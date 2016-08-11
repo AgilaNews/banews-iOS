@@ -1,0 +1,459 @@
+//
+//  SSHttpRequest.m
+//  TenMinDemo
+//
+//  Created by apple开发 on 16/5/31.
+//  Copyright © 2016年 CYXiang. All rights reserved.
+//
+
+#import "SSHttpRequest.h"
+#import "AFNetworking.h"
+#import "Signature.h"
+#import "AppDelegate.h"
+
+@implementation SSHttpRequest
+
+static SSHttpRequest *_manager = nil;
++ (instancetype)sharedInstance
+{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _manager = [SSHttpRequest manager];
+        // 申明返回的结果是text/html类型
+        _manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+        _manager.responseSerializer = [AFJSONResponseSerializer serializer];
+        _manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript",@"application/javascript", @"text/html", @"text/plain", nil];
+        // 设置安全性
+        AFSecurityPolicy *securityPolicy = [AFSecurityPolicy defaultPolicy];
+        //allowInvalidCertificates 是否允许无效证书（也就是自建的证书），默认为NO
+        // 如果是需要验证自建证书，需要设置为YES
+        securityPolicy.allowInvalidCertificates = YES;
+        // validatesDomainName 是否需要验证域名，默认为YES；
+        securityPolicy.validatesDomainName = NO;
+        _manager.securityPolicy  = securityPolicy;
+        // 设置超时时间为5s
+        _manager.requestSerializer.timeoutInterval = 5;
+        // 设置请求头
+        [_manager.requestSerializer setValue:@"gzip, deflate" forHTTPHeaderField:@"Accept-Encoding"];
+        [_manager.requestSerializer setValue:@"en-PH;q=0.8,en-US;q=0.5,en;q=0.3" forHTTPHeaderField:@"Accept-Language"];
+        [_manager.requestSerializer setValue:[NSString stringWithFormat:@"%dx%d",(int)kScreenWidth_DP,(int)kScreenHeight_DP] forHTTPHeaderField:@"X-DENSITY"];
+        
+    });
+    return _manager;
+}
+
+
+- (NSURLSessionDataTask *)get:(NSString *)url params:(NSMutableDictionary *)params contentType:(ContentType)contentType serverType:(NetServerType)serverType success:(void (^)(id))success failure:(void (^)(NSError *))failure isShowHUD:(BOOL)showHUD
+{
+    // 参数格式
+    if (contentType == UrlencodedType) {
+        [_manager.requestSerializer setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    } else {
+        [_manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    }
+    
+    // 接口拼接
+    if (url.length < 1) {
+        _urlString = @"https://api.agilanews.today/";
+    } else {    
+        switch (serverType) {
+            case NetServer_Home:
+            {
+                if (DEF_PERSISTENT_GET_OBJECT(Server_Home) != nil) {
+                    _urlString = [NSString stringWithFormat:@"%@%@",DEF_PERSISTENT_GET_OBJECT(Server_Home),url];
+                } else {
+                    _urlString = [NSString stringWithFormat:@"%@%@",kHomeUrl,url];
+                }
+            }
+                break;
+            case NetServer_Log:
+            {
+                if (DEF_PERSISTENT_GET_OBJECT(Server_Log) != nil) {
+                    _urlString = [NSString stringWithFormat:@"%@%@",DEF_PERSISTENT_GET_OBJECT(Server_Log),url];
+                } else {
+                    _urlString = [NSString stringWithFormat:@"%@%@",kLogUrl,url];
+                }
+            }
+                break;
+            case NetServer_Mon:
+            {
+                if (DEF_PERSISTENT_GET_OBJECT(Server_Mon) != nil) {
+                    _urlString = [NSString stringWithFormat:@"%@%@",DEF_PERSISTENT_GET_OBJECT(Server_Mon),url];
+                } else {
+                    _urlString = [NSString stringWithFormat:@"%@%@",kMonUrl,url];
+                }
+            }
+                break;
+            case NetServer_Referrer:
+            {
+                if (DEF_PERSISTENT_GET_OBJECT(Server_Referrer) != nil) {
+                    _urlString = [NSString stringWithFormat:@"%@%@",DEF_PERSISTENT_GET_OBJECT(Server_Referrer),url];
+                } else {
+                    _urlString = [NSString stringWithFormat:@"%@%@",kReferrerUrl,url];
+                }
+            }
+                break;
+            default:
+                break;
+        }
+    }
+    // User-A
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    NSString *userA = nil;
+    if (appDelegate.model) {
+        userA = appDelegate.model.user_id;
+    } else {
+        userA = @" ";
+    }
+    [_manager.requestSerializer setValue:userA forHTTPHeaderField:@"X-User-A"];
+    [_manager.requestSerializer setValue:DEF_PERSISTENT_GET_OBJECT(@"IDFA") forHTTPHeaderField:@"X-Session"];
+    [_manager.requestSerializer setValue:DEF_PERSISTENT_GET_OBJECT(@"IDFA") forHTTPHeaderField:@"X-User-D"];
+    // 请求时间
+    NSDate *currentDate = [NSDate date];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"ccc, d LLL YYYY hh:mm:ss zzz"];
+    NSString *dateString = [dateFormatter stringFromDate:currentDate];
+    [_manager.requestSerializer setValue:dateString forHTTPHeaderField:@"Date"];
+    // 签名算法
+    NSString *string = [NSString stringWithFormat:@"GET\n \n%@\n%@\nX-DENSITY:%dx%d\nX-SESSION:%@\nX-USER-A:%@\nX-USER-D:%@\n%@",contentType == UrlencodedType ? @"APPLICATION/X-WWW-FORM-URLENCODED" : @"APPLICATION/JSON",dateString,(int)kScreenWidth_DP,(int)kScreenHeight_DP,DEF_PERSISTENT_GET_OBJECT(@"IDFA"),userA,DEF_PERSISTENT_GET_OBJECT(@"IDFA"),url];
+    [_manager.requestSerializer setValue:[Signature hmacsha1:string key:@"7intJWbSmtjkrIrb"] forHTTPHeaderField:@"Authorization"];
+    
+    // 添加默认参数
+    // 时区设置
+    [params setObject:[NSString stringWithFormat:@"%@",[NSTimeZone systemTimeZone]] forKey:@"tz"];
+    // 经纬度
+    if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
+        [params setObject:DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) forKey:@"lng"];
+        [params setObject:DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) forKey:@"lat"];
+    }
+    // 语言设置
+    [params setObject:[[NSLocale preferredLanguages] firstObject] forKey:@"lang"];
+    // 客户端版本号
+    NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    [params setObject:[NSString stringWithFormat:@"v%@",version] forKey:@"client_version"];
+    // 设备ID
+    if (DEF_PERSISTENT_GET_OBJECT(@"IDFA") != nil) {
+        [params setObject:DEF_PERSISTENT_GET_OBJECT(@"IDFA") forKey:@"idfv"];
+        [params setObject:DEF_PERSISTENT_GET_OBJECT(@"IDFA") forKey:@"idfa"];
+    }
+    // 系统
+    [params setObject:@"ios" forKey:@"os"];
+    // 系统版本号
+    [params setObject:[NSString stringWithFormat:@"%@",[[UIDevice currentDevice] systemVersion]] forKey:@"os_version"];
+
+    // 打印请求参数
+    SSLog(@"\n------打印请求地址------\n%@\n------打印请求参数------\n%@\n------打印请求头------\n%@",_urlString,params,string);
+    
+    NSURLSessionDataTask *dataTask = [_manager GET:_urlString parameters:params progress:^(NSProgress * _Nonnull downloadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        if (success) {
+            SSLog(@"\n------网络请求结果------\n%@",responseObject);
+            success(responseObject);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if (showHUD) {
+            if ([error code] == NSURLErrorCancelled)
+            {
+                [SVProgressHUD dismiss];
+                SSLog(@"\n------网络请求取消------\n%@",error);
+                return;
+            }
+            // 打点-页面进入-011001
+            [Flurry logEvent:@"NetFailure_Enter"];
+            
+            if ([AFNetworkReachabilityManager sharedManager].networkReachabilityStatus == AFNetworkReachabilityStatusNotReachable)
+            {
+                [SVProgressHUD showErrorWithStatus:@"Please check your network connection"];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [SVProgressHUD dismiss];
+                });
+            } else {
+                [SVProgressHUD showErrorWithStatus:@"Fetching failed, please try again"];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [SVProgressHUD dismiss];
+                });
+            }
+        }
+        if (failure) {
+            SSLog(@"\n------网络请求失败------\n%@",error);
+            failure(error);
+        }
+    }];
+    
+    return dataTask;
+}
+
+- (void)post:(NSString *)url params:(NSMutableDictionary *)params contentType:(ContentType)contentType serverType:(NetServerType)serverType success:(void (^)(id))success failure:(void (^)(NSError *))failure isShowHUD:(BOOL)showHUD
+{
+    _manager.requestSerializer = [AFJSONRequestSerializer serializer];
+    // 参数格式
+    if (contentType == UrlencodedType) {
+        [_manager.requestSerializer setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    } else {
+        [_manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    }
+    
+    // 接口拼接
+    switch (serverType) {
+        case NetServer_Home:
+        {
+            if (DEF_PERSISTENT_GET_OBJECT(Server_Home) != nil) {
+                _urlString = [NSString stringWithFormat:@"%@%@",DEF_PERSISTENT_GET_OBJECT(Server_Home),url];
+            } else {
+                _urlString = [NSString stringWithFormat:@"%@%@",kHomeUrl,url];
+            }
+        }
+            break;
+        case NetServer_Log:
+        {
+            if (DEF_PERSISTENT_GET_OBJECT(Server_Log) != nil) {
+                _urlString = [NSString stringWithFormat:@"%@%@",DEF_PERSISTENT_GET_OBJECT(Server_Log),url];
+            } else {
+                _urlString = [NSString stringWithFormat:@"%@%@",kLogUrl,url];
+            }
+        }
+            break;
+        case NetServer_Mon:
+        {
+            if (DEF_PERSISTENT_GET_OBJECT(Server_Mon) != nil) {
+                _urlString = [NSString stringWithFormat:@"%@%@",DEF_PERSISTENT_GET_OBJECT(Server_Mon),url];
+            } else {
+                _urlString = [NSString stringWithFormat:@"%@%@",kMonUrl,url];
+            }
+        }
+            break;
+        case NetServer_Referrer:
+        {
+            if (DEF_PERSISTENT_GET_OBJECT(Server_Referrer) != nil) {
+                _urlString = [NSString stringWithFormat:@"%@%@",DEF_PERSISTENT_GET_OBJECT(Server_Referrer),url];
+            } else {
+                _urlString = [NSString stringWithFormat:@"%@%@",kReferrerUrl,url];
+            }
+        }
+            break;
+        default:
+            break;
+    }
+    // User-A
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    NSString *userA = nil;
+    if (appDelegate.model) {
+        userA = appDelegate.model.user_id;
+    } else {
+        userA = @" ";
+    }
+    [_manager.requestSerializer setValue:userA forHTTPHeaderField:@"X-User-A"];
+    [_manager.requestSerializer setValue:DEF_PERSISTENT_GET_OBJECT(@"IDFA") forHTTPHeaderField:@"X-Session"];
+    [_manager.requestSerializer setValue:DEF_PERSISTENT_GET_OBJECT(@"IDFA") forHTTPHeaderField:@"X-User-D"];
+    // 请求时间
+    NSDate *currentDate = [NSDate date];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"ccc, d LLL YYYY hh:mm:ss zzz"];
+    NSString *dateString = [dateFormatter stringFromDate:currentDate];
+    [_manager.requestSerializer setValue:dateString forHTTPHeaderField:@"Date"];
+    // 签名算法
+    NSString *string = [NSString stringWithFormat:@"GET\n \n%@\n%@\nX-DENSITY:%dx%d\nX-SESSION:%@\nX-USER-A:%@\nX-USER-D:%@\n%@",contentType == UrlencodedType ? @"APPLICATION/X-WWW-FORM-URLENCODED" : @"APPLICATION/JSON",dateString,(int)kScreenWidth_DP,(int)kScreenHeight_DP,DEF_PERSISTENT_GET_OBJECT(@"IDFA"),userA,DEF_PERSISTENT_GET_OBJECT(@"IDFA"),url];
+    [_manager.requestSerializer setValue:[Signature hmacsha1:string key:@"7intJWbSmtjkrIrb"] forHTTPHeaderField:@"Authorization"];
+    
+    // 添加默认参数
+    // 时区设置
+    [params setObject:[NSString stringWithFormat:@"%@",[NSTimeZone systemTimeZone]] forKey:@"tz"];
+    // 经纬度
+    if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
+        [params setObject:DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) forKey:@"lng"];
+        [params setObject:DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) forKey:@"lat"];
+    }
+    // 语言设置
+    [params setObject:[[NSLocale preferredLanguages] firstObject] forKey:@"lang"];
+    // 客户端版本号
+    NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    [params setObject:[NSString stringWithFormat:@"v%@",version] forKey:@"client_version"];
+    // 设备ID
+    if (DEF_PERSISTENT_GET_OBJECT(@"IDFA") != nil) {
+        [params setObject:DEF_PERSISTENT_GET_OBJECT(@"IDFA") forKey:@"idfv"];
+        [params setObject:DEF_PERSISTENT_GET_OBJECT(@"IDFA") forKey:@"idfa"];
+    }
+    // 系统
+    [params setObject:@"ios" forKey:@"os"];
+    // 系统版本号
+    [params setObject:[NSString stringWithFormat:@"%@",[[UIDevice currentDevice] systemVersion]] forKey:@"os_version"];
+    
+    // 打印请求参数
+    SSLog(@"\n------打印请求地址------\n%@\n------打印请求参数------\n%@",_urlString,params);
+    
+    [_manager POST:_urlString parameters:params progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        if (success) {
+            SSLog(@"\n------网络请求结果------\n%@",responseObject);
+            success(responseObject);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if (showHUD) {
+            if ([error code] == NSURLErrorCancelled)
+            {
+                [SVProgressHUD dismiss];
+                SSLog(@"\n------网络请求取消------\n%@",error);
+                return;
+            }
+            // 打点-页面进入-011001
+            [Flurry logEvent:@"NetFailure_Enter"];
+            
+            if ([AFNetworkReachabilityManager sharedManager].networkReachabilityStatus == AFNetworkReachabilityStatusNotReachable)
+            {
+                [SVProgressHUD showErrorWithStatus:@"Please check your network connection"];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [SVProgressHUD dismiss];
+                });
+            } else {
+                [SVProgressHUD showErrorWithStatus:@"Fetching failed, please try again"];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [SVProgressHUD dismiss];
+                });
+            }
+        }
+        if (failure) {
+            SSLog(@"\n------网络请求失败------\n%@",error);
+            failure(error);
+        }
+    }];
+}
+
+- (void)DELETE:(NSString *)url params:(NSMutableDictionary *)params contentType:(ContentType)contentType serverType:(NetServerType)serverType success:(void (^)(id))success failure:(void (^)(NSError *))failure isShowHUD:(BOOL)showHUD
+{
+    _manager.requestSerializer = [AFJSONRequestSerializer serializer];
+    // 参数格式
+    if (contentType == UrlencodedType) {
+        [_manager.requestSerializer setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    } else {
+        [_manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    }
+    
+    // 接口拼接
+    switch (serverType) {
+        case NetServer_Home:
+        {
+            if (DEF_PERSISTENT_GET_OBJECT(Server_Home) != nil) {
+                _urlString = [NSString stringWithFormat:@"%@%@",DEF_PERSISTENT_GET_OBJECT(Server_Home),url];
+            } else {
+                _urlString = [NSString stringWithFormat:@"%@%@",kHomeUrl,url];
+            }
+        }
+            break;
+        case NetServer_Log:
+        {
+            if (DEF_PERSISTENT_GET_OBJECT(Server_Log) != nil) {
+                _urlString = [NSString stringWithFormat:@"%@%@",DEF_PERSISTENT_GET_OBJECT(Server_Log),url];
+            } else {
+                _urlString = [NSString stringWithFormat:@"%@%@",kLogUrl,url];
+            }
+        }
+            break;
+        case NetServer_Mon:
+        {
+            if (DEF_PERSISTENT_GET_OBJECT(Server_Mon) != nil) {
+                _urlString = [NSString stringWithFormat:@"%@%@",DEF_PERSISTENT_GET_OBJECT(Server_Mon),url];
+            } else {
+                _urlString = [NSString stringWithFormat:@"%@%@",kMonUrl,url];
+            }
+        }
+            break;
+        case NetServer_Referrer:
+        {
+            if (DEF_PERSISTENT_GET_OBJECT(Server_Referrer) != nil) {
+                _urlString = [NSString stringWithFormat:@"%@%@",DEF_PERSISTENT_GET_OBJECT(Server_Referrer),url];
+            } else {
+                _urlString = [NSString stringWithFormat:@"%@%@",kReferrerUrl,url];
+            }
+        }
+            break;
+        default:
+            break;
+    }
+    // User-A
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    NSString *userA = nil;
+    if (appDelegate.model) {
+        userA = appDelegate.model.user_id;
+    } else {
+        userA = @" ";
+    }
+    [_manager.requestSerializer setValue:userA forHTTPHeaderField:@"X-User-A"];
+    [_manager.requestSerializer setValue:DEF_PERSISTENT_GET_OBJECT(@"IDFA") forHTTPHeaderField:@"X-Session"];
+    [_manager.requestSerializer setValue:DEF_PERSISTENT_GET_OBJECT(@"IDFA") forHTTPHeaderField:@"X-User-D"];
+    // 请求时间
+    NSDate *currentDate = [NSDate date];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"ccc, d LLL YYYY hh:mm:ss zzz"];
+    NSString *dateString = [dateFormatter stringFromDate:currentDate];
+    [_manager.requestSerializer setValue:dateString forHTTPHeaderField:@"Date"];
+    // 签名算法
+    NSString *string = [NSString stringWithFormat:@"GET\n \n%@\n%@\nX-DENSITY:%dx%d\nX-SESSION:%@\nX-USER-A:%@\nX-USER-D:%@\n%@",contentType == UrlencodedType ? @"APPLICATION/X-WWW-FORM-URLENCODED" : @"APPLICATION/JSON",dateString,(int)kScreenWidth_DP,(int)kScreenHeight_DP,DEF_PERSISTENT_GET_OBJECT(@"IDFA"),userA,DEF_PERSISTENT_GET_OBJECT(@"IDFA"),url];
+    [_manager.requestSerializer setValue:[Signature hmacsha1:string key:@"7intJWbSmtjkrIrb"] forHTTPHeaderField:@"Authorization"];
+    
+    _manager.requestSerializer.HTTPMethodsEncodingParametersInURI = [NSSet setWithArray:@[@"GET", @"HEAD"]];
+    
+    // 添加默认参数
+    // 时区设置
+    [params setObject:[NSString stringWithFormat:@"%@",[NSTimeZone systemTimeZone]] forKey:@"tz"];
+    // 经纬度
+    if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
+        [params setObject:DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) forKey:@"lng"];
+        [params setObject:DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) forKey:@"lat"];
+    }
+    // 语言设置
+    [params setObject:[[NSLocale preferredLanguages] firstObject] forKey:@"lang"];
+    // 客户端版本号
+    NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    [params setObject:[NSString stringWithFormat:@"v%@",version] forKey:@"client_version"];
+    // 设备ID
+    if (DEF_PERSISTENT_GET_OBJECT(@"IDFA") != nil) {
+        [params setObject:DEF_PERSISTENT_GET_OBJECT(@"IDFA") forKey:@"idfv"];
+        [params setObject:DEF_PERSISTENT_GET_OBJECT(@"IDFA") forKey:@"idfa"];
+    }
+    // 系统
+    [params setObject:@"ios" forKey:@"os"];
+    // 系统版本号
+    [params setObject:[NSString stringWithFormat:@"%@",[[UIDevice currentDevice] systemVersion]] forKey:@"os_version"];
+    
+    // 打印请求参数
+    SSLog(@"\n------打印请求地址------\n%@\n------打印请求参数------\n%@",_urlString,params);
+    [_manager DELETE:_urlString parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        if (success) {
+            SSLog(@"\n------网络请求结果------\n%@",responseObject);
+            success(responseObject);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if (showHUD) {
+            if ([error code] == NSURLErrorCancelled)
+            {
+                [SVProgressHUD dismiss];
+                SSLog(@"\n------网络请求取消------\n%@",error);
+                return;
+            }
+            // 打点-页面进入-011001
+            [Flurry logEvent:@"NetFailure_Enter"];
+            
+            if ([AFNetworkReachabilityManager sharedManager].networkReachabilityStatus == AFNetworkReachabilityStatusNotReachable)
+            {
+                [SVProgressHUD showErrorWithStatus:@"Please check your network connection"];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [SVProgressHUD dismiss];
+                });
+            } else {
+                [SVProgressHUD showErrorWithStatus:@"Fetching failed, please try again"];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [SVProgressHUD dismiss];
+                });
+            }
+        }
+        if (failure) {
+            SSLog(@"\n------网络请求失败------\n%@",error);
+            failure(error);
+        }
+    }];
+}
+
+
+@end

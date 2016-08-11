@@ -1,0 +1,122 @@
+//
+//  FeedbackViewController.m
+//  Agilanews
+//
+//  Created by 张思思 on 16/8/1.
+//  Copyright © 2016年 banews. All rights reserved.
+//
+
+#import "FeedbackViewController.h"
+
+@interface FeedbackViewController ()
+
+@end
+
+@implementation FeedbackViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view.
+    
+    self.title = @"Feedback";
+    self.isBackButton = YES;
+    self.automaticallyAdjustsScrollViewInsets = NO;
+
+    // 添加导航栏右侧按钮
+    _sendButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    _sendButton.frame = CGRectMake(0, 0, 80, 40);
+    _sendButton.titleLabel.font = [UIFont systemFontOfSize:17];
+    [_sendButton setTitle:@"Send" forState:UIControlStateNormal];
+    [_sendButton setTitleColor:[UIColor colorWithRed:1 green:1 blue:1 alpha:.4] forState:UIControlStateDisabled];
+    [_sendButton addTarget:self action:@selector(sendAction:) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *sendItem = [[UIBarButtonItem alloc]initWithCustomView:_sendButton];
+    if ([[[[UIDevice currentDevice] systemVersion] substringToIndex:1] intValue] >= 7) {
+        UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+        negativeSpacer.width = -20;
+        self.navigationItem.rightBarButtonItems = @[negativeSpacer, sendItem];
+    } else {
+        self.navigationItem.rightBarButtonItem = sendItem;
+    }
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textChange) name:UITextViewTextDidChangeNotification object:nil];
+
+    // 初始化子视图
+    [self _initSubiews];
+    _sendButton.enabled = NO;
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+// 初始化子视图
+- (void)_initSubiews
+{
+    _textView = [[FeedbackTextView alloc] initWithFrame:CGRectMake(0, 64 + 10, kScreenWidth, 185)];
+    [self.view addSubview:_textView];
+    _textView.feedbackTextView.text = @" ";
+    [_textView.feedbackTextView becomeFirstResponder];
+    _textView.feedbackTextView.text = nil;
+    
+    _textField = [[FeedbackTextField alloc] initWithFrame:CGRectMake(0, _textView.bottom + 10, kScreenWidth, 44)];
+    [self.view addSubview:_textField];
+}
+
+#pragma mark - 按钮点击事件
+- (void)sendAction:(UIButton *)button
+{
+    // 打点-点击提交-010804
+    [Flurry logEvent:@"FeedB_Submit_Click"];
+
+    [SVProgressHUD show];
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    [params setObject:_textView.feedbackTextView.text forKey:@"fb_detail"];
+    if ([_textField.text rangeOfString:@"@"].location != NSNotFound) {
+        [params setObject:_textField.text forKey:@"email"];
+    }
+    [[SSHttpRequest sharedInstance] post:kHomeUrl_Feedback params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
+        // 打点-提交成功-010805
+        [Flurry logEvent:@"FeedB_Submit_Click_Y"];
+        
+        [SVProgressHUD showSuccessWithStatus:@"Successful"];
+        [self.navigationController popViewControllerAnimated:YES];
+    } failure:^(NSError *error) {
+        // 打点-提交失败-010806
+        [Flurry logEvent:@"FeedB_Submit_Click_N"];
+    } isShowHUD:YES];
+}
+
+- (void)backAction:(UIButton *)button
+{
+    // 打点-点击反馈页返回按钮-010807
+    [Flurry logEvent:@"FeedB_BackButton_Click"];
+    [super backAction:button];
+}
+
+#pragma mark - 输入框改变
+- (void)textChange
+{
+    if (_textView.feedbackTextView.text.length > 0) {
+        _sendButton.enabled = YES;
+    } else {
+        _sendButton.enabled = NO;
+    }
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+@end

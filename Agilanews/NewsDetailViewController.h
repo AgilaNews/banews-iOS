@@ -1,0 +1,35 @@
+//
+//  NewsDetailViewController.h
+//  Agilanews
+//
+//  Created by 张思思 on 16/7/19.
+//  Copyright © 2016年 banews. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import "BaseViewController.h"
+#import "NewsModel.h"
+#import "NewsDetailModel.h"
+#import "AppDelegate.h"
+#import "CommentTextView.h"
+
+@interface NewsDetailViewController : BaseViewController <UIWebViewDelegate, UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, UITextViewDelegate, FBSDKSharingDelegate>
+
+@property (nonatomic, strong) NewsModel *model;
+@property (nonatomic, strong) UIWebView *webView;
+@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) UIView *commentsView;         
+@property (nonatomic, strong) UIButton *likeButton;         // 点赞按钮
+@property (nonatomic, assign) float webViewHeight;          // webView高度
+@property (nonatomic, strong) NewsDetailModel *detailModel; // 新闻详情model
+@property (nonatomic, strong) NSMutableArray *commentArray; // 评论数组
+@property (nonatomic, strong) NSNumber *collectID;          // 收藏新闻ID
+@property (nonatomic, strong) CommentTextView *commentTextView; // 评论输入框
+@property (nonatomic, strong) UIView *noCommentView;        // 无评论视图
+@property (nonatomic, strong) NSURLSessionDataTask *task;
+@property (nonatomic, assign) BOOL isShowGuide;
+@property (nonatomic, assign) NSInteger pullupCount;    // 上拉加载次数
+@property (nonatomic, strong) NSString *channelName;    // 频道名
+@property (nonatomic, assign) long long enterTime;      // 文章进入时间
+
+@end
