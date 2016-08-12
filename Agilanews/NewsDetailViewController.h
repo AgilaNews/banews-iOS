@@ -27,10 +27,14 @@
 @property (nonatomic, strong) CommentTextView *commentTextView; // 评论输入框
 @property (nonatomic, strong) UIView *noCommentView;        // 无评论视图
 @property (nonatomic, strong) NSURLSessionDataTask *task;
-@property (nonatomic, assign) BOOL isShowGuide;
+@property (nonatomic, assign) BOOL isShowGuide;         // 是否展示引导页
 @property (nonatomic, assign) NSInteger pullupCount;    // 上拉加载次数
 @property (nonatomic, strong) NSString *channelName;    // 频道名
 @property (nonatomic, assign) long long enterTime;      // 文章进入时间
 @property (nonatomic, assign) BOOL isRecommendShow;     // 推荐文章展示
+@property (nonatomic, strong) UIView *blankView;
+@property (nonatomic, strong) UILabel *blankLabel;
+@property (nonatomic, strong) UIImageView *failureView;
+@property (nonatomic, assign) long long afterFailureRequsetTime;
 
 @end
