@@ -106,7 +106,7 @@ static SSHttpRequest *_manager = nil;
         userA = @" ";
     }
     [_manager.requestSerializer setValue:userA forHTTPHeaderField:@"X-User-A"];
-    [_manager.requestSerializer setValue:DEF_PERSISTENT_GET_OBJECT(@"IDFA") forHTTPHeaderField:@"X-Session"];
+    [_manager.requestSerializer setValue:DEF_PERSISTENT_GET_OBJECT(@"UUID") forHTTPHeaderField:@"X-Session"];
     [_manager.requestSerializer setValue:DEF_PERSISTENT_GET_OBJECT(@"IDFA") forHTTPHeaderField:@"X-User-D"];
     // 请求时间
     NSDate *currentDate = [NSDate date];
@@ -115,7 +115,7 @@ static SSHttpRequest *_manager = nil;
     NSString *dateString = [dateFormatter stringFromDate:currentDate];
     [_manager.requestSerializer setValue:dateString forHTTPHeaderField:@"Date"];
     // 签名算法
-    NSString *string = [NSString stringWithFormat:@"GET\n \n%@\n%@\nX-DENSITY:%dx%d\nX-SESSION:%@\nX-USER-A:%@\nX-USER-D:%@\n%@",contentType == UrlencodedType ? @"APPLICATION/X-WWW-FORM-URLENCODED" : @"APPLICATION/JSON",dateString,(int)kScreenWidth_DP,(int)kScreenHeight_DP,DEF_PERSISTENT_GET_OBJECT(@"IDFA"),userA,DEF_PERSISTENT_GET_OBJECT(@"IDFA"),url];
+    NSString *string = [NSString stringWithFormat:@"GET\n \n%@\n%@\nX-DENSITY:%dx%d\nX-SESSION:%@\nX-USER-A:%@\nX-USER-D:%@\n%@",contentType == UrlencodedType ? @"APPLICATION/X-WWW-FORM-URLENCODED" : @"APPLICATION/JSON",dateString,(int)kScreenWidth_DP,(int)kScreenHeight_DP,DEF_PERSISTENT_GET_OBJECT(@"UUID"),userA,DEF_PERSISTENT_GET_OBJECT(@"IDFA"),url];
     [_manager.requestSerializer setValue:[Signature hmacsha1:string key:@"7intJWbSmtjkrIrb"] forHTTPHeaderField:@"Authorization"];
     
     // 添加默认参数
@@ -194,6 +194,30 @@ static SSHttpRequest *_manager = nil;
         [_manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     }
     
+    NSMutableDictionary *baseParams = [NSMutableDictionary dictionary];
+    // 添加默认参数
+    // 时区设置
+    [baseParams setObject:[NSString stringWithFormat:@"%@",[NSTimeZone systemTimeZone]] forKey:@"tz"];
+    // 经纬度
+    if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
+        [baseParams setObject:DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) forKey:@"lng"];
+        [baseParams setObject:DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) forKey:@"lat"];
+    }
+    // 语言设置
+    [baseParams setObject:[[NSLocale preferredLanguages] firstObject] forKey:@"lang"];
+    // 客户端版本号
+    NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    [baseParams setObject:[NSString stringWithFormat:@"v%@",version] forKey:@"client_version"];
+    // 设备ID
+    if (DEF_PERSISTENT_GET_OBJECT(@"IDFA") != nil) {
+        [baseParams setObject:DEF_PERSISTENT_GET_OBJECT(@"IDFA") forKey:@"idfv"];
+        [baseParams setObject:DEF_PERSISTENT_GET_OBJECT(@"IDFA") forKey:@"idfa"];
+    }
+    // 系统
+    [baseParams setObject:@"ios" forKey:@"os"];
+    // 系统版本号
+    [baseParams setObject:[NSString stringWithFormat:@"%@",[[UIDevice currentDevice] systemVersion]] forKey:@"os_version"];
+    
     // 接口拼接
     switch (serverType) {
         case NetServer_Home:
@@ -203,6 +227,7 @@ static SSHttpRequest *_manager = nil;
             } else {
                 _urlString = [NSString stringWithFormat:@"%@%@",kHomeUrl,url];
             }
+            [params addEntriesFromDictionary:baseParams];
         }
             break;
         case NetServer_Log:
@@ -212,6 +237,12 @@ static SSHttpRequest *_manager = nil;
             } else {
                 _urlString = [NSString stringWithFormat:@"%@%@",kLogUrl,url];
             }
+            _urlString = [_urlString stringByAppendingString:@"?"];
+            for (NSString *key in baseParams.allKeys) {
+                _urlString = [_urlString stringByAppendingString:[NSString stringWithFormat:@"%@=%@&",key,baseParams[key]]];
+            }
+            _urlString = [_urlString substringToIndex:_urlString.length - 1];
+            _urlString = [_urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         }
             break;
         case NetServer_Mon:
@@ -244,7 +275,7 @@ static SSHttpRequest *_manager = nil;
         userA = @" ";
     }
     [_manager.requestSerializer setValue:userA forHTTPHeaderField:@"X-User-A"];
-    [_manager.requestSerializer setValue:DEF_PERSISTENT_GET_OBJECT(@"IDFA") forHTTPHeaderField:@"X-Session"];
+    [_manager.requestSerializer setValue:DEF_PERSISTENT_GET_OBJECT(@"UUID") forHTTPHeaderField:@"X-Session"];
     [_manager.requestSerializer setValue:DEF_PERSISTENT_GET_OBJECT(@"IDFA") forHTTPHeaderField:@"X-User-D"];
     // 请求时间
     NSDate *currentDate = [NSDate date];
@@ -253,31 +284,9 @@ static SSHttpRequest *_manager = nil;
     NSString *dateString = [dateFormatter stringFromDate:currentDate];
     [_manager.requestSerializer setValue:dateString forHTTPHeaderField:@"Date"];
     // 签名算法
-    NSString *string = [NSString stringWithFormat:@"GET\n \n%@\n%@\nX-DENSITY:%dx%d\nX-SESSION:%@\nX-USER-A:%@\nX-USER-D:%@\n%@",contentType == UrlencodedType ? @"APPLICATION/X-WWW-FORM-URLENCODED" : @"APPLICATION/JSON",dateString,(int)kScreenWidth_DP,(int)kScreenHeight_DP,DEF_PERSISTENT_GET_OBJECT(@"IDFA"),userA,DEF_PERSISTENT_GET_OBJECT(@"IDFA"),url];
+    NSString *string = [NSString stringWithFormat:@"GET\n \n%@\n%@\nX-DENSITY:%dx%d\nX-SESSION:%@\nX-USER-A:%@\nX-USER-D:%@\n%@",contentType == UrlencodedType ? @"APPLICATION/X-WWW-FORM-URLENCODED" : @"APPLICATION/JSON",dateString,(int)kScreenWidth_DP,(int)kScreenHeight_DP,DEF_PERSISTENT_GET_OBJECT(@"UUID"),userA,DEF_PERSISTENT_GET_OBJECT(@"IDFA"),url];
     [_manager.requestSerializer setValue:[Signature hmacsha1:string key:@"7intJWbSmtjkrIrb"] forHTTPHeaderField:@"Authorization"];
     
-    // 添加默认参数
-    // 时区设置
-    [params setObject:[NSString stringWithFormat:@"%@",[NSTimeZone systemTimeZone]] forKey:@"tz"];
-    // 经纬度
-    if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
-        [params setObject:DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) forKey:@"lng"];
-        [params setObject:DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) forKey:@"lat"];
-    }
-    // 语言设置
-    [params setObject:[[NSLocale preferredLanguages] firstObject] forKey:@"lang"];
-    // 客户端版本号
-    NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-    [params setObject:[NSString stringWithFormat:@"v%@",version] forKey:@"client_version"];
-    // 设备ID
-    if (DEF_PERSISTENT_GET_OBJECT(@"IDFA") != nil) {
-        [params setObject:DEF_PERSISTENT_GET_OBJECT(@"IDFA") forKey:@"idfv"];
-        [params setObject:DEF_PERSISTENT_GET_OBJECT(@"IDFA") forKey:@"idfa"];
-    }
-    // 系统
-    [params setObject:@"ios" forKey:@"os"];
-    // 系统版本号
-    [params setObject:[NSString stringWithFormat:@"%@",[[UIDevice currentDevice] systemVersion]] forKey:@"os_version"];
     
     // 打印请求参数
     SSLog(@"\n------打印请求地址------\n%@\n------打印请求参数------\n%@",_urlString,params);
@@ -380,7 +389,7 @@ static SSHttpRequest *_manager = nil;
         userA = @" ";
     }
     [_manager.requestSerializer setValue:userA forHTTPHeaderField:@"X-User-A"];
-    [_manager.requestSerializer setValue:DEF_PERSISTENT_GET_OBJECT(@"IDFA") forHTTPHeaderField:@"X-Session"];
+    [_manager.requestSerializer setValue:DEF_PERSISTENT_GET_OBJECT(@"UUID") forHTTPHeaderField:@"X-Session"];
     [_manager.requestSerializer setValue:DEF_PERSISTENT_GET_OBJECT(@"IDFA") forHTTPHeaderField:@"X-User-D"];
     // 请求时间
     NSDate *currentDate = [NSDate date];
@@ -389,7 +398,7 @@ static SSHttpRequest *_manager = nil;
     NSString *dateString = [dateFormatter stringFromDate:currentDate];
     [_manager.requestSerializer setValue:dateString forHTTPHeaderField:@"Date"];
     // 签名算法
-    NSString *string = [NSString stringWithFormat:@"GET\n \n%@\n%@\nX-DENSITY:%dx%d\nX-SESSION:%@\nX-USER-A:%@\nX-USER-D:%@\n%@",contentType == UrlencodedType ? @"APPLICATION/X-WWW-FORM-URLENCODED" : @"APPLICATION/JSON",dateString,(int)kScreenWidth_DP,(int)kScreenHeight_DP,DEF_PERSISTENT_GET_OBJECT(@"IDFA"),userA,DEF_PERSISTENT_GET_OBJECT(@"IDFA"),url];
+    NSString *string = [NSString stringWithFormat:@"GET\n \n%@\n%@\nX-DENSITY:%dx%d\nX-SESSION:%@\nX-USER-A:%@\nX-USER-D:%@\n%@",contentType == UrlencodedType ? @"APPLICATION/X-WWW-FORM-URLENCODED" : @"APPLICATION/JSON",dateString,(int)kScreenWidth_DP,(int)kScreenHeight_DP,DEF_PERSISTENT_GET_OBJECT(@"UUID"),userA,DEF_PERSISTENT_GET_OBJECT(@"IDFA"),url];
     [_manager.requestSerializer setValue:[Signature hmacsha1:string key:@"7intJWbSmtjkrIrb"] forHTTPHeaderField:@"Authorization"];
     
     _manager.requestSerializer.HTTPMethodsEncodingParametersInURI = [NSSet setWithArray:@[@"GET", @"HEAD"]];

@@ -28,14 +28,14 @@
     [self registerShareSDK];
     // 注册Twitter/Crashlytics
     [Fabric with:@[[Twitter class], [Crashlytics class]]];
+    // 读取用户登录信息/配置信息
+    [self loadUserData];
     // 监听网络状态
     [self networkMonitoring];
     // 开始定位
     [self locationServices];
     // 冷启动
     [self coldBoot:YES];
-    // 读取用户登录信息/配置信息
-    [self loadUserData];
     //设置启动页面时间
     [NSThread sleepForTimeInterval:2.0];
 
@@ -70,6 +70,43 @@
                                    homeVC.segmentVC.titleArray[index], @"channel",
                                    nil];
     [Flurry logEvent:@"App_Exit" withParameters:articleParams];
+    
+    if ([[NetType getNetType] isEqualToString:@"wifi"] && _eventArray.count > 0) {
+        // 上报打点信息
+        NSArray *logArray = [NSArray array];
+        if (_eventArray.count >= 10) {
+            logArray = [_eventArray subarrayWithRange:NSMakeRange(0, 10)];
+            [_eventArray removeObjectsInRange:NSMakeRange(0, 10)];
+        } else {
+            logArray = [NSArray arrayWithArray:_eventArray];
+            [_eventArray removeAllObjects];
+        }
+        NSMutableDictionary *sessionDic = [NSMutableDictionary dictionary];
+        for (NSMutableDictionary *eventDic in logArray) {
+            NSString *session = eventDic[@"session"];
+            [eventDic removeObjectForKey:@"session"];
+            if (sessionDic[session] != nil) {
+                // 字典中有session
+                NSMutableArray *events = sessionDic[session];
+                [events addObject:eventDic];
+                [sessionDic setObject:events forKey:session];
+            } else {
+                // 字典中无session
+                NSMutableArray *events = [NSMutableArray array];
+                [events addObject:eventDic];
+                [sessionDic setObject:events forKey:session];
+            }
+        }
+        NSMutableArray *sessions = [NSMutableArray array];
+        for (NSString *session in sessionDic.allKeys) {
+            NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:
+                                 session, @"id",
+                                 sessionDic[session], @"events",
+                                 nil];
+            [sessions addObject:dic];
+        }
+        NSLog(@"%@",sessions);
+    }
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 }
@@ -120,7 +157,8 @@
     // 设置IDFA（广告标识符）
     NSString *IDFA = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
     DEF_PERSISTENT_SET_OBJECT(@"IDFA", IDFA);
-    
+    NSString *uuid = [[NSUUID UUID] UUIDString];
+    DEF_PERSISTENT_SET_OBJECT(@"UUID", uuid);
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     // 手机厂商
     [params setObject:@"apple" forKey:@"vendor"];
@@ -142,12 +180,14 @@
     if ([@"WiFi" isEqualToString:DEF_PERSISTENT_GET_OBJECT(@"netStatus")]) {
         netType = @"wifi";
     } else {
-        if ([netType isEqualToString:@"CTRadioAccessTechnologyGPRS"] || [netType isEqualToString:@"CTRadioAccessTechnologyEdge"] || [netType isEqualToString:@"CTRadioAccessTechnologyWCDMA"]) {
+        if ([netType isEqualToString:@"CTRadioAccessTechnologyGPRS"] || [netType isEqualToString:@"CTRadioAccessTechnologyEdge"]) {
             netType = @"2G";
-        } else if ([netType isEqualToString:@"CTRadioAccessTechnologyHSDPA"] || [netType isEqualToString:@"CTRadioAccessTechnologyHSUPA"] || [netType isEqualToString:@"CTRadioAccessTechnologyCDMA1x"] || [netType isEqualToString:@"CTRadioAccessTechnologyCDMAEVDORev0"] || [netType isEqualToString:@"CTRadioAccessTechnologyCDMAEVDORevA"] || [netType isEqualToString:@"CTRadioAccessTechnologyCDMAEVDORevB"] || [netType isEqualToString:@"CTRadioAccessTechnologyeHRPD"]) {
+        } else if ([netType isEqualToString:@"CTRadioAccessTechnologyHSDPA"] || [netType isEqualToString:@"CTRadioAccessTechnologyWCDMA"] || [netType isEqualToString:@"CTRadioAccessTechnologyHSUPA"] || [netType isEqualToString:@"CTRadioAccessTechnologyCDMA1x"] || [netType isEqualToString:@"CTRadioAccessTechnologyCDMAEVDORev0"] || [netType isEqualToString:@"CTRadioAccessTechnologyCDMAEVDORevA"] || [netType isEqualToString:@"CTRadioAccessTechnologyCDMAEVDORevB"] || [netType isEqualToString:@"CTRadioAccessTechnologyeHRPD"]) {
             netType = @"3G";
-        } else {
+        } else if ([netType isEqualToString:@"CTRadioAccessTechnologyLTE"]){
             netType = @"4G";
+        } else {
+            netType = @"unknow";
         }
     }
     [params setObject:netType forKey:@"net"];
@@ -260,6 +300,7 @@
     _model = model;
     _likedDic = [NSMutableDictionary dictionary];
     _checkDic = [NSMutableDictionary dictionary];
+    _eventArray = [NSMutableArray array];
     NSString *checkFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/check.data"];
     NSDictionary *checkData = [NSKeyedUnarchiver unarchiveObjectWithFile:checkFilePath];
     NSNumber *checkNum = checkData.allKeys.firstObject;

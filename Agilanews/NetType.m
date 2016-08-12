@@ -14,15 +14,17 @@
 {
     CTTelephonyNetworkInfo *networInfo = [[CTTelephonyNetworkInfo alloc] init];
     NSString *netType = networInfo.currentRadioAccessTechnology;
-    if ([netType isEqualToString:@"WiFi"]) {
+    if ([@"WiFi" isEqualToString:DEF_PERSISTENT_GET_OBJECT(@"netStatus")]) {
         return @"wifi";
     } else {
-        if ([netType isEqualToString:@"CTRadioAccessTechnologyGPRS"] || [netType isEqualToString:@"CTRadioAccessTechnologyEdge"] || [netType isEqualToString:@"CTRadioAccessTechnologyWCDMA"]) {
+        if ([netType isEqualToString:@"CTRadioAccessTechnologyGPRS"] || [netType isEqualToString:@"CTRadioAccessTechnologyEdge"]) {
             return @"2G";
-        } else if ([netType isEqualToString:@"CTRadioAccessTechnologyHSDPA"] || [netType isEqualToString:@"CTRadioAccessTechnologyHSUPA"] || [netType isEqualToString:@"CTRadioAccessTechnologyCDMA1x"] || [netType isEqualToString:@"CTRadioAccessTechnologyCDMAEVDORev0"] || [netType isEqualToString:@"CTRadioAccessTechnologyCDMAEVDORevA"] || [netType isEqualToString:@"CTRadioAccessTechnologyCDMAEVDORevB"] || [netType isEqualToString:@"CTRadioAccessTechnologyeHRPD"]) {
+        } else if ([netType isEqualToString:@"CTRadioAccessTechnologyHSDPA"] || [netType isEqualToString:@"CTRadioAccessTechnologyWCDMA"] || [netType isEqualToString:@"CTRadioAccessTechnologyHSUPA"] || [netType isEqualToString:@"CTRadioAccessTechnologyCDMA1x"] || [netType isEqualToString:@"CTRadioAccessTechnologyCDMAEVDORev0"] || [netType isEqualToString:@"CTRadioAccessTechnologyCDMAEVDORevA"] || [netType isEqualToString:@"CTRadioAccessTechnologyCDMAEVDORevB"] || [netType isEqualToString:@"CTRadioAccessTechnologyeHRPD"]) {
             return @"3G";
-        } else {
+        } else if ([netType isEqualToString:@"CTRadioAccessTechnologyLTE"]){
             return @"4G";
+        } else {
+            return @"unknow";
         }
     }
 }

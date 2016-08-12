@@ -276,6 +276,7 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NewsModel *model = _dataList[indexPath.row];
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
 
     // 打点-点击列表-010108
     NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -287,21 +288,33 @@
     // 服务器打点-列表页点击详情-020102
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     NSString *pagePos = [NSString stringWithFormat:@"%.1f",(cell.top - tableView.contentOffset.y + 1.5) / tableView.height];
-    NSDictionary *eventDic = [NSDictionary dictionaryWithObjectsAndKeys:
-                              @020102, @"id",
-                              [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"start",
-                              model.news_id, @"news_id",
-                              [NSNumber numberWithInteger:indexPath.row], @"list_pos",
-                              _model.channelID, @"refer",
-                              pagePos, @"page_pos",
-                              model.issuedID, @"dispatch_id",
-                              nil];
+    NSMutableDictionary *eventDic = [NSMutableDictionary dictionary];
+    [eventDic setObject:@"020102" forKey:@"id"];
+    [eventDic setObject:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970] * 1000] forKey:@"time"];
+    [eventDic setObject:model.news_id forKey:@"news_id"];
+    [eventDic setObject:[NSNumber numberWithInteger:indexPath.row] forKey:@"list_pos"];
+    [eventDic setObject:_model.channelID forKey:@"refer"];
+    [eventDic setObject:pagePos forKey:@"page_pos"];
+    [eventDic setObject:model.issuedID forKey:@"dispatch_id"];
+    [eventDic setObject:[NetType getNetType] forKey:@"net"];
+    if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
+        [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) forKey:@"lng"];
+        [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) forKey:@"lat"];
+    }
     NSDictionary *sessionDic = [NSDictionary dictionaryWithObjectsAndKeys:
-                                DEF_PERSISTENT_GET_OBJECT(@"IDFA"), @"id",
+                                DEF_PERSISTENT_GET_OBJECT(@"UUID"), @"id",
                                 [NSArray arrayWithObject:eventDic], @"events",
                                 nil];
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObject:[NSArray arrayWithObject:sessionDic] forKey:@"sessions"];
+    [[SSHttpRequest sharedInstance] post:@"" params:params contentType:JsonType serverType:NetServer_Log success:^(id responseObj) {
+        // 打点成功
+        NSLog(@"123");
+    } failure:^(NSError *error) {
+        // 打点失败
+        [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
+        [appDelegate.eventArray addObject:eventDic];
+    } isShowHUD:NO];
     
-    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     [appDelegate.checkDic setObject:@1 forKey:model.news_id];
     NewsDetailViewController *newsDetailVC = [[NewsDetailViewController alloc] init];
     newsDetailVC.model = model;
@@ -320,7 +333,7 @@
 // 滑动视图开始拖拽
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
-    _beginScrollTime = [[NSDate date] timeIntervalSince1970];
+    _beginScrollTime = [[NSDate date] timeIntervalSince1970] * 1000;
 }
 
 // 滑动视图停止拖拽
@@ -341,14 +354,22 @@
             NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
             NewsModel *model = _dataList[indexPath.row];
             // 服务器打点-列表页滑动-020101
-            NSDictionary *eventDic = [NSDictionary dictionaryWithObjectsAndKeys:
-                                      @020101, @"id",
-                                      [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"start",
-                                      _model.channelID, @"channel",
-                                      model.news_id, @"last_id",
-                                      [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970] - _beginScrollTime], @"duration",
-                                      model.issuedID, @"dispatch_id",
-                                      nil];
+            NSMutableDictionary *eventDic = [NSMutableDictionary dictionary];
+            [eventDic setObject:@"020101" forKey:@"id"];
+            [eventDic setObject:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970] * 1000] forKey:@"time"];
+            [eventDic setObject:_model.channelID forKey:@"channel"];
+            [eventDic setObject:model.news_id forKey:@"last_id"];
+            long long duration = [[NSDate date] timeIntervalSince1970] * 1000 - _beginScrollTime;
+            [eventDic setObject:[NSString stringWithFormat:@"%.1f",duration / 1000.0] forKey:@"duration"];
+            [eventDic setObject:[NetType getNetType] forKey:@"net"];
+            if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
+                [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) forKey:@"lng"];
+                [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) forKey:@"lat"];
+            }
+            [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
+            AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+            [appDelegate.eventArray addObject:eventDic];
+            NSLog(@"服务器打点-列表页滑动-020101");
         }
     });
 }
@@ -367,14 +388,22 @@
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     NewsModel *model = _dataList[indexPath.row];
     // 服务器打点-列表页滑动-020101
-    NSDictionary *eventDic = [NSDictionary dictionaryWithObjectsAndKeys:
-                              @020101, @"id",
-                              [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"start",
-                              _model.channelID, @"channel",
-                              model.news_id, @"last_id",
-                              [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970] - _beginScrollTime], @"duration",
-                              model.issuedID, @"dispatch_id",
-                              nil];
+    NSMutableDictionary *eventDic = [NSMutableDictionary dictionary];
+    [eventDic setObject:@"020101" forKey:@"id"];
+    [eventDic setObject:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970] * 1000] forKey:@"time"];
+    [eventDic setObject:_model.channelID forKey:@"channel"];
+    [eventDic setObject:model.news_id forKey:@"last_id"];
+    long long duration = [[NSDate date] timeIntervalSince1970] * 1000 - _beginScrollTime;
+    [eventDic setObject:[NSString stringWithFormat:@"%.1f",duration / 1000.0] forKey:@"duration"];
+    [eventDic setObject:[NetType getNetType] forKey:@"net"];
+    if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
+        [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) forKey:@"lng"];
+        [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) forKey:@"lat"];
+    }
+    [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    [appDelegate.eventArray addObject:eventDic];
+    NSLog(@"服务器打点-列表页滑动-020101");
 }
 
 #pragma mark - Network

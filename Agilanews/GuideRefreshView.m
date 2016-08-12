@@ -128,6 +128,7 @@ static GuideRefreshView *_guideView = nil;
         } completion:^(BOOL finished) {
             DEF_PERSISTENT_SET_OBJECT(SS_GuideHomeKey, @1);
             [[GuideRefreshView sharedInstance] removeFromSuperview];
+            _guideView = nil;
         }];
     }
 }

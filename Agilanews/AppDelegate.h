@@ -18,6 +18,7 @@
 @property (strong, nonatomic) LoginModel *model;
 @property (strong, nonatomic) NSMutableDictionary *likedDic;    // 点赞记录
 @property (strong, nonatomic) NSMutableDictionary *checkDic;    // 新闻查看记录
+@property (strong, nonatomic) NSMutableArray *eventArray;       // 打点记录
 
 @end
 
