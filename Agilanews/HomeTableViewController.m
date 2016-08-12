@@ -300,20 +300,22 @@
     if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
         [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) forKey:@"lng"];
         [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) forKey:@"lat"];
+    } else {
+        [eventDic setObject:@"" forKey:@"lng"];
+        [eventDic setObject:@"" forKey:@"lat"];
     }
     NSDictionary *sessionDic = [NSDictionary dictionaryWithObjectsAndKeys:
                                 DEF_PERSISTENT_GET_OBJECT(@"UUID"), @"id",
                                 [NSArray arrayWithObject:eventDic], @"events",
                                 nil];
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObject:[NSArray arrayWithObject:sessionDic] forKey:@"sessions"];
-    [[SSHttpRequest sharedInstance] post:@"" params:params contentType:JsonType serverType:NetServer_Log success:^(id responseObj) {
-        // 打点成功
-        NSLog(@"123");
-    } failure:^(NSError *error) {
-        // 打点失败
-        [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
-        [appDelegate.eventArray addObject:eventDic];
-    } isShowHUD:NO];
+//    [[SSHttpRequest sharedInstance] post:@"" params:params contentType:JsonType serverType:NetServer_Log success:^(id responseObj) {
+//        // 打点成功
+//    } failure:^(NSError *error) {
+//        // 打点失败
+//        [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
+//        [appDelegate.eventArray addObject:eventDic];
+//    } isShowHUD:NO];
     
     [appDelegate.checkDic setObject:@1 forKey:model.news_id];
     NewsDetailViewController *newsDetailVC = [[NewsDetailViewController alloc] init];
@@ -365,11 +367,13 @@
             if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
                 [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) forKey:@"lng"];
                 [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) forKey:@"lat"];
+            } else {
+                [eventDic setObject:@"" forKey:@"lng"];
+                [eventDic setObject:@"" forKey:@"lat"];
             }
             [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
             AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
             [appDelegate.eventArray addObject:eventDic];
-            NSLog(@"服务器打点-列表页滑动-020101");
         }
     });
 }
@@ -399,11 +403,13 @@
     if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
         [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) forKey:@"lng"];
         [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) forKey:@"lat"];
+    } else {
+        [eventDic setObject:@"" forKey:@"lng"];
+        [eventDic setObject:@"" forKey:@"lat"];
     }
     [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     [appDelegate.eventArray addObject:eventDic];
-    NSLog(@"服务器打点-列表页滑动-020101");
 }
 
 #pragma mark - Network

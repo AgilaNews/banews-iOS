@@ -125,6 +125,9 @@ static SSHttpRequest *_manager = nil;
     if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
         [params setObject:DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) forKey:@"lng"];
         [params setObject:DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) forKey:@"lat"];
+    } else {
+        [params setObject:@"" forKey:@"lng"];
+        [params setObject:@"" forKey:@"lat"];
     }
     // 语言设置
     [params setObject:[[NSLocale preferredLanguages] firstObject] forKey:@"lang"];
@@ -202,6 +205,9 @@ static SSHttpRequest *_manager = nil;
     if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
         [baseParams setObject:DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) forKey:@"lng"];
         [baseParams setObject:DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) forKey:@"lat"];
+    } else {
+        [baseParams setObject:@"" forKey:@"lng"];
+        [baseParams setObject:@"" forKey:@"lat"];
     }
     // 语言设置
     [baseParams setObject:[[NSLocale preferredLanguages] firstObject] forKey:@"lang"];
@@ -410,6 +416,9 @@ static SSHttpRequest *_manager = nil;
     if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
         [params setObject:DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) forKey:@"lng"];
         [params setObject:DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) forKey:@"lat"];
+    } else {
+        [params setObject:@"" forKey:@"lng"];
+        [params setObject:@"" forKey:@"lat"];
     }
     // 语言设置
     [params setObject:[[NSLocale preferredLanguages] firstObject] forKey:@"lang"];

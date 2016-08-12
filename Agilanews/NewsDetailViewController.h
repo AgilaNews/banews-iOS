@@ -31,5 +31,6 @@
 @property (nonatomic, assign) NSInteger pullupCount;    // 上拉加载次数
 @property (nonatomic, strong) NSString *channelName;    // 频道名
 @property (nonatomic, assign) long long enterTime;      // 文章进入时间
+@property (nonatomic, assign) BOOL isRecommendShow;     // 推荐文章展示
 
 @end

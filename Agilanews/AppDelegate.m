@@ -36,6 +36,12 @@
     [self locationServices];
     // 冷启动
     [self coldBoot:YES];
+    // 启动上报打点
+    NSString *logFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/log.data"];
+    NSMutableArray *logData = [NSKeyedUnarchiver unarchiveObjectWithFile:logFilePath];
+    if (logData.count > 0 && logData != nil) {
+        [self serverLogWithEventArray:logData];
+    }
     //设置启动页面时间
     [NSThread sleepForTimeInterval:2.0];
 
@@ -71,42 +77,8 @@
                                    nil];
     [Flurry logEvent:@"App_Exit" withParameters:articleParams];
     
-    if ([[NetType getNetType] isEqualToString:@"wifi"] && _eventArray.count > 0) {
-        // 上报打点信息
-        NSArray *logArray = [NSArray array];
-        if (_eventArray.count >= 10) {
-            logArray = [_eventArray subarrayWithRange:NSMakeRange(0, 10)];
-            [_eventArray removeObjectsInRange:NSMakeRange(0, 10)];
-        } else {
-            logArray = [NSArray arrayWithArray:_eventArray];
-            [_eventArray removeAllObjects];
-        }
-        NSMutableDictionary *sessionDic = [NSMutableDictionary dictionary];
-        for (NSMutableDictionary *eventDic in logArray) {
-            NSString *session = eventDic[@"session"];
-            [eventDic removeObjectForKey:@"session"];
-            if (sessionDic[session] != nil) {
-                // 字典中有session
-                NSMutableArray *events = sessionDic[session];
-                [events addObject:eventDic];
-                [sessionDic setObject:events forKey:session];
-            } else {
-                // 字典中无session
-                NSMutableArray *events = [NSMutableArray array];
-                [events addObject:eventDic];
-                [sessionDic setObject:events forKey:session];
-            }
-        }
-        NSMutableArray *sessions = [NSMutableArray array];
-        for (NSString *session in sessionDic.allKeys) {
-            NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:
-                                 session, @"id",
-                                 sessionDic[session], @"events",
-                                 nil];
-            [sessions addObject:dic];
-        }
-        NSLog(@"%@",sessions);
-    }
+    // 服务端打点上报
+    [self serverLogWithEventArray:_eventArray];
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 }
@@ -141,6 +113,15 @@
     NSString *newsFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/news.data"];
     NSDictionary *newsData = [NSDictionary dictionaryWithObject:newsDic forKey:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]]];
     [NSKeyedArchiver archiveRootObject:newsData toFile:newsFilePath];
+    // 缓存打点记录
+    NSString *logFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/log.data"];
+    NSMutableArray *logData = [NSKeyedUnarchiver unarchiveObjectWithFile:logFilePath];
+    if (logData.count > 0) {
+        [logData addObjectsFromArray:_eventArray];
+    } else {
+        logData = [NSMutableArray arrayWithArray:_eventArray];
+    }
+    [NSKeyedArchiver archiveRootObject:logData toFile:logFilePath];
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
@@ -341,20 +322,55 @@
     [self.window.rootViewController presentViewController:textOnlyAlert animated:YES completion:nil];
 }
 
-//// 获取当前设备的截图
-//- (UIImage *)capture
-//{
-//    // 获取需要截取的视图
-//    UIView *view = _window.rootViewController.view;
-//    if (view == nil) {
-//        return nil;
-//    }
-//    
-//    UIGraphicsBeginImageContextWithOptions(view.bounds.size, view.opaque, 0);
-//    [view.layer renderInContext:UIGraphicsGetCurrentContext()];
-//    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-//    UIGraphicsEndImageContext();
-//    return image;
-//}
+/**
+ *  服务端打点上报
+ */
+- (void)serverLogWithEventArray:(NSMutableArray *)eventArray
+{
+    __weak typeof(self) weakSelf = self;
+    if ([[NetType getNetType] isEqualToString:@"wifi"] && eventArray.count > 0) {
+        // 上报打点信息
+        NSArray *logArray = [NSArray array];
+        if (eventArray.count >= 10) {
+            logArray = [eventArray subarrayWithRange:NSMakeRange(0, 10)];
+            [eventArray removeObjectsInRange:NSMakeRange(0, 10)];
+        } else {
+            logArray = [NSArray arrayWithArray:eventArray];
+            [eventArray removeAllObjects];
+        }
+        NSMutableDictionary *sessionDic = [NSMutableDictionary dictionary];
+        for (NSMutableDictionary *eventDic in logArray) {
+            NSString *session = eventDic[@"session"];
+            [eventDic removeObjectForKey:@"session"];
+            if (sessionDic[session] != nil) {
+                // 字典中有session
+                NSMutableArray *events = sessionDic[session];
+                [events addObject:eventDic];
+                [sessionDic setObject:events forKey:session];
+            } else {
+                // 字典中无session
+                NSMutableArray *events = [NSMutableArray array];
+                [events addObject:eventDic];
+                [sessionDic setObject:events forKey:session];
+            }
+        }
+        NSMutableArray *sessions = [NSMutableArray array];
+        for (NSString *session in sessionDic.allKeys) {
+            NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:
+                                 session, @"id",
+                                 sessionDic[session], @"events",
+                                 nil];
+            [sessions addObject:dic];
+        }
+        NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObject:[NSArray arrayWithObject:sessionDic] forKey:@"sessions"];
+//        [[SSHttpRequest sharedInstance] post:@"" params:params contentType:JsonType serverType:NetServer_Log success:^(id responseObj) {
+//            // 打点成功
+//            [weakSelf serverLogWithEventArray:eventArray];
+//        } failure:^(NSError *error) {
+//            // 打点失败
+//            [weakSelf serverLogWithEventArray:eventArray];
+//        } isShowHUD:NO];
+    }
+}
 
 @end

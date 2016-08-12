@@ -115,6 +115,26 @@
 
 - (void)dealloc
 {
+    // 服务器打点-详情页返回-020201
+    NSMutableDictionary *eventDic = [NSMutableDictionary dictionary];
+    [eventDic setObject:@"020201" forKey:@"id"];
+    [eventDic setObject:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970] * 1000] forKey:@"time"];
+    [eventDic setObject:_model.news_id forKey:@"news_id"];
+    float pagePos = (_tableView.contentOffset.y + kScreenHeight - 64 - 50) / _tableView.contentSize.height;
+    [eventDic setObject:[NSString stringWithFormat:@"%.1f",MAX(pagePos, 1)] forKey:@"page_pos"];
+    float duration = ([[NSDate date] timeIntervalSince1970] * 1000 - _enterTime * 1000) / 1000.0;
+    [eventDic setObject:[NSString stringWithFormat:@"%.1f",duration] forKey:@"duration"];
+    [eventDic setObject:[NetType getNetType] forKey:@"net"];
+    if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
+        [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) forKey:@"lng"];
+        [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) forKey:@"lat"];
+    } else {
+        [eventDic setObject:@"" forKey:@"lng"];
+        [eventDic setObject:@"" forKey:@"lat"];
+    }
+    [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    [appDelegate.eventArray addObject:eventDic];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -420,8 +440,7 @@
                     {
                         case NEWS_ManyPic:
                         {
-                            CGSize titleLabelSize = [model.title calculateSize:CGSizeMake(kScreenWidth - 20, 40) font:[UIFont systemFontOfSize:16]];
-                            return 11 + titleLabelSize.height + 10 + 70 + 10 + 11 + 11;
+                            return 12 + 68 + 12;
                         }
                             break;
                         case NEWS_SinglePic:
@@ -511,11 +530,11 @@
                         {
                             case NEWS_ManyPic:
                             {
-                                // 多图cell
-                                static NSString *cellID = @"ManyPicCellID";
-                                ManyPicCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+                                // 单图cell
+                                static NSString *cellID = @"SinglePicCellID";
+                                SinglePicCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
                                 if (cell == nil) {
-                                    cell = [[ManyPicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:kWhiteBgColor];
+                                    cell = [[SinglePicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:kWhiteBgColor];
                                 }
                                 cell.model = model;
                                 [cell setNeedsLayout];
@@ -612,6 +631,41 @@
                                                _model.news_id, @"article",
                                                nil];
                 [Flurry logEvent:@"Article_ReArticle_Click" withParameters:articleParams];
+                
+                // 服务器打点-详情页点击相关推荐-020202
+                NSMutableDictionary *eventDic = [NSMutableDictionary dictionary];
+                [eventDic setObject:@"020202" forKey:@"id"];
+                [eventDic setObject:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970] * 1000] forKey:@"time"];
+                [eventDic setObject:model.news_id forKey:@"news_id"];
+                [eventDic setObject:_model.news_id forKey:@"refer"];
+                [eventDic setObject:@"1" forKey:@"pos"];
+                NSMutableArray *newslist = [NSMutableArray array];
+                for (NewsModel *model in _detailModel.recommend_news) {
+                    [newslist addObject:model.news_id];
+                }
+                [eventDic setObject:newslist forKey:@"newslist"];
+                [eventDic setObject:[NetType getNetType] forKey:@"net"];
+                if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
+                    [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) forKey:@"lng"];
+                    [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) forKey:@"lat"];
+                } else {
+                    [eventDic setObject:@"" forKey:@"lng"];
+                    [eventDic setObject:@"" forKey:@"lat"];
+                }
+                NSDictionary *sessionDic = [NSDictionary dictionaryWithObjectsAndKeys:
+                                            DEF_PERSISTENT_GET_OBJECT(@"UUID"), @"id",
+                                            [NSArray arrayWithObject:eventDic], @"events",
+                                            nil];
+                NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObject:[NSArray arrayWithObject:sessionDic] forKey:@"sessions"];
+//                [[SSHttpRequest sharedInstance] post:@"" params:params contentType:JsonType serverType:NetServer_Log success:^(id responseObj) {
+//                    // 打点成功
+//                } failure:^(NSError *error) {
+//                    // 打点失败
+//                    [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
+//                    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+//                    [appDelegate.eventArray addObject:eventDic];
+//                } isShowHUD:NO];
+                
                 [self.navigationController pushViewController:newsDetailVC animated:YES];
             }
             break;
@@ -623,6 +677,11 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
+    float page_pos = (scrollView.contentOffset.y + kScreenHeight - 170) / _webView.height;
+    if (page_pos >= 1.0 && !_webView.loading) {
+        // 推荐文章展示
+        _isRecommendShow = YES;
+    }
     if (![DEF_PERSISTENT_GET_OBJECT(SS_GuideFavKey) isEqualToNumber:@1]) {
         if (scrollView.contentOffset.y + kScreenHeight - 64 - 50 >= _tableView.contentSize.height && _tableView.numberOfSections == 3) {
             self.isShowGuide = YES;
@@ -841,6 +900,37 @@
         
         if (isShowGuide) {
             [[UIApplication sharedApplication].keyWindow addSubview:[GuideFavoritesView sharedInstance]];
+        }
+    }
+}
+
+- (void)setIsRecommendShow:(BOOL)isRecommendShow
+{
+    if (_isRecommendShow != isRecommendShow) {
+        _isRecommendShow = isRecommendShow;
+        
+        if (isRecommendShow) {
+            // 服务器打点-详情页相关推荐展示-020203
+            NSMutableDictionary *eventDic = [NSMutableDictionary dictionary];
+            [eventDic setObject:@"020203" forKey:@"id"];
+            [eventDic setObject:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970] * 1000] forKey:@"time"];
+            [eventDic setObject:_model.news_id forKey:@"news_id"];
+            NSMutableArray *newslist = [NSMutableArray array];
+            for (NewsModel *model in _detailModel.recommend_news) {
+                [newslist addObject:model.news_id];
+            }
+            [eventDic setObject:newslist forKey:@"newslist"];
+            [eventDic setObject:[NetType getNetType] forKey:@"net"];
+            if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
+                [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) forKey:@"lng"];
+                [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) forKey:@"lat"];
+            } else {
+                [eventDic setObject:@"" forKey:@"lng"];
+                [eventDic setObject:@"" forKey:@"lat"];
+            }
+            [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
+            AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+            [appDelegate.eventArray addObject:eventDic];
         }
     }
 }
