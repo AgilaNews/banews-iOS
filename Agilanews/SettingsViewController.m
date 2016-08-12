@@ -348,12 +348,7 @@
         // 点击确定清除
         [self clearLocalCache];
     }];
-//    if ([yesAction valueForKey:@"_titleTextColor"]) {
-//        [yesAction setValue:kOrangeColor forKey:@"_titleTextColor"];
-//    }
-//    if ([noAction valueForKey:@"_titleTextColor"]) {
-//        [noAction setValue:SSColor(102, 102, 102) forKey:@"_titleTextColor"];
-//    }
+
     [clearAlert addAction:noAction];
     [clearAlert addAction:yesAction];
     [self presentViewController:clearAlert animated:YES completion:nil];
@@ -453,6 +448,7 @@
  */
 - (void)clearCachSuccess
 {
+    _cacheSize = [NSString stringWithFormat : @"%.2fMB" , [self filePath]];
     [_tableView reloadData];
 }
 

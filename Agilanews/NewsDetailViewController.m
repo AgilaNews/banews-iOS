@@ -498,16 +498,17 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *cellID = @"webCellID";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
-    }
+    UITableViewCell *cell = nil;
     if (!_webView.isLoading) {
         switch (indexPath.section) {
             case 0:
             {
                 // 新闻详情
+                static NSString *cellID = @"webCellID";
+                cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+                if (cell == nil) {
+                    cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+                }
                 [cell.contentView addSubview:_webView];
                 [cell.contentView addSubview:self.likeButton];
                 self.likeButton.top = _webView.bottom;
@@ -519,8 +520,16 @@
                 switch (indexPath.row) {
                     case 0:
                     {
-                        RecommendedView *recommendedView = [[RecommendedView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 30) titleImage:[UIImage imageNamed:@"icon_article_recommend_small"] titleText:@"Recommended for you"];
-                        [cell.contentView addSubview:recommendedView];
+                        static NSString *cellID = @"recommendedCellID";
+                        cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+                        if (cell == nil) {
+                            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+                        }
+                        if (cell.contentView.subviews.count <= 0) {
+                            RecommendedView *recommendedView = [[RecommendedView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 30) titleImage:[UIImage imageNamed:@"icon_article_recommend_small"] titleText:@"Recommended for you"];
+                            [cell.contentView addSubview:recommendedView];
+                        }
+                        return cell;
                         break;
                     }
                     default:
@@ -532,11 +541,11 @@
                             {
                                 // 单图cell
                                 static NSString *cellID = @"SinglePicCellID";
-                                SinglePicCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+                                cell = [tableView dequeueReusableCellWithIdentifier:cellID];
                                 if (cell == nil) {
                                     cell = [[SinglePicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:kWhiteBgColor];
                                 }
-                                cell.model = model;
+                                ((SinglePicCell *)cell).model = model;
                                 [cell setNeedsLayout];
                                 return cell;
                                 break;
@@ -545,11 +554,11 @@
                             {
                                 // 单图cell
                                 static NSString *cellID = @"SinglePicCellID";
-                                SinglePicCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+                                cell = [tableView dequeueReusableCellWithIdentifier:cellID];
                                 if (cell == nil) {
                                     cell = [[SinglePicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:kWhiteBgColor];
                                 }
-                                cell.model = model;
+                                ((SinglePicCell *)cell).model = model;
                                 [cell setNeedsLayout];
                                 return cell;
                                 break;
@@ -558,11 +567,11 @@
                             {
                                 // 无图cell
                                 static NSString *cellID = @"NoPicCellID";
-                                NoPicCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+                                cell = [tableView dequeueReusableCellWithIdentifier:cellID];
                                 if (cell == nil) {
                                     cell = [[NoPicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:kWhiteBgColor];
                                 }
-                                cell.model = model;
+                                ((NoPicCell *)cell).model = model;
                                 [cell setNeedsLayout];
                                 return cell;
                                 break;
@@ -578,26 +587,34 @@
                 switch (indexPath.row) {
                     case 0:
                     {
-                        RecommendedView *recommendedView = [[RecommendedView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 30) titleImage:[UIImage imageNamed:@"icon_article_comments_small"] titleText:@"Comments"];
-                        [cell.contentView addSubview:recommendedView];
+                        static NSString *cellID = @"commentsCellID";
+                        cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+                        if (cell == nil) {
+                            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+                        }
+                        if (cell.contentView.subviews.count <= 0) {
+                            RecommendedView *recommendedView = [[RecommendedView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 30) titleImage:[UIImage imageNamed:@"icon_article_comments_small"] titleText:@"Comments"];
+                            [cell.contentView addSubview:recommendedView];
+                        }
+                        return cell;
                         break;
                     }
                     default:
                     {
                         // 评论cell
+                        static NSString *cellID = @"commentID";
+                        cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+                        if (cell == nil) {
+                            cell = [[CommentCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+                        }
                         if (_commentArray.count > 0) {
                             [self.noCommentView removeFromSuperview];
-                            static NSString *cellID = @"commentID";
-                            CommentCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
-                            if (cell == nil) {
-                                cell = [[CommentCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
-                            }
-                            cell.model = _commentArray[indexPath.row - 1];
-                            [cell setNeedsLayout];
-                            return cell;
+                            ((CommentCell *)cell).model = _commentArray[indexPath.row - 1];
                         } else {
                             [cell.contentView addSubview:self.noCommentView];
                         }
+                        [cell setNeedsLayout];
+                        return cell;
                         break;
                     }
                 }
@@ -609,6 +626,7 @@
     }
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     cell.backgroundColor = kWhiteBgColor;
+    [cell setNeedsLayout];
     return cell;
 }
 
