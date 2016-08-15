@@ -20,6 +20,7 @@
 @property (nonatomic, assign) float scrollY;
 @property (nonatomic, assign) BOOL isDecelerating;
 @property (nonatomic, assign) long long beginScrollTime;
+@property (nonatomic, assign) long long refreshTime;
 
 - (instancetype)initWithModel:(CategoriesModel *)model;
 

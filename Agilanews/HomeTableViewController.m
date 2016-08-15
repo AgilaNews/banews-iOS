@@ -455,6 +455,7 @@
             [Flurry logEvent:@"Home_List_DownRefresh_Y" withParameters:articleParams];
             [_dataList insertObjects:models atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, models.count)]];
             [weakSelf tableViewDidFinishTriggerHeader:YES reload:YES];
+            _refreshTime = [[NSDate date] timeIntervalSince1970];
         } else {
             // 打点-上拉加载成功-010110
             NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -559,6 +560,8 @@
     CategoriesModel *cateModel = notif.object;
     if ([cateModel.channelID isEqualToNumber:_model.channelID] && _dataList.count <= 0) {
         [self.tableView.header beginRefreshing];
+    } else if ([cateModel.channelID isEqualToNumber:_model.channelID] && ([[NSDate date] timeIntervalSince1970] - _refreshTime) > 3600) {
+        [self.tableView.header beginRefreshing];
     } else {
         [self.tableView reloadData];
     }
@@ -573,7 +576,10 @@
 {
     CategoriesModel *cateModel = notif.object;
     if ([cateModel.channelID isEqualToNumber:_model.channelID] && _dataList.count <= 0) {
-        [self requestDataWithChannelID:_model.channelID isLater:YES isShowHUD:NO];
+        [self.tableView.header beginRefreshing];
+//        [self requestDataWithChannelID:_model.channelID isLater:YES isShowHUD:NO];
+    } else if ([cateModel.channelID isEqualToNumber:_model.channelID] && ([[NSDate date] timeIntervalSince1970] - _refreshTime) > 3600) {
+        [self.tableView.header beginRefreshing];
     } else {
         [self.tableView reloadData];
     }

@@ -367,11 +367,11 @@ static const CGFloat SVProgressHUDDefaultAnimationDuration = 0.15;
 
         _ringThickness = 2.0f;
         _ringRadius = 18.0f;
-        _ringNoTextRadius = 24.0f;
+        _ringNoTextRadius = 12.0f;//无文字时加载loading半径
         
         _cornerRadius = 15.0f;
         
-        _minimumDismissTimeInterval = 2;
+        _minimumDismissTimeInterval = 3;
 
         _fadeInAnimationDuration = SVProgressHUDDefaultAnimationDuration;
         _fadeOutAnimationDuration = SVProgressHUDDefaultAnimationDuration;
@@ -1122,6 +1122,7 @@ static const CGFloat SVProgressHUDDefaultAnimationDuration = 0.15;
         indefiniteAnimatedView.strokeColor = self.foregroundColorForStyle;
         indefiniteAnimatedView.strokeThickness = self.ringThickness;
         indefiniteAnimatedView.radius = self.statusLabel.text ? self.ringRadius : self.ringNoTextRadius;
+        
     } else {
         // Check if spinner exists and is an object of different class
         if(_indefiniteAnimatedView && ![_indefiniteAnimatedView isKindOfClass:[UIActivityIndicatorView class]]){
@@ -1219,7 +1220,7 @@ static const CGFloat SVProgressHUDDefaultAnimationDuration = 0.15;
 
 - (UIColor*)backgroundColorForStyle {
     if(self.defaultStyle == SVProgressHUDStyleLight) {
-//        return [UIColor whiteColor];
+//        return [UIColor clearColor];
         return [UIColor colorWithRed:0 green:0 blue:0 alpha:.7];
     } else if(self.defaultStyle == SVProgressHUDStyleDark) {
         return [UIColor blackColor];

@@ -147,6 +147,7 @@
 - (void)requestDataWithNewsID:(NSString *)newsID ShowHUD:(BOOL)showHUD
 {
     if (showHUD) {
+        SVProgressHUD.defaultStyle = SVProgressHUDStyleCustom;
         [SVProgressHUD show];
     }
     __weak typeof(self) weakSelf = self;
@@ -161,7 +162,6 @@
             _blankView = nil;
             _blankLabel = nil;
         }
-        [SVProgressHUD dismiss];
         weakSelf.detailModel = [NewsDetailModel mj_objectWithKeyValues:responseObj];
         // css文件路径
         NSString *filePath = [[NSBundle mainBundle] pathForResource:@"webView" ofType:@"css"];
@@ -183,7 +183,7 @@
             }
         }
         // 拼接HTML
-        NSString *htmlString = [NSString stringWithFormat:@"<html><head><link rel=\"stylesheet\" type=\"text/css\" href=\"file:///%@\"/></head><body><div class=\"title\">%@</div><div class=\"sourcetime\">%@  %@ <a class=\"source\" href=" ">/View source</a></div>%@",filePath,weakSelf.detailModel.title,dateString,weakSelf.detailModel.source,weakSelf.detailModel.body];
+        NSString *htmlString = [NSString stringWithFormat:@"<html><head><link rel=\"stylesheet\" type=\"text/css\" href=\"file:///%@\"/></head><body><div class=\"title\">%@</div><div class=\"sourcetime\">%@ <a class=\"source\" href=\"%@\">/View source</a></div>%@",filePath,weakSelf.detailModel.title,dateString,weakSelf.detailModel.source_url,weakSelf.detailModel.body];
         htmlString = [htmlString stringByAppendingString:@"</body></html>"];
         [_webView loadHTMLString:htmlString baseURL:nil];
     } failure:^(NSError *error) {
@@ -753,7 +753,11 @@
 #pragma mark - UIWebViewDelegate
 - (void)webViewDidStartLoad:(UIWebView *)webView
 {
-    [SVProgressHUD show];
+//    [SVProgressHUD show];
+    [SVProgressHUD dismiss];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        SVProgressHUD.defaultStyle = SVProgressHUDStyleLight;
+    });
 }
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
@@ -776,7 +780,6 @@
             break;
     }
     [_webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"document.getElementsByTagName('body')[0].style.webkitTextSizeAdjust= '%ld%%'",(long)textSize]];
-    [SVProgressHUD dismiss];
     _tableView.frame = CGRectMake(0, 64, kScreenWidth, kScreenHeight - 64 - 50);
     [self.view addSubview:self.commentsView];
     CGFloat height = [[_webView stringByEvaluatingJavaScriptFromString:@"document.body.offsetHeight"] floatValue] + 25;
@@ -806,6 +809,15 @@
             [SVProgressHUD dismiss];
         });
     }
+}
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType;
+{
+    NSURL *requestURL = [request URL];
+    if (([[requestURL scheme] isEqualToString:@"http"] || [[requestURL scheme] isEqualToString:@"https"] || [[requestURL scheme] isEqualToString:@"mailto"])
+        && (navigationType == UIWebViewNavigationTypeLinkClicked)) {
+        return ![[UIApplication sharedApplication] openURL:requestURL];
+    }
+    return YES;
 }
 
 #pragma mark - setter/getter
@@ -1450,6 +1462,10 @@
 {
     // 取消网络请求
     [_task cancel];
+    [SVProgressHUD dismiss];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        SVProgressHUD.defaultStyle = SVProgressHUDStyleLight;
+    });
     // 打点-点击返回-010202
     NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
                                    [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",

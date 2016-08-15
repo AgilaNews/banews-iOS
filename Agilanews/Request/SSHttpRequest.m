@@ -54,7 +54,7 @@ static SSHttpRequest *_manager = nil;
     
     // 接口拼接
     if (url.length < 1) {
-        _urlString = @"https://api.agilanews.today/";
+        _urlString = @"http://api.agilanews.today/";
     } else {    
         switch (serverType) {
             case NetServer_Home:

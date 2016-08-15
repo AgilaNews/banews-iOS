@@ -74,17 +74,21 @@
     [params setObject:_textView.feedbackTextView.text forKey:@"fb_detail"];
     if ([_textField.text rangeOfString:@"@"].location != NSNotFound) {
         [params setObject:_textField.text forKey:@"email"];
-    }
-    [[SSHttpRequest sharedInstance] post:kHomeUrl_Feedback params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
-        // 打点-提交成功-010805
-        [Flurry logEvent:@"FeedB_Submit_Click_Y"];
-        
-        [SVProgressHUD showSuccessWithStatus:@"Successful"];
-        [self.navigationController popViewControllerAnimated:YES];
-    } failure:^(NSError *error) {
+        [[SSHttpRequest sharedInstance] post:kHomeUrl_Feedback params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
+            // 打点-提交成功-010805
+            [Flurry logEvent:@"FeedB_Submit_Click_Y"];
+            
+            [SVProgressHUD showSuccessWithStatus:@"Successful"];
+            [self.navigationController popViewControllerAnimated:YES];
+        } failure:^(NSError *error) {
+            // 打点-提交失败-010806
+            [Flurry logEvent:@"FeedB_Submit_Click_N"];
+        } isShowHUD:YES];
+    } else {
         // 打点-提交失败-010806
         [Flurry logEvent:@"FeedB_Submit_Click_N"];
-    } isShowHUD:YES];
+        [SVProgressHUD showErrorWithStatus:@"Please input right email address"];
+    }
 }
 
 - (void)backAction:(UIButton *)button
