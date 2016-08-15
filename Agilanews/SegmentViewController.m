@@ -12,7 +12,7 @@
 
 #define HEADBTN_TAG                 10000
 #define Default_BottomLineHeight    2
-#define Default_ButtonHeight        35
+#define Default_ButtonHeight        40
 #define Default_TitleColor          [UIColor blackColor]
 #define Default_HeadViewBackgroundColor  [UIColor whiteColor]
 #define Default_FontSize            17
@@ -59,7 +59,7 @@
     _lineView = nil;
     NSMutableArray *sizeArray = [NSMutableArray array];
     for (NSString *title in titleArray) {
-        CGSize size = [title calculateSize:CGSizeMake(1000, 35) font:[UIFont boldSystemFontOfSize:Default_FontSize]];
+        CGSize size = [title calculateSize:CGSizeMake(1000, 40) font:[UIFont boldSystemFontOfSize:Default_FontSize]];
         [sizeArray addObject:[NSNumber numberWithInt:MAX(size.width, 50) + 20]];
     }
     _sizeArray = sizeArray;

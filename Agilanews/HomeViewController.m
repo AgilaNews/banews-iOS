@@ -11,7 +11,7 @@
 #import "HomeTableViewController.h"
 #import "CategoriesModel.h"
 
-static CGFloat const ButtonHeight = 35;
+static CGFloat const ButtonHeight = 40;
 
 @interface HomeViewController ()
 
@@ -28,7 +28,7 @@ static CGFloat const ButtonHeight = 35;
 
     // 添加导航栏左侧按钮
     UIButton *leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    leftButton.frame = CGRectMake(0, 20, 50, 44);
+    leftButton.frame = CGRectMake(0, 0, 44, 44);
     [leftButton setImage:[UIImage imageNamed:@"left"] forState:UIControlStateNormal];
     [leftButton addTarget:self action:@selector(leftAction:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *buttonItem = [[UIBarButtonItem alloc] initWithCustomView:leftButton];

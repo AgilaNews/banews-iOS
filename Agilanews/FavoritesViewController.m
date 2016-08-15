@@ -375,7 +375,7 @@
         _showBlankView = showBlankView;
         
         if (showBlankView) {
-            _blankView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height)];
+            _blankView = [[UIView alloc] initWithFrame:CGRectMake(0, 64, self.view.width, self.view.height)];
             _blankView.backgroundColor = kWhiteBgColor;
             _blankView.userInteractionEnabled = YES;
             [self.tableView addSubview:_blankView];
