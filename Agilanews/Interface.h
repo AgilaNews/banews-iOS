@@ -25,15 +25,14 @@ typedef enum {
 
 #if DEBUG
 #define kHomeUrl        @"http://api.agilanews.info/v1"
-//#define kHomeUrl        @"http://api.agilanews.today/v1"
-#define kLogUrl         @"http://log.agilanews.info/v1"
-#define kMonUrl         @"http://mon.agilanews.info/v1"
-#define kReferrerUrl    @"http://api.agilanews.info/referrer/v1"
+#define kLogUrl         @"http://log.agilanews.info/"
+#define kMonUrl         @"http://mon.agilanews.info/"
+#define kReferrerUrl    @"http://api.agilanews.info/referrer/"
 #else
 #define kHomeUrl        @"http://api.agilanews.today/v1"
-#define kLogUrl         @"http://log.agilanews.today/v1"
-#define kMonUrl         @"http://mon.agilanews.today/v1"
-#define kReferrerUrl    @"http://api.agilanews.today/referrer/v1"
+#define kLogUrl         @"http://log.agilanews.today/"
+#define kMonUrl         @"http://mon.agilanews.today/"
+#define kReferrerUrl    @"http://api.agilanews.today/referrer/"
 #endif
 
 // 新闻列表刷新接口
