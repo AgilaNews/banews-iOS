@@ -363,13 +363,13 @@
             [sessions addObject:dic];
         }
         NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObject:[NSArray arrayWithObject:sessionDic] forKey:@"sessions"];
-//        [[SSHttpRequest sharedInstance] post:@"" params:params contentType:JsonType serverType:NetServer_Log success:^(id responseObj) {
-//            // 打点成功
-//            [weakSelf serverLogWithEventArray:eventArray];
-//        } failure:^(NSError *error) {
-//            // 打点失败
-//            [weakSelf serverLogWithEventArray:eventArray];
-//        } isShowHUD:NO];
+        [[SSHttpRequest sharedInstance] post:@"" params:params contentType:JsonType serverType:NetServer_Log success:^(id responseObj) {
+            // 打点成功
+            [weakSelf serverLogWithEventArray:eventArray];
+        } failure:^(NSError *error) {
+            // 打点失败
+            [weakSelf serverLogWithEventArray:eventArray];
+        } isShowHUD:NO];
     }
 }
 

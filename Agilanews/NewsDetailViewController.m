@@ -718,14 +718,14 @@
                                             [NSArray arrayWithObject:eventDic], @"events",
                                             nil];
                 NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObject:[NSArray arrayWithObject:sessionDic] forKey:@"sessions"];
-//                [[SSHttpRequest sharedInstance] post:@"" params:params contentType:JsonType serverType:NetServer_Log success:^(id responseObj) {
-//                    // 打点成功
-//                } failure:^(NSError *error) {
-//                    // 打点失败
-//                    [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
-//                    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-//                    [appDelegate.eventArray addObject:eventDic];
-//                } isShowHUD:NO];
+                [[SSHttpRequest sharedInstance] post:@"" params:params contentType:JsonType serverType:NetServer_Log success:^(id responseObj) {
+                    // 打点成功
+                } failure:^(NSError *error) {
+                    // 打点失败
+                    [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
+                    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+                    [appDelegate.eventArray addObject:eventDic];
+                } isShowHUD:NO];
                 
                 [self.navigationController pushViewController:newsDetailVC animated:YES];
             }
