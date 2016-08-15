@@ -845,9 +845,11 @@
             [button addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
             switch (i) {
                 case 0:
+                {
                     [button setImage:[UIImage imageNamed:@"icon_article_comments_default"] forState:UIControlStateNormal];
                     [button setImage:[UIImage imageNamed:@"icon_article_comments_select"] forState:UIControlStateHighlighted];
                     break;
+                }
                 case 1:
                     [button setImage:[UIImage imageNamed:@"icon_article_collect_default"] forState:UIControlStateNormal];
                     [button setImage:[UIImage imageNamed:@"icon_article_collect_select"] forState:UIControlStateSelected];
@@ -860,7 +862,35 @@
                     break;
             }
             [_commentsView addSubview:button];
+            
+            if (i == 0 && _detailModel.commentCount.integerValue > 0) {
+                int width;
+                if (_detailModel.commentCount.integerValue < 10) {
+                    width = 12;
+                } else if (_detailModel.commentCount.integerValue < 100) {
+                    width = 16;
+                } else if (_detailModel.commentCount.integerValue < 1000) {
+                    width = 22;
+                } else {
+                    width = 28;
+                }
+                UILabel *commentsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, width, 10)];
+                commentsLabel.center = CGPointMake(button.right - 10, button.top + 16);
+                commentsLabel.backgroundColor = SSColor(255, 0, 0);
+                commentsLabel.layer.cornerRadius = 5.0f;
+                commentsLabel.layer.masksToBounds = YES;
+                commentsLabel.textAlignment = NSTextAlignmentCenter;
+                commentsLabel.font = [UIFont systemFontOfSize:10];
+                commentsLabel.textColor = [UIColor whiteColor];
+                if (_detailModel.commentCount.integerValue < 1000) {
+                    commentsLabel.text = _detailModel.commentCount.stringValue;
+                } else {
+                    commentsLabel.text = @"999+";
+                }
+                [_commentsView addSubview:commentsLabel];
+            }
         }
+        
     }
     return _commentsView;
 }
