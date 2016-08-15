@@ -467,7 +467,7 @@
             [weakSelf tableViewDidFinishTriggerHeader:NO reload:YES];
         }
         if (showHUD) {
-            [[BannerView sharedInstance] showBannerWithText:DEF_banner(models.count) superView:weakSelf.tableView];
+            [[BannerView sharedInstance] showBannerWithText:DEF_banner((unsigned long)models.count) superView:weakSelf.tableView];
         }
         [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Refresh_Success object:nil];
     } failure:^(NSError *error) {

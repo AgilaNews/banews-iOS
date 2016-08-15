@@ -309,7 +309,7 @@
         [button setTitle:[NSString stringWithFormat:@"%@",responseObj[@"liked"]] forState:UIControlStateNormal];
         button.selected = YES;
     } failure:^(NSError *error) {
-        [button setTitle:[NSString stringWithFormat:@"%ld",[button.titleLabel.text integerValue] - 1] forState:UIControlStateNormal];
+        [button setTitle:[NSString stringWithFormat:@"%d",button.titleLabel.text.intValue - 1] forState:UIControlStateNormal];
         button.selected = NO;
     } isShowHUD:NO];
 }
@@ -1150,14 +1150,14 @@
     
     _likeButton.selected = !button.selected;
     if (button.selected) {
-        [button setTitle:[NSString stringWithFormat:@"%ld",[button.titleLabel.text integerValue] + 1] forState:UIControlStateNormal];
+        [button setTitle:[NSString stringWithFormat:@"%d",button.titleLabel.text.intValue - 1] forState:UIControlStateNormal];
         AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
         if (appDelegate.likedDic[_model.news_id] != nil) {
             return;
         }
         [self likedNewsWithAppDelegate:appDelegate button:button];
     } else {
-        [button setTitle:[NSString stringWithFormat:@"%ld",[button.titleLabel.text integerValue] - 1] forState:UIControlStateNormal];
+        [button setTitle:[NSString stringWithFormat:@"%d",button.titleLabel.text.intValue - 1] forState:UIControlStateNormal];
     }
 }
 

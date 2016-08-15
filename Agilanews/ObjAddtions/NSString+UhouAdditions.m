@@ -31,14 +31,14 @@
 //-----------------------------------------------------------------------------------
 
 //返回行数
-- (NSInteger)numberOfLinesWithFont:(UIFont*)font withLineWidth:(NSInteger)lineWidth
-{
-    CGSize size = [self sizeWithFont:font
-                   constrainedToSize:CGSizeMake(lineWidth, CGFLOAT_MAX)
-                       lineBreakMode:NSLineBreakByTruncatingTail];
-    NSInteger lines = size.height / [font ittLineHeight];
-    return lines;
-}
+//- (NSInteger)numberOfLinesWithFont:(UIFont*)font withLineWidth:(NSInteger)lineWidth
+//{
+//    CGSize size = [self sizeWithFont:font
+//                   constrainedToSize:CGSizeMake(lineWidth, CGFLOAT_MAX)
+//                       lineBreakMode:NSLineBreakByTruncatingTail];
+//    NSInteger lines = size.height / [font ittLineHeight];
+//    return lines;
+//}
 
 //计算字符串的宽度
 -(CGFloat)widthWithFont:(UIFont *)font withLineHeight:(CGFloat)lineHeight

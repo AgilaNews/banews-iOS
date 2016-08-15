@@ -33,7 +33,7 @@ typedef enum : NSUInteger {
 //-----------------------------------------------------------------------------------
 
 //返回行数
-- (NSInteger)numberOfLinesWithFont:(UIFont*)font withLineWidth:(NSInteger)lineWidth;
+//- (NSInteger)numberOfLinesWithFont:(UIFont*)font withLineWidth:(NSInteger)lineWidth;
 
 
 /**
