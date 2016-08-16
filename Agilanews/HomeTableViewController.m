@@ -354,6 +354,9 @@
         if (!_isDecelerating) {
             UITableViewCell *cell = self.tableView.visibleCells.lastObject;
             NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+            if (_dataList.count <= indexPath.row) {
+                return;
+            }
             NewsModel *model = _dataList[indexPath.row];
             // 服务器打点-列表页滑动-020101
             NSMutableDictionary *eventDic = [NSMutableDictionary dictionary];
@@ -390,6 +393,9 @@
     _scrollY = scrollView.contentOffset.y;
     UITableViewCell *cell = self.tableView.visibleCells.lastObject;
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    if (_dataList.count <= indexPath.row) {
+        return;
+    }
     NewsModel *model = _dataList[indexPath.row];
     // 服务器打点-列表页滑动-020101
     NSMutableDictionary *eventDic = [NSMutableDictionary dictionary];

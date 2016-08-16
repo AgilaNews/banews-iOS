@@ -302,15 +302,16 @@
  */
 - (void)likedNewsWithAppDelegate:(AppDelegate *)appDelegate button:(UIButton *)button
 {
+    __weak typeof(self) weakSelf = self;
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setObject:_model.news_id forKey:@"news_id"];
     [[SSHttpRequest sharedInstance] post:kHomeUrl_Like params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
         [appDelegate.likedDic setValue:@1 forKey:_model.news_id];
         [button setTitle:[NSString stringWithFormat:@"%@",responseObj[@"liked"]] forState:UIControlStateNormal];
-        button.selected = YES;
+        weakSelf.likeButton.selected = YES;
     } failure:^(NSError *error) {
-        [button setTitle:[NSString stringWithFormat:@"%d",button.titleLabel.text.intValue - 1] forState:UIControlStateNormal];
-        button.selected = NO;
+//        [button setTitle:[NSString stringWithFormat:@"%d",button.titleLabel.text.intValue - 1] forState:UIControlStateNormal];
+//        weakSelf.likeButton.selected = NO;
     } isShowHUD:NO];
 }
 
@@ -1152,16 +1153,19 @@
     [Flurry logEvent:@"Article_Like_Click" withParameters:articleParams];
     
     if (button.selected) {
+        if (button.titleLabel.text.intValue > 0) {
+            [button setTitle:[NSString stringWithFormat:@"%d",button.titleLabel.text.intValue - 1] forState:UIControlStateNormal];
+        } else {
+            [button setTitle:@"0" forState:UIControlStateNormal];
+        }
+    } else {
         [button setTitle:[NSString stringWithFormat:@"%d",button.titleLabel.text.intValue + 1] forState:UIControlStateNormal];
         AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-        if (appDelegate.likedDic[_model.news_id] != nil) {
-            return;
+        if (appDelegate.likedDic[_model.news_id] == nil) {
+            [self likedNewsWithAppDelegate:appDelegate button:button];
         }
-        [self likedNewsWithAppDelegate:appDelegate button:button];
-    } else {
-        [button setTitle:[NSString stringWithFormat:@"%d",button.titleLabel.text.intValue - 1] forState:UIControlStateNormal];
     }
-    self.likeButton.selected = !button.selected;
+    button.selected = !button.selected;
 }
 
 /**
