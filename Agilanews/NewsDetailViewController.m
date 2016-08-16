@@ -938,6 +938,9 @@
                 [_likeButton setTitle:@"999+" forState:UIControlStateNormal];
                 break;
         }
+    } else {
+        _likeButton.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, -4);
+        [_likeButton setTitle:@"0" forState:UIControlStateNormal];
     }
     return _likeButton;
 }
