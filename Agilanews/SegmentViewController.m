@@ -63,7 +63,7 @@
         [sizeArray addObject:[NSNumber numberWithInt:MAX(size.width, 50) + 20]];
     }
     _sizeArray = sizeArray;
-    self.headerView.frame = CGRectMake(0, 0, MainScreenWidth, self.buttonHeight);
+    self.headerView.frame = CGRectMake(0, 0, MainScreenWidth, self.buttonHeight + 10);
     if (_segmentHeaderType == 0) {
         CGFloat width = 0;
         for (NSNumber *size_x in sizeArray) {

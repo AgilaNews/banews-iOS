@@ -32,7 +32,7 @@
 - (UIImageView *)gifView
 {
     if (!_gifView) {
-        UIImageView *gifView = [[UIImageView alloc] initWithFrame:CGRectMake((kScreenWidth - 20) * .5, 5, 20, 20)];
+        UIImageView *gifView = [[UIImageView alloc] initWithFrame:CGRectMake((kScreenWidth - 20) * .5, 5, 25, 25)];
         gifView.image = [UIImage imageNamed:@"icon_refresh"];
         gifView.contentMode = UIViewContentModeScaleAspectFill;
         [self addSubview:_gifView = gifView];
@@ -68,6 +68,8 @@
         case MJRefreshHeaderStateIdle: {
             if (oldState == MJRefreshHeaderStateRefreshing) {
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MJRefreshSlowAnimationDuration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    self.gifView.height = 25;
+                    self.gifView.width = 25;
                     self.pullingPercent = 0.0;
                 });
             } else {
@@ -75,14 +77,19 @@
             }
             break;
         }
+        case MJRefreshHeaderStateWillRefresh:
+        {
+            
+        }
             
         case MJRefreshHeaderStatePulling:
         {
-            self.gifView.height = 2 * 10 + 10;
-            self.mj_h = 2 * 10 + 10 + 25;
+            self.gifView.height = 2 * 7.5 + 10;
+            self.mj_h = 2 * 7.5 + 10 + 25;
         }
         case MJRefreshHeaderStateRefreshing: {
-            
+//            self.gifView.height = 25;
+
             break;
         }
             
@@ -136,8 +143,12 @@
 //            NSUInteger index =  images.count * self.pullingPercent;
 //            if (index >= images.count) index = images.count - 1;
 //            self.gifView.image = images[index];
-            self.gifView.height = (self.pullingPercent + 1) * 10 + 10;
-            self.mj_h = (self.pullingPercent + 1) * 10 + 10 + 25;
+            if (self.pullingPercent - .3 < 0 && self.pullingPercent != 0) {
+                self.gifView.height = 10;
+                self.gifView.width = 10;
+            }
+            self.gifView.height = (self.pullingPercent - .3 < 0) ? 17.5 : ((self.pullingPercent - .3) / .7 + 1) * 7.5 + 10;
+            self.mj_h = (self.pullingPercent - .3 < 0) ? 42.5 : ((self.pullingPercent - .3) / .7 + 1) * 7.5 + 10 + 25;
             break;
         }
         default:
