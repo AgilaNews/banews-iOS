@@ -27,14 +27,16 @@ static CGFloat const ButtonHeight = 40;
     self.automaticallyAdjustsScrollViewInsets = NO;
 
     // 添加导航栏左侧按钮
+    UIView *leftBtnView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
     UIButton *leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
     leftButton.frame = CGRectMake(0, 0, 44, 44);
     [leftButton setImage:[UIImage imageNamed:@"left"] forState:UIControlStateNormal];
     [leftButton addTarget:self action:@selector(leftAction:) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *buttonItem = [[UIBarButtonItem alloc] initWithCustomView:leftButton];
+    [leftBtnView addSubview:leftButton];
+    UIBarButtonItem *buttonItem = [[UIBarButtonItem alloc] initWithCustomView:leftBtnView];
     if ([[[[UIDevice currentDevice] systemVersion] substringToIndex:1] intValue] >= 7) {
         UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-        negativeSpacer.width = -10;
+        negativeSpacer.width = -5;
         self.navigationItem.leftBarButtonItems = @[negativeSpacer, buttonItem];
     }
     

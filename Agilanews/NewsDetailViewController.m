@@ -1148,7 +1148,6 @@
                                    nil];
     [Flurry logEvent:@"Article_Like_Click" withParameters:articleParams];
     
-    _likeButton.selected = !button.selected;
     if (button.selected) {
         [button setTitle:[NSString stringWithFormat:@"%d",button.titleLabel.text.intValue + 1] forState:UIControlStateNormal];
         AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
@@ -1159,6 +1158,7 @@
     } else {
         [button setTitle:[NSString stringWithFormat:@"%d",button.titleLabel.text.intValue - 1] forState:UIControlStateNormal];
     }
+    self.likeButton.selected = !button.selected;
 }
 
 /**
