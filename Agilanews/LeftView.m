@@ -51,7 +51,7 @@
             break;
         case UIGestureRecognizerStateEnded:
         {
-            if (_tableView.right > (kScreenWidth - SLIP_WIDTH) * .5) {
+            if (_tableView.right > (kScreenWidth - SLIP_WIDTH) / 3.0 * 2) {
                 [self show];
             } else {
                 [self hide];
