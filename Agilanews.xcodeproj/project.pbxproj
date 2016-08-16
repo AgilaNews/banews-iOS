@@ -72,6 +72,7 @@
 		5F571F8C1D5C1FFE00604CDD /* GooglePlus.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5F571F891D5C1FFE00604CDD /* GooglePlus.bundle */; };
 		5F571F8D1D5C1FFE00604CDD /* GooglePlus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F571F8A1D5C1FFE00604CDD /* GooglePlus.framework */; };
 		5F571F901D5C227600604CDD /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F571F8F1D5C227600604CDD /* Fabric.framework */; };
+		5F571FDB1D62DE0500604CDD /* FJSWaveProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F571FDA1D62DE0500604CDD /* FJSWaveProgress.m */; };
 		5F5AE9711D5353B400A5A8B7 /* BannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5AE9701D5353B400A5A8B7 /* BannerView.m */; };
 		5F5AE9761D54364E00A5A8B7 /* GuideRefreshView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5AE9751D54364E00A5A8B7 /* GuideRefreshView.m */; };
 		5F5AE9791D54A4C900A5A8B7 /* GuideFavoritesView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5AE9781D54A4C900A5A8B7 /* GuideFavoritesView.m */; };
@@ -302,6 +303,8 @@
 		5F571F891D5C1FFE00604CDD /* GooglePlus.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GooglePlus.bundle; path = "../../Downloads/google-plus-ios-sdk-1.7.1/GooglePlus.bundle"; sourceTree = "<group>"; };
 		5F571F8A1D5C1FFE00604CDD /* GooglePlus.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GooglePlus.framework; path = "../../Downloads/google-plus-ios-sdk-1.7.1/GooglePlus.framework"; sourceTree = "<group>"; };
 		5F571F8F1D5C227600604CDD /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
+		5F571FD91D62DE0500604CDD /* FJSWaveProgress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FJSWaveProgress.h; sourceTree = "<group>"; };
+		5F571FDA1D62DE0500604CDD /* FJSWaveProgress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FJSWaveProgress.m; sourceTree = "<group>"; };
 		5F5AE96F1D5353B400A5A8B7 /* BannerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BannerView.h; sourceTree = "<group>"; };
 		5F5AE9701D5353B400A5A8B7 /* BannerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BannerView.m; sourceTree = "<group>"; };
 		5F5AE9741D54364E00A5A8B7 /* GuideRefreshView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuideRefreshView.h; sourceTree = "<group>"; };
@@ -944,6 +947,8 @@
 				5F635CA61D3CFA58006AAE3D /* TimeStampToString.m */,
 				5F571F731D589BEF00604CDD /* NetType.h */,
 				5F571F741D589BEF00604CDD /* NetType.m */,
+				5F571FD91D62DE0500604CDD /* FJSWaveProgress.h */,
+				5F571FDA1D62DE0500604CDD /* FJSWaveProgress.m */,
 			);
 			name = Base;
 			sourceTree = "<group>";
@@ -1357,6 +1362,7 @@
 				5F42C0A11D34E42A00B89651 /* SVRadialGradientLayer.m in Sources */,
 				5F42BFF91D34E3D500B89651 /* AFURLResponseSerialization.m in Sources */,
 				5FF4B7781D37BD2C00CC6704 /* UIImage+RoundCorner.m in Sources */,
+				5F571FDB1D62DE0500604CDD /* FJSWaveProgress.m in Sources */,
 				5F42C0161D34E3EC00B89651 /* MJPropertyKey.m in Sources */,
 				5F635ED21D3F94C0006AAE3D /* LoginButton.m in Sources */,
 				5FE7221B1D5034970026BFC3 /* FeedbackTextView.m in Sources */,

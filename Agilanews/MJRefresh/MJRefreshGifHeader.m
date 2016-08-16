@@ -10,13 +10,16 @@
 #import "MJRefreshGifHeader.h"
 #import "MJRefreshConst.h"
 #import "UIView+MJExtension.h"
+#import "FJSWaveProgress.h"
 
 @interface MJRefreshGifHeader()
 /** 所有状态对应的动画图片 */
 @property (strong, nonatomic) NSMutableDictionary *stateImages;
-
 /** 播放动画图片的控件 */
-@property (weak, nonatomic) UIImageView *gifView;
+@property (weak, nonatomic) UIView *gifView;
+
+@property (nonatomic,strong) FJSWaveProgress *progressView;
+
 @end
 
 @implementation MJRefreshGifHeader
@@ -29,13 +32,13 @@
     return _stateImages;
 }
 
-- (UIImageView *)gifView
+- (UIView *)gifView
 {
     if (!_gifView) {
-        UIImageView *gifView = [[UIImageView alloc] initWithFrame:CGRectMake((kScreenWidth - 20) * .5, 5, 25, 25)];
-        gifView.image = [UIImage imageNamed:@"icon_refresh"];
-        gifView.contentMode = UIViewContentModeScaleAspectFill;
-        [self addSubview:_gifView = gifView];
+        self.progressView = [[FJSWaveProgress alloc] initWithFrame:CGRectMake((kScreenWidth - 25) * .5, 5, 25, 25)];
+        self.progressView.waveHeight = 1;
+        self.progressView.speed = .5;
+        [self addSubview:_gifView = self.progressView];
     }
     return _gifView;
 }
@@ -68,28 +71,24 @@
         case MJRefreshHeaderStateIdle: {
             if (oldState == MJRefreshHeaderStateRefreshing) {
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MJRefreshSlowAnimationDuration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    self.gifView.height = 25;
-                    self.gifView.width = 25;
+                    self.gifView.height = self.gifView.width = 25;
                     self.pullingPercent = 0.0;
+                    [self.progressView stopWaveAnimation];
                 });
             } else {
                 self.pullingPercent = self.pullingPercent;
             }
             break;
         }
-        case MJRefreshHeaderStateWillRefresh:
-        {
-            
-        }
-            
         case MJRefreshHeaderStatePulling:
         {
-            self.gifView.height = 2 * 7.5 + 10;
+            self.gifView.height = self.gifView.width = 2 * 7.5 + 10;
             self.mj_h = 2 * 7.5 + 10 + 25;
         }
         case MJRefreshHeaderStateRefreshing: {
-//            self.gifView.height = 25;
-
+            if (self.top == -50 && (self.pullingPercent == 1 || self.pullingPercent == 0)) {
+                [self.progressView startWaveAnimation];
+            }
             break;
         }
             
@@ -144,11 +143,16 @@
 //            if (index >= images.count) index = images.count - 1;
 //            self.gifView.image = images[index];
             if (self.pullingPercent - .3 < 0 && self.pullingPercent != 0) {
-                self.gifView.height = 10;
-                self.gifView.width = 10;
+                self.gifView.height = self.gifView.width = 10;
+                [self.progressView stopWaveAnimation];
+            } else if (self.pullingPercent == 0) {
+                self.gifView.height = self.gifView.width = 25;
+            } else {
+                [self.progressView stopWaveAnimation];
+                self.gifView.height = (self.pullingPercent - .3 < 0) ? 17.5 : ((self.pullingPercent - .3) / .7 + 1) * 7.5 + 10;
+                self.gifView.width = self.gifView.height;
+                self.mj_h = (self.pullingPercent - .3 < 0) ? 42.5 : ((self.pullingPercent - .3) / .7 + 1) * 7.5 + 10 + 25;
             }
-            self.gifView.height = (self.pullingPercent - .3 < 0) ? 17.5 : ((self.pullingPercent - .3) / .7 + 1) * 7.5 + 10;
-            self.mj_h = (self.pullingPercent - .3 < 0) ? 42.5 : ((self.pullingPercent - .3) / .7 + 1) * 7.5 + 10 + 25;
             break;
         }
         default:
