@@ -505,7 +505,7 @@
     switch (indexPath.section) {
         case 0:
             if (_detailModel == nil) {
-                return kScreenHeight - 64;
+                return kScreenHeight;
             } else {
                 return _webViewHeight + 54;
             }
