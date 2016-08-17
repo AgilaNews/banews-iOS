@@ -73,6 +73,7 @@
     _webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 64, kScreenWidth, kScreenHeight - 64)];
     _webView.backgroundColor = kWhiteBgColor;
     _webView.delegate = self;
+    _webView.scrollView.delegate = self;
 //    _webView.scrollView.scrollEnabled = NO;
     _webView.scrollView.scrollsToTop = NO;
     _webView.scrollView.showsHorizontalScrollIndicator = NO;
@@ -796,6 +797,9 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
+    if ([scrollView.superview isKindOfClass:[UIWebView class]] && _webView.isLoading) {
+        _webviewOffsetY = scrollView.contentOffset.y;
+    }
     float page_pos = (scrollView.contentOffset.y + kScreenHeight - 170) / _webView.height;
     if (page_pos >= 1.0 && !_webView.loading) {
         // 推荐文章展示
@@ -847,6 +851,7 @@
     _likeButton.hidden = NO;
     [self.view addSubview:self.commentsView];
     [_tableView reloadData];
+    [_tableView setContentOffset:CGPointMake(_tableView.contentOffset.x, _webviewOffsetY) animated:NO];
 }
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(nullable NSError *)error
 {

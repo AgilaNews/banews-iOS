@@ -36,5 +36,6 @@
 @property (nonatomic, strong) UILabel *blankLabel;
 @property (nonatomic, strong) UIImageView *failureView;
 @property (nonatomic, assign) long long afterFailureRequsetTime;
+@property (nonatomic, assign) float webviewOffsetY;
 
 @end
