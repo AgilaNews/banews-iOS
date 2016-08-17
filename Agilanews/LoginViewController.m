@@ -67,6 +67,9 @@
     [super viewWillAppear:animated];
     // 打点-页面进入-010601
     [Flurry logEvent:@"Login_Enter"];
+#if DEBUG
+    [iConsole info:@"Login_Enter",nil];
+#endif
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -86,15 +89,23 @@
         {
             // 打点-点击facebook-010602
             [Flurry logEvent:@"Login_Facebook_Click"];
-            
+#if DEBUG
+            [iConsole info:@"Login_Facebook_Click",nil];
+#endif
             [ShareSDK getUserInfo:SSDKPlatformTypeFacebook onStateChanged:^(SSDKResponseState state, SSDKUser *user, NSError *error) {
                 if (state == SSDKResponseStateSuccess) {
                     // 打点-登陆Facebook成功-010605
                     [Flurry logEvent:@"Login_Facebook_Click_Y"];
+#if DEBUG
+                    [iConsole info:@"Login_Facebook_Click_Y",nil];
+#endif
                     [self loginWithUserData:user LoginType:Facebook];
                 } else {
                     // 打点-登陆Facebook失败-010608
                     [Flurry logEvent:@"Login_Facebook_Click_N"];
+#if DEBUG
+                    [iConsole info:@"Login_Facebook_Click_N",nil];
+#endif
                     SSLog(@"%@",error);
                 }
             }];
@@ -104,15 +115,23 @@
         {
             // 打点-点击twitter-010603
             [Flurry logEvent:@"Login_Twitter_Click"];
-            
+#if DEBUG
+            [iConsole info:@"Login_Twitter_Click",nil];
+#endif
             [ShareSDK getUserInfo:SSDKPlatformTypeTwitter onStateChanged:^(SSDKResponseState state, SSDKUser *user, NSError *error) {
                 if (state == SSDKResponseStateSuccess) {
                     // 打点-登陆twitter成功-010606
                     [Flurry logEvent:@"Login_Twitter_Click_Y"];
+#if DEBUG
+                    [iConsole info:@"Login_Twitter_Click_Y",nil];
+#endif
                     [self loginWithUserData:user LoginType:Twitter];
                 } else {
                     // 打点-登陆twitter失败-010609
                     [Flurry logEvent:@"Login_Twitter_Click_N"];
+#if DEBUG
+                    [iConsole info:@"Login_Twitter_Click_N",nil];
+#endif
                     SSLog(@"%@",error);
                 }
             }];
@@ -122,15 +141,23 @@
         {
             // 打点-点击Google＋-010604
             [Flurry logEvent:@"Login_Google_Click"];
-            
+#if DEBUG
+            [iConsole info:@"Login_Google_Click",nil];
+#endif
             [ShareSDK getUserInfo:SSDKPlatformTypeGooglePlus onStateChanged:^(SSDKResponseState state, SSDKUser *user, NSError *error) {
                 if (state == SSDKResponseStateSuccess) {
                     // 打点-登陆Google＋成功-010607
                     [Flurry logEvent:@"Login_Google_Click_Y"];
+#if DEBUG
+                    [iConsole info:@"Login_Google_Click_Y",nil];
+#endif
                     [self loginWithUserData:user LoginType:GooglePuls];
                 } else {
                     // 打点-登陆Google＋失败-010610
                     [Flurry logEvent:@"Login_Google_Click_N"];
+#if DEBUG
+                    [iConsole info:@"Login_Google_Click_N",nil];
+#endif
                     SSLog(@"%@",error);
                 }
             }];
@@ -213,6 +240,9 @@
 {
     // 打点-点击返回-010611
     [Flurry logEvent:@"Login_BackButton_Click"];
+#if DEBUG
+    [iConsole info:@"Login_BackButton_Click",nil];
+#endif
     [super backAction:button];
 }
 
@@ -220,6 +250,9 @@
 {
     // 打点-点击返回-010611
     [Flurry logEvent:@"Login_BackButton_Click"];
+#if DEBUG
+    [iConsole info:@"Login_BackButton_Click",nil];
+#endif
     [super closeAction:button];
 }
 

@@ -84,6 +84,9 @@
         if (isInput) {
             // 打点-输入邮箱地址-010803
             [Flurry logEvent:@"FeedB_EMail_Input"];
+#if DEBUG
+            [iConsole info:@"FeedB_EMail_Input",nil];
+#endif
         }
     }
 }

@@ -156,7 +156,9 @@
         {
             // 打点-点击收藏-010403
             [Flurry logEvent:@"Info_Icon_Click"];
-            
+#if DEBUG
+            [iConsole info:@"Info_Icon_Click",nil];
+#endif
             // 点击Favorites
             if (_appDelegate.model) {
                 // 直接进入收藏
@@ -174,7 +176,9 @@
         {
             // 打点-点击反馈-010404
             [Flurry logEvent:@"Menu_FeedbackButton_Click"];
-            
+#if DEBUG
+            [iConsole info:@"Menu_FeedbackButton_Click",nil];
+#endif
             // 点击Feedback
             FeedbackViewController *feedbackVC = [[FeedbackViewController alloc] init];
             [navCtrl pushViewController:feedbackVC animated:YES];
@@ -184,7 +188,9 @@
         {
             // 打点-点击设置-010406
             [Flurry logEvent:@"Menu_SetButton_Click"];
-            
+#if DEBUG
+            [iConsole info:@"Menu_SetButton_Click",nil];
+#endif
             // 点击Settings
             SettingsViewController *settingsVC = [[SettingsViewController alloc] init];
             [navCtrl pushViewController:settingsVC animated:YES];
@@ -213,14 +219,18 @@
     if (_appDelegate.model) {
         // 打点-点击头像-010701
         [Flurry logEvent:@"Info_Icon_Click"];
-        
+#if DEBUG
+        [iConsole info:@"Info_Icon_Click",nil];
+#endif
         UserInfoViewController *userInfoVC = [[UserInfoViewController alloc] init];
         userInfoVC.model = _appDelegate.model;
         [navCtrl pushViewController:userInfoVC animated:YES];
     } else {
         // 打点-点击登陆-010402
         [Flurry logEvent:@"Menu_LoginButton_Click"];
-        
+#if DEBUG
+        [iConsole info:@"Menu_LoginButton_Click",nil];
+#endif
         LoginViewController *loginVC = [[LoginViewController alloc] init];
         [navCtrl pushViewController:loginVC animated:YES];
     }

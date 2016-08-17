@@ -284,7 +284,9 @@
                                    _model.name, @"channel",
                                    nil];
     [Flurry logEvent:@"Home_List_Click" withParameters:articleParams];
-    
+#if DEBUG
+    [iConsole info:[NSString stringWithFormat:@"Home_List_Click:%@",articleParams],nil];
+#endif
     // 服务器打点-列表页点击详情-020102
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     NSString *pagePos = [NSString stringWithFormat:@"%.1f",(cell.top - tableView.contentOffset.y + 1.5) / tableView.height];
@@ -348,6 +350,9 @@
                                        _model.name, @"channel",
                                        nil];
         [Flurry logEvent:@"Home_List_UpScroll" withParameters:articleParams];
+#if DEBUG
+        [iConsole info:[NSString stringWithFormat:@"Home_List_UpScroll:%@",articleParams],nil];
+#endif
     }
     _scrollY = scrollView.contentOffset.y;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -459,6 +464,9 @@
                                            _model.name, @"channel",
                                            nil];
             [Flurry logEvent:@"Home_List_DownRefresh_Y" withParameters:articleParams];
+#if DEBUG
+            [iConsole info:[NSString stringWithFormat:@"Home_List_DownRefresh_Y:%@",articleParams],nil];
+#endif
             [_dataList insertObjects:models atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, models.count)]];
             [weakSelf tableViewDidFinishTriggerHeader:YES reload:YES];
             _refreshTime = [[NSDate date] timeIntervalSince1970];
@@ -469,6 +477,9 @@
                                            _model.name, @"channel",
                                            nil];
             [Flurry logEvent:@"Home_List_UpLoad_Y" withParameters:articleParams];
+#if DEBUG
+            [iConsole info:[NSString stringWithFormat:@"Home_List_UpLoad_Y:%@",articleParams],nil];
+#endif
             [_dataList addObjectsFromArray:models];
             [weakSelf tableViewDidFinishTriggerHeader:NO reload:YES];
         }
@@ -484,6 +495,9 @@
                                            _model.name, @"channel",
                                            nil];
             [Flurry logEvent:@"Home_List_DownRefresh_N" withParameters:articleParams];
+#if DEBUG
+            [iConsole info:[NSString stringWithFormat:@"Home_List_DownRefresh_N:%@",articleParams],nil];
+#endif
             [weakSelf tableViewDidFinishTriggerHeader:YES reload:NO];
         } else {
             // 打点-上拉加载失败-010111
@@ -492,12 +506,17 @@
                                            _model.name, @"channel",
                                            nil];
             [Flurry logEvent:@"Home_List_UpLoad_N" withParameters:articleParams];
+#if DEBUG
+            [iConsole info:[NSString stringWithFormat:@"Home_List_UpLoad_N:%@",articleParams],nil];
+#endif
             [weakSelf tableViewDidFinishTriggerHeader:NO reload:NO];
         }
         if (_dataList.count <= 0) {
             // 打点-页面进入-011001
             [Flurry logEvent:@"NetFailure_Enter"];
-
+#if DEBUG
+            [iConsole info:@"NetFailure_Enter",nil];
+#endif
             weakSelf.showTableBlankView = YES;
             UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tableViewDidTriggerHeaderRefresh)];
             [weakSelf.blankView addGestureRecognizer:tap];
@@ -525,6 +544,9 @@
                                    _model.name, @"channel",
                                    nil];
     [Flurry logEvent:@"Home_List_DownRefresh" withParameters:articleParams];
+#if DEBUG
+    [iConsole info:[NSString stringWithFormat:@"Home_List_DownRefresh:%@",articleParams],nil];
+#endif
     [self requestDataWithChannelID:_model.channelID isLater:YES isShowHUD:YES];
 }
 
@@ -539,6 +561,9 @@
                                    _model.name, @"channel",
                                    nil];
     [Flurry logEvent:@"Home_List_UpLoad" withParameters:articleParams];
+#if DEBUG
+    [iConsole info:[NSString stringWithFormat:@"Home_List_UpLoad:%@",articleParams],nil];
+#endif
     [self requestDataWithChannelID:_model.channelID isLater:NO isShowHUD:NO];
 }
 

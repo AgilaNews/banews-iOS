@@ -9,10 +9,15 @@
 #import <UIKit/UIKit.h>
 #import "CategoriesModel.h"
 #import "LoginModel.h"
+#import "iConsole.h"
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate,CLLocationManagerDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate,CLLocationManagerDelegate,iConsoleDelegate>
 
+#if DEBUG
+@property (strong, nonatomic) iConsoleWindow *window; //这是关键，必须使用iConsoleWindow
+#else
 @property (strong, nonatomic) UIWindow *window;
+#endif
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) NSMutableArray *categoriesArray;
 @property (strong, nonatomic) LoginModel *model;

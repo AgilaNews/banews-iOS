@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "BaseViewController.h"
 #import "SegmentViewController.h"
 #import "LeftView.h"
 
-@interface HomeViewController : UIViewController
+@interface HomeViewController : BaseViewController
 
 @property (nonatomic, strong) SegmentViewController *segmentVC;
 @property (nonatomic, strong) LeftView *leftView;

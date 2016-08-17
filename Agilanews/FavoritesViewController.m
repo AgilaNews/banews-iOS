@@ -63,6 +63,9 @@
     [super viewWillAppear:animated];
     // 打点-页面进入-010501
     [Flurry logEvent:@"Favor_Enter"];
+#if DEBUG
+    [iConsole info:@"Favor_Enter",nil];
+#endif
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -127,7 +130,9 @@
 {
     // 打点-点击删除-010504
     [Flurry logEvent:@"Favor_DelButton_Click"];
-    
+#if DEBUG
+    [iConsole info:@"Favor_DelButton_Click",nil];
+#endif
     __weak typeof(self) weakSelf = self;
     NSMutableArray *collectIDs = [NSMutableArray array];
     for (NewsModel *model in _selectedList) {
@@ -138,7 +143,9 @@
     [[SSHttpRequest sharedInstance] DELETE:kHomeUrl_Collect params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
         // 打点-删除成功-010505
         [Flurry logEvent:@"Favor_DelButton_Click_Y"];
-        
+#if DEBUG
+        [iConsole info:@"Favor_DelButton_Click_Y",nil];
+#endif
         [_dataList removeObjectsInArray:_selectedList];
         AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
         NSString *htmlFilePath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/%@.data",appDelegate.model.user_id]];
@@ -154,6 +161,9 @@
     } failure:^(NSError *error) {
         // 打点-删除失败-010506
         [Flurry logEvent:@"Favor_DelButton_Click_N"];
+#if DEBUG
+        [iConsole info:@"Favor_DelButton_Click_N",nil];
+#endif
     } isShowHUD:NO];
 }
 
@@ -166,14 +176,18 @@
 {
     // 打点-点击删除-010504
     [Flurry logEvent:@"Favor_DelButton_Click"];
-    
+#if DEBUG
+    [iConsole info:@"Favor_DelButton_Click",nil];
+#endif
     __weak typeof(self) weakSelf = self;
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setObject:@[model.collect_id] forKey:@"ids"];
     [[SSHttpRequest sharedInstance] DELETE:kHomeUrl_Collect params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
         // 打点-删除成功-010505
         [Flurry logEvent:@"Favor_DelButton_Click_Y"];
-        
+#if DEBUG
+        [iConsole info:@"Favor_DelButton_Click_Y",nil];
+#endif
         [_dataList removeObjectsInArray:_selectedList];
         AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
         NSString *filePath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/%@.data",appDelegate.model.user_id]];
@@ -188,7 +202,9 @@
     } failure:^(NSError *error) {
         // 打点-删除失败-010506
         [Flurry logEvent:@"Favor_DelButton_Click_N"];
-//        [weakSelf deleteCollectNewsWithModel:model];
+#if DEBUG
+        [iConsole info:@"Favor_DelButton_Click_N",nil];
+#endif
     } isShowHUD:NO];
 }
 
@@ -324,7 +340,9 @@
     if (!_tableView.editing) {
         // 打点-点击列表文章-010502
         [Flurry logEvent:@"Favor_List_Click"];
-        
+#if DEBUG
+        [iConsole info:@"Favor_List_Click",nil];
+#endif
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
         NewsModel *model = _dataList[indexPath.row];
         FavoriteDetailViewController *favDetVC = [[FavoriteDetailViewController alloc] init];
@@ -420,7 +438,9 @@
 {
     // 打点-点击收藏页返回按钮-010507
     [Flurry logEvent:@"Favor_BackButton_Click"];
-    
+#if DEBUG
+    [iConsole info:@"Favor_BackButton_Click",nil];
+#endif
     if (self.tableView.editing) {
         self.isEdit = NO;
         [self.tableView setEditing:NO animated:YES];
@@ -457,6 +477,9 @@
         
         // 打点-点击编辑-010503
         [Flurry logEvent:@"Favor_EditButton_Click"];
+#if DEBUG
+        [iConsole info:@"Favor_EditButton_Click",nil];
+#endif
     }
     button.selected = !button.selected;
 }

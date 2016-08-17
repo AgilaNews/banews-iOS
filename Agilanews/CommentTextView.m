@@ -87,6 +87,9 @@
                                            [NetType getNetType], @"network",
                                            nil];
             [Flurry logEvent:@"Article_Comments_Input" withParameters:articleParams];
+#if DEBUG
+            [iConsole info:[NSString stringWithFormat:@"Article_Comments_Input:%@",articleParams],nil];
+#endif
         }
     }
 }

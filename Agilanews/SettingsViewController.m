@@ -195,7 +195,9 @@
                 {
                     // 打点-点击文字设置-010901
                     [Flurry logEvent:@"Set_FontSize_Set"];
-
+#if DEBUG
+                    [iConsole info:@"Set_FontSize_Set",nil];
+#endif
                     // cell （0，0）
                     [tableView deselectRowAtIndexPath:indexPath animated:YES];
                     // 字体设置弹出提示框
@@ -206,7 +208,9 @@
                 {
                     // 打点-点击清理缓存-010907
                     [Flurry logEvent:@"Set_CacheClean_Click"];
-
+#if DEBUG
+                    [iConsole info:@"Set_CacheClean_Click",nil];
+#endif
                     // cell （0，2）
                     [tableView deselectRowAtIndexPath:indexPath animated:YES];
                     // 提示清理缓存
@@ -226,14 +230,18 @@
                 {
                     // 打点-点击为app评分-010908
                     [Flurry logEvent:@"Set_Score_Click"];
-                    // cell （1，0）
+#if DEBUG
+                    [iConsole info:@"Set_Score_Click",nil];
+#endif
                 }
                     break;
                 case 1:
                 {
                     // 打点-点击版本更新-010909
                     [Flurry logEvent:@"Set_Update_Click"];
-                    // cell （1，1）
+#if DEBUG
+                    [iConsole info:@"Set_Update_Click",nil];
+#endif
                 }
                     break;
                 default:
@@ -282,7 +290,9 @@
                                        @"Extra Large", @"text_size",
                                        nil];
         [Flurry logEvent:@"Set_FontSize_Set_Click" withParameters:articleParams];
-
+#if DEBUG
+        [iConsole info:[NSString stringWithFormat:@"Set_FontSize_Set_Click:%@",articleParams],nil];
+#endif
         DEF_PERSISTENT_SET_OBJECT(SS_FontSize, @1);
         [_tableView reloadData];
         [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_FontSize_Change object:nil];
@@ -293,7 +303,9 @@
                                        @"Large", @"text_size",
                                        nil];
         [Flurry logEvent:@"Set_FontSize_Set_Click" withParameters:articleParams];
-        
+#if DEBUG
+        [iConsole info:[NSString stringWithFormat:@"Set_FontSize_Set_Click:%@",articleParams],nil];
+#endif
         DEF_PERSISTENT_SET_OBJECT(SS_FontSize, @2);
         [_tableView reloadData];
         [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_FontSize_Change object:nil];
@@ -304,7 +316,9 @@
                                        @"Normal", @"text_size",
                                        nil];
         [Flurry logEvent:@"Set_FontSize_Set_Click" withParameters:articleParams];
-        
+#if DEBUG
+        [iConsole info:[NSString stringWithFormat:@"Set_FontSize_Set_Click:%@",articleParams],nil];
+#endif
         DEF_PERSISTENT_SET_OBJECT(SS_FontSize, @0);
         [_tableView reloadData];
         [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_FontSize_Change object:nil];
@@ -315,7 +329,9 @@
                                        @"Small", @"text_size",
                                        nil];
         [Flurry logEvent:@"Set_FontSize_Set_Click" withParameters:articleParams];
-        
+#if DEBUG
+        [iConsole info:[NSString stringWithFormat:@"Set_FontSize_Set_Click:%@",articleParams],nil];
+#endif
         DEF_PERSISTENT_SET_OBJECT(SS_FontSize, @3);
         [_tableView reloadData];
         [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_FontSize_Change object:nil];
@@ -358,6 +374,9 @@
 {
     // 打点-点击设置页面返回按钮-010910
     [Flurry logEvent:@"Set_BackButton_Click"];
+#if DEBUG
+    [iConsole info:@"Set_BackButton_Click",nil];
+#endif
     [super backAction:button];
 }
 
@@ -381,13 +400,17 @@
     if (rightSwitch.isOn) {
         // 打点-打开低流量模式-010905
         [Flurry logEvent:@"Set_LowData_Open"];
-
+#if DEBUG
+        [iConsole info:@"Set_LowData_Open",nil];
+#endif
         DEF_PERSISTENT_SET_OBJECT(SS_textOnlyMode, @1);
         [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_TextOnly_ON object:nil];
     }else{
         // 打点-关闭低流量模式-010906
         [Flurry logEvent:@"Set_LowData_Close"];
-        
+#if DEBUG
+        [iConsole info:@"Set_LowData_Close",nil];
+#endif
         DEF_PERSISTENT_SET_OBJECT(SS_textOnlyMode, @0);
         [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_TextOnly_OFF object:nil];
     }

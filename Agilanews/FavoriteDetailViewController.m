@@ -160,7 +160,9 @@
     {
         // 打点-页面进入-011001
         [Flurry logEvent:@"NetFailure_Enter"];
-        
+#if DEBUG
+        [iConsole info:@"NetFailure_Enter",nil];
+#endif
         [SVProgressHUD showErrorWithStatus:@"Please check your network connection"];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [SVProgressHUD dismiss];
@@ -168,7 +170,9 @@
     } else {
         // 打点-页面进入-011001
         [Flurry logEvent:@"NetFailure_Enter"];
-        
+#if DEBUG
+        [iConsole info:@"NetFailure_Enter",nil];
+#endif
         [SVProgressHUD showErrorWithStatus:@"Fetching failed, please try again"];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [SVProgressHUD dismiss];

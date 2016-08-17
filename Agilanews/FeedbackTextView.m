@@ -77,6 +77,9 @@
         if (isInput) {
             // 打点-输入反馈意见-010802
             [Flurry logEvent:@"FeedB_Sugg_Input"];
+#if DEBUG
+            [iConsole info:@"FeedB_Sugg_Input",nil];
+#endif
         }
     }
 }

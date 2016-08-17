@@ -18,10 +18,23 @@
 
 @implementation AppDelegate
 
+- (void)handleConsoleCommand:(NSString *)command
+{
+    if ([command isEqualToString:@"version"])
+    {
+        [iConsole info:@"%@ version %@",
+         [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleName"],
+         [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]];
+    }
+    else
+    {
+        [iConsole error:@"unrecognised command, try 'version' instead"];
+    }
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    
+
     // 注册Flurry
     [Flurry startSession:@"XC84PTZ5BKW385XPBJ2N"];
     // 注册ShareSDK
@@ -45,10 +58,13 @@
     //设置启动页面时间
     [NSThread sleepForTimeInterval:2.0];
 
-    _window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
 #if DEBUG
+    _window = [[iConsoleWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     _window.backgroundColor = SSColor(0, 0, 0);
+    [iConsole sharedConsole].delegate = self;
+    [iConsole sharedConsole].logSubmissionEmail = @"1164063991@qq.com";
 #else
+    _window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     _window.backgroundColor = SSColor(255, 255, 255);
 #endif
     [_window makeKeyAndVisible];
@@ -76,7 +92,9 @@
                                    homeVC.segmentVC.titleArray[index], @"channel",
                                    nil];
     [Flurry logEvent:@"App_Exit" withParameters:articleParams];
-    
+    #if DEBUG
+    [iConsole info:[NSString stringWithFormat:@"App_Exit:%@",articleParams],nil];
+    #endif
     // 服务端打点上报
     [self serverLogWithEventArray:_eventArray];
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
@@ -135,6 +153,9 @@
                                    [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
                                    nil];
     [Flurry logEvent:@"App_Lanch" withParameters:articleParams];
+#if DEBUG
+    [iConsole info:[NSString stringWithFormat:@"App_Lanch:%@",articleParams],nil];
+#endif
     // 设置IDFA（广告标识符）
     NSString *IDFA = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
     DEF_PERSISTENT_SET_OBJECT(@"IDFA", IDFA);
@@ -309,11 +330,16 @@
     UIAlertAction *noAction = [UIAlertAction actionWithTitle:@"No,Thanks" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         // 打点-点击无图模式提醒对话框No选项-010011
         [Flurry logEvent:@"LowDataTips_No_Click"];
+#if DEBUG
+        [iConsole info:@"LowDataTips_No_Click",nil];
+#endif
     }];
     UIAlertAction *yesAction = [UIAlertAction actionWithTitle:@"Yes,Please" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
         // 打点-点击无图模式提醒对话框中YES选项-010010
         [Flurry logEvent:@"LowDataTips_YES_Click"];
-
+#if DEBUG
+        [iConsole info:@"LowDataTips_YES_Click",nil];
+#endif
         DEF_PERSISTENT_SET_OBJECT(SS_textOnlyMode, @1);
         [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_TextOnly_ON object:nil];
     }];
