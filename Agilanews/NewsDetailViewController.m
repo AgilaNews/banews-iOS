@@ -170,7 +170,8 @@
         }
         weakSelf.detailModel = [NewsDetailModel mj_objectWithKeyValues:responseObj];
         // css文件路径
-        NSString *filePath = [[NSBundle mainBundle] pathForResource:@"webView" ofType:@"css"];
+        NSString *cssFilePath = [[NSBundle mainBundle] pathForResource:@"webView" ofType:@"css"];
+        NSString *jsFilePath = [[NSBundle mainBundle] pathForResource:@"webView" ofType:@"js"];
         // 格式化日期
         NSDate *currentDate = [NSDate dateWithTimeIntervalSince1970:[weakSelf.detailModel.public_time longLongValue]];
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -184,12 +185,13 @@
                 weakSelf.detailModel.body = [weakSelf.detailModel.body stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"<!--IMG%d-->",i] withString:imageUrl];
             } else {
                 ImageModel *imageModel = weakSelf.detailModel.imgs[i];
-                NSString *imageUrl = [NSString stringWithFormat:@"<img src=\"%@\"/>",imageModel.src];
+//                NSString *imageUrl = [NSString stringWithFormat:@"<img src=\"%@\"/>",imageModel.src];
+                NSString *imageUrl = [NSString stringWithFormat:@"<img src=\"\" data-src=\"%@\" height=\"%fpx\" width=\"%@px\" class=\"ready-to-load\"/>",imageModel.src, imageModel.height.integerValue / 2.0, imageModel.width];
                 weakSelf.detailModel.body = [weakSelf.detailModel.body stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"<!--IMG%d-->",i] withString:imageUrl];
             }
         }
         // 拼接HTML
-        NSString *htmlString = [NSString stringWithFormat:@"<html><head><link rel=\"stylesheet\" type=\"text/css\" href=\"file:///%@\"/></head><body><div class=\"title\">%@</div><div class=\"sourcetime\">%@ <a class=\"source\" href=\"%@\">/View source</a></div>%@",filePath,weakSelf.detailModel.title,dateString,weakSelf.detailModel.source_url,weakSelf.detailModel.body];
+        NSString *htmlString = [NSString stringWithFormat:@"<html><head><link rel=\"stylesheet\" type=\"text/css\" href=\"file:///%@\"/><script src=\"file://%@\"></script></head><body><div class=\"title\">%@</div><div class=\"sourcetime\">%@ <a class=\"source\" href=\"%@\">/View source</a></div>%@",cssFilePath,jsFilePath,weakSelf.detailModel.title,dateString,weakSelf.detailModel.source_url,weakSelf.detailModel.body];
         htmlString = [htmlString stringByAppendingString:@"</body></html>"];
         [_webView loadHTMLString:htmlString baseURL:nil];
     } failure:^(NSError *error) {
@@ -573,130 +575,129 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = nil;
-    if (!_webView.isLoading) {
-        switch (indexPath.section) {
-            case 0:
-            {
-                // 新闻详情
-                static NSString *cellID = @"webCellID";
-                cell = [tableView dequeueReusableCellWithIdentifier:cellID];
-                if (cell == nil) {
-                    cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
-                }
-                [cell.contentView addSubview:_webView];
-                [cell.contentView addSubview:self.likeButton];
-                self.likeButton.top = _webView.bottom;
-                break;
+
+    switch (indexPath.section) {
+        case 0:
+        {
+            // 新闻详情
+            static NSString *cellID = @"webCellID";
+            cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+            if (cell == nil) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
             }
-            case 1:
-            {
-                // 推荐新闻
-                switch (indexPath.row) {
-                    case 0:
-                    {
-                        static NSString *cellID = @"recommendedCellID";
-                        cell = [tableView dequeueReusableCellWithIdentifier:cellID];
-                        if (cell == nil) {
-                            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
-                        }
-                        if (cell.contentView.subviews.count <= 0) {
-                            RecommendedView *recommendedView = [[RecommendedView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 30) titleImage:[UIImage imageNamed:@"icon_article_recommend_small"] titleText:@"Recommended for you"];
-                            [cell.contentView addSubview:recommendedView];
-                        }
-                        return cell;
-                        break;
-                    }
-                    default:
-                    {
-                        NewsModel *model = _detailModel.recommend_news[indexPath.row - 1];
-                        switch ([model.tpl integerValue])
-                        {
-                            case NEWS_ManyPic:
-                            {
-                                // 单图cell
-                                static NSString *cellID = @"SinglePicCellID";
-                                cell = [tableView dequeueReusableCellWithIdentifier:cellID];
-                                if (cell == nil) {
-                                    cell = [[SinglePicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:kWhiteBgColor];
-                                }
-                                ((SinglePicCell *)cell).model = model;
-                                [cell setNeedsLayout];
-                                return cell;
-                                break;
-                            }
-                            case NEWS_SinglePic:
-                            {
-                                // 单图cell
-                                static NSString *cellID = @"SinglePicCellID";
-                                cell = [tableView dequeueReusableCellWithIdentifier:cellID];
-                                if (cell == nil) {
-                                    cell = [[SinglePicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:kWhiteBgColor];
-                                }
-                                ((SinglePicCell *)cell).model = model;
-                                [cell setNeedsLayout];
-                                return cell;
-                                break;
-                            }
-                            case NEWS_NoPic:
-                            {
-                                // 无图cell
-                                static NSString *cellID = @"NoPicCellID";
-                                cell = [tableView dequeueReusableCellWithIdentifier:cellID];
-                                if (cell == nil) {
-                                    cell = [[NoPicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:kWhiteBgColor];
-                                }
-                                ((NoPicCell *)cell).model = model;
-                                [cell setNeedsLayout];
-                                return cell;
-                                break;
-                            }
-                        }
-                    }
-                }
-                break;
-            }
-            case 2:
-            {
-                // 新闻评论
-                switch (indexPath.row) {
-                    case 0:
-                    {
-                        static NSString *cellID = @"commentsCellID";
-                        cell = [tableView dequeueReusableCellWithIdentifier:cellID];
-                        if (cell == nil) {
-                            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
-                        }
-                        if (cell.contentView.subviews.count <= 0) {
-                            RecommendedView *recommendedView = [[RecommendedView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 30) titleImage:[UIImage imageNamed:@"icon_article_comments_small"] titleText:@"Comments"];
-                            [cell.contentView addSubview:recommendedView];
-                        }
-                        return cell;
-                        break;
-                    }
-                    default:
-                    {
-                        // 评论cell
-                        static NSString *cellID = @"commentID";
-                        cell = [tableView dequeueReusableCellWithIdentifier:cellID];
-                        if (cell == nil) {
-                            cell = [[CommentCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
-                        }
-                        if (_commentArray.count > 0) {
-                            [self.noCommentView removeFromSuperview];
-                            ((CommentCell *)cell).model = _commentArray[indexPath.row - 1];
-                        } else {
-                            [cell.contentView addSubview:self.noCommentView];
-                        }
-                        [cell setNeedsLayout];
-                        return cell;
-                        break;
-                    }
-                }
-                break;
-            }
-            default:
-                break;
+            [cell.contentView addSubview:_webView];
+            [cell.contentView addSubview:self.likeButton];
+            self.likeButton.top = _webView.bottom;
+            break;
         }
+        case 1:
+        {
+            // 推荐新闻
+            switch (indexPath.row) {
+                case 0:
+                {
+                    static NSString *cellID = @"recommendedCellID";
+                    cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+                    if (cell == nil) {
+                        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+                    }
+                    if (cell.contentView.subviews.count <= 0) {
+                        RecommendedView *recommendedView = [[RecommendedView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 30) titleImage:[UIImage imageNamed:@"icon_article_recommend_small"] titleText:@"Recommended for you"];
+                        [cell.contentView addSubview:recommendedView];
+                    }
+                    return cell;
+                    break;
+                }
+                default:
+                {
+                    NewsModel *model = _detailModel.recommend_news[indexPath.row - 1];
+                    switch ([model.tpl integerValue])
+                    {
+                        case NEWS_ManyPic:
+                        {
+                            // 单图cell
+                            static NSString *cellID = @"SinglePicCellID";
+                            cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+                            if (cell == nil) {
+                                cell = [[SinglePicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:kWhiteBgColor];
+                            }
+                            ((SinglePicCell *)cell).model = model;
+                            [cell setNeedsLayout];
+                            return cell;
+                            break;
+                        }
+                        case NEWS_SinglePic:
+                        {
+                            // 单图cell
+                            static NSString *cellID = @"SinglePicCellID";
+                            cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+                            if (cell == nil) {
+                                cell = [[SinglePicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:kWhiteBgColor];
+                            }
+                            ((SinglePicCell *)cell).model = model;
+                            [cell setNeedsLayout];
+                            return cell;
+                            break;
+                        }
+                        case NEWS_NoPic:
+                        {
+                            // 无图cell
+                            static NSString *cellID = @"NoPicCellID";
+                            cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+                            if (cell == nil) {
+                                cell = [[NoPicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:kWhiteBgColor];
+                            }
+                            ((NoPicCell *)cell).model = model;
+                            [cell setNeedsLayout];
+                            return cell;
+                            break;
+                        }
+                    }
+                }
+            }
+            break;
+        }
+        case 2:
+        {
+            // 新闻评论
+            switch (indexPath.row) {
+                case 0:
+                {
+                    static NSString *cellID = @"commentsCellID";
+                    cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+                    if (cell == nil) {
+                        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+                    }
+                    if (cell.contentView.subviews.count <= 0) {
+                        RecommendedView *recommendedView = [[RecommendedView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 30) titleImage:[UIImage imageNamed:@"icon_article_comments_small"] titleText:@"Comments"];
+                        [cell.contentView addSubview:recommendedView];
+                    }
+                    return cell;
+                    break;
+                }
+                default:
+                {
+                    // 评论cell
+                    static NSString *cellID = @"commentID";
+                    cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+                    if (cell == nil) {
+                        cell = [[CommentCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+                    }
+                    if (_commentArray.count > 0) {
+                        [self.noCommentView removeFromSuperview];
+                        ((CommentCell *)cell).model = _commentArray[indexPath.row - 1];
+                    } else {
+                        [cell.contentView addSubview:self.noCommentView];
+                    }
+                    [cell setNeedsLayout];
+                    return cell;
+                    break;
+                }
+            }
+            break;
+        }
+        default:
+            break;
     }
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     cell.backgroundColor = kWhiteBgColor;

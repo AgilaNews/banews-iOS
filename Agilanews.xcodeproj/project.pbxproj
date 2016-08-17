@@ -75,6 +75,7 @@
 		5F571FDB1D62DE0500604CDD /* FJSWaveProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F571FDA1D62DE0500604CDD /* FJSWaveProgress.m */; };
 		5F571FDE1D632A5400604CDD /* iConsole.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F571FDD1D632A5400604CDD /* iConsole.m */; };
 		5F571FE11D632A9C00604CDD /* GTMStackTrace.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F571FE01D632A9C00604CDD /* GTMStackTrace.m */; };
+		5F571FE41D64057500604CDD /* webView.js in Resources */ = {isa = PBXBuildFile; fileRef = 5F571FE31D64057500604CDD /* webView.js */; };
 		5F5AE9711D5353B400A5A8B7 /* BannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5AE9701D5353B400A5A8B7 /* BannerView.m */; };
 		5F5AE9761D54364E00A5A8B7 /* GuideRefreshView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5AE9751D54364E00A5A8B7 /* GuideRefreshView.m */; };
 		5F5AE9791D54A4C900A5A8B7 /* GuideFavoritesView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5AE9781D54A4C900A5A8B7 /* GuideFavoritesView.m */; };
@@ -311,6 +312,7 @@
 		5F571FDD1D632A5400604CDD /* iConsole.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iConsole.m; sourceTree = "<group>"; };
 		5F571FDF1D632A9C00604CDD /* GTMStackTrace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMStackTrace.h; sourceTree = "<group>"; };
 		5F571FE01D632A9C00604CDD /* GTMStackTrace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTMStackTrace.m; sourceTree = "<group>"; };
+		5F571FE31D64057500604CDD /* webView.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = webView.js; sourceTree = "<group>"; };
 		5F5AE96F1D5353B400A5A8B7 /* BannerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BannerView.h; sourceTree = "<group>"; };
 		5F5AE9701D5353B400A5A8B7 /* BannerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BannerView.m; sourceTree = "<group>"; };
 		5F5AE9741D54364E00A5A8B7 /* GuideRefreshView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuideRefreshView.h; sourceTree = "<group>"; };
@@ -1008,6 +1010,7 @@
 				5F635CB21D3E12C3006AAE3D /* NewsDetailViewController.h */,
 				5F635CB31D3E12C3006AAE3D /* NewsDetailViewController.m */,
 				5F635ED71D41EB51006AAE3D /* webView.css */,
+				5F571FE31D64057500604CDD /* webView.js */,
 				5FE722211D50B5B70026BFC3 /* textonly.png */,
 			);
 			name = ViewControllers;
@@ -1230,6 +1233,7 @@
 				5F42C09F1D34E42A00B89651 /* SVProgressHUD.bundle in Resources */,
 				5F635ED81D41EB51006AAE3D /* webView.css in Resources */,
 				5F635CCE1D3E3EDF006AAE3D /* ShareSDKUI.bundle in Resources */,
+				5F571FE41D64057500604CDD /* webView.js in Resources */,
 				5FF4B7AC1D38F7B200CC6704 /* Info.plist in Resources */,
 				5F635CD11D3E3EDF006AAE3D /* ShareSDK.bundle in Resources */,
 				5FE7220E1D4EFCE30026BFC3 /* TwitterKitResources.bundle in Resources */,
