@@ -136,14 +136,16 @@ static CGFloat const ButtonHeight = 40;
 - (void)leftAction:(UIButton *)button
 {
     // 打点-点击侧边栏按钮-010115
-    NSString *channelName = _segmentVC.titleArray[_segmentVC.selectIndex - 10000];
-    NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
-                                   channelName, @"channel",
-                                   nil];
-    [Flurry logEvent:@"Home_MenuButton_Click" withParameters:articleParams];
+    if (_segmentVC.titleArray) {
+        NSString *channelName = _segmentVC.titleArray[_segmentVC.selectIndex - 10000];
+        NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
+                                       channelName, @"channel",
+                                       nil];
+        [Flurry logEvent:@"Home_MenuButton_Click" withParameters:articleParams];
 #if DEBUG
-    [iConsole info:[NSString stringWithFormat:@"Home_MenuButton_Click:%@",articleParams],nil];
+        [iConsole info:[NSString stringWithFormat:@"Home_MenuButton_Click:%@",articleParams],nil];
 #endif
+    }
     if (_leftView == nil) {
         _leftView = [[LeftView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
     }
