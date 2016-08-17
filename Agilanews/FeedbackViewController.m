@@ -76,29 +76,30 @@
     [params setObject:_textView.feedbackTextView.text forKey:@"fb_detail"];
     if ([_textField.text rangeOfString:@"@"].location != NSNotFound) {
         [params setObject:_textField.text forKey:@"email"];
-        [[SSHttpRequest sharedInstance] post:kHomeUrl_Feedback params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
-            // 打点-提交成功-010805
-            [Flurry logEvent:@"FeedB_Submit_Click_Y"];
-#if DEBUG
-            [iConsole info:@"FeedB_Submit_Click_Y",nil];
-#endif
-            [SVProgressHUD showSuccessWithStatus:@"Successful"];
-            [self.navigationController popViewControllerAnimated:YES];
-        } failure:^(NSError *error) {
-            // 打点-提交失败-010806
-            [Flurry logEvent:@"FeedB_Submit_Click_N"];
-#if DEBUG
-            [iConsole info:@"FeedB_Submit_Click_N",nil];
-#endif
-        } isShowHUD:YES];
-    } else {
+    } else if (_textField.text.length > 0) {
         // 打点-提交失败-010806
         [Flurry logEvent:@"FeedB_Submit_Click_N"];
 #if DEBUG
         [iConsole info:@"FeedB_Submit_Click_N",nil];
 #endif
         [SVProgressHUD showErrorWithStatus:@"Please input right email address"];
+        return;
     }
+    [[SSHttpRequest sharedInstance] post:kHomeUrl_Feedback params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
+        // 打点-提交成功-010805
+        [Flurry logEvent:@"FeedB_Submit_Click_Y"];
+#if DEBUG
+        [iConsole info:@"FeedB_Submit_Click_Y",nil];
+#endif
+        [SVProgressHUD showSuccessWithStatus:@"Successful"];
+        [self.navigationController popViewControllerAnimated:YES];
+    } failure:^(NSError *error) {
+        // 打点-提交失败-010806
+        [Flurry logEvent:@"FeedB_Submit_Click_N"];
+#if DEBUG
+        [iConsole info:@"FeedB_Submit_Click_N",nil];
+#endif
+    } isShowHUD:YES];
 }
 
 - (void)backAction:(UIButton *)button
