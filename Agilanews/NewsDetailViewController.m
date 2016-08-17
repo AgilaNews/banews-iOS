@@ -1153,6 +1153,7 @@
  */
 - (void)fontChange
 {
+    _webView.height = 1;
     NSInteger textSize = 100;
     switch ([DEF_PERSISTENT_GET_OBJECT(SS_FontSize) integerValue]) {
         case 0:
@@ -1172,6 +1173,10 @@
             break;
     }
     [_webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"document.getElementsByTagName('body')[0].style.webkitTextSizeAdjust= '%ld%%'",(long)textSize]];
+    CGFloat height = _webView.scrollView.contentSize.height;
+    _webViewHeight = height;
+    _webView.height = height;
+    [_tableView reloadData];
 }
 
 /**
@@ -1496,7 +1501,7 @@
         [iConsole info:[NSString stringWithFormat:@"Article_FontSize_Set_Click:%@",articleParams],nil];
 #endif
         DEF_PERSISTENT_SET_OBJECT(SS_FontSize, @1);
-        [_tableView reloadData];
+//        [_tableView reloadData];
         [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_FontSize_Change object:nil];
     }];
     UIAlertAction *large = [UIAlertAction actionWithTitle:@"Large" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
@@ -1509,7 +1514,7 @@
         [iConsole info:[NSString stringWithFormat:@"Article_FontSize_Set_Click:%@",articleParams],nil];
 #endif
         DEF_PERSISTENT_SET_OBJECT(SS_FontSize, @2);
-        [_tableView reloadData];
+//        [_tableView reloadData];
         [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_FontSize_Change object:nil];
     }];
     UIAlertAction *normal = [UIAlertAction actionWithTitle:@"Normal" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
@@ -1522,7 +1527,7 @@
         [iConsole info:[NSString stringWithFormat:@"Article_FontSize_Set_Click:%@",articleParams],nil];
 #endif
         DEF_PERSISTENT_SET_OBJECT(SS_FontSize, @0);
-        [_tableView reloadData];
+//        [_tableView reloadData];
         [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_FontSize_Change object:nil];
     }];
     UIAlertAction *small = [UIAlertAction actionWithTitle:@"Small" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
@@ -1535,7 +1540,7 @@
         [iConsole info:[NSString stringWithFormat:@"Article_FontSize_Set_Click:%@",articleParams],nil];
 #endif
         DEF_PERSISTENT_SET_OBJECT(SS_FontSize, @3);
-        [_tableView reloadData];
+//        [_tableView reloadData];
         [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_FontSize_Change object:nil];
     }];
     UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
