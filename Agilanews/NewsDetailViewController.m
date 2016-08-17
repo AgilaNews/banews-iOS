@@ -73,7 +73,7 @@
     _webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 64, kScreenWidth, kScreenHeight - 64)];
     _webView.backgroundColor = kWhiteBgColor;
     _webView.delegate = self;
-    _webView.scrollView.scrollEnabled = NO;
+//    _webView.scrollView.scrollEnabled = NO;
     _webView.scrollView.scrollsToTop = NO;
     _webView.scrollView.showsHorizontalScrollIndicator = NO;
     _webView.scrollView.showsVerticalScrollIndicator = NO;
@@ -332,6 +332,7 @@
     [params setObject:_model.news_id forKey:@"news_id"];
     [[SSHttpRequest sharedInstance] post:kHomeUrl_Like params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
         [appDelegate.likedDic setValue:@1 forKey:_model.news_id];
+        _detailModel.likedCount = responseObj[@"liked"];
         [button setTitle:[NSString stringWithFormat:@"%@",responseObj[@"liked"]] forState:UIControlStateNormal];
         weakSelf.likeButton.selected = YES;
     } failure:^(NSError *error) {
@@ -838,6 +839,7 @@
     }
     [_webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"document.getElementsByTagName('body')[0].style.webkitTextSizeAdjust= '%ld%%'",(long)textSize]];
     _tableView.frame = CGRectMake(0, 64, kScreenWidth, kScreenHeight - 64 - 50);
+    _webView.scrollView.scrollEnabled = NO;
     CGFloat height = [[_webView stringByEvaluatingJavaScriptFromString:@"document.body.offsetHeight"] floatValue] + 25;
     _webViewHeight = height;
     _webView.height = height;
