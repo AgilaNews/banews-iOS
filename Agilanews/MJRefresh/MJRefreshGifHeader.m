@@ -36,7 +36,7 @@
 {
     if (!_gifView) {
         self.progressView = [[FJSWaveProgress alloc] initWithFrame:CGRectMake((kScreenWidth - 25) * .5, 5, 25, 25)];
-        self.progressView.waveHeight = 1;
+        self.progressView.waveHeight = 1.5;
         self.progressView.speed = .5;
         [self addSubview:_gifView = self.progressView];
     }

@@ -113,11 +113,14 @@
 #pragma mark -- 波动动画实现
 - (void)waveAnimation
 {
+    if (self.yHeight <= 0) {
+        self.yHeight = 25;
+    }
     self.yHeight -= .2;
     CGFloat waveHeight = self.waveHeight;
     //如果是0或者1,则不需要wave的高度,否则会看出来一个小的波动.
     if (self.progress == 0.0f || self.progress == 1.0f) {
-        waveHeight = 0.f;
+        waveHeight = 1.5f;
     }
     //累加偏移量,这样就可以通过speed来控制波动的速度了.对于正弦函数中的各个参数,你可以通过上面的注释进行了解.
     self.offset += self.speed;
