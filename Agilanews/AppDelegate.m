@@ -18,20 +18,6 @@
 
 @implementation AppDelegate
 
-- (void)handleConsoleCommand:(NSString *)command
-{
-    if ([command isEqualToString:@"version"])
-    {
-        [iConsole info:@"%@ version %@",
-         [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleName"],
-         [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]];
-    }
-    else
-    {
-        [iConsole error:@"unrecognised command, try 'version' instead"];
-    }
-}
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
 
@@ -404,6 +390,20 @@
             // 打点失败
             [weakSelf serverLogWithEventArray:eventArray];
         } isShowHUD:NO];
+    }
+}
+
+- (void)handleConsoleCommand:(NSString *)command
+{
+    if ([command isEqualToString:@"version"])
+    {
+        [iConsole info:@"%@ version %@",
+         [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleName"],
+         [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]];
+    }
+    else
+    {
+        [iConsole error:@"unrecognised command, try 'version' instead"];
     }
 }
 
