@@ -87,6 +87,7 @@
         }
         case MJRefreshHeaderStateRefreshing: {
             if (self.top == -50 && (self.pullingPercent == 1 || self.pullingPercent == 0)) {
+                [self.progressView stopWaveAnimation];
                 [self.progressView startWaveAnimation];
             }
             break;
