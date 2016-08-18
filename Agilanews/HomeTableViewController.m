@@ -86,7 +86,6 @@
     self.tableView.separatorInset = UIEdgeInsetsMake(0, 11, 0, 11);
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     self.showRefreshHeader = YES;
-    self.showRefreshFooter = YES;
     if ([_model.channelID isEqualToNumber:@10001]) {
         self.tableView.scrollsToTop = YES;
     } else {
@@ -470,6 +469,7 @@
             [_dataList insertObjects:models atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, models.count)]];
             [weakSelf tableViewDidFinishTriggerHeader:YES reload:YES];
             _refreshTime = [[NSDate date] timeIntervalSince1970];
+            self.showRefreshFooter = YES;
         } else {
             // 打点-上拉加载成功-010110
             NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
