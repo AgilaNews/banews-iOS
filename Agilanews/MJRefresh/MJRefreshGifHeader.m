@@ -86,7 +86,7 @@
             self.mj_h = 2 * 7.5 + 10 + 25;
         }
         case MJRefreshHeaderStateRefreshing: {
-            if (self.top == -50 && (self.pullingPercent == 1 || self.pullingPercent == 0)) {
+            if (self.top == -50 && (self.pullingPercent == 1 || self.pullingPercent < 0.5)) {
                 [self.progressView stopWaveAnimation];
                 [self.progressView startWaveAnimation];
             }
@@ -143,10 +143,10 @@
 //            NSUInteger index =  images.count * self.pullingPercent;
 //            if (index >= images.count) index = images.count - 1;
 //            self.gifView.image = images[index];
-            if (self.pullingPercent - .3 < 0 && self.pullingPercent != 0) {
+            if (self.pullingPercent - .3 < 0 && self.pullingPercent > 0.1) {
                 self.gifView.height = self.gifView.width = 10;
                 [self.progressView stopWaveAnimation];
-            } else if (self.pullingPercent == 0) {
+            } else if (self.pullingPercent < .1) {
                 self.gifView.height = self.gifView.width = 25;
             } else {
                 [self.progressView stopWaveAnimation];
