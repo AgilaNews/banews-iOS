@@ -278,7 +278,6 @@
 - (void)tableViewDidTriggerHeaderRefresh
 {
     
-    
 }
 
 /**

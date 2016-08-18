@@ -31,8 +31,10 @@ static SSHttpRequest *_manager = nil;
         // validatesDomainName 是否需要验证域名，默认为YES；
         securityPolicy.validatesDomainName = NO;
         _manager.securityPolicy  = securityPolicy;
-        // 设置超时时间为5s
-        _manager.requestSerializer.timeoutInterval = 5;
+//        // 设置超时时间为5s
+//        [_manager.requestSerializer willChangeValueForKey:@"timeoutInterval"];
+//        [_manager.requestSerializer setTimeoutInterval:3.0f];
+//        [_manager.requestSerializer didChangeValueForKey:@"timeoutInterval"];
         // 设置请求头
         [_manager.requestSerializer setValue:@"gzip, deflate" forHTTPHeaderField:@"Accept-Encoding"];
         [_manager.requestSerializer setValue:@"en-PH;q=0.8,en-US;q=0.5,en;q=0.3" forHTTPHeaderField:@"Accept-Language"];
@@ -148,7 +150,10 @@ static SSHttpRequest *_manager = nil;
     [params setObject:@"ios" forKey:@"os"];
     // 系统版本号
     [params setObject:[NSString stringWithFormat:@"%@",[[UIDevice currentDevice] systemVersion]] forKey:@"os_version"];
-
+    // 设置超时时间为5s
+    [_manager.requestSerializer willChangeValueForKey:@"timeoutInterval"];
+    [_manager.requestSerializer setTimeoutInterval:8.0f];
+    [_manager.requestSerializer didChangeValueForKey:@"timeoutInterval"];
     // 打印请求参数
     SSLog(@"\n------打印请求地址------\n%@\n------打印请求参数------\n%@\n------打印请求头------\n%@",_urlString,params,string);
     
@@ -300,7 +305,10 @@ static SSHttpRequest *_manager = nil;
     NSString *string = [NSString stringWithFormat:@"GET\n \n%@\n%@\nX-DENSITY:%dx%d\nX-SESSION:%@\nX-USER-A:%@\nX-USER-D:%@\n%@",contentType == UrlencodedType ? @"APPLICATION/X-WWW-FORM-URLENCODED" : @"APPLICATION/JSON",dateString,(int)kScreenWidth_DP,(int)kScreenHeight_DP,DEF_PERSISTENT_GET_OBJECT(@"UUID"),userA,DEF_PERSISTENT_GET_OBJECT(@"IDFA"),url];
     [_manager.requestSerializer setValue:[Signature hmacsha1:string key:@"7intJWbSmtjkrIrb"] forHTTPHeaderField:@"Authorization"];
     
-    
+    // 设置超时时间为5s
+    [_manager.requestSerializer willChangeValueForKey:@"timeoutInterval"];
+    [_manager.requestSerializer setTimeoutInterval:8.0f];
+    [_manager.requestSerializer didChangeValueForKey:@"timeoutInterval"];
     // 打印请求参数
     SSLog(@"\n------打印请求地址------\n%@\n------打印请求参数------\n%@",_urlString,params);
     
@@ -443,7 +451,10 @@ static SSHttpRequest *_manager = nil;
     [params setObject:@"ios" forKey:@"os"];
     // 系统版本号
     [params setObject:[NSString stringWithFormat:@"%@",[[UIDevice currentDevice] systemVersion]] forKey:@"os_version"];
-    
+    // 设置超时时间为5s
+    [_manager.requestSerializer willChangeValueForKey:@"timeoutInterval"];
+    [_manager.requestSerializer setTimeoutInterval:8.0f];
+    [_manager.requestSerializer didChangeValueForKey:@"timeoutInterval"];
     // 打印请求参数
     SSLog(@"\n------打印请求地址------\n%@\n------打印请求参数------\n%@",_urlString,params);
     [_manager DELETE:_urlString parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
