@@ -551,7 +551,7 @@
                             break;
                         case NEWS_NoPic:
                         {
-                            CGSize titleLabelSize = [model.title calculateSize:CGSizeMake(kScreenWidth - 20, 60) font:titleFont];
+                            CGSize titleLabelSize = [model.title calculateSize:CGSizeMake(kScreenWidth - 22, 60) font:titleFont];
                             return 11 + titleLabelSize.height + 15 + 11 + 11;
                         }
                             break;
@@ -630,6 +630,7 @@
                         RecommendedView *recommendedView = [[RecommendedView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 30) titleImage:[UIImage imageNamed:@"icon_article_recommend_small"] titleText:@"Recommended for you"];
                         [cell.contentView addSubview:recommendedView];
                     }
+                    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
                     return cell;
                     break;
                 }
@@ -697,6 +698,7 @@
                         RecommendedView *recommendedView = [[RecommendedView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 30) titleImage:[UIImage imageNamed:@"icon_article_comments_small"] titleText:@"Comments"];
                         [cell.contentView addSubview:recommendedView];
                     }
+                    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
                     return cell;
                     break;
                 }
