@@ -126,7 +126,9 @@
     HomeViewController *homeVC = baseNav.viewControllers.firstObject;
     NSMutableDictionary *newsDic = [NSMutableDictionary dictionary];
     for (HomeTableViewController *homeTabVC in homeVC.segmentVC.subViewControllers) {
-        [newsDic setObject:homeTabVC.dataList forKey:homeTabVC.model.channelID];
+        if (homeTabVC.dataList.count > 0) {
+            [newsDic setObject:homeTabVC.dataList forKey:homeTabVC.model.channelID];
+        }
     }
     NSString *newsFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/news.data"];
     NSDictionary *newsData = [NSDictionary dictionaryWithObject:newsDic forKey:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]]];
@@ -140,6 +142,9 @@
         logData = [NSMutableArray arrayWithArray:_eventArray];
     }
     [NSKeyedArchiver archiveRootObject:logData toFile:logFilePath];
+    // 缓存频道刷新记录
+    NSString *refreshFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/refresh.data"];
+    [NSKeyedArchiver archiveRootObject:_refreshTimeDic toFile:refreshFilePath];
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
@@ -309,6 +314,9 @@
     if ([[NSDate date] timeIntervalSince1970] - checkNum.longLongValue < 3600) {
         _checkDic = checkData[checkData.allKeys.firstObject];
     }
+    NSString *refreshFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/refresh.data"];
+    _refreshTimeDic = [NSMutableDictionary dictionaryWithDictionary:[NSKeyedUnarchiver unarchiveObjectWithFile:refreshFilePath]];
+    NSLog(@"%@",_refreshTimeDic);
 }
 
 /**

@@ -93,11 +93,14 @@
     }
     [self.tableView setContentOffset:CGPointMake(self.tableView.contentOffset.x, .5)];
     _dataList = [NSMutableArray array];
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    NSNumber *refreshNum = appDelegate.refreshTimeDic[_model.channelID];
+    _refreshTime = refreshNum.longLongValue;
     NSString *newsFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/news.data"];
     NSDictionary *newsData = [NSKeyedUnarchiver unarchiveObjectWithFile:newsFilePath];
     NSNumber *checkNum = newsData.allKeys.firstObject;
     if ([[NSDate date] timeIntervalSince1970] - checkNum.longLongValue < 3600) {
-        _dataList = newsData[newsData.allKeys.firstObject][_model.channelID];
+        _dataList = [NSMutableArray arrayWithArray:newsData[newsData.allKeys.firstObject][_model.channelID]];
     } else if ([_model.channelID isEqualToNumber:@10001])
     {
         // 请求数据
@@ -468,8 +471,8 @@
 #endif
             [_dataList insertObjects:models atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, models.count)]];
             [weakSelf tableViewDidFinishTriggerHeader:YES reload:YES];
-            _refreshTime = [[NSDate date] timeIntervalSince1970];
-            self.showRefreshFooter = YES;
+            weakSelf.refreshTime = [[NSDate date] timeIntervalSince1970];
+            weakSelf.showRefreshFooter = YES;
         } else {
             // 打点-上拉加载成功-010110
             NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -622,6 +625,16 @@
 - (void)reloadDataAction
 {
     [self.tableView reloadData];
+}
+
+- (void)setRefreshTime:(long long)refreshTime
+{
+    if (_refreshTime != refreshTime) {
+        _refreshTime = refreshTime;
+        
+        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        [appDelegate.refreshTimeDic setObject:[NSNumber numberWithLongLong:refreshTime] forKey:_model.channelID];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
