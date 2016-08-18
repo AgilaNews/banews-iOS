@@ -56,13 +56,13 @@
 
 
 
-#define SS_LATITUDE     @"latitude"         // 纬度
-#define SS_LONGITUDE    @"longitude"        // 经度
-#define SS_netStatus    @"netStatus"        // 网络状态
-#define SS_textOnlyMode @"textOnlyMode"     // 无图模式
-#define SS_FontSize     @"FontSize"         // 字体大小
-#define SS_GuideHomeKey @"SS_GuideHomeKey_v1.0.1"  // 引导页——主页
-#define SS_GuideFavKey  @"SS_GuideFavKey_v1.0.1"   // 引导页——收藏
+#define SS_LATITUDE     @"latitude"              // 纬度
+#define SS_LONGITUDE    @"longitude"             // 经度
+#define SS_netStatus    @"netStatus"             // 网络状态
+#define SS_textOnlyMode @"textOnlyMode"          // 无图模式
+#define SS_FontSize     @"FontSize"              // 字体大小
+#define SS_GuideHomeKey @"SS_GuideHomeKey_v1.0.1"// 引导页——主页
+#define SS_GuideFavKey  @"SS_GuideFavKey_v1.0.1" // 引导页——收藏
 
 // 新闻模板
 #define NEWS_ManyPic    3   // 多图模板
@@ -73,17 +73,17 @@
 
 
 // 通知
-#define KNOTIFICATION_Categories         @"KNOTIFICATION_Categories"       // 频道分类获得通知
-#define KNOTIFICATION_Refresh            @"KNOTIFICATION_Refresh"          // 首页刷新按钮通知
-#define KNOTIFICATION_Refresh_Success    @"KNOTIFICATION_Refresh_Success"  // 首页刷新成功通知
-#define KNOTIFICATION_Login_Success      @"KNOTIFICATION_Login_Success"    // 第三方登录成功通知
-#define KNOTIFICATION_Secect_Channel     @"KNOTIFICATION_Secect_Channel"   // 选中频道通知
-#define KNOTIFICATION_Scroll_Channel     @"KNOTIFICATION_Scroll_Channel"   // 滑动频道通知
-#define KNOTIFICATION_TextOnly_ON        @"KNOTIFICATION_TextOnly_ON"      // 无图模式开启通知
-#define KNOTIFICATION_TextOnly_OFF       @"KNOTIFICATION_TextOnly_OFF"     // 无图模式关闭通知
-#define KNOTIFICATION_FontSize_Change    @"KNOTIFICATION_FontSize_Change"  // 字体大小改变通知
-#define KNOTIFICATION_PushToFavorite     @"KNOTIFICATION_PushToFavorite"   // 跳转到收藏通知
-#define KNOTIFICATION_TouchFavorite      @"KNOTIFICATION_TouchFavorite"    // 跳转到收藏通知
+#define KNOTIFICATION_Categories      @"KNOTIFICATION_Categories"     // 频道分类获得通知
+#define KNOTIFICATION_Refresh         @"KNOTIFICATION_Refresh"        // 首页刷新按钮通知
+#define KNOTIFICATION_Refresh_Success @"KNOTIFICATION_Refresh_Success"// 首页刷新成功通知
+#define KNOTIFICATION_Login_Success   @"KNOTIFICATION_Login_Success"  // 第三方登录成功通知
+#define KNOTIFICATION_Secect_Channel  @"KNOTIFICATION_Secect_Channel" // 选中频道通知
+#define KNOTIFICATION_Scroll_Channel  @"KNOTIFICATION_Scroll_Channel" // 滑动频道通知
+#define KNOTIFICATION_TextOnly_ON     @"KNOTIFICATION_TextOnly_ON"    // 无图模式开启通知
+#define KNOTIFICATION_TextOnly_OFF    @"KNOTIFICATION_TextOnly_OFF"   // 无图模式关闭通知
+#define KNOTIFICATION_FontSize_Change @"KNOTIFICATION_FontSize_Change"// 字体大小改变通知
+#define KNOTIFICATION_PushToFavorite  @"KNOTIFICATION_PushToFavorite" // 跳转到收藏通知
+#define KNOTIFICATION_TouchFavorite   @"KNOTIFICATION_TouchFavorite"  // 跳转到收藏通知
 
 
 // 刷新成功提示banner
