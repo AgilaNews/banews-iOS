@@ -1180,7 +1180,8 @@
             break;
     }
     [_webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"document.getElementsByTagName('body')[0].style.webkitTextSizeAdjust= '%ld%%'",(long)textSize]];
-    CGFloat height = _webView.scrollView.contentSize.height;
+    CGFloat height = [[_webView stringByEvaluatingJavaScriptFromString:@"document.body.offsetHeight"] floatValue] + 25;
+//    CGFloat height = _webView.scrollView.contentSize.height;
     _webViewHeight = height;
     _webView.height = height;
     [_tableView reloadData];
