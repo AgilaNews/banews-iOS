@@ -413,12 +413,13 @@
  */
 - (void)postComment
 {
+    __weak typeof(self) weakSelf = self;
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setObject:_model.news_id forKey:@"news_id"];
     [params setObject:_commentTextView.textView.text forKey:@"comment_detail"];
     [[SSHttpRequest sharedInstance] post:kHomeUrl_Comment params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
         CommentModel *model = [CommentModel mj_objectWithKeyValues:responseObj[@"comment"]];
-        [self.commentArray insertObject:model atIndex:0];
+        [weakSelf.commentArray insertObject:model atIndex:0];
         [_tableView reloadData];
         [_commentTextView.textView resignFirstResponder];
         [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
@@ -429,6 +430,7 @@
             [_commentTextView removeFromSuperview];
             _commentTextView = nil;
         }];
+        [SVProgressHUD showSuccessWithStatus:@"Successful"];
         // 打点-评论成功-010210
         NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
                                        [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
@@ -1254,6 +1256,9 @@
     if (appDelegate.model) {
         // 评论
         _commentTextView = [[CommentTextView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(cancelAction)];
+        [_commentTextView.shadowView addGestureRecognizer:tap];
+        
         UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
         [keyWindow addSubview:_commentTextView];
         [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
@@ -1625,10 +1630,12 @@
 {
     if (_commentTextView.textView.text.length > 0) {
         _commentTextView.sendButton.selected = YES;
+        _commentTextView.sendButton.enabled = YES;
         _commentTextView.placeholderLabel.hidden = YES;
         _commentTextView.isInput = YES;
     } else {
         _commentTextView.sendButton.selected = NO;
+        _commentTextView.sendButton.enabled = NO;
         _commentTextView.placeholderLabel.hidden = NO;
         _commentTextView.isInput = NO;
     }

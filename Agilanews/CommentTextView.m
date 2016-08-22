@@ -33,6 +33,7 @@
         _textView.layer.borderWidth = 1;
         _textView.tintColor = kOrangeColor;
         _textView.textColor = kBlackColor;
+        _textView.contentInset = UIEdgeInsetsMake(0, 0, 25, 0);
         _textView.font = [UIFont systemFontOfSize:14];
         [_bgView addSubview:_textView];
         
@@ -61,13 +62,28 @@
         _sendButton.titleLabel.font = [UIFont systemFontOfSize:17];
         [_bgView addSubview:_sendButton];
         
+        _letterNumLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, _textView.height - 10, 100, 13)];
+        _letterNumLabel.right = _bgView.width - 23;
+        _letterNumLabel.text = @"0/300";
+        _letterNumLabel.textColor = kGrayColor;
+        _letterNumLabel.font = [UIFont systemFontOfSize:12];
+        _letterNumLabel.textAlignment = NSTextAlignmentRight;
+        [_bgView addSubview:_letterNumLabel];
+        
         [_textView becomeFirstResponder];
         [UIView animateWithDuration:.5 animations:^{
             _shadowView.alpha = .7;
             _bgView.alpha = 1;
         }];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(commentTextViewTextChange) name:UITextViewTextDidChangeNotification object:nil];
     }
     return self;
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)setIsInput:(BOOL)isInput
@@ -91,6 +107,16 @@
             [iConsole info:[NSString stringWithFormat:@"Article_Comments_Input:%@",articleParams],nil];
 #endif
         }
+    }
+}
+
+- (void)commentTextViewTextChange
+{
+    _letterNumLabel.text = [NSString stringWithFormat:@"%ld/300",(unsigned long)_textView.text.length];
+    if (_textView.text.length > 300) {
+        _letterNumLabel.textColor = SSColor(225, 65, 35);
+    } else {
+        _letterNumLabel.textColor = kGrayColor;
     }
 }
 

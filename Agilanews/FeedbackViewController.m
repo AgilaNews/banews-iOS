@@ -38,7 +38,7 @@
         self.navigationItem.rightBarButtonItem = sendItem;
     }
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textChange) name:UITextViewTextDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(feedbackViewControllerTextChange) name:UITextViewTextDidChangeNotification object:nil];
 
     // 初始化子视图
     [self _initSubiews];
@@ -113,7 +113,7 @@
 }
 
 #pragma mark - 输入框改变
-- (void)textChange
+- (void)feedbackViewControllerTextChange
 {
     if (_textView.feedbackTextView.text.length > 0) {
         _sendButton.enabled = YES;

@@ -18,5 +18,6 @@
 @property (nonatomic, strong) UILabel *placeholderLabel;
 @property (nonatomic, assign) BOOL isInput;
 @property (nonatomic, strong) NSString *news_id;
+@property (nonatomic, strong) UILabel *letterNumLabel;
 
 @end

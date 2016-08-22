@@ -34,12 +34,15 @@
         self.adjustsFontSizeToFitWidth = YES;
         [self setValue:kGrayColor forKeyPath:@"_placeholderLabel.textColor"];
         
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textChange) name:UITextFieldTextDidChangeNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(feedbackTextFieldTextChange) name:UITextFieldTextDidChangeNotification object:nil];
     }
     return self;
 }
 
-
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 - (CGRect)textRectForBounds:(CGRect)bounds
 {
@@ -67,7 +70,7 @@
     [super drawPlaceholderInRect:CGRectMake(0, 0, self.width - 10, self.height)];
 }
 
-- (void)textChange
+- (void)feedbackTextFieldTextChange
 {
     if (self.text.length > 0) {
         _isInput = YES;

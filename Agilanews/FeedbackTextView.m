@@ -42,7 +42,7 @@
         _letterNumLabel.textAlignment = NSTextAlignmentRight;
         [self addSubview:_letterNumLabel];
         
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textChange) name:UITextViewTextDidChangeNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(feedbackTextViewTextChange) name:UITextViewTextDidChangeNotification object:nil];
     }
     return self;
 }
@@ -52,7 +52,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)textChange
+- (void)feedbackTextViewTextChange
 {
     _letterNumLabel.text = [NSString stringWithFormat:@"%ld/300",(unsigned long)_feedbackTextView.text.length];
     if (_feedbackTextView.text.length > 0) {

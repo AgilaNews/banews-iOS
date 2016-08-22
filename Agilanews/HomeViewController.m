@@ -136,7 +136,7 @@ static CGFloat const ButtonHeight = 40;
 - (void)leftAction:(UIButton *)button
 {
     // 打点-点击侧边栏按钮-010115
-    if (_segmentVC.titleArray) {
+    if (_segmentVC.titleArray.count > 0) {
         NSString *channelName = _segmentVC.titleArray[_segmentVC.selectIndex - 10000];
         NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
                                        channelName, @"channel",
