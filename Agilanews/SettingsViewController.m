@@ -417,6 +417,15 @@
 
 }
 
+- (void)setCacheSize:(NSString *)cacheSize
+{
+    if (_cacheSize != cacheSize) {
+        _cacheSize = cacheSize;
+        
+        [_tableView reloadData];
+    }
+}
+
 #pragma mark - 计算缓存文件大小
 // 计算缓存文件大小
 - (long long)fileSizeAtPath:(NSString *)filePath
@@ -471,8 +480,7 @@
  */
 - (void)clearCachSuccess
 {
-    _cacheSize = [NSString stringWithFormat : @"%.2fMB" , [self filePath]];
-    [_tableView reloadData];
+    self.cacheSize = [NSString stringWithFormat : @"%.2fMB" , [self filePath]];
 }
 
 - (void)didReceiveMemoryWarning {
