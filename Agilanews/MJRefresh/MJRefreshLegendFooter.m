@@ -22,6 +22,7 @@
 {
     if (!_activityView) {
         UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        _activityView.backgroundColor = kWhiteBgColor;
         [self addSubview:_activityView = activityView];
     }
     return _activityView;

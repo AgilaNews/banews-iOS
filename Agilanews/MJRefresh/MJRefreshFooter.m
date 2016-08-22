@@ -40,7 +40,7 @@
 {
     if (!_loadMoreButton) {
         UIButton *loadMoreButton = [[UIButton alloc] init];
-        loadMoreButton.backgroundColor = [UIColor clearColor];
+        loadMoreButton.backgroundColor = kWhiteBgColor;
         [loadMoreButton addTarget:self action:@selector(buttonClick) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:_loadMoreButton = loadMoreButton];
     }
@@ -51,7 +51,7 @@
 {
     if (!_noMoreLabel) {
         UILabel *noMoreLabel = [[UILabel alloc] init];
-        noMoreLabel.backgroundColor = [UIColor clearColor];
+        noMoreLabel.backgroundColor = kWhiteBgColor;
         noMoreLabel.textAlignment = NSTextAlignmentCenter;
         [self addSubview:_noMoreLabel = noMoreLabel];
     }
@@ -62,7 +62,7 @@
 {
     if (!_stateLabel) {
         UILabel *stateLabel = [[UILabel alloc] init];
-        stateLabel.backgroundColor = [UIColor clearColor];
+        stateLabel.backgroundColor = kWhiteBgColor;
         stateLabel.textAlignment = NSTextAlignmentCenter;
         [self addSubview:_stateLabel = stateLabel];
     }

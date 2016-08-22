@@ -36,7 +36,7 @@
 {
     if (!_stateLabel) {
         UILabel *stateLabel = [[UILabel alloc] init];
-        stateLabel.backgroundColor = [UIColor clearColor];
+        stateLabel.backgroundColor = kWhiteBgColor;
         stateLabel.textAlignment = NSTextAlignmentCenter;
         [self addSubview:_stateLabel = stateLabel];
     }
