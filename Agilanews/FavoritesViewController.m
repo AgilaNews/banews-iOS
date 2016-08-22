@@ -14,6 +14,11 @@
 #import "FavoriteDetailViewController.h"
 #import "AppDelegate.h"
 
+#define titleFont_Normal        [UIFont systemFontOfSize:16]
+#define titleFont_ExtraLarge    [UIFont systemFontOfSize:20]
+#define titleFont_Large         [UIFont systemFontOfSize:18]
+#define titleFont_Small         [UIFont systemFontOfSize:14]
+
 @interface FavoritesViewController ()
 
 @end
@@ -217,6 +222,24 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NewsModel *model = _dataList[indexPath.row];
+    UIFont *titleFont = nil;
+    switch ([DEF_PERSISTENT_GET_OBJECT(SS_FontSize) integerValue]) {
+        case 0:
+            titleFont = titleFont_Normal;
+            break;
+        case 1:
+            titleFont = titleFont_ExtraLarge;
+            break;
+        case 2:
+            titleFont = titleFont_Large;
+            break;
+        case 3:
+            titleFont = titleFont_Small;
+            break;
+        default:
+            titleFont = titleFont_Normal;
+            break;
+    }
     switch ([model.tpl integerValue])
     {
         case NEWS_ManyPic:
@@ -231,7 +254,7 @@
             break;
         case NEWS_NoPic:
         {
-            CGSize titleLabelSize = [model.title calculateSize:CGSizeMake(kScreenWidth - 20, 60) font:[UIFont systemFontOfSize:16]];
+            CGSize titleLabelSize = [model.title calculateSize:CGSizeMake(kScreenWidth - 22, 60) font:titleFont];
             return 11 + titleLabelSize.height + 15 + 11 + 11;
         }
             break;
