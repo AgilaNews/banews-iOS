@@ -172,9 +172,6 @@
     [self.titleImageView sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:[UIImage imageNamed:@"holderImage"] options:SDWebImageLowPriority | SDWebImageRetryFailed completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         if (!image) {
             _titleImageView.image = [UIImage imageNamed:@"holderImage"];
-            _titleImageView.contentMode = UIViewContentModeCenter;
-        } else {
-            _titleImageView.contentMode = UIViewContentModeScaleAspectFit;
         }
     }];
 }
@@ -216,7 +213,7 @@
     if (_titleImageView == nil) {
         _titleImageView = [[UIImageView alloc] init];
         _titleImageView.backgroundColor = SSColor(235, 235, 235);
-        _titleImageView.contentMode = UIViewContentModeCenter;
+        _titleImageView.contentMode = UIViewContentModeScaleAspectFit;
         _titleImageView.clipsToBounds = YES;
         _titleImageView.image = [UIImage imageNamed:@"holderImage"];
     }

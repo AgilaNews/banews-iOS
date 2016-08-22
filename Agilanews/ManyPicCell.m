@@ -191,9 +191,6 @@
                 [self.imageViewOne sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:[UIImage imageNamed:@"holderImage"] options:SDWebImageLowPriority | SDWebImageRetryFailed completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                     if (!image) {
                         _imageViewOne.image = [UIImage imageNamed:@"holderImage"];
-                        _imageViewOne.contentMode = UIViewContentModeCenter;
-                    } else {
-                        _imageViewOne.contentMode = UIViewContentModeScaleAspectFit;
                     }
                 }];
             }
@@ -203,9 +200,6 @@
                 [self.imageViewTwo sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:[UIImage imageNamed:@"holderImage"] options:SDWebImageLowPriority | SDWebImageRetryFailed completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                     if (!image) {
                         _imageViewTwo.image = [UIImage imageNamed:@"holderImage"];
-                        _imageViewTwo.contentMode = UIViewContentModeCenter;
-                    } else {
-                        _imageViewTwo.contentMode = UIViewContentModeScaleAspectFit;
                     }
                 }];
             }
@@ -215,9 +209,6 @@
                 [self.imageViewThree sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:[UIImage imageNamed:@"holderImage"] options:SDWebImageLowPriority | SDWebImageRetryFailed completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                     if (!image) {
                         _imageViewThree.image = [UIImage imageNamed:@"holderImage"];
-                        _imageViewThree.contentMode = UIViewContentModeCenter;
-                    } else {
-                        _imageViewThree.contentMode = UIViewContentModeScaleAspectFit;
                     }
                 }];
             }
@@ -265,7 +256,7 @@
     if (_imageViewOne == nil) {
         _imageViewOne = [[UIImageView alloc] init];
         _imageViewOne.backgroundColor = SSColor(235, 235, 235);
-        _imageViewOne.contentMode = UIViewContentModeCenter;
+        _imageViewOne.contentMode = UIViewContentModeScaleAspectFit;
         _imageViewOne.clipsToBounds = YES;
         _imageViewOne.image = [UIImage imageNamed:@"holderImage"];
     }
@@ -277,7 +268,7 @@
     if (_imageViewTwo == nil) {
         _imageViewTwo = [[UIImageView alloc] init];
         _imageViewTwo.backgroundColor = SSColor(235, 235, 235);
-        _imageViewTwo.contentMode = UIViewContentModeCenter;
+        _imageViewTwo.contentMode = UIViewContentModeScaleAspectFit;
         _imageViewTwo.clipsToBounds = YES;
         _imageViewTwo.image = [UIImage imageNamed:@"holderImage"];
     }
@@ -289,7 +280,7 @@
     if (_imageViewThree == nil) {
         _imageViewThree = [[UIImageView alloc] init];
         _imageViewThree.backgroundColor = SSColor(235, 235, 235);
-        _imageViewThree.contentMode = UIViewContentModeCenter;
+        _imageViewThree.contentMode = UIViewContentModeScaleAspectFit;
         _imageViewThree.clipsToBounds = YES;
         _imageViewThree.image = [UIImage imageNamed:@"holderImage"];
     }
