@@ -44,12 +44,16 @@
     
     // 添加导航栏右侧按钮
     UIButton *shareBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    shareBtn.backgroundColor = kOrangeColor;
     shareBtn.frame = CGRectMake(0, 0, 40, 40);
+    shareBtn.imageView.backgroundColor = kOrangeColor;
     [shareBtn setImage:[UIImage imageNamed:@"icon_article_share_default"] forState:UIControlStateNormal];
     [shareBtn addTarget:self action:@selector(shareAction) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *shareItem = [[UIBarButtonItem alloc]initWithCustomView:shareBtn];
     UIButton *moreBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    moreBtn.backgroundColor = kOrangeColor;
     moreBtn.frame = CGRectMake(0, 0, 40, 38);
+    moreBtn.imageView.backgroundColor = kOrangeColor;
     [moreBtn setImage:[UIImage imageNamed:@"icon_article_font"] forState:UIControlStateNormal];
     [moreBtn addTarget:self action:@selector(moreAction) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *moreItem = [[UIBarButtonItem alloc]initWithCustomView:moreBtn];
@@ -980,6 +984,8 @@
         _likeButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _likeButton.frame = CGRectMake((kScreenWidth - 95) * .5, 0, 95, 34);
         _likeButton.backgroundColor = kWhiteBgColor;
+        _likeButton.imageView.backgroundColor = kWhiteBgColor;
+        _likeButton.titleLabel.backgroundColor = kWhiteBgColor;
         _likeButton.layer.cornerRadius = 17;
         _likeButton.layer.masksToBounds = YES;
         _likeButton.layer.borderWidth = 1;
