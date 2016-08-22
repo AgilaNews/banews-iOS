@@ -464,13 +464,15 @@
 {
     NSString *cachPath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
     NSArray * filesArray = [[NSFileManager defaultManager] subpathsAtPath:cachPath];
-    for (NSString *branchPath in filesArray)
-    {
-        NSError * error = nil ;
-        NSString * path = [cachPath stringByAppendingPathComponent:branchPath];
-        if ([[NSFileManager defaultManager] fileExistsAtPath:path])
+    @autoreleasepool {
+        for (NSString *branchPath in filesArray)
         {
-            [[NSFileManager defaultManager] removeItemAtPath:path error:&error];
+            NSError * error = nil ;
+            NSString * path = [cachPath stringByAppendingPathComponent:branchPath];
+            if ([[NSFileManager defaultManager] fileExistsAtPath:path])
+            {
+                [[NSFileManager defaultManager] removeItemAtPath:path error:&error];
+            }
         }
     }
     [self performSelectorOnMainThread:@selector(clearCachSuccess) withObject:nil waitUntilDone:YES ];

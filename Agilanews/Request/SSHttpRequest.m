@@ -256,8 +256,10 @@ static SSHttpRequest *_manager = nil;
                 _urlString = [NSString stringWithFormat:@"%@%@",kLogUrl,url];
             }
             _urlString = [_urlString stringByAppendingString:@"?"];
-            for (NSString *key in baseParams.allKeys) {
-                _urlString = [_urlString stringByAppendingString:[NSString stringWithFormat:@"%@=%@&",key,baseParams[key]]];
+            @autoreleasepool {
+                for (NSString *key in baseParams.allKeys) {
+                    _urlString = [_urlString stringByAppendingString:[NSString stringWithFormat:@"%@=%@&",key,baseParams[key]]];
+                }
             }
             _urlString = [_urlString substringToIndex:_urlString.length - 1];
             _urlString = [_urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];

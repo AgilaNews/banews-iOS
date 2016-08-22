@@ -41,15 +41,17 @@
         [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         NSString *dateString = [dateFormatter stringFromDate:currentDate];
         // 替换图片url
-        for (int i = 0; i < model.imgs.count; i++) {
-            if ([DEF_PERSISTENT_GET_OBJECT(SS_textOnlyMode) isEqualToNumber:@1]) {
-                NSString *imageFilePath = [[NSBundle mainBundle] pathForResource:@"textonly" ofType:@"png"];
-                NSString *imageUrl = [NSString stringWithFormat:@"<img src=file:///%@/>",imageFilePath];
-                model.body = [model.body stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"<!--IMG%d-->",i] withString:imageUrl];
-            } else {
-                ImageModel *imageModel = model.imgs[i];
-                NSString *imageUrl = [NSString stringWithFormat:@"<img src=\"%@\"/>",imageModel.src];
-                model.body = [model.body stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"<!--IMG%d-->",i] withString:imageUrl];
+        @autoreleasepool {
+            for (int i = 0; i < model.imgs.count; i++) {
+                if ([DEF_PERSISTENT_GET_OBJECT(SS_textOnlyMode) isEqualToNumber:@1]) {
+                    NSString *imageFilePath = [[NSBundle mainBundle] pathForResource:@"textonly" ofType:@"png"];
+                    NSString *imageUrl = [NSString stringWithFormat:@"<img src=file:///%@/>",imageFilePath];
+                    model.body = [model.body stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"<!--IMG%d-->",i] withString:imageUrl];
+                } else {
+                    ImageModel *imageModel = model.imgs[i];
+                    NSString *imageUrl = [NSString stringWithFormat:@"<img src=\"%@\"/>",imageModel.src];
+                    model.body = [model.body stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"<!--IMG%d-->",i] withString:imageUrl];
+                }
             }
         }
         // 拼接HTML
@@ -106,15 +108,17 @@
         [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         NSString *dateString = [dateFormatter stringFromDate:currentDate];
         // 替换图片url
-        for (int i = 0; i < detailModel.imgs.count; i++) {
-            if ([DEF_PERSISTENT_GET_OBJECT(SS_textOnlyMode) isEqualToNumber:@1]) {
-                NSString *imageFilePath = [[NSBundle mainBundle] pathForResource:@"textonly" ofType:@"png"];
-                NSString *imageUrl = [NSString stringWithFormat:@"<img src=file:///%@/>",imageFilePath];
-                detailModel.body = [detailModel.body stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"<!--IMG%d-->",i] withString:imageUrl];
-            } else {
-                ImageModel *imageModel = detailModel.imgs[i];
-                NSString *imageUrl = [NSString stringWithFormat:@"<img src=\"%@\"/>",imageModel.src];
-                detailModel.body = [detailModel.body stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"<!--IMG%d-->",i] withString:imageUrl];
+        @autoreleasepool {
+            for (int i = 0; i < detailModel.imgs.count; i++) {
+                if ([DEF_PERSISTENT_GET_OBJECT(SS_textOnlyMode) isEqualToNumber:@1]) {
+                    NSString *imageFilePath = [[NSBundle mainBundle] pathForResource:@"textonly" ofType:@"png"];
+                    NSString *imageUrl = [NSString stringWithFormat:@"<img src=file:///%@/>",imageFilePath];
+                    detailModel.body = [detailModel.body stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"<!--IMG%d-->",i] withString:imageUrl];
+                } else {
+                    ImageModel *imageModel = detailModel.imgs[i];
+                    NSString *imageUrl = [NSString stringWithFormat:@"<img src=\"%@\"/>",imageModel.src];
+                    detailModel.body = [detailModel.body stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"<!--IMG%d-->",i] withString:imageUrl];
+                }
             }
         }
         // 拼接HTML

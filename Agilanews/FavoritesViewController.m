@@ -91,9 +91,11 @@
     }
     [[SSHttpRequest sharedInstance] get:kHomeUrl_Collect params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
         NSMutableArray *models = [NSMutableArray array];
-        for (NSDictionary *dic in responseObj) {
-            NewsModel *model = [NewsModel mj_objectWithKeyValues:dic];
-            [models addObject:model];
+        @autoreleasepool {
+            for (NSDictionary *dic in responseObj) {
+                NewsModel *model = [NewsModel mj_objectWithKeyValues:dic];
+                [models addObject:model];
+            }
         }
         if (isFooter) {
             if (((NSArray *)responseObj).count <= 0) {
@@ -140,8 +142,10 @@
 #endif
     __weak typeof(self) weakSelf = self;
     NSMutableArray *collectIDs = [NSMutableArray array];
-    for (NewsModel *model in _selectedList) {
-        [collectIDs addObject:model.collect_id];
+    @autoreleasepool {
+        for (NewsModel *model in _selectedList) {
+            [collectIDs addObject:model.collect_id];
+        }
     }
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setObject:collectIDs forKey:@"ids"];

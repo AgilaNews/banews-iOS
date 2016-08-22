@@ -442,22 +442,24 @@
     }
     [[SSHttpRequest sharedInstance] get:kHomeUrl_NewsList params:params contentType:UrlencodedType serverType:NetServer_Home success:^(id responseObj) {
         NSMutableArray *models = [NSMutableArray array];
-        for (NSDictionary *dic in [responseObj valueForKey:[responseObj allKeys].firstObject])
-        {
-            NewsModel *model = [NewsModel mj_objectWithKeyValues:dic];
-            model.issuedID = [responseObj allKeys].firstObject;
-            if (later == YES) {
-                model.public_time = [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]];
-            } else {
-                if (models.count > 0) {
-                    NewsModel *lastModel = models.lastObject;
-                    model.public_time = [NSNumber numberWithLongLong:[lastModel.public_time longLongValue] - (arc4random() % 240 + 60)];
+        @autoreleasepool {
+            for (NSDictionary *dic in [responseObj valueForKey:[responseObj allKeys].firstObject])
+            {
+                NewsModel *model = [NewsModel mj_objectWithKeyValues:dic];
+                model.issuedID = [responseObj allKeys].firstObject;
+                if (later == YES) {
+                    model.public_time = [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]];
                 } else {
-                    NewsModel *lastModel = _dataList.lastObject;
-                    model.public_time = [NSNumber numberWithLongLong:[lastModel.public_time longLongValue] - (arc4random() % 240 + 60)];
+                    if (models.count > 0) {
+                        NewsModel *lastModel = models.lastObject;
+                        model.public_time = [NSNumber numberWithLongLong:[lastModel.public_time longLongValue] - (arc4random() % 240 + 60)];
+                    } else {
+                        NewsModel *lastModel = _dataList.lastObject;
+                        model.public_time = [NSNumber numberWithLongLong:[lastModel.public_time longLongValue] - (arc4random() % 240 + 60)];
+                    }
                 }
+                [models addObject:model];
             }
-            [models addObject:model];
         }
         if (later == YES) {
             // 打点-下拉刷新成功-010113

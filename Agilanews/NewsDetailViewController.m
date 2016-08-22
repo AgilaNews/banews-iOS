@@ -184,16 +184,18 @@
         [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         NSString *dateString = [dateFormatter stringFromDate:currentDate];
         // 替换图片url
-        for (int i = 0; i < weakSelf.detailModel.imgs.count; i++) {
-            if ([DEF_PERSISTENT_GET_OBJECT(SS_textOnlyMode) isEqualToNumber:@1]) {
-                NSString *imageFilePath = [[NSBundle mainBundle] pathForResource:@"textonly" ofType:@"png"];
-                NSString *imageUrl = [NSString stringWithFormat:@"<img src=file:///%@/>",imageFilePath];
-                weakSelf.detailModel.body = [weakSelf.detailModel.body stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"<!--IMG%d-->",i] withString:imageUrl];
-            } else {
-                ImageModel *imageModel = weakSelf.detailModel.imgs[i];
-//                NSString *imageUrl = [NSString stringWithFormat:@"<img src=\"%@\"/>",imageModel.src];
-                NSString *imageUrl = [NSString stringWithFormat:@"<img src=\"\" data-src=\"%@\" height=\"%fpx\" width=\"%@px\" class=\"ready-to-load\"/>",imageModel.src, imageModel.height.integerValue / 2.0, imageModel.width];
-                weakSelf.detailModel.body = [weakSelf.detailModel.body stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"<!--IMG%d-->",i] withString:imageUrl];
+        @autoreleasepool {
+            for (int i = 0; i < weakSelf.detailModel.imgs.count; i++) {
+                if ([DEF_PERSISTENT_GET_OBJECT(SS_textOnlyMode) isEqualToNumber:@1]) {
+                    NSString *imageFilePath = [[NSBundle mainBundle] pathForResource:@"textonly" ofType:@"png"];
+                    NSString *imageUrl = [NSString stringWithFormat:@"<img src=file:///%@/>",imageFilePath];
+                    weakSelf.detailModel.body = [weakSelf.detailModel.body stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"<!--IMG%d-->",i] withString:imageUrl];
+                } else {
+                    ImageModel *imageModel = weakSelf.detailModel.imgs[i];
+                    //                NSString *imageUrl = [NSString stringWithFormat:@"<img src=\"%@\"/>",imageModel.src];
+                    NSString *imageUrl = [NSString stringWithFormat:@"<img src=\"\" data-src=\"%@\" height=\"%fpx\" width=\"%@px\" class=\"ready-to-load\"/>",imageModel.src, imageModel.height.integerValue / 2.0, imageModel.width];
+                    weakSelf.detailModel.body = [weakSelf.detailModel.body stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"<!--IMG%d-->",i] withString:imageUrl];
+                }
             }
         }
         // 拼接HTML
@@ -282,9 +284,11 @@
         NSArray *array = responseObj;
         if (array.count > 0) {
             NSMutableArray *models = [NSMutableArray array];
-            for (NSDictionary *dic in array) {
-                CommentModel *model = [CommentModel mj_objectWithKeyValues:dic];
-                [models addObject:model];
+            @autoreleasepool {
+                for (NSDictionary *dic in array) {
+                    CommentModel *model = [CommentModel mj_objectWithKeyValues:dic];
+                    [models addObject:model];
+                }
             }
             [self.commentArray addObjectsFromArray:models];
             [weakSelf.tableView reloadData];
@@ -764,8 +768,10 @@
                 [eventDic setObject:_model.news_id forKey:@"refer"];
                 [eventDic setObject:@"1" forKey:@"pos"];
                 NSMutableArray *newslist = [NSMutableArray array];
-                for (NewsModel *model in _detailModel.recommend_news) {
-                    [newslist addObject:model.news_id];
+                @autoreleasepool {
+                    for (NewsModel *model in _detailModel.recommend_news) {
+                        [newslist addObject:model.news_id];
+                    }
                 }
                 [eventDic setObject:newslist forKey:@"newslist"];
                 [eventDic setObject:[NetType getNetType] forKey:@"net"];
@@ -1094,8 +1100,10 @@
             [eventDic setObject:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970] * 1000] forKey:@"time"];
             [eventDic setObject:_model.news_id forKey:@"news_id"];
             NSMutableArray *newslist = [NSMutableArray array];
-            for (NewsModel *model in _detailModel.recommend_news) {
-                [newslist addObject:model.news_id];
+            @autoreleasepool {
+                for (NewsModel *model in _detailModel.recommend_news) {
+                    [newslist addObject:model.news_id];
+                }
             }
             [eventDic setObject:newslist forKey:@"newslist"];
             [eventDic setObject:[NetType getNetType] forKey:@"net"];
