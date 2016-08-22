@@ -442,9 +442,9 @@
     }
     [[SSHttpRequest sharedInstance] get:kHomeUrl_NewsList params:params contentType:UrlencodedType serverType:NetServer_Home success:^(id responseObj) {
         NSMutableArray *models = [NSMutableArray array];
-        @autoreleasepool {
-            for (NSDictionary *dic in [responseObj valueForKey:[responseObj allKeys].firstObject])
-            {
+        for (NSDictionary *dic in [responseObj valueForKey:[responseObj allKeys].firstObject])
+        {
+            @autoreleasepool {
                 NewsModel *model = [NewsModel mj_objectWithKeyValues:dic];
                 model.issuedID = [responseObj allKeys].firstObject;
                 if (later == YES) {

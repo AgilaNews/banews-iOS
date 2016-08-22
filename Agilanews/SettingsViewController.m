@@ -469,9 +469,9 @@
 {
     NSString *cachPath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
     NSArray * filesArray = [[NSFileManager defaultManager] subpathsAtPath:cachPath];
-    @autoreleasepool {
-        for (NSString *branchPath in filesArray)
-        {
+    for (NSString *branchPath in filesArray)
+    {
+        @autoreleasepool {
             NSError * error = nil ;
             NSString * path = [cachPath stringByAppendingPathComponent:branchPath];
             if ([[NSFileManager defaultManager] fileExistsAtPath:path])

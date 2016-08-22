@@ -41,8 +41,8 @@
         [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         NSString *dateString = [dateFormatter stringFromDate:currentDate];
         // 替换图片url
-        @autoreleasepool {
-            for (int i = 0; i < model.imgs.count; i++) {
+        for (int i = 0; i < model.imgs.count; i++) {
+            @autoreleasepool {
                 if ([DEF_PERSISTENT_GET_OBJECT(SS_textOnlyMode) isEqualToNumber:@1]) {
                     NSString *imageFilePath = [[NSBundle mainBundle] pathForResource:@"textonly" ofType:@"png"];
                     NSString *imageUrl = [NSString stringWithFormat:@"<img src=file:///%@/>",imageFilePath];
@@ -108,8 +108,8 @@
         [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         NSString *dateString = [dateFormatter stringFromDate:currentDate];
         // 替换图片url
-        @autoreleasepool {
-            for (int i = 0; i < detailModel.imgs.count; i++) {
+        for (int i = 0; i < detailModel.imgs.count; i++) {
+            @autoreleasepool {
                 if ([DEF_PERSISTENT_GET_OBJECT(SS_textOnlyMode) isEqualToNumber:@1]) {
                     NSString *imageFilePath = [[NSBundle mainBundle] pathForResource:@"textonly" ofType:@"png"];
                     NSString *imageUrl = [NSString stringWithFormat:@"<img src=file:///%@/>",imageFilePath];
