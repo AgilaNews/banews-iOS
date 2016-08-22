@@ -16,8 +16,10 @@
     if (self) {
         self.backgroundColor = kWhiteBgColor;
         _titleImageView = [[UIImageView alloc] initWithFrame:CGRectMake(27, 11, 22, 22)];
+        _titleImageView.backgroundColor = kWhiteBgColor;
         [self.contentView addSubview:_titleImageView];
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(_titleImageView.right + 17, _titleImageView.top, 150, 22)];
+        _titleLabel.backgroundColor = kWhiteBgColor;
         _titleLabel.textColor = kBlackColor;
         _titleLabel.font = [UIFont systemFontOfSize:17];
         [self.contentView addSubview:_titleLabel];

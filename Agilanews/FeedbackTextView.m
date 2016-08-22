@@ -20,6 +20,8 @@
         
         _feedbackTextView = [[FeedbackSubview alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 160)];
         _feedbackTextView.backgroundColor = [UIColor whiteColor];
+        _feedbackTextView.inputView.backgroundColor = [UIColor whiteColor];
+        _feedbackTextView.inputAccessoryView.backgroundColor = [UIColor whiteColor];
         _feedbackTextView.tintColor = kOrangeColor;
         _feedbackTextView.textColor = kBlackColor;
         _feedbackTextView.font = [UIFont systemFontOfSize:15];
@@ -36,6 +38,7 @@
         
         _letterNumLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.height - 23, 100, 13)];
         _letterNumLabel.right = self.width - 13;
+        _letterNumLabel.backgroundColor = [UIColor whiteColor];
         _letterNumLabel.text = @"0/300";
         _letterNumLabel.textColor = kGrayColor;
         _letterNumLabel.font = [UIFont systemFontOfSize:12];

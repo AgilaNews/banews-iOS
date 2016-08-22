@@ -979,6 +979,7 @@
     if (_likeButton == nil) {
         _likeButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _likeButton.frame = CGRectMake((kScreenWidth - 95) * .5, 0, 95, 34);
+        _likeButton.backgroundColor = kWhiteBgColor;
         _likeButton.layer.cornerRadius = 17;
         _likeButton.layer.masksToBounds = YES;
         _likeButton.layer.borderWidth = 1;

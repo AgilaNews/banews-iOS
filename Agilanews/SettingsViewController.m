@@ -82,10 +82,14 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellID];
     }
+    cell.backgroundColor = [UIColor whiteColor];
+    cell.textLabel.backgroundColor = [UIColor whiteColor];
     cell.textLabel.font = [UIFont systemFontOfSize:16];
     cell.textLabel.textColor = kBlackColor;
+    cell.detailTextLabel.backgroundColor = [UIColor whiteColor];
     cell.detailTextLabel.font = [UIFont systemFontOfSize:14];
     cell.detailTextLabel.textColor = SSColor(102, 102, 102);
+    cell.accessoryView.backgroundColor = [UIColor whiteColor];
     switch (indexPath.section) {
         case 0:
         {
@@ -385,6 +389,7 @@
 {
     if (_textOnlySwith == nil) {
         _textOnlySwith = [[UISwitch alloc] init];
+        _textOnlySwith.backgroundColor = [UIColor whiteColor];
         [_textOnlySwith addTarget:self action:@selector(switchStateChanges:) forControlEvents:UIControlEventValueChanged];
         if ([DEF_PERSISTENT_GET_OBJECT(SS_textOnlyMode) isEqualToNumber:@1]) {
             [_textOnlySwith setOn:YES];

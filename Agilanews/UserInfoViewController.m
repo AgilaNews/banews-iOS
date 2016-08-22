@@ -38,6 +38,7 @@
     [logoutButton setTitle:@"LOG OUT" forState:UIControlStateNormal];
     [logoutButton setTitleColor:kOrangeColor forState:UIControlStateNormal];
     logoutButton.titleLabel.font = [UIFont systemFontOfSize:16];
+    logoutButton.titleLabel.backgroundColor = [UIColor whiteColor];
     [logoutButton addTarget:self action:@selector(logOutAction) forControlEvents:UIControlEventTouchUpInside];
     _tableView.tableFooterView = logoutButton;
     [self.view addSubview:_tableView];

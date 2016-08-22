@@ -23,6 +23,8 @@
         [self addSubview:lineView];
         
         self.backgroundColor = [UIColor whiteColor];
+        self.inputView.backgroundColor = [UIColor whiteColor];
+        self.inputAccessoryView.backgroundColor = [UIColor whiteColor];
         self.layer.borderWidth = 1;
         self.layer.borderColor = SSColor(235, 235, 235).CGColor;
         self.leftViewMode = UITextFieldViewModeAlways;

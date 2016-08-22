@@ -87,6 +87,7 @@
         segmentBtn.frame = CGRectMake(width, 0, [sizeArray[index] floatValue], self.buttonHeight);
         [segmentBtn setTitle:titleArray[index] forState:UIControlStateNormal];
         segmentBtn.titleLabel.font = [UIFont boldSystemFontOfSize:self.fontSize];
+        segmentBtn.titleLabel.backgroundColor = SSColor(235, 235, 235);
         segmentBtn.tag = index + HEADBTN_TAG;
         [segmentBtn setTitleColor:self.titleColor forState:UIControlStateNormal];
         [segmentBtn setTitleColor:self.titleSelectedColor forState:UIControlStateSelected];
