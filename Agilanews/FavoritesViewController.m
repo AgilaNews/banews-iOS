@@ -105,7 +105,7 @@
                 }];
                 [weakSelf.tableView.footer setTitle:@"" forState:MJRefreshFooterStateIdle];
                 [weakSelf.tableView.footer setTitle:@"Loading..." forState:MJRefreshFooterStateRefreshing];
-                [weakSelf.tableView.footer setTitle:@"No more date" forState:MJRefreshFooterStateNoMoreData];
+                [weakSelf.tableView.footer setTitle:@"No more favorites" forState:MJRefreshFooterStateNoMoreData];
             } else {
                 [weakSelf.tableView removeFooter];
             }
