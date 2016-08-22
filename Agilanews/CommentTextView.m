@@ -62,7 +62,7 @@
         _sendButton.titleLabel.font = [UIFont systemFontOfSize:17];
         [_bgView addSubview:_sendButton];
         
-        _letterNumLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, _textView.height - 10, 100, 13)];
+        _letterNumLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, _textView.height - 6, 100, 13)];
         _letterNumLabel.right = _bgView.width - 23;
         _letterNumLabel.text = @"0/300";
         _letterNumLabel.textColor = kGrayColor;
@@ -115,8 +115,12 @@
     _letterNumLabel.text = [NSString stringWithFormat:@"%ld/300",(unsigned long)_textView.text.length];
     if (_textView.text.length > 300) {
         _letterNumLabel.textColor = SSColor(225, 65, 35);
+        _sendButton.selected = NO;
+        _sendButton.enabled = NO;
     } else {
         _letterNumLabel.textColor = kGrayColor;
+        _sendButton.selected = YES;
+        _sendButton.enabled = YES;
     }
 }
 
