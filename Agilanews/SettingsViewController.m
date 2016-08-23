@@ -237,6 +237,7 @@
 #if DEBUG
                     [iConsole info:@"Set_Score_Click",nil];
 #endif
+                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&onlyLatestVersion=true&pageNumber=0&sortOrdering=1&id=%d",1146695204]]];
                 }
                     break;
                 case 1:
@@ -246,6 +247,7 @@
 #if DEBUG
                     [iConsole info:@"Set_Update_Click",nil];
 #endif
+                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"itms-apps://itunes.apple.com/app/id1146695204"]];
                 }
                     break;
                 default:
