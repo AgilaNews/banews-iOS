@@ -70,14 +70,14 @@ static CGFloat const ButtonHeight = 40;
         // 频道数组为空
         NSArray *nameArray = @[@"Hot",@"World",@"Sports",@"Entertainment",@"Games",@"Lifestyle",@"Business",@"Sci&Tech",@"Opinion"];
         NSMutableArray *models = [NSMutableArray array];
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < nameArray.count; i++) {
             CategoriesModel *model = [[CategoriesModel alloc] init];
             model.name = nameArray[i];
             model.channelID = [NSNumber numberWithInt:10001 + i];
             [titleArray addObject:model.name];
             [models addObject:model];
         }
-        appDelegate.categoriesArray = models;
+        appDelegate.categoriesArray = [NSMutableArray arrayWithArray:models];
     }
     _segmentVC.titleArray = titleArray;
     _segmentVC.titleColor = [UIColor blackColor];

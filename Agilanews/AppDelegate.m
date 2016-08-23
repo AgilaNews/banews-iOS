@@ -197,12 +197,14 @@
         DEF_PERSISTENT_SET_OBJECT(Server_Mon, responseObj[@"interfaces"][@"mon"]);
         DEF_PERSISTENT_SET_OBJECT(Server_Referrer, responseObj[@"interfaces"][@"referrer"]);
         // 分类存入模型
-        _categoriesArray = [NSMutableArray array];
         for (NSDictionary *dic in responseObj[@"categories"]) {
+            if (_categoriesArray == nil) {
+                _categoriesArray = [NSMutableArray array];
+            }
             CategoriesModel *categoriesModel = [CategoriesModel mj_objectWithKeyValues:dic];
             [_categoriesArray addObject:categoriesModel];
         }
-        if (isFirst) {
+        if (isFirst && _categoriesArray.count > 0) {
             // 通知刷新
             [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Categories object:nil];
         }
