@@ -441,6 +441,7 @@
         [params setObject:@"older" forKey:@"dir"];
     }
     [[SSHttpRequest sharedInstance] get:kHomeUrl_NewsList params:params contentType:UrlencodedType serverType:NetServer_Home success:^(id responseObj) {
+        weakSelf.showRefreshFooter = YES;
         NSMutableArray *models = [NSMutableArray array];
         for (NSDictionary *dic in [responseObj valueForKey:[responseObj allKeys].firstObject])
         {
@@ -474,7 +475,6 @@
             [_dataList insertObjects:models atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, models.count)]];
             [weakSelf tableViewDidFinishTriggerHeader:YES reload:YES];
             weakSelf.refreshTime = [[NSDate date] timeIntervalSince1970];
-            weakSelf.showRefreshFooter = YES;
         } else {
             // 打点-上拉加载成功-010110
             NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:

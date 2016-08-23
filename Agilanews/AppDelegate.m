@@ -197,10 +197,11 @@
         DEF_PERSISTENT_SET_OBJECT(Server_Mon, responseObj[@"interfaces"][@"mon"]);
         DEF_PERSISTENT_SET_OBJECT(Server_Referrer, responseObj[@"interfaces"][@"referrer"]);
         // 分类存入模型
+        if (responseObj[@"categories"] == nil) {
+            return;
+        }
+        _categoriesArray = [NSMutableArray array];
         for (NSDictionary *dic in responseObj[@"categories"]) {
-            if (_categoriesArray == nil) {
-                _categoriesArray = [NSMutableArray array];
-            }
             CategoriesModel *categoriesModel = [CategoriesModel mj_objectWithKeyValues:dic];
             [_categoriesArray addObject:categoriesModel];
         }
