@@ -144,7 +144,16 @@
         make.centerY.mas_equalTo(weakSelf.sourceLabel.mas_centerY);
     }];
     // 时间布局
+    NSString *timeString = nil;
+    if (_bgColor == [UIColor whiteColor]) {
+        timeString = [TimeStampToString getNewsStringWhitTimeStamp:[_model.public_time longLongValue]];
+    } else {
+        timeString = [TimeStampToString getRecommendedNewsStringWhitTimeStamp:[_model.public_time longLongValue]];
+    }
+    CGSize timeLabelSize = [timeString calculateSize:CGSizeMake(80, 13) font:self.timeLabel.font];
     [self.timeLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.width.mas_equalTo(timeLabelSize.width);
+        make.height.mas_equalTo(timeLabelSize.height);
         make.left.mas_equalTo(weakSelf.timeView.mas_right).offset(5);
         make.centerY.mas_equalTo(weakSelf.sourceLabel.mas_centerY);
     }];
@@ -163,11 +172,7 @@
     }
 
     self.sourceLabel.text = _model.source;
-    if (_bgColor == [UIColor whiteColor]) {
-        self.timeLabel.text = [TimeStampToString getNewsStringWhitTimeStamp:[_model.public_time longLongValue]];
-    } else {
-        self.timeLabel.text = [TimeStampToString getRecommendedNewsStringWhitTimeStamp:[_model.public_time longLongValue]];
-    }
+    self.timeLabel.text = timeString;
     
     NSNumber *textOnlyMode = DEF_PERSISTENT_GET_OBJECT(SS_textOnlyMode);
     if ([textOnlyMode integerValue] == 1) {
@@ -313,7 +318,7 @@
 {
     if (_timeLabel == nil) {
         _timeLabel = [[UILabel alloc] init];
-        _timeLabel.backgroundColor = [UIColor clearColor];
+        _timeLabel.backgroundColor = _bgColor;
         _timeLabel.font = [UIFont systemFontOfSize:12];
         _timeLabel.textColor = kGrayColor;
     }
