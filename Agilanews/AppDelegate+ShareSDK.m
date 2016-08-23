@@ -29,9 +29,9 @@
      {
          switch (platformType)
          {
-             case SSDKPlatformTypeFacebook:
+//             case SSDKPlatformTypeFacebook:
 //                 [ShareSDKConnector connectFacebookMessenger:[FBSDKMessengerSharer class]];
-                 break;
+//                 break;
 //             case SSDKPlatformTypeQQ:
 //                 [ShareSDKConnector connectQQ:[QQApiInterface class] tencentOAuthClass:[TencentOAuth class]];
 //                 break;
@@ -62,12 +62,12 @@
              case SSDKPlatformTypeTwitter:
                  [appInfo SSDKSetupTwitterByConsumerKey:@"AYjlOtTLN2fsKfuqgjPYh76IK"
                             consumerSecret:@"KnsnE9olzbTAIShqTaxttRJIizwEWMV6kolFUb5lHYmUKSCfRX"
-                                            redirectUri:@"http://www.baidu.com/"];
+                                            redirectUri:@"http://www.agilanews.com"];
                  break;
              case SSDKPlatformTypeGooglePlus:
                  [appInfo SSDKSetupGooglePlusByClientID:@"220913118121-tsfqho6sgkbh2frs2k8h3kludcnnunf1.apps.googleusercontent.com"
                                            clientSecret:@""
-                                            redirectUri:@"http://localhost"];
+                                            redirectUri:@"http://www.agilanews.com"];
                  break;
              default:
                  break;

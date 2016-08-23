@@ -20,9 +20,13 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-
     // 注册Flurry
+#if DEBUG
     [Flurry startSession:@"XC84PTZ5BKW385XPBJ2N"];
+#else
+    [Flurry startSession:@"ZBQNRB8P9XRTS7T7W2ZC"];
+#endif
+    [Flurry setAppVersion:[NSString stringWithFormat:@"v%@",[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]]];
     // 注册ShareSDK
     [self registerShareSDK];
     // 注册Twitter/Crashlytics
