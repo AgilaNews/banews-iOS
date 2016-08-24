@@ -1541,7 +1541,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.banews.agila;
 				PRODUCT_NAME = Agila;
-				PROVISIONING_PROFILE = "e7f999b3-7931-4c70-9156-b1c3b9ed2b3c";
+				PROVISIONING_PROFILE = "6264f1ad-ebaa-4ba4-878a-eb0869ce2497";
 				VALID_ARCHS = "arm64 armv7s armv7";
 			};
 			name = Debug;
@@ -1661,7 +1661,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.banews.agila;
 				PRODUCT_NAME = Agila;
-				PROVISIONING_PROFILE = "e6fa1d59-2923-42c9-a5ed-52038860895e";
+				PROVISIONING_PROFILE = "ba5fba90-121b-4ed7-bfaf-67bb109ee59b";
 				VALID_ARCHS = "arm64 armv7s armv7";
 			};
 			name = AdHoc;
