@@ -86,6 +86,7 @@
     self.tableView.separatorInset = UIEdgeInsetsMake(0, 11, 0, 11);
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     self.showRefreshHeader = YES;
+    self.showRefreshFooter = YES;
     if ([_model.channelID isEqualToNumber:@10001]) {
         self.tableView.scrollsToTop = YES;
     } else {
@@ -441,7 +442,6 @@
         [params setObject:@"older" forKey:@"dir"];
     }
     [[SSHttpRequest sharedInstance] get:kHomeUrl_NewsList params:params contentType:UrlencodedType serverType:NetServer_Home success:^(id responseObj) {
-        weakSelf.showRefreshFooter = YES;
         NSMutableArray *models = [NSMutableArray array];
         for (NSDictionary *dic in [responseObj valueForKey:[responseObj allKeys].firstObject])
         {
