@@ -1511,8 +1511,8 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer: agilanews.developer@gmail.com (44YZT8G7EX)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: agilanews.developer@gmail.com (44YZT8G7EX)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: zhendong Wang (4PX74E3WFB)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: zhendong Wang (4PX74E3WFB)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Agilanews/Masonry/ShareSDK",

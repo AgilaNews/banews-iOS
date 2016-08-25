@@ -110,9 +110,9 @@
     {
         // 请求数据
         [self requestDataWithChannelID:_model.channelID isLater:YES isShowHUD:NO];
-        if (![DEF_PERSISTENT_GET_OBJECT(SS_GuideHomeKey) isEqualToNumber:@1]) {
-            [[UIApplication sharedApplication].keyWindow addSubview:[GuideRefreshView sharedInstance]];
-        }
+    }
+    if (![DEF_PERSISTENT_GET_OBJECT(SS_GuideHomeKey) isEqualToNumber:@1] && [_model.channelID isEqualToNumber:@10001]) {
+        [[UIApplication sharedApplication].keyWindow addSubview:[GuideRefreshView sharedInstance]];
     }
 }
 
