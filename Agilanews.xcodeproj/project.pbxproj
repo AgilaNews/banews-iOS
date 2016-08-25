@@ -1551,8 +1551,8 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: zhendong Wang (CA8M4AL9S7)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: zhendong Wang (CA8M4AL9S7)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Agilanews/Masonry/ShareSDK",
@@ -1581,7 +1581,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.banews.agila;
 				PRODUCT_NAME = Agila;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "be8fe500-a866-4e3c-a230-7aadaa5e127d";
 				VALID_ARCHS = "arm64 armv7s armv7";
 			};
 			name = Release;
