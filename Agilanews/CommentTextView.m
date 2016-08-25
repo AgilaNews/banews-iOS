@@ -56,6 +56,7 @@
         _sendButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _sendButton.backgroundColor = [UIColor whiteColor];
         _sendButton.frame = CGRectMake(_cancelButton.right + 20, _cancelButton.top, _cancelButton.width, _cancelButton.height);
+        _sendButton.enabled = NO;
         [_sendButton setTitle:@"Send" forState:UIControlStateNormal];
         [_sendButton setTitleColor:SSColor(129, 129, 137) forState:UIControlStateNormal];
         [_sendButton setTitleColor:kOrangeColor forState:UIControlStateSelected];
@@ -113,14 +114,18 @@
 - (void)commentTextViewTextChange
 {
     _letterNumLabel.text = [NSString stringWithFormat:@"%ld/300",(unsigned long)_textView.text.length];
-    if (_textView.text.length > 300) {
-        _letterNumLabel.textColor = SSColor(225, 65, 35);
+    if (_textView.text.length <= 0) {
+        _letterNumLabel.textColor = kGrayColor;
         _sendButton.selected = NO;
         _sendButton.enabled = NO;
-    } else {
+    } else if (_textView.text.length <= 300) {
         _letterNumLabel.textColor = kGrayColor;
         _sendButton.selected = YES;
         _sendButton.enabled = YES;
+    } else {
+        _letterNumLabel.textColor = SSColor(225, 65, 35);
+        _sendButton.selected = NO;
+        _sendButton.enabled = NO;
     }
 }
 

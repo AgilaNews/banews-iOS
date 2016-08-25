@@ -1643,13 +1643,9 @@
 - (void)textViewDidChange:(UITextView *)textView
 {
     if (_commentTextView.textView.text.length > 0) {
-        _commentTextView.sendButton.selected = YES;
-        _commentTextView.sendButton.enabled = YES;
         _commentTextView.placeholderLabel.hidden = YES;
         _commentTextView.isInput = YES;
     } else {
-        _commentTextView.sendButton.selected = NO;
-        _commentTextView.sendButton.enabled = NO;
         _commentTextView.placeholderLabel.hidden = NO;
         _commentTextView.isInput = NO;
     }
