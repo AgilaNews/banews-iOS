@@ -71,6 +71,10 @@
                                              selector:@selector(reloadDataAction)
                                                  name:KNOTIFICATION_FontSize_Change
                                                object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(applicationWillEnterForeground)
+                                                 name:UIApplicationWillEnterForegroundNotification
+                                               object:nil];
     
     
     // 创建表视图
@@ -619,6 +623,23 @@
     } else {
         [self.tableView reloadData];
     }
+}
+
+/**
+ *  程序即将进入前台通知
+ */
+- (void)applicationWillEnterForeground
+{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        NSNumber *backgroundTime = DEF_PERSISTENT_GET_OBJECT(@"BackgroundTime");
+        if ([[NSDate date] timeIntervalSince1970] - backgroundTime.longLongValue > 3600)
+        {
+            _dataList = [NSMutableArray array];
+            if ([self.tableView isDisplayedInScreen]) {
+                [self.tableView.header beginRefreshing];
+            }
+        }
+    });
 }
 
 /**
