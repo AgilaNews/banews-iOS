@@ -362,7 +362,7 @@
     [[SSHttpRequest sharedInstance] post:kHomeUrl_Collect params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
         _collectID = [NSNumber numberWithInteger:[responseObj[@"collect_id"] integerValue]];
         button.selected = YES;
-        [SVProgressHUD showSuccessWithStatus:@"Favorited,you can read it in “Favorites” in the menu page"];
+        [SVProgressHUD showSuccessWithStatus:@"Save the news and read it later by entering 'Favorites'"];
         // 新闻详情本地缓存
         AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
         NSString *htmlFilePath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/%@.data",appDelegate.model.user_id]];
