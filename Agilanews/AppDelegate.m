@@ -31,22 +31,6 @@
     [self registerShareSDK];
     // 注册Twitter/Crashlytics
     [Fabric with:@[[Twitter class], [Crashlytics class]]];
-    // 读取用户登录信息/配置信息
-    [self loadUserData];
-    // 监听网络状态
-    [self networkMonitoring];
-    // 开始定位
-    [self locationServices];
-    // 冷启动
-    [self coldBoot:YES];
-    // 启动上报打点
-    NSString *logFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/log.data"];
-    NSMutableArray *logData = [NSKeyedUnarchiver unarchiveObjectWithFile:logFilePath];
-    if (logData.count > 0 && logData != nil) {
-        [self serverLogWithEventArray:logData];
-    }
-    //设置启动页面时间
-    [NSThread sleepForTimeInterval:2.0];
 
 #if DEBUG
     _window = [[iConsoleWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
@@ -63,6 +47,22 @@
     // 设置根控制器
     _window.rootViewController = navCtrl;
     
+    // 读取用户登录信息/配置信息
+    [self loadUserData];
+    // 监听网络状态
+    [self networkMonitoring];
+    // 开始定位
+    [self locationServices];
+    // 冷启动
+    [self coldBoot:YES];
+    // 启动上报打点
+    NSString *logFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/log.data"];
+    NSMutableArray *logData = [NSKeyedUnarchiver unarchiveObjectWithFile:logFilePath];
+    if (logData.count > 0 && logData != nil) {
+        [self serverLogWithEventArray:logData];
+    }
+    //设置启动页面时间
+    [NSThread sleepForTimeInterval:2.0];
     return YES;
 }
 
@@ -301,20 +301,22 @@
  */
 - (void)loadUserData
 {
-    NSString *loginFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/userinfo.data"];
-    LoginModel *model = [NSKeyedUnarchiver unarchiveObjectWithFile:loginFilePath];
-    _model = model;
-    _likedDic = [NSMutableDictionary dictionary];
-    _checkDic = [NSMutableDictionary dictionary];
-    _eventArray = [NSMutableArray array];
-    NSString *checkFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/check.data"];
-    NSDictionary *checkData = [NSKeyedUnarchiver unarchiveObjectWithFile:checkFilePath];
-    NSNumber *checkNum = checkData.allKeys.firstObject;
-    if ([[NSDate date] timeIntervalSince1970] - checkNum.longLongValue < 3600) {
-        _checkDic = checkData[checkData.allKeys.firstObject];
-    }
-    NSString *refreshFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/refresh.data"];
-    _refreshTimeDic = [NSMutableDictionary dictionaryWithDictionary:[NSKeyedUnarchiver unarchiveObjectWithFile:refreshFilePath]];
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        NSString *loginFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/userinfo.data"];
+        LoginModel *model = [NSKeyedUnarchiver unarchiveObjectWithFile:loginFilePath];
+        _model = model;
+        _likedDic = [NSMutableDictionary dictionary];
+        _checkDic = [NSMutableDictionary dictionary];
+        _eventArray = [NSMutableArray array];
+        NSString *checkFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/check.data"];
+        NSDictionary *checkData = [NSKeyedUnarchiver unarchiveObjectWithFile:checkFilePath];
+        NSNumber *checkNum = checkData.allKeys.firstObject;
+        if ([[NSDate date] timeIntervalSince1970] - checkNum.longLongValue < 3600) {
+            _checkDic = checkData[checkData.allKeys.firstObject];
+        }
+        NSString *refreshFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/refresh.data"];
+        _refreshTimeDic = [NSMutableDictionary dictionaryWithDictionary:[NSKeyedUnarchiver unarchiveObjectWithFile:refreshFilePath]];
+    });
 }
 
 /**
