@@ -73,6 +73,8 @@
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     SSLog(@"进入后台");
+    // 记录进入后台时间
+    DEF_PERSISTENT_SET_OBJECT(@"BackgroundTime", [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]]);
     // 打点-退出APP-010002
     UINavigationController *navCtrl = (UINavigationController *)_window.rootViewController;
     HomeViewController *homeVC = navCtrl.viewControllers.firstObject;
@@ -155,7 +157,11 @@
     NSString *IDFA = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
     DEF_PERSISTENT_SET_OBJECT(@"IDFA", IDFA);
     NSString *uuid = [[NSUUID UUID] UUIDString];
-    DEF_PERSISTENT_SET_OBJECT(@"UUID", uuid);
+    // 刷新session
+    NSNumber *backgroundTime = DEF_PERSISTENT_GET_OBJECT(@"BackgroundTime");
+    if ([[NSDate date] timeIntervalSince1970] - backgroundTime.longLongValue > 3600) {
+        DEF_PERSISTENT_SET_OBJECT(@"UUID", uuid);
+    }
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     // 手机厂商
     [params setObject:@"apple" forKey:@"vendor"];
@@ -309,7 +315,6 @@
     }
     NSString *refreshFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/refresh.data"];
     _refreshTimeDic = [NSMutableDictionary dictionaryWithDictionary:[NSKeyedUnarchiver unarchiveObjectWithFile:refreshFilePath]];
-    NSLog(@"%@",_refreshTimeDic);
 }
 
 /**
