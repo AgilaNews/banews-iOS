@@ -60,7 +60,7 @@
     NSMutableArray *sizeArray = [NSMutableArray array];
     for (NSString *title in titleArray) {
         CGSize size = [title calculateSize:CGSizeMake(1000, 40) font:[UIFont boldSystemFontOfSize:Default_FontSize]];
-        [sizeArray addObject:[NSNumber numberWithInt:MAX(size.width, 50) + 20]];
+        [sizeArray addObject:[NSNumber numberWithInt:MAX(size.width, 40) + 20]];
     }
     _sizeArray = sizeArray;
     self.headerView.frame = CGRectMake(0, 0, MainScreenWidth, self.buttonHeight + 10);

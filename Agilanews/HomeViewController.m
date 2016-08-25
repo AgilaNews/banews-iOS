@@ -36,7 +36,7 @@ static CGFloat const ButtonHeight = 40;
     UIBarButtonItem *buttonItem = [[UIBarButtonItem alloc] initWithCustomView:leftBtnView];
     if ([[[[UIDevice currentDevice] systemVersion] substringToIndex:1] intValue] >= 7) {
         UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-        negativeSpacer.width = -5;
+        negativeSpacer.width = -12;
         self.navigationItem.leftBarButtonItems = @[negativeSpacer, buttonItem];
     }
     
