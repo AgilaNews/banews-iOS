@@ -448,6 +448,7 @@
         [params setObject:@"older" forKey:@"dir"];
     }
     [[SSHttpRequest sharedInstance] get:kHomeUrl_NewsList params:params contentType:UrlencodedType serverType:NetServer_Home success:^(id responseObj) {
+        [SVProgressHUD dismiss];
         NSMutableArray *models = [NSMutableArray array];
         for (NSDictionary *dic in [responseObj valueForKey:[responseObj allKeys].firstObject])
         {
@@ -529,7 +530,8 @@
             [iConsole info:@"NetFailure_Enter",nil];
 #endif
             weakSelf.showTableBlankView = YES;
-            UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tableViewDidTriggerHeaderRefresh)];
+            weakSelf.blankView.userInteractionEnabled = YES;
+            UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchFailureView)];
             [weakSelf.blankView addGestureRecognizer:tap];
             if ([AFNetworkReachabilityManager sharedManager].networkReachabilityStatus == AFNetworkReachabilityStatusNotReachable) {
                 weakSelf.blankLabel.text = @"Network unavailable";
@@ -558,6 +560,17 @@
 #if DEBUG
     [iConsole info:[NSString stringWithFormat:@"Home_List_DownRefresh:%@",articleParams],nil];
 #endif
+    [self requestDataWithChannelID:_model.channelID isLater:YES isShowHUD:YES];
+}
+
+- (void)touchFailureView
+{
+    if (self.showTableBlankView) {
+        self.showTableBlankView = NO;
+        self.blankView.userInteractionEnabled = NO;
+        SVProgressHUD.defaultStyle = SVProgressHUDStyleCustom;
+        [SVProgressHUD show];
+    }
     [self requestDataWithChannelID:_model.channelID isLater:YES isShowHUD:YES];
 }
 

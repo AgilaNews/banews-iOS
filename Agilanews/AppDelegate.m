@@ -205,7 +205,8 @@
         DEF_PERSISTENT_SET_OBJECT(Server_Mon, responseObj[@"interfaces"][@"mon"]);
         DEF_PERSISTENT_SET_OBJECT(Server_Referrer, responseObj[@"interfaces"][@"referrer"]);
         // 分类存入模型
-        if (responseObj[@"categories"] == nil) {
+        NSArray *categories = responseObj[@"categories"];
+        if (categories.count > 0) {
             return;
         }
         _categoriesArray = [NSMutableArray array];

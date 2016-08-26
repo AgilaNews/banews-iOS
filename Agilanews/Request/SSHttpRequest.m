@@ -166,6 +166,7 @@ static SSHttpRequest *_manager = nil;
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         if (showHUD) {
+            SVProgressHUD.defaultStyle = SVProgressHUDStyleLight;
             if ([error code] == NSURLErrorCancelled)
             {
                 [SVProgressHUD dismiss];
@@ -323,6 +324,7 @@ static SSHttpRequest *_manager = nil;
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         if (showHUD) {
+            SVProgressHUD.defaultStyle = SVProgressHUDStyleLight;
             if ([error code] == NSURLErrorCancelled)
             {
                 [SVProgressHUD dismiss];
@@ -466,6 +468,7 @@ static SSHttpRequest *_manager = nil;
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         if (showHUD) {
+            SVProgressHUD.defaultStyle = SVProgressHUDStyleLight;
             if ([error code] == NSURLErrorCancelled)
             {
                 [SVProgressHUD dismiss];
