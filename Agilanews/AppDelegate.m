@@ -89,6 +89,20 @@
     #endif
     // 服务端打点上报
     [self serverLogWithEventArray:_eventArray];
+    
+    @autoreleasepool {
+        // 缓存新闻列表
+        NSMutableDictionary *newsDic = [NSMutableDictionary dictionary];
+        for (HomeTableViewController *homeTabVC in homeVC.segmentVC.subViewControllers) {
+            if (homeTabVC.dataList.count > 0) {
+                [newsDic setObject:[NSArray arrayWithArray:homeTabVC.dataList] forKey:homeTabVC.model.channelID];
+                [homeTabVC.dataList removeAllObjects];
+            }
+        }
+        NSString *newsFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/news.data"];
+        NSDictionary *newsData = [NSDictionary dictionaryWithObject:newsDic forKey:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]]];
+        [NSKeyedArchiver archiveRootObject:newsData toFile:newsFilePath];
+    }
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 }
@@ -113,18 +127,6 @@
     NSString *checkFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/check.data"];
     NSDictionary *checkData = [NSDictionary dictionaryWithObject:_checkDic forKey:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]]];
     [NSKeyedArchiver archiveRootObject:checkData toFile:checkFilePath];
-    // 缓存新闻列表
-    BaseNavigationController *baseNav = (BaseNavigationController *)_window.rootViewController;
-    HomeViewController *homeVC = baseNav.viewControllers.firstObject;
-    NSMutableDictionary *newsDic = [NSMutableDictionary dictionary];
-    for (HomeTableViewController *homeTabVC in homeVC.segmentVC.subViewControllers) {
-        if (homeTabVC.dataList.count > 0) {
-            [newsDic setObject:homeTabVC.dataList forKey:homeTabVC.model.channelID];
-        }
-    }
-    NSString *newsFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/news.data"];
-    NSDictionary *newsData = [NSDictionary dictionaryWithObject:newsDic forKey:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]]];
-    [NSKeyedArchiver archiveRootObject:newsData toFile:newsFilePath];
     // 缓存打点记录
     NSString *logFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/log.data"];
     NSMutableArray *logData = [NSKeyedUnarchiver unarchiveObjectWithFile:logFilePath];
@@ -302,20 +304,22 @@
 - (void)loadUserData
 {
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        NSString *loginFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/userinfo.data"];
-        LoginModel *model = [NSKeyedUnarchiver unarchiveObjectWithFile:loginFilePath];
-        _model = model;
-        _likedDic = [NSMutableDictionary dictionary];
-        _checkDic = [NSMutableDictionary dictionary];
-        _eventArray = [NSMutableArray array];
-        NSString *checkFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/check.data"];
-        NSDictionary *checkData = [NSKeyedUnarchiver unarchiveObjectWithFile:checkFilePath];
-        NSNumber *checkNum = checkData.allKeys.firstObject;
-        if ([[NSDate date] timeIntervalSince1970] - checkNum.longLongValue < 3600) {
-            _checkDic = checkData[checkData.allKeys.firstObject];
+        @autoreleasepool {
+            NSString *loginFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/userinfo.data"];
+            LoginModel *model = [NSKeyedUnarchiver unarchiveObjectWithFile:loginFilePath];
+            _model = model;
+            _likedDic = [NSMutableDictionary dictionary];
+            _checkDic = [NSMutableDictionary dictionary];
+            _eventArray = [NSMutableArray array];
+            NSString *checkFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/check.data"];
+            NSDictionary *checkData = [NSKeyedUnarchiver unarchiveObjectWithFile:checkFilePath];
+            NSNumber *checkNum = checkData.allKeys.firstObject;
+            if ([[NSDate date] timeIntervalSince1970] - checkNum.longLongValue < 3600) {
+                _checkDic = checkData[checkData.allKeys.firstObject];
+            }
+            NSString *refreshFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/refresh.data"];
+            _refreshTimeDic = [NSMutableDictionary dictionaryWithDictionary:[NSKeyedUnarchiver unarchiveObjectWithFile:refreshFilePath]];
         }
-        NSString *refreshFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/refresh.data"];
-        _refreshTimeDic = [NSMutableDictionary dictionaryWithDictionary:[NSKeyedUnarchiver unarchiveObjectWithFile:refreshFilePath]];
     });
 }
 

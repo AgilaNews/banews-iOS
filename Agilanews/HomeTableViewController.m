@@ -101,18 +101,20 @@
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     NSNumber *refreshNum = appDelegate.refreshTimeDic[_model.channelID];
     _refreshTime = refreshNum.longLongValue;
-    NSString *newsFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/news.data"];
-    NSDictionary *newsData = [NSKeyedUnarchiver unarchiveObjectWithFile:newsFilePath];
-    NSNumber *checkNum = newsData.allKeys.firstObject;
-    if ([[NSDate date] timeIntervalSince1970] - checkNum.longLongValue < 3600) {
-        _dataList = [NSMutableArray arrayWithArray:newsData[newsData.allKeys.firstObject][_model.channelID]];
-    } else if ([_model.channelID isEqualToNumber:@10001])
-    {
-        // 请求数据
-        [self requestDataWithChannelID:_model.channelID isLater:YES isShowHUD:NO];
-    }
-    if (![DEF_PERSISTENT_GET_OBJECT(SS_GuideHomeKey) isEqualToNumber:@1] && [_model.channelID isEqualToNumber:@10001]) {
-        [[UIApplication sharedApplication].keyWindow addSubview:[GuideRefreshView sharedInstance]];
+    @autoreleasepool {
+        NSString *newsFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/news.data"];
+        NSDictionary *newsData = [NSKeyedUnarchiver unarchiveObjectWithFile:newsFilePath];
+        NSNumber *checkNum = newsData.allKeys.firstObject;
+        if ([[NSDate date] timeIntervalSince1970] - checkNum.longLongValue < 3600) {
+            _dataList = [NSMutableArray arrayWithArray:newsData[newsData.allKeys.firstObject][_model.channelID]];
+        } else if ([_model.channelID isEqualToNumber:@10001])
+        {
+            // 请求数据
+            [self requestDataWithChannelID:_model.channelID isLater:YES isShowHUD:NO];
+        }
+        if (![DEF_PERSISTENT_GET_OBJECT(SS_GuideHomeKey) isEqualToNumber:@1] && [_model.channelID isEqualToNumber:@10001]) {
+            [[UIApplication sharedApplication].keyWindow addSubview:[GuideRefreshView sharedInstance]];
+        }
     }
 }
 
@@ -637,6 +639,13 @@
             _dataList = [NSMutableArray array];
             if ([self.tableView isDisplayedInScreen]) {
                 [self.tableView.header beginRefreshing];
+            }
+        } else {
+            @autoreleasepool {
+                NSString *newsFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/news.data"];
+                NSDictionary *newsData = [NSKeyedUnarchiver unarchiveObjectWithFile:newsFilePath];
+                _dataList = [NSMutableArray arrayWithArray:newsData[newsData.allKeys.firstObject][_model.channelID]];
+                [self.tableView reloadData];
             }
         }
     });

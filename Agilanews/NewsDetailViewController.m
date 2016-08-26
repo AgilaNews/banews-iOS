@@ -280,7 +280,8 @@
     __weak typeof(self) weakSelf = self;
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setObject:_model.news_id forKey:@"news_id"];
-    [params setObject:@"loder" forKey:@"prefer"];
+//    [params setObject:@"loder" forKey:@"prefer"];
+    [params setObject:@"later" forKey:@"prefer"];
     CommentModel *commentModel = _commentArray.lastObject;
     [params setObject:commentModel.commentID forKey:@"last_id"];
     [[SSHttpRequest sharedInstance] get:kHomeUrl_Comment params:params contentType:UrlencodedType serverType:NetServer_Home success:^(id responseObj) {
