@@ -1147,6 +1147,65 @@
         _commentTextView.textView.delegate = self;
         [_commentTextView.cancelButton addTarget:self action:@selector(cancelAction) forControlEvents:UIControlEventTouchUpInside];
         [_commentTextView.sendButton addTarget:self action:@selector(sendAction) forControlEvents:UIControlEventTouchUpInside];
+    } else if ([notif.object[@"isShareFacebook"] isEqualToNumber:@1]) {
+        // 分享Facebook
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
+            NSString *shareString = _detailModel.share_url;
+            shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"facebook"];
+            content.contentURL = [NSURL URLWithString:shareString];
+            content.contentTitle = _detailModel.title;
+            ImageModel *imageModel = _detailModel.imgs.firstObject;
+            content.imageURL = [NSURL URLWithString:imageModel.src];
+            [FBSDKShareDialog showFromViewController:self
+                                         withContent:content
+                                            delegate:self];
+        });
+    } else if ([notif.object[@"isShareTwitter"] isEqualToNumber:@1]) {
+        // 分享Twitter
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            NSString *shareString = _detailModel.share_url;
+            shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"twitter"];
+            TWTRComposer *composer = [[TWTRComposer alloc] init];
+            [composer setText:_detailModel.title];
+            [composer setURL:[NSURL URLWithString:shareString]];
+            @try {
+                [composer showFromViewController:self completion:^(TWTRComposerResult result) {
+                    if (result == TWTRComposerResultCancelled) {
+                        // 取消分享
+                        SSLog(@"Tweet composition cancelled");
+                    } else {
+                        // 分享成功
+                        SSLog(@"Sending Tweet!");
+                    }
+                }];
+            }
+            @catch (NSException *exception) {
+                SSLog(@"%s\n%@", __FUNCTION__, exception);
+            }
+        });
+    } else if ([notif.object[@"isShareGoogle"] isEqualToNumber:@1]) {
+        // 分享Google
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            NSString *shareString = _detailModel.share_url;
+            shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"googleplus"];
+            NSURLComponents* urlComponents = [[NSURLComponents alloc]
+                                              initWithString:@"https://plus.google.com/share"];
+            urlComponents.queryItems = @[[[NSURLQueryItem alloc]
+                                          initWithName:@"url"
+                                          value:[[NSURL URLWithString:shareString] absoluteString]]];
+            NSURL* url = [urlComponents URL];
+            if ([SFSafariViewController class]) {
+                // Open the URL in SFSafariViewController (iOS 9+)
+                SFSafariViewController* controller = [[SFSafariViewController alloc]
+                                                      initWithURL:url];
+                //            controller.delegate = self;
+                [self presentViewController:controller animated:YES completion:nil];
+            } else {
+                // Open the URL in the device's browser
+                [[UIApplication sharedApplication] openURL:url];
+            }
+        });
     }
 }
 
@@ -1350,17 +1409,6 @@
         case 2:
         {
             // 点击facebook按钮
-            FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
-            NSString *shareString = _detailModel.share_url;
-            shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"facebook"];
-            content.contentURL = [NSURL URLWithString:shareString];
-            content.contentTitle = _detailModel.title;
-            ImageModel *imageModel = _detailModel.imgs.firstObject;
-            content.imageURL = [NSURL URLWithString:imageModel.src];
-            [FBSDKShareDialog showFromViewController:self
-                                         withContent:content
-                                            delegate:self];
-
             // 打点-分享至facebook-010219
             NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
                                            [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
@@ -1371,6 +1419,25 @@
 #if DEBUG
             [iConsole info:[NSString stringWithFormat:@"Article_Share_Facebook_Click:%@",articleParams],nil];
 #endif
+            AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+            if (appDelegate.model) {
+                FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
+                NSString *shareString = _detailModel.share_url;
+                shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"facebook"];
+                content.contentURL = [NSURL URLWithString:shareString];
+                content.contentTitle = _detailModel.title;
+                ImageModel *imageModel = _detailModel.imgs.firstObject;
+                content.imageURL = [NSURL URLWithString:imageModel.src];
+                [FBSDKShareDialog showFromViewController:self
+                                             withContent:content
+                                                delegate:self];
+            } else {
+                // 登录后分享
+                LoginViewController *loginVC = [[LoginViewController alloc] init];
+                loginVC.isShareFacebook = YES;
+                UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:loginVC];
+                [self.navigationController presentViewController:navCtrl animated:YES completion:nil];
+            }
             break;
         }
         default:
@@ -1410,17 +1477,25 @@
 #if DEBUG
         [iConsole info:[NSString stringWithFormat:@"Article_Share_Facebook_Click:%@",articleParams],nil];
 #endif
-        FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
-        NSString *shareString = _detailModel.share_url;
-        shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"facebook"];
-        content.contentURL = [NSURL URLWithString:shareString];
-        content.contentTitle = _detailModel.title;
-        ImageModel *imageModel = _detailModel.imgs.firstObject;
-        content.imageURL = [NSURL URLWithString:imageModel.src];
-        [FBSDKShareDialog showFromViewController:weakSelf
-                                     withContent:content
-                                        delegate:weakSelf];
-        
+        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        if (appDelegate.model) {
+            FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
+            NSString *shareString = _detailModel.share_url;
+            shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"facebook"];
+            content.contentURL = [NSURL URLWithString:shareString];
+            content.contentTitle = _detailModel.title;
+            ImageModel *imageModel = _detailModel.imgs.firstObject;
+            content.imageURL = [NSURL URLWithString:imageModel.src];
+            [FBSDKShareDialog showFromViewController:weakSelf
+                                         withContent:content
+                                            delegate:weakSelf];
+        } else {
+            // 登录后分享
+            LoginViewController *loginVC = [[LoginViewController alloc] init];
+            loginVC.isShareFacebook = YES;
+            UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:loginVC];
+            [weakSelf.navigationController presentViewController:navCtrl animated:YES completion:nil];
+        }
     }];
     
     // 分享到twitter
@@ -1435,24 +1510,33 @@
 #if DEBUG
         [iConsole info:[NSString stringWithFormat:@"Article_Share_Twitter_Click:%@",articleParams],nil];
 #endif
-        NSString *shareString = _detailModel.share_url;
-        shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"twitter"];
-        TWTRComposer *composer = [[TWTRComposer alloc] init];
-        [composer setText:_detailModel.title];
-        [composer setURL:[NSURL URLWithString:shareString]];
-        @try {
-            [composer showFromViewController:weakSelf completion:^(TWTRComposerResult result) {
-                if (result == TWTRComposerResultCancelled) {
-                    // 取消分享
-                    NSLog(@"Tweet composition cancelled");
-                } else {
-                    // 分享成功
-                    NSLog(@"Sending Tweet!");
-                }
-            }];
-        }
-        @catch (NSException *exception) {
-            NSLog(@"%s\n%@", __FUNCTION__, exception);
+        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        if (appDelegate.model) {
+            NSString *shareString = _detailModel.share_url;
+            shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"twitter"];
+            TWTRComposer *composer = [[TWTRComposer alloc] init];
+            [composer setText:_detailModel.title];
+            [composer setURL:[NSURL URLWithString:shareString]];
+            @try {
+                [composer showFromViewController:weakSelf completion:^(TWTRComposerResult result) {
+                    if (result == TWTRComposerResultCancelled) {
+                        // 取消分享
+                        SSLog(@"Tweet composition cancelled");
+                    } else {
+                        // 分享成功
+                        SSLog(@"Sending Tweet!");
+                    }
+                }];
+            }
+            @catch (NSException *exception) {
+                SSLog(@"%s\n%@", __FUNCTION__, exception);
+            }
+        } else {
+            // 登录后分享
+            LoginViewController *loginVC = [[LoginViewController alloc] init];
+            loginVC.isShareTwitter = YES;
+            UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:loginVC];
+            [weakSelf.navigationController presentViewController:navCtrl animated:YES completion:nil];
         }
     }];
 
@@ -1468,25 +1552,33 @@
 #if DEBUG
         [iConsole info:[NSString stringWithFormat:@"Article_Share_Google+_Click:%@",articleParams],nil];
 #endif
-        NSString *shareString = _detailModel.share_url;
-        shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"googleplus"];
-        NSURLComponents* urlComponents = [[NSURLComponents alloc]
-                                          initWithString:@"https://plus.google.com/share"];
-        urlComponents.queryItems = @[[[NSURLQueryItem alloc]
-                                      initWithName:@"url"
-                                      value:[[NSURL URLWithString:shareString] absoluteString]]];
-        NSURL* url = [urlComponents URL];
-        if ([SFSafariViewController class]) {
-            // Open the URL in SFSafariViewController (iOS 9+)
-            SFSafariViewController* controller = [[SFSafariViewController alloc]
-                                                  initWithURL:url];
-//            controller.delegate = self;
-            [self presentViewController:controller animated:YES completion:nil];
+        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        if (appDelegate.model) {
+            NSString *shareString = _detailModel.share_url;
+            shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"googleplus"];
+            NSURLComponents* urlComponents = [[NSURLComponents alloc]
+                                              initWithString:@"https://plus.google.com/share"];
+            urlComponents.queryItems = @[[[NSURLQueryItem alloc]
+                                          initWithName:@"url"
+                                          value:[[NSURL URLWithString:shareString] absoluteString]]];
+            NSURL* url = [urlComponents URL];
+            if ([SFSafariViewController class]) {
+                // Open the URL in SFSafariViewController (iOS 9+)
+                SFSafariViewController* controller = [[SFSafariViewController alloc]
+                                                      initWithURL:url];
+                //            controller.delegate = self;
+                [weakSelf presentViewController:controller animated:YES completion:nil];
+            } else {
+                // Open the URL in the device's browser
+                [[UIApplication sharedApplication] openURL:url];
+            }
         } else {
-            // Open the URL in the device's browser
-            [[UIApplication sharedApplication] openURL:url];
+            // 登录后分享
+            LoginViewController *loginVC = [[LoginViewController alloc] init];
+            loginVC.isShareGoogle = YES;
+            UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:loginVC];
+            [weakSelf.navigationController presentViewController:navCtrl animated:YES completion:nil];
         }
-        
     }];
     
     [ShareSDK showShareActionSheet:self.view
