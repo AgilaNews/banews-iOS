@@ -65,6 +65,7 @@
 #define SS_GuideFavKey  @"SS_GuideFavKey_v1.0.1" // 引导页——收藏
 
 // 新闻模板
+#define NEWS_BigPic     2   // 大图模板
 #define NEWS_ManyPic    3   // 多图模板
 #define NEWS_SinglePic  4   // 单图模板
 #define NEWS_NoPic      5   // 无图模板
