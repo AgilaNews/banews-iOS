@@ -101,18 +101,20 @@
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     NSNumber *refreshNum = appDelegate.refreshTimeDic[_model.channelID];
     _refreshTime = refreshNum.longLongValue;
-    NSString *newsFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/news.data"];
-    NSDictionary *newsData = [NSKeyedUnarchiver unarchiveObjectWithFile:newsFilePath];
-    NSNumber *checkNum = newsData.allKeys.firstObject;
-    if ([[NSDate date] timeIntervalSince1970] - checkNum.longLongValue < 3600) {
-        _dataList = [NSMutableArray arrayWithArray:newsData[newsData.allKeys.firstObject][_model.channelID]];
-    } else if ([_model.channelID isEqualToNumber:@10001])
-    {
-        // 请求数据
-        [self requestDataWithChannelID:_model.channelID isLater:YES isShowHUD:NO];
-    }
-    if (![DEF_PERSISTENT_GET_OBJECT(SS_GuideHomeKey) isEqualToNumber:@1] && [_model.channelID isEqualToNumber:@10001]) {
-        [[UIApplication sharedApplication].keyWindow addSubview:[GuideRefreshView sharedInstance]];
+    @autoreleasepool {
+        NSString *newsFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/news.data"];
+        NSDictionary *newsData = [NSKeyedUnarchiver unarchiveObjectWithFile:newsFilePath];
+        NSNumber *checkNum = newsData.allKeys.firstObject;
+        if ([[NSDate date] timeIntervalSince1970] - checkNum.longLongValue < 3600) {
+            _dataList = [NSMutableArray arrayWithArray:newsData[newsData.allKeys.firstObject][_model.channelID]];
+        } else if ([_model.channelID isEqualToNumber:@10001])
+        {
+            // 请求数据
+            [self requestDataWithChannelID:_model.channelID isLater:YES isShowHUD:NO];
+        }
+        if (![DEF_PERSISTENT_GET_OBJECT(SS_GuideHomeKey) isEqualToNumber:@1] && [_model.channelID isEqualToNumber:@10001]) {
+            [[UIApplication sharedApplication].keyWindow addSubview:[GuideRefreshView sharedInstance]];
+        }
     }
 }
 
@@ -282,6 +284,9 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (indexPath.row >= _dataList.count) {
+        return;
+    }
     NewsModel *model = _dataList[indexPath.row];
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
 
@@ -446,6 +451,7 @@
         [params setObject:@"older" forKey:@"dir"];
     }
     [[SSHttpRequest sharedInstance] get:kHomeUrl_NewsList params:params contentType:UrlencodedType serverType:NetServer_Home success:^(id responseObj) {
+        [SVProgressHUD dismiss];
         NSMutableArray *models = [NSMutableArray array];
         for (NSDictionary *dic in [responseObj valueForKey:[responseObj allKeys].firstObject])
         {
@@ -527,7 +533,8 @@
             [iConsole info:@"NetFailure_Enter",nil];
 #endif
             weakSelf.showTableBlankView = YES;
-            UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tableViewDidTriggerHeaderRefresh)];
+            weakSelf.blankView.userInteractionEnabled = YES;
+            UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchFailureView)];
             [weakSelf.blankView addGestureRecognizer:tap];
             if ([AFNetworkReachabilityManager sharedManager].networkReachabilityStatus == AFNetworkReachabilityStatusNotReachable) {
                 weakSelf.blankLabel.text = @"Network unavailable";
@@ -556,6 +563,17 @@
 #if DEBUG
     [iConsole info:[NSString stringWithFormat:@"Home_List_DownRefresh:%@",articleParams],nil];
 #endif
+    [self requestDataWithChannelID:_model.channelID isLater:YES isShowHUD:YES];
+}
+
+- (void)touchFailureView
+{
+    if (self.showTableBlankView) {
+        self.showTableBlankView = NO;
+        self.blankView.userInteractionEnabled = NO;
+        SVProgressHUD.defaultStyle = SVProgressHUDStyleCustom;
+        [SVProgressHUD show];
+    }
     [self requestDataWithChannelID:_model.channelID isLater:YES isShowHUD:YES];
 }
 
@@ -637,6 +655,13 @@
             _dataList = [NSMutableArray array];
             if ([self.tableView isDisplayedInScreen]) {
                 [self.tableView.header beginRefreshing];
+            }
+        } else {
+            @autoreleasepool {
+                NSString *newsFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/news.data"];
+                NSDictionary *newsData = [NSKeyedUnarchiver unarchiveObjectWithFile:newsFilePath];
+                _dataList = [NSMutableArray arrayWithArray:newsData[newsData.allKeys.firstObject][_model.channelID]];
+                [self.tableView reloadData];
             }
         }
     });

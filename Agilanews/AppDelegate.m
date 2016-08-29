@@ -61,6 +61,7 @@
     if (logData.count > 0 && logData != nil) {
         [self serverLogWithEventArray:logData];
     }
+    _eventArray = [NSMutableArray array];
     //设置启动页面时间
     [NSThread sleepForTimeInterval:2.0];
     return YES;
@@ -89,6 +90,32 @@
     #endif
     // 服务端打点上报
     [self serverLogWithEventArray:_eventArray];
+    
+    @autoreleasepool {
+        // 缓存新闻列表
+        NSMutableDictionary *newsDic = [NSMutableDictionary dictionary];
+        for (HomeTableViewController *homeTabVC in homeVC.segmentVC.subViewControllers) {
+            if (homeTabVC.dataList.count > 0) {
+                [newsDic setObject:[NSArray arrayWithArray:homeTabVC.dataList] forKey:homeTabVC.model.channelID];
+                [homeTabVC.dataList removeAllObjects];
+            }
+        }
+        NSString *newsFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/news.data"];
+        NSDictionary *newsData = [NSDictionary dictionaryWithObject:newsDic forKey:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]]];
+        [NSKeyedArchiver archiveRootObject:newsData toFile:newsFilePath];
+        // 缓存点赞记录
+        NSString *likeFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/like.data"];
+        NSDictionary *likeData = [NSDictionary dictionaryWithObject:_likedDic forKey:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]]];
+        [NSKeyedArchiver archiveRootObject:likeData toFile:likeFilePath];
+        // 缓存新闻查看记录
+        NSString *checkFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/check.data"];
+        NSDictionary *checkData = [NSDictionary dictionaryWithObject:_checkDic forKey:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]]];
+        [NSKeyedArchiver archiveRootObject:checkData toFile:checkFilePath];
+        // 缓存频道刷新记录
+        NSString *refreshFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/refresh.data"];
+        [NSKeyedArchiver archiveRootObject:_refreshTimeDic toFile:refreshFilePath];
+    }
+    
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 }
@@ -99,6 +126,9 @@
     [self coldBoot:NO];
     // 开始定位
     [self locationServices];
+    // 读取用户登录信息/配置信息
+    [self loadUserData];
+
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
 }
 
@@ -109,22 +139,6 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     SSLog(@"程序将要终止");
-    // 缓存新闻查看记录
-    NSString *checkFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/check.data"];
-    NSDictionary *checkData = [NSDictionary dictionaryWithObject:_checkDic forKey:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]]];
-    [NSKeyedArchiver archiveRootObject:checkData toFile:checkFilePath];
-    // 缓存新闻列表
-    BaseNavigationController *baseNav = (BaseNavigationController *)_window.rootViewController;
-    HomeViewController *homeVC = baseNav.viewControllers.firstObject;
-    NSMutableDictionary *newsDic = [NSMutableDictionary dictionary];
-    for (HomeTableViewController *homeTabVC in homeVC.segmentVC.subViewControllers) {
-        if (homeTabVC.dataList.count > 0) {
-            [newsDic setObject:homeTabVC.dataList forKey:homeTabVC.model.channelID];
-        }
-    }
-    NSString *newsFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/news.data"];
-    NSDictionary *newsData = [NSDictionary dictionaryWithObject:newsDic forKey:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]]];
-    [NSKeyedArchiver archiveRootObject:newsData toFile:newsFilePath];
     // 缓存打点记录
     NSString *logFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/log.data"];
     NSMutableArray *logData = [NSKeyedUnarchiver unarchiveObjectWithFile:logFilePath];
@@ -134,9 +148,6 @@
         logData = [NSMutableArray arrayWithArray:_eventArray];
     }
     [NSKeyedArchiver archiveRootObject:logData toFile:logFilePath];
-    // 缓存频道刷新记录
-    NSString *refreshFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/refresh.data"];
-    [NSKeyedArchiver archiveRootObject:_refreshTimeDic toFile:refreshFilePath];
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
@@ -203,7 +214,8 @@
         DEF_PERSISTENT_SET_OBJECT(Server_Mon, responseObj[@"interfaces"][@"mon"]);
         DEF_PERSISTENT_SET_OBJECT(Server_Referrer, responseObj[@"interfaces"][@"referrer"]);
         // 分类存入模型
-        if (responseObj[@"categories"] == nil) {
+        NSArray *categories = responseObj[@"categories"];
+        if (categories.count > 0) {
             return;
         }
         _categoriesArray = [NSMutableArray array];
@@ -302,20 +314,30 @@
 - (void)loadUserData
 {
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        NSString *loginFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/userinfo.data"];
-        LoginModel *model = [NSKeyedUnarchiver unarchiveObjectWithFile:loginFilePath];
-        _model = model;
-        _likedDic = [NSMutableDictionary dictionary];
-        _checkDic = [NSMutableDictionary dictionary];
-        _eventArray = [NSMutableArray array];
-        NSString *checkFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/check.data"];
-        NSDictionary *checkData = [NSKeyedUnarchiver unarchiveObjectWithFile:checkFilePath];
-        NSNumber *checkNum = checkData.allKeys.firstObject;
-        if ([[NSDate date] timeIntervalSince1970] - checkNum.longLongValue < 3600) {
-            _checkDic = checkData[checkData.allKeys.firstObject];
+        @autoreleasepool {
+            NSString *loginFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/userinfo.data"];
+            LoginModel *model = [NSKeyedUnarchiver unarchiveObjectWithFile:loginFilePath];
+            _model = model;
+            // 加载点赞记录
+            _likedDic = [NSMutableDictionary dictionary];
+            NSString *likeFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/like.data"];
+            NSDictionary *likeData = [NSKeyedUnarchiver unarchiveObjectWithFile:likeFilePath];
+            NSNumber *likeNum = likeData.allKeys.firstObject;
+            if ([[NSDate date] timeIntervalSince1970] - likeNum.longLongValue < 3600) {
+                _likedDic = likeData[likeData.allKeys.firstObject];
+            }
+            // 加载新闻查看记录
+            _checkDic = [NSMutableDictionary dictionary];
+            NSString *checkFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/check.data"];
+            NSDictionary *checkData = [NSKeyedUnarchiver unarchiveObjectWithFile:checkFilePath];
+            NSNumber *checkNum = checkData.allKeys.firstObject;
+            if ([[NSDate date] timeIntervalSince1970] - checkNum.longLongValue < 3600) {
+                _checkDic = checkData[checkData.allKeys.firstObject];
+            }
+            // 加载频道刷新记录
+            NSString *refreshFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/refresh.data"];
+            _refreshTimeDic = [NSMutableDictionary dictionaryWithDictionary:[NSKeyedUnarchiver unarchiveObjectWithFile:refreshFilePath]];
         }
-        NSString *refreshFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/refresh.data"];
-        _refreshTimeDic = [NSMutableDictionary dictionaryWithDictionary:[NSKeyedUnarchiver unarchiveObjectWithFile:refreshFilePath]];
     });
 }
 

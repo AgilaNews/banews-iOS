@@ -27,7 +27,7 @@
     // Do any additional setup after loading the view.
     self.view.backgroundColor = kWhiteBgColor;
     self.title = @"Log in";
-    if (_isCollect || _isComment) {
+    if (_isCollect || _isComment || _isShareFacebook || _isShareTwitter || _isShareGoogle) {
         self.isDismissButton = YES;
     } else {
         self.isBackButton = YES;
@@ -221,11 +221,15 @@
         [NSKeyedArchiver archiveRootObject:appDelegate.model toFile:loginFilePath];
         [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Login_Success object:[NSDictionary dictionaryWithObjectsAndKeys:
                     [NSNumber numberWithBool:_isCollect], @"isCollect",
-                    [NSNumber numberWithBool:_isComment], @"isComment",                                nil]];
+                    [NSNumber numberWithBool:_isComment], @"isComment",
+                    [NSNumber numberWithBool:_isShareFacebook], @"isShareFacebook",
+                    [NSNumber numberWithBool:_isShareTwitter], @"isShareTwitter",
+                    [NSNumber numberWithBool:_isShareGoogle], @"isShareGoogle",
+                    nil]];
         if (_isFavorite) {
             FavoritesViewController *favoritesVC = [[FavoritesViewController alloc] init];
-            [self.navigationController pushViewController:favoritesVC animated:YES];
-        } else if (_isCollect || _isComment) {
+            [weakSelf.navigationController pushViewController:favoritesVC animated:YES];
+        } else if (_isCollect || _isComment || _isShareFacebook || _isShareTwitter || _isShareGoogle) {
             [weakSelf dismissViewControllerAnimated:YES completion:nil];
         } else {
             [weakSelf.navigationController popViewControllerAnimated:YES];
