@@ -38,8 +38,6 @@ static SSHttpRequest *_manager = nil;
         // 设置请求头
         [_manager.requestSerializer setValue:@"gzip, deflate" forHTTPHeaderField:@"Accept-Encoding"];
         [_manager.requestSerializer setValue:@"en-PH;q=0.8,en-US;q=0.5,en;q=0.3" forHTTPHeaderField:@"Accept-Language"];
-        [_manager.requestSerializer setValue:[NSString stringWithFormat:@"%dx%d",(int)kScreenWidth_DP,(int)kScreenHeight_DP] forHTTPHeaderField:@"X-DENSITY"];
-        
     });
     return _manager;
 }
@@ -112,6 +110,7 @@ static SSHttpRequest *_manager = nil;
     } else {
         userA = @" ";
     }
+    [_manager.requestSerializer setValue:[NSString stringWithFormat:@"%dx%d;%d;l",(int)kScreenWidth_DP, (int)kScreenHeight_DP, iPhone6Plus ? 401 : 326] forHTTPHeaderField:@"X-DENSITY"];
     [_manager.requestSerializer setValue:userA forHTTPHeaderField:@"X-User-A"];
     [_manager.requestSerializer setValue:DEF_PERSISTENT_GET_OBJECT(@"UUID") forHTTPHeaderField:@"X-Session"];
     [_manager.requestSerializer setValue:DEF_PERSISTENT_GET_OBJECT(@"IDFA") forHTTPHeaderField:@"X-User-D"];
@@ -122,7 +121,7 @@ static SSHttpRequest *_manager = nil;
     NSString *dateString = [dateFormatter stringFromDate:currentDate];
     [_manager.requestSerializer setValue:dateString forHTTPHeaderField:@"Date"];
     // 签名算法
-    NSString *string = [NSString stringWithFormat:@"GET\n \n%@\n%@\nX-DENSITY:%dx%d\nX-SESSION:%@\nX-USER-A:%@\nX-USER-D:%@\n%@",contentType == UrlencodedType ? @"APPLICATION/X-WWW-FORM-URLENCODED" : @"APPLICATION/JSON",dateString,(int)kScreenWidth_DP,(int)kScreenHeight_DP,DEF_PERSISTENT_GET_OBJECT(@"UUID"),userA,DEF_PERSISTENT_GET_OBJECT(@"IDFA"),url];
+    NSString *string = [NSString stringWithFormat:@"GET\n \n%@\n%@\nX-DENSITY:%dx%d;%d;l\nX-SESSION:%@\nX-USER-A:%@\nX-USER-D:%@\n%@",contentType == UrlencodedType ? @"APPLICATION/X-WWW-FORM-URLENCODED" : @"APPLICATION/JSON", dateString, (int)kScreenWidth_DP, (int)kScreenHeight_DP, iPhone6Plus ? 401 : 326, DEF_PERSISTENT_GET_OBJECT(@"UUID"), userA,DEF_PERSISTENT_GET_OBJECT(@"IDFA"), url];
     [_manager.requestSerializer setValue:[Signature hmacsha1:string key:@"7intJWbSmtjkrIrb"] forHTTPHeaderField:@"Authorization"];
     
     // 添加默认参数
@@ -295,6 +294,7 @@ static SSHttpRequest *_manager = nil;
     } else {
         userA = @" ";
     }
+    [_manager.requestSerializer setValue:[NSString stringWithFormat:@"%dx%d;%d;l",(int)kScreenWidth_DP, (int)kScreenHeight_DP, iPhone6Plus ? 401 : 326] forHTTPHeaderField:@"X-DENSITY"];
     [_manager.requestSerializer setValue:userA forHTTPHeaderField:@"X-User-A"];
     [_manager.requestSerializer setValue:DEF_PERSISTENT_GET_OBJECT(@"UUID") forHTTPHeaderField:@"X-Session"];
     [_manager.requestSerializer setValue:DEF_PERSISTENT_GET_OBJECT(@"IDFA") forHTTPHeaderField:@"X-User-D"];
@@ -305,7 +305,7 @@ static SSHttpRequest *_manager = nil;
     NSString *dateString = [dateFormatter stringFromDate:currentDate];
     [_manager.requestSerializer setValue:dateString forHTTPHeaderField:@"Date"];
     // 签名算法
-    NSString *string = [NSString stringWithFormat:@"GET\n \n%@\n%@\nX-DENSITY:%dx%d\nX-SESSION:%@\nX-USER-A:%@\nX-USER-D:%@\n%@",contentType == UrlencodedType ? @"APPLICATION/X-WWW-FORM-URLENCODED" : @"APPLICATION/JSON",dateString,(int)kScreenWidth_DP,(int)kScreenHeight_DP,DEF_PERSISTENT_GET_OBJECT(@"UUID"),userA,DEF_PERSISTENT_GET_OBJECT(@"IDFA"),url];
+    NSString *string = [NSString stringWithFormat:@"GET\n \n%@\n%@\nX-DENSITY:%dx%d;%d;l\nX-SESSION:%@\nX-USER-A:%@\nX-USER-D:%@\n%@",contentType == UrlencodedType ? @"APPLICATION/X-WWW-FORM-URLENCODED" : @"APPLICATION/JSON", dateString, (int)kScreenWidth_DP, (int)kScreenHeight_DP, iPhone6Plus ? 401 : 326, DEF_PERSISTENT_GET_OBJECT(@"UUID"), userA,DEF_PERSISTENT_GET_OBJECT(@"IDFA"), url];
     [_manager.requestSerializer setValue:[Signature hmacsha1:string key:@"7intJWbSmtjkrIrb"] forHTTPHeaderField:@"Authorization"];
     
     // 设置超时时间为5s
@@ -415,6 +415,7 @@ static SSHttpRequest *_manager = nil;
     } else {
         userA = @" ";
     }
+    [_manager.requestSerializer setValue:[NSString stringWithFormat:@"%dx%d;%d;l",(int)kScreenWidth_DP, (int)kScreenHeight_DP, iPhone6Plus ? 401 : 326] forHTTPHeaderField:@"X-DENSITY"];
     [_manager.requestSerializer setValue:userA forHTTPHeaderField:@"X-User-A"];
     [_manager.requestSerializer setValue:DEF_PERSISTENT_GET_OBJECT(@"UUID") forHTTPHeaderField:@"X-Session"];
     [_manager.requestSerializer setValue:DEF_PERSISTENT_GET_OBJECT(@"IDFA") forHTTPHeaderField:@"X-User-D"];
@@ -425,7 +426,7 @@ static SSHttpRequest *_manager = nil;
     NSString *dateString = [dateFormatter stringFromDate:currentDate];
     [_manager.requestSerializer setValue:dateString forHTTPHeaderField:@"Date"];
     // 签名算法
-    NSString *string = [NSString stringWithFormat:@"GET\n \n%@\n%@\nX-DENSITY:%dx%d\nX-SESSION:%@\nX-USER-A:%@\nX-USER-D:%@\n%@",contentType == UrlencodedType ? @"APPLICATION/X-WWW-FORM-URLENCODED" : @"APPLICATION/JSON",dateString,(int)kScreenWidth_DP,(int)kScreenHeight_DP,DEF_PERSISTENT_GET_OBJECT(@"UUID"),userA,DEF_PERSISTENT_GET_OBJECT(@"IDFA"),url];
+    NSString *string = [NSString stringWithFormat:@"GET\n \n%@\n%@\nX-DENSITY:%dx%d;%d;l\nX-SESSION:%@\nX-USER-A:%@\nX-USER-D:%@\n%@",contentType == UrlencodedType ? @"APPLICATION/X-WWW-FORM-URLENCODED" : @"APPLICATION/JSON", dateString, (int)kScreenWidth_DP, (int)kScreenHeight_DP, iPhone6Plus ? 401 : 326, DEF_PERSISTENT_GET_OBJECT(@"UUID"), userA,DEF_PERSISTENT_GET_OBJECT(@"IDFA"), url];
     [_manager.requestSerializer setValue:[Signature hmacsha1:string key:@"7intJWbSmtjkrIrb"] forHTTPHeaderField:@"Authorization"];
     
     _manager.requestSerializer.HTTPMethodsEncodingParametersInURI = [NSSet setWithArray:@[@"GET", @"HEAD"]];
