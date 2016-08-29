@@ -337,6 +337,20 @@
             // 加载频道刷新记录
             NSString *refreshFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/refresh.data"];
             _refreshTimeDic = [NSMutableDictionary dictionaryWithDictionary:[NSKeyedUnarchiver unarchiveObjectWithFile:refreshFilePath]];
+            // 加载新闻列表
+            NSString *newsFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/news.data"];
+            NSDictionary *newsData = [NSMutableDictionary dictionaryWithDictionary:[NSKeyedUnarchiver unarchiveObjectWithFile:newsFilePath]];
+            NSNumber *newsNum = newsData.allKeys.firstObject;
+            if ([[NSDate date] timeIntervalSince1970] - newsNum.longLongValue < 3600) {
+                UINavigationController *navCtrl = (UINavigationController *)_window.rootViewController;
+                HomeViewController *homeVC = navCtrl.viewControllers.firstObject;
+                NSDictionary *newsDic = newsData[newsNum];
+                for (HomeTableViewController *homeTabVC in homeVC.segmentVC.subViewControllers) {
+                    if (homeTabVC.dataList.count <= 0) {
+                        homeTabVC.dataList = [NSMutableArray arrayWithArray:newsDic[homeTabVC.model.channelID]];
+                    }
+                }
+            }
         }
     });
 }
