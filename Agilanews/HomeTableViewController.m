@@ -284,6 +284,9 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (indexPath.row >= _dataList.count) {
+        return;
+    }
     NewsModel *model = _dataList[indexPath.row];
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
 
