@@ -20,9 +20,9 @@ static SSHttpRequest *_manager = nil;
     dispatch_once(&onceToken, ^{
         _manager = [SSHttpRequest manager];
         // 申明返回的结果是text/html类型
-        _manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+//        _manager.responseSerializer = [AFHTTPResponseSerializer serializer];
         _manager.responseSerializer = [AFJSONResponseSerializer serializer];
-        _manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript",@"application/javascript", @"text/html", @"text/plain", nil];
+        _manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript",@"application/javascript", @"text/html", @"text/plain", @"application/ph", nil];
         // 设置安全性
         AFSecurityPolicy *securityPolicy = [AFSecurityPolicy defaultPolicy];
         //allowInvalidCertificates 是否允许无效证书（也就是自建的证书），默认为NO
@@ -31,10 +31,6 @@ static SSHttpRequest *_manager = nil;
         // validatesDomainName 是否需要验证域名，默认为YES；
         securityPolicy.validatesDomainName = NO;
         _manager.securityPolicy  = securityPolicy;
-//        // 设置超时时间为5s
-//        [_manager.requestSerializer willChangeValueForKey:@"timeoutInterval"];
-//        [_manager.requestSerializer setTimeoutInterval:3.0f];
-//        [_manager.requestSerializer didChangeValueForKey:@"timeoutInterval"];
         // 设置请求头
         [_manager.requestSerializer setValue:@"gzip, deflate" forHTTPHeaderField:@"Accept-Encoding"];
         [_manager.requestSerializer setValue:@"en-PH;q=0.8,en-US;q=0.5,en;q=0.3" forHTTPHeaderField:@"Accept-Language"];
@@ -48,6 +44,7 @@ static SSHttpRequest *_manager = nil;
 - (NSURLSessionDataTask *)get:(NSString *)url params:(NSMutableDictionary *)params contentType:(ContentType)contentType serverType:(NetServerType)serverType success:(void (^)(id))success failure:(void (^)(NSError *))failure isShowHUD:(BOOL)showHUD
 {
     // 参数格式
+    
     if (contentType == UrlencodedType) {
         [_manager.requestSerializer setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     } else {
@@ -150,7 +147,7 @@ static SSHttpRequest *_manager = nil;
     [params setObject:@"ios" forKey:@"os"];
     // 系统版本号
     [params setObject:[NSString stringWithFormat:@"%@",[[UIDevice currentDevice] systemVersion]] forKey:@"os_version"];
-    // 设置超时时间为5s
+    // 设置超时时间
     [_manager.requestSerializer willChangeValueForKey:@"timeoutInterval"];
     [_manager.requestSerializer setTimeoutInterval:8.0f];
     [_manager.requestSerializer didChangeValueForKey:@"timeoutInterval"];
