@@ -611,6 +611,7 @@
 - (void)requestDataWithRefreshNotif:(NSNotification *)notif
 {
     if ([_model.channelID isEqualToNumber:notif.object]) {
+        [self.tableView setContentOffset:self.tableView.contentOffset animated:NO];
         [self.tableView.header beginRefreshing];
     }
 //    if ([self.tableView isDisplayedInScreen]) {
