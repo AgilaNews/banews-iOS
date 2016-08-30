@@ -937,6 +937,10 @@
                     [button setImage:[UIImage imageNamed:@"icon_article_collect_default"] forState:UIControlStateNormal];
                     [button setImage:[UIImage imageNamed:@"icon_article_collect_select"] forState:UIControlStateSelected];
                     [button setImage:[UIImage imageNamed:@"icon_article_collect_select"] forState:UIControlStateHighlighted];
+                    if (![_detailModel.collect_id isEqualToNumber:@0]) {
+                        button.selected = YES;
+                        _collectID = _detailModel.collect_id;
+                    }
                     break;
                 case 2:
                     [button setImage:[UIImage imageNamed:@"facebook"] forState:UIControlStateNormal];
