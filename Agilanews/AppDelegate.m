@@ -96,7 +96,12 @@
         NSMutableDictionary *newsDic = [NSMutableDictionary dictionary];
         for (HomeTableViewController *homeTabVC in homeVC.segmentVC.subViewControllers) {
             if (homeTabVC.dataList.count > 0) {
-                [newsDic setObject:[NSArray arrayWithArray:homeTabVC.dataList] forKey:homeTabVC.model.channelID];
+                NSInteger length = 30;
+                if (homeTabVC.dataList.count > length) {
+                    [newsDic setObject:[homeTabVC.dataList subarrayWithRange:NSMakeRange(0, length)] forKey:homeTabVC.model.channelID];
+                } else {
+                    [newsDic setObject:[NSArray arrayWithArray:homeTabVC.dataList] forKey:homeTabVC.model.channelID];
+                }
                 [homeTabVC.dataList removeAllObjects];
             }
         }

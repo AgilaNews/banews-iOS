@@ -107,11 +107,12 @@
         NSNumber *checkNum = newsData.allKeys.firstObject;
         NSArray *dataList = newsData[newsData.allKeys.firstObject][_model.channelID];
         if ([[NSDate date] timeIntervalSince1970] - checkNum.longLongValue < 3600) {
+            // 加载缓存
             _dataList = [NSMutableArray arrayWithArray:dataList];
         } else if ([[NetType getNetType] isEqualToString:@"unknow"] && dataList.count > 0) {
+            // 无网状态下加载缓存
             _dataList = [NSMutableArray arrayWithArray:dataList];
-        } else if ([_model.channelID isEqualToNumber:@10001])
-        {
+        } else if ([_model.channelID isEqualToNumber:@10001]) {
             // 请求数据
             [self requestDataWithChannelID:_model.channelID isLater:YES isShowHUD:NO];
         }
