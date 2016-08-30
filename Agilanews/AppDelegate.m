@@ -457,4 +457,32 @@
     }
 }
 
+- (void)applicationDidReceiveMemoryWarning:(UIApplication *)application
+{
+    SDWebImageManager *mgr = [SDWebImageManager sharedManager];
+    // 取消正在下载的图片
+    [mgr cancelAll];
+    // 清除内存缓存
+    [mgr.imageCache clearMemory];
+    
+//    @autoreleasepool {
+//        NSString *newsFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/news.data"];
+//        NSDictionary *newsDataOld = [NSMutableDictionary dictionaryWithDictionary:[NSKeyedUnarchiver unarchiveObjectWithFile:newsFilePath]];
+//        NSDictionary *newsDicOld = newsDataOld[newsDataOld.allKeys.firstObject];
+//        UINavigationController *navCtrl = (UINavigationController *)_window.rootViewController;
+//        HomeViewController *homeVC = navCtrl.viewControllers.firstObject;
+//        NSMutableDictionary *newsDic = [NSMutableDictionary dictionary];
+//        for (HomeTableViewController *homeTabVC in homeVC.segmentVC.subViewControllers) {
+//            if (homeTabVC.dataList.count > 0) {
+//                [newsDic setObject:[NSArray arrayWithArray:homeTabVC.dataList] forKey:homeTabVC.model.channelID];
+//                [homeTabVC.dataList removeAllObjects];
+//            } else {
+//                [newsDic setObject:[NSArray arrayWithArray:newsDicOld[homeTabVC.model.channelID]] forKey:homeTabVC.model.channelID];
+//            }
+//        }
+//        NSDictionary *newsData = [NSDictionary dictionaryWithObject:newsDic forKey:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]]];
+//        [NSKeyedArchiver archiveRootObject:newsData toFile:newsFilePath];
+//    }
+}
+
 @end

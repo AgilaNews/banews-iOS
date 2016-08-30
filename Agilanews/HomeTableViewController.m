@@ -112,9 +112,9 @@
             // 请求数据
             [self requestDataWithChannelID:_model.channelID isLater:YES isShowHUD:NO];
         }
-        if (![DEF_PERSISTENT_GET_OBJECT(SS_GuideHomeKey) isEqualToNumber:@1] && [_model.channelID isEqualToNumber:@10001]) {
-            [[UIApplication sharedApplication].keyWindow addSubview:[GuideRefreshView sharedInstance]];
-        }
+    }
+    if (![DEF_PERSISTENT_GET_OBJECT(SS_GuideHomeKey) isEqualToNumber:@1] && [_model.channelID isEqualToNumber:@10001]) {
+        [[UIApplication sharedApplication].keyWindow addSubview:[GuideRefreshView sharedInstance]];
     }
 }
 
@@ -471,6 +471,9 @@
                 }
                 [models addObject:model];
             }
+        }
+        if (_dataList == nil) {
+            _dataList = [NSMutableArray array];
         }
         if (later == YES) {
             // 打点-下拉刷新成功-010113
