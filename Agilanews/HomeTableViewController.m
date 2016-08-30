@@ -610,9 +610,11 @@
  */
 - (void)requestDataWithRefreshNotif:(NSNotification *)notif
 {
-    if ([self.tableView isDisplayedInScreen]) {
+    if ([_model.channelID isEqualToNumber:notif.object]) {
         [self.tableView.header beginRefreshing];
     }
+//    if ([self.tableView isDisplayedInScreen]) {
+//    }
 }
 
 /**

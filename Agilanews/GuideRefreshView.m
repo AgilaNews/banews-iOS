@@ -106,7 +106,7 @@ static GuideRefreshView *_guideView = nil;
         return;
     }
     if (_refreshView) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Refresh object:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Refresh object:@10001];
         [GuideRefreshView sharedInstance].swipe.direction = UISwipeGestureRecognizerDirectionLeft;
         [[GuideRefreshView sharedInstance] removeAllSubviews];
         [GuideRefreshView sharedInstance].refreshView = nil;
