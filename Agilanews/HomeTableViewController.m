@@ -105,8 +105,11 @@
         NSString *newsFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/news.data"];
         NSDictionary *newsData = [NSKeyedUnarchiver unarchiveObjectWithFile:newsFilePath];
         NSNumber *checkNum = newsData.allKeys.firstObject;
+        NSArray *dataList = newsData[newsData.allKeys.firstObject][_model.channelID];
         if ([[NSDate date] timeIntervalSince1970] - checkNum.longLongValue < 3600) {
-            _dataList = [NSMutableArray arrayWithArray:newsData[newsData.allKeys.firstObject][_model.channelID]];
+            _dataList = [NSMutableArray arrayWithArray:dataList];
+        } else if ([[NetType getNetType] isEqualToString:@"unknow"] && dataList.count > 0) {
+            _dataList = [NSMutableArray arrayWithArray:dataList];
         } else if ([_model.channelID isEqualToNumber:@10001])
         {
             // 请求数据
