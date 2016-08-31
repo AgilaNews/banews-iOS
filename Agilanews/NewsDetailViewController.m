@@ -89,10 +89,35 @@
     // 注册通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginSuccess:) name:KNOTIFICATION_Login_Success object:nil];
     // 注册键盘将要弹出通知
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHidden) name:UIKeyboardWillHideNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(fontChange) name:KNOTIFICATION_FontSize_Change object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(touchFavorite) name:KNOTIFICATION_TouchFavorite object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHidden)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(fontChange)
+                                                 name:KNOTIFICATION_FontSize_Change
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(touchFavorite) name:KNOTIFICATION_TouchFavorite
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(applicationDidEnterBackground)
+                                                 name:UIApplicationDidEnterBackgroundNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(applicationWillEnterForeground)
+                                                 name:UIApplicationWillEnterForegroundNotification
+                                               object:nil];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -1289,6 +1314,29 @@
             UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:loginVC];
             [self.navigationController presentViewController:navCtrl animated:YES completion:nil];
         }
+    }
+}
+
+/**
+ *  程序已经进入后台通知
+ */
+- (void)applicationDidEnterBackground
+{
+    // 缓存详情信息
+    NSString *detailFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/detail.data"];
+    [NSKeyedArchiver archiveRootObject:_detailModel toFile:detailFilePath];
+}
+
+/**
+ *  程序即将进入前台通知
+ */
+- (void)applicationWillEnterForeground
+{
+    // 加载详情信息
+    NSString *detailFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/detail.data"];
+    NewsDetailModel *model = [NSKeyedUnarchiver unarchiveObjectWithFile:detailFilePath];
+    if ([model.news_id isEqualToString:_model.news_id]) {
+        _detailModel = model;
     }
 }
 
