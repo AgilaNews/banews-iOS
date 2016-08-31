@@ -573,6 +573,9 @@
     [self requestDataWithChannelID:_model.channelID isLater:YES isShowHUD:YES];
 }
 
+/**
+ *  点击失败页面
+ */
 - (void)touchFailureView
 {
     if (self.showTableBlankView) {
@@ -645,7 +648,6 @@
     CategoriesModel *cateModel = notif.object;
     if ([cateModel.channelID isEqualToNumber:_model.channelID] && _dataList.count <= 0) {
         [self.tableView.header beginRefreshing];
-//        [self requestDataWithChannelID:_model.channelID isLater:YES isShowHUD:NO];
     } else if ([cateModel.channelID isEqualToNumber:_model.channelID] && ([[NSDate date] timeIntervalSince1970] - _refreshTime) > 3600) {
         [self.tableView.header beginRefreshing];
     } else {
@@ -658,23 +660,21 @@
  */
 - (void)applicationWillEnterForeground
 {
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        NSNumber *backgroundTime = DEF_PERSISTENT_GET_OBJECT(@"BackgroundTime");
-        if ([[NSDate date] timeIntervalSince1970] - backgroundTime.longLongValue > 3600)
-        {
-            _dataList = [NSMutableArray array];
-            if ([self.tableView isDisplayedInScreen]) {
-                [self.tableView.header beginRefreshing];
-            }
-        } else {
-            @autoreleasepool {
-                NSString *newsFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/news.data"];
-                NSDictionary *newsData = [NSKeyedUnarchiver unarchiveObjectWithFile:newsFilePath];
-                _dataList = [NSMutableArray arrayWithArray:newsData[newsData.allKeys.firstObject][_model.channelID]];
-                [self.tableView reloadData];
-            }
+    NSNumber *backgroundTime = DEF_PERSISTENT_GET_OBJECT(@"BackgroundTime");
+    if ([[NSDate date] timeIntervalSince1970] - backgroundTime.longLongValue > 3600)
+    {
+        _dataList = [NSMutableArray array];
+        if ([self.tableView isDisplayedInScreen]) {
+            [self.tableView.header beginRefreshing];
         }
-    });
+    } else {
+        @autoreleasepool {
+            NSString *newsFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/news.data"];
+            NSDictionary *newsData = [NSKeyedUnarchiver unarchiveObjectWithFile:newsFilePath];
+            _dataList = [NSMutableArray arrayWithArray:newsData[newsData.allKeys.firstObject][_model.channelID]];
+            [self.tableView reloadData];
+        }
+    }
 }
 
 /**
