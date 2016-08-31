@@ -1007,7 +1007,8 @@
             _likeButton.selected = YES;
         }
     }
-    if (_detailModel.likedCount > 0) {
+    if (_detailModel.likedCount.integerValue > 0) {
+        _likeButton.imageEdgeInsets = UIEdgeInsetsMake(0, -5, 0, 0);
         NSString *buttonTitle = [NSString stringWithFormat:@"%@",_detailModel.likedCount];
         switch (buttonTitle.length) {
             case 1:
@@ -1028,8 +1029,8 @@
                 break;
         }
     } else {
-        _likeButton.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, -4);
-        [_likeButton setTitle:@"0" forState:UIControlStateNormal];
+        _likeButton.imageEdgeInsets = UIEdgeInsetsMake(0, 3, 0, 0);
+        [_likeButton setTitle:@"" forState:UIControlStateNormal];
     }
     return _likeButton;
 }
@@ -1310,19 +1311,20 @@
     [iConsole info:[NSString stringWithFormat:@"Article_Like_Click:%@",articleParams],nil];
 #endif
     if (button.selected) {
-        if (button.titleLabel.text.intValue > 0) {
-            [button setTitle:[NSString stringWithFormat:@"%d",button.titleLabel.text.intValue - 1] forState:UIControlStateNormal];
+        if (button.titleLabel.text.intValue > 1) {
+            _detailModel.likedCount = [NSNumber numberWithInteger:_detailModel.likedCount.integerValue - 1];
         } else {
-            [button setTitle:@"0" forState:UIControlStateNormal];
+            [button setTitle:@"" forState:UIControlStateNormal];
+            _detailModel.likedCount = @0;
         }
     } else {
-        [button setTitle:[NSString stringWithFormat:@"%d",button.titleLabel.text.intValue + 1] forState:UIControlStateNormal];
+        _detailModel.likedCount = [NSNumber numberWithInteger:_detailModel.likedCount.integerValue + 1];
         AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
         if (appDelegate.likedDic[_model.news_id] == nil) {
             [self likedNewsWithAppDelegate:appDelegate button:button];
         }
     }
-    button.selected = !button.selected;
+    self.likeButton.selected = !button.selected;
 }
 
 /**

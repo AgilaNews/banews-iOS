@@ -48,7 +48,7 @@
     _window.rootViewController = navCtrl;
     
     // 读取用户登录信息/配置信息
-    [self loadUserData];
+    [self loadUserData:YES];
     // 监听网络状态
     [self networkMonitoring];
     // 开始定位
@@ -132,7 +132,7 @@
     // 开始定位
     [self locationServices];
     // 读取用户登录信息/配置信息
-    [self loadUserData];
+    [self loadUserData:NO];
 
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
 }
@@ -316,13 +316,13 @@
 /**
  *  读取用户登录信息/配置信息
  */
-- (void)loadUserData
+- (void)loadUserData:(BOOL)isFirst
 {
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         @autoreleasepool {
+            // 加载登录信息
             NSString *loginFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/userinfo.data"];
-            LoginModel *model = [NSKeyedUnarchiver unarchiveObjectWithFile:loginFilePath];
-            _model = model;
+            _model = [NSKeyedUnarchiver unarchiveObjectWithFile:loginFilePath];
             // 加载点赞记录
             _likedDic = [NSMutableDictionary dictionary];
             NSString *likeFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/like.data"];
@@ -342,17 +342,19 @@
             // 加载频道刷新记录
             NSString *refreshFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/refresh.data"];
             _refreshTimeDic = [NSMutableDictionary dictionaryWithDictionary:[NSKeyedUnarchiver unarchiveObjectWithFile:refreshFilePath]];
-            // 加载新闻列表
-            NSString *newsFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/news.data"];
-            NSDictionary *newsData = [NSMutableDictionary dictionaryWithDictionary:[NSKeyedUnarchiver unarchiveObjectWithFile:newsFilePath]];
-            NSNumber *newsNum = newsData.allKeys.firstObject;
-            if ([[NSDate date] timeIntervalSince1970] - newsNum.longLongValue < 3600) {
-                UINavigationController *navCtrl = (UINavigationController *)_window.rootViewController;
-                HomeViewController *homeVC = navCtrl.viewControllers.firstObject;
-                NSDictionary *newsDic = newsData[newsNum];
-                for (HomeTableViewController *homeTabVC in homeVC.segmentVC.subViewControllers) {
-                    if (homeTabVC.dataList.count <= 0) {
-                        homeTabVC.dataList = [NSMutableArray arrayWithArray:newsDic[homeTabVC.model.channelID]];
+            if (isFirst) {
+                // 加载新闻列表
+                NSString *newsFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/news.data"];
+                NSDictionary *newsData = [NSMutableDictionary dictionaryWithDictionary:[NSKeyedUnarchiver unarchiveObjectWithFile:newsFilePath]];
+                NSNumber *newsNum = newsData.allKeys.firstObject;
+                if ([[NSDate date] timeIntervalSince1970] - newsNum.longLongValue < 3600) {
+                    UINavigationController *navCtrl = (UINavigationController *)_window.rootViewController;
+                    HomeViewController *homeVC = navCtrl.viewControllers.firstObject;
+                    NSDictionary *newsDic = newsData[newsNum];
+                    for (HomeTableViewController *homeTabVC in homeVC.segmentVC.subViewControllers) {
+                        if (homeTabVC.dataList.count <= 0) {
+                            homeTabVC.dataList = [NSMutableArray arrayWithArray:newsDic[homeTabVC.model.channelID]];
+                        }
                     }
                 }
             }
