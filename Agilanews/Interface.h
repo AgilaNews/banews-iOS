@@ -49,7 +49,8 @@ typedef enum {
 #define kHomeUrl_Collect    @"/user/collect/"
 // 反馈接口
 #define kHomeUrl_Feedback   @"/feedback/"
-
+// 检查更新接口
+#define kHomeUrl_Check   @"/check"
 
 
 #endif /* Interface_h */

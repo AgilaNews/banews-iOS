@@ -248,6 +248,12 @@
                     [iConsole info:@"Set_Update_Click",nil];
 #endif
                     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"itms-apps://itunes.apple.com/app/id1146695204"]];
+//                    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+//                    [[SSHttpRequest sharedInstance] get:kHomeUrl_Check params:params contentType:UrlencodedType serverType:NetServer_Home success:^(id responseObj) {
+//                        NSLog(@"%@",responseObj);
+//                    } failure:^(NSError *error) {
+//                        
+//                    } isShowHUD:YES];
                 }
                     break;
                 default:
