@@ -247,13 +247,45 @@
 #if DEBUG
                     [iConsole info:@"Set_Update_Click",nil];
 #endif
-                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"itms-apps://itunes.apple.com/app/id1146695204"]];
-//                    NSMutableDictionary *params = [NSMutableDictionary dictionary];
-//                    [[SSHttpRequest sharedInstance] get:kHomeUrl_Check params:params contentType:UrlencodedType serverType:NetServer_Home success:^(id responseObj) {
-//                        NSLog(@"%@",responseObj);
-//                    } failure:^(NSError *error) {
-//                        
-//                    } isShowHUD:YES];
+//                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"itms-apps://itunes.apple.com/app/id1146695204"]];
+                    __weak typeof(self) weakSelf = self;
+                    [SVProgressHUD show];
+                    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+                    [[SSHttpRequest sharedInstance] get:kHomeUrl_Check params:params contentType:UrlencodedType serverType:NetServer_Check success:^(id responseObj) {
+                        NSString *new_version = responseObj[@"updates"][@"new_version"];
+                        NSString *version = [NSString stringWithFormat:@"v%@", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]];
+                        if ([new_version compare:version options:NSNumericSearch] == NSOrderedDescending) {
+                            [SVProgressHUD dismiss];
+                            NSString *title = @"Update Available";
+                            NSString *message = [NSString stringWithFormat:@"We have found a latest version %@,do you want to update?", new_version];
+                            UIAlertController *clearAlert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+                            NSMutableAttributedString *alertControllerStr = [[NSMutableAttributedString alloc] initWithString:title];
+                            [alertControllerStr addAttribute:NSForegroundColorAttributeName value:kBlackColor range:NSMakeRange(0, title.length)];
+                            [alertControllerStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:18] range:NSMakeRange(0, title.length)];
+                            if ([clearAlert valueForKey:@"attributedTitle"]) {
+                                [clearAlert setValue:alertControllerStr forKey:@"attributedTitle"];
+                            }
+                            NSMutableAttributedString *alertControllerMessageStr = [[NSMutableAttributedString alloc] initWithString:message];
+                            [alertControllerMessageStr addAttribute:NSForegroundColorAttributeName value:SSColor(102, 102, 102) range:NSMakeRange(0, message.length)];
+                            [alertControllerMessageStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:14] range:NSMakeRange(0, message.length)];
+                            if ([clearAlert valueForKey:@"attributedMessage"]) {
+                                [clearAlert setValue:alertControllerMessageStr forKey:@"attributedMessage"];
+                            }
+                            UIAlertAction *noAction = [UIAlertAction actionWithTitle:@"Update Later" style:UIAlertActionStyleDefault handler:nil];
+                            UIAlertAction *yesAction = [UIAlertAction actionWithTitle:@"Update Now" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+                                dispatch_after(0.2, dispatch_get_main_queue(), ^{
+                                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"itms-apps://%@", responseObj[@"updates"][@"update_url"]]]];
+                                });
+                            }];
+                            [clearAlert addAction:noAction];
+                            [clearAlert addAction:yesAction];
+                            [weakSelf presentViewController:clearAlert animated:YES completion:nil];
+                        } else {
+                            [SVProgressHUD showSuccessWithStatus:@"It has been the latest version."];
+                        }
+                    } failure:^(NSError *error) {
+                        
+                    } isShowHUD:YES];
                 }
                     break;
                 default:

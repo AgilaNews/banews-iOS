@@ -66,8 +66,8 @@ static SSHttpRequest *_manager = nil;
                 } else {
                     _urlString = [NSString stringWithFormat:@"%@%@",kHomeUrl,url];
                 }
-            }
                 break;
+            }
             case NetServer_Log:
             {
                 if (DEF_PERSISTENT_GET_OBJECT(Server_Log) != nil) {
@@ -75,8 +75,8 @@ static SSHttpRequest *_manager = nil;
                 } else {
                     _urlString = [NSString stringWithFormat:@"%@%@",kLogUrl,url];
                 }
-            }
                 break;
+            }
             case NetServer_Mon:
             {
                 if (DEF_PERSISTENT_GET_OBJECT(Server_Mon) != nil) {
@@ -84,8 +84,8 @@ static SSHttpRequest *_manager = nil;
                 } else {
                     _urlString = [NSString stringWithFormat:@"%@%@",kMonUrl,url];
                 }
-            }
                 break;
+            }
             case NetServer_Referrer:
             {
                 if (DEF_PERSISTENT_GET_OBJECT(Server_Referrer) != nil) {
@@ -93,8 +93,17 @@ static SSHttpRequest *_manager = nil;
                 } else {
                     _urlString = [NSString stringWithFormat:@"%@%@",kReferrerUrl,url];
                 }
-            }
                 break;
+            }
+            case NetServer_Check:
+            {
+#if DEBUG
+                _urlString = [NSString stringWithFormat:@"http://api.agilanews.info/%@",url];
+#else
+                _urlString = [NSString stringWithFormat:@"http://api.agilanews.today/%@",url];
+#endif
+                break;
+            }
             default:
                 break;
         }
