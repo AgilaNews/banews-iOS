@@ -127,6 +127,12 @@
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     SSLog(@"将要进入前台");
+    NSNumber *backgroundTime = DEF_PERSISTENT_GET_OBJECT(@"BackgroundTime");
+    if ([[NSDate date] timeIntervalSince1970] - backgroundTime.longLongValue > 3600 * 2) {
+        HomeViewController *homeVC = [[HomeViewController alloc] init];
+        BaseNavigationController *navCtrl = [[BaseNavigationController alloc] initWithRootViewController:homeVC];
+        _window.rootViewController = navCtrl;
+    }
     // 冷启动
     [self coldBoot:NO];
     // 开始定位
