@@ -55,6 +55,8 @@
     [self locationServices];
     // 冷启动
     [self coldBoot:YES];
+    // 创建图片文件夹
+    [self createImageFolderAtPath];
     // 启动上报打点
     NSString *logFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/log.data"];
     NSMutableArray *logData = [NSKeyedUnarchiver unarchiveObjectWithFile:logFilePath];
@@ -98,11 +100,12 @@
             if (homeTabVC.dataList.count > 0) {
                 NSInteger length = 30;
                 if (homeTabVC.dataList.count > length) {
-                    [newsDic setObject:[homeTabVC.dataList subarrayWithRange:NSMakeRange(0, length)] forKey:homeTabVC.model.channelID];
+                    [newsDic setObject:[NSMutableArray arrayWithArray:[homeTabVC.dataList subarrayWithRange:NSMakeRange(0, length)]] forKey:homeTabVC.model.channelID];
                 } else {
-                    [newsDic setObject:[NSArray arrayWithArray:homeTabVC.dataList] forKey:homeTabVC.model.channelID];
+                    [newsDic setObject:[NSMutableArray arrayWithArray:homeTabVC.dataList] forKey:homeTabVC.model.channelID];
                 }
                 [homeTabVC.dataList removeAllObjects];
+                [homeTabVC.tableView reloadData];
             }
         }
         NSString *newsFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/news.data"];
@@ -127,12 +130,12 @@
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     SSLog(@"将要进入前台");
-    NSNumber *backgroundTime = DEF_PERSISTENT_GET_OBJECT(@"BackgroundTime");
-    if ([[NSDate date] timeIntervalSince1970] - backgroundTime.longLongValue > 3600 * 2) {
-        HomeViewController *homeVC = [[HomeViewController alloc] init];
-        BaseNavigationController *navCtrl = [[BaseNavigationController alloc] initWithRootViewController:homeVC];
-        _window.rootViewController = navCtrl;
-    }
+//    NSNumber *backgroundTime = DEF_PERSISTENT_GET_OBJECT(@"BackgroundTime");
+//    if ([[NSDate date] timeIntervalSince1970] - backgroundTime.longLongValue > 3600 * 2) {
+//        HomeViewController *homeVC = [[HomeViewController alloc] init];
+//        BaseNavigationController *navCtrl = [[BaseNavigationController alloc] initWithRootViewController:homeVC];
+//        _window.rootViewController = navCtrl;
+//    }
     // 冷启动
     [self coldBoot:NO];
     // 开始定位
@@ -477,25 +480,18 @@
     [mgr cancelAll];
     // 清除内存缓存
     [mgr.imageCache clearMemory];
-    
-//    @autoreleasepool {
-//        NSString *newsFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/news.data"];
-//        NSDictionary *newsDataOld = [NSMutableDictionary dictionaryWithDictionary:[NSKeyedUnarchiver unarchiveObjectWithFile:newsFilePath]];
-//        NSDictionary *newsDicOld = newsDataOld[newsDataOld.allKeys.firstObject];
-//        UINavigationController *navCtrl = (UINavigationController *)_window.rootViewController;
-//        HomeViewController *homeVC = navCtrl.viewControllers.firstObject;
-//        NSMutableDictionary *newsDic = [NSMutableDictionary dictionary];
-//        for (HomeTableViewController *homeTabVC in homeVC.segmentVC.subViewControllers) {
-//            if (homeTabVC.dataList.count > 0) {
-//                [newsDic setObject:[NSArray arrayWithArray:homeTabVC.dataList] forKey:homeTabVC.model.channelID];
-//                [homeTabVC.dataList removeAllObjects];
-//            } else {
-//                [newsDic setObject:[NSArray arrayWithArray:newsDicOld[homeTabVC.model.channelID]] forKey:homeTabVC.model.channelID];
-//            }
-//        }
-//        NSDictionary *newsData = [NSDictionary dictionaryWithObject:newsDic forKey:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]]];
-//        [NSKeyedArchiver archiveRootObject:newsData toFile:newsFilePath];
-//    }
+}
+
+// 创建图片文件夹
+- (void)createImageFolderAtPath
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:@"ImageFolder"];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    BOOL existed = [fileManager fileExistsAtPath:filePath];
+    if (!existed) {
+        [fileManager createDirectoryAtPath:filePath withIntermediateDirectories:YES attributes:nil error:nil];
+    }
 }
 
 @end

@@ -76,7 +76,6 @@
                                                  name:UIApplicationWillEnterForegroundNotification
                                                object:nil];
     
-    
     // 创建表视图
     self.tableView.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight);
     self.tableView.dataSource = self;

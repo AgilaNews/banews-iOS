@@ -13,10 +13,11 @@
 #import "AppDelegate.h"
 #import "CommentTextView.h"
 
-@interface NewsDetailViewController : BaseViewController <UIWebViewDelegate, UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, UITextViewDelegate, FBSDKSharingDelegate>
+@interface NewsDetailViewController : BaseViewController <UIWebViewDelegate, UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, UITextViewDelegate, FBSDKSharingDelegate, UIWebViewDelegate>
 
 @property (nonatomic, strong) NewsModel *model;
 @property (nonatomic, strong) UIWebView *webView;
+@property (nonatomic, strong) WebViewJavascriptBridge *bridge;
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UIView *commentsView;         
 @property (nonatomic, strong) UIButton *likeButton;         // 点赞按钮

@@ -61,6 +61,7 @@
 #import <Crashlytics/Crashlytics.h>
 #import "Flurry/Flurry.h"
 #import "iConsole.h"
+#import "WebViewJavascriptBridge.h"
 
 ////////////////////////////////////////
 

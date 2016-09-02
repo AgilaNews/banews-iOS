@@ -78,11 +78,47 @@
     _webView.backgroundColor = kWhiteBgColor;
     _webView.delegate = self;
     _webView.scrollView.delegate = self;
-//    _webView.scrollView.scrollEnabled = NO;
     _webView.scrollView.scrollsToTop = NO;
     _webView.scrollView.showsHorizontalScrollIndicator = NO;
     _webView.scrollView.showsVerticalScrollIndicator = NO;
-    
+    self.bridge = [WebViewJavascriptBridge bridgeForWebView:_webView];
+    [_bridge setWebViewDelegate:self];
+    [_bridge registerHandler:@"ObjcCallback" handler:^(id data, WVJBResponseCallback responseCallback)
+     {
+         NSString *urlString = data[@"url"];
+         NSNumber *callbackId = data[@"id"];
+         urlString = [urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+         NSString *md5String = [NSString encryptPassword:urlString];
+         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+         NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:[NSString stringWithFormat:@"ImageFolder/%@.jpg", md5String]];
+         NSFileManager *fileManager = [NSFileManager defaultManager];
+         if ([fileManager fileExistsAtPath:filePath]) {
+             NSString *imagePath = [NSString stringWithFormat:@"file://%@/",filePath];
+             responseCallback(@{
+                                @"path": imagePath,
+                                @"id": callbackId
+                                });
+         } else {
+             SDWebImageDownloader *downloader = [SDWebImageDownloader sharedDownloader];
+             [downloader downloadImageWithURL:[NSURL URLWithString:urlString]
+                                      options:0
+                                     progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+                                         // progression tracking code
+                                     }
+                                    completed:^(UIImage *image, NSData *data, NSError *error, BOOL finished) {
+                                        if (image && finished) {
+                                            if ([data writeToFile:filePath atomically:YES]) {
+                                                NSString *imagePath = [NSString stringWithFormat:@"file://%@/",filePath];
+                                                responseCallback(@{
+                                                                   @"path": imagePath,
+                                                                   @"id": callbackId
+                                                                   });
+                                            }
+                                        }
+                                    }];
+         }
+     }];
+
     // 请求新闻详情
     [self requestDataWithNewsID:_model.news_id ShowHUD:YES];
     
@@ -228,7 +264,7 @@
             }
         }
         // 拼接HTML
-        NSString *htmlString = [NSString stringWithFormat:@"<html><head><link rel=\"stylesheet\" type=\"text/css\" href=\"file:///%@\"/><script src=\"file://%@\"></script></head><body><div class=\"title\">%@</div><div class=\"sourcetime\">%@ <a class=\"source\" href=\"%@\">/View source</a></div>%@",cssFilePath,jsFilePath,weakSelf.detailModel.title,dateString,weakSelf.detailModel.source_url,weakSelf.detailModel.body];
+        NSString *htmlString = [NSString stringWithFormat:@"<html><head><link rel=\"stylesheet\" type=\"text/css\" href=\"file:///%@\"/><script src=\"file://%@\"></script></head><body><div id='log'></div><div class=\"title\">%@</div><div class=\"sourcetime\">%@ <a class=\"source\" href=\"%@\">/View source</a></div>%@",cssFilePath,jsFilePath,weakSelf.detailModel.title,dateString,weakSelf.detailModel.source_url,weakSelf.detailModel.body];
         htmlString = [htmlString stringByAppendingString:@"</body></html>"];
         [_webView loadHTMLString:htmlString baseURL:nil];
     } failure:^(NSError *error) {
@@ -779,7 +815,9 @@
                 NewsDetailViewController *newsDetailVC = [[NewsDetailViewController alloc] init];
                 newsDetailVC.model = model;
                 newsDetailVC.channelName = _channelName;
-
+                if (model.news_id.length <= 0) {
+                    return;
+                }
                 // 打点-推荐区文章点击-010218
                 NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
                                                [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
@@ -892,6 +930,9 @@
     [self.view addSubview:self.commentsView];
     [_tableView reloadData];
     [_tableView setContentOffset:CGPointMake(_tableView.contentOffset.x, _webviewOffsetY) animated:NO];
+//    [_bridge callHandler:@"testJavascriptHandler" data:@{@"123": @"456"} responseCallback:^(id response) {
+//        NSLog(@"testJavascriptHandler responded: %@", response);
+//    }];
 }
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(nullable NSError *)error
 {
