@@ -267,7 +267,7 @@
             }
         }
         // 拼接HTML
-        NSString *htmlString = [NSString stringWithFormat:@"<html><head><link rel=\"stylesheet\" type=\"text/css\" href=\"file:///%@\"/><script src=\"file://%@\"></script></head><body><div id='log'></div><div class=\"title\">%@</div><div class=\"sourcetime\">%@ <a class=\"source\" href=\"%@\">/View source</a></div>%@",cssFilePath,jsFilePath,weakSelf.detailModel.title,dateString,weakSelf.detailModel.source_url,weakSelf.detailModel.body];
+        NSString *htmlString = [NSString stringWithFormat:@"<html><head><link rel=\"stylesheet\" type=\"text/css\" href=\"file:///%@\"/><script src=\"file://%@\"></script></head><body><div class=\"title\">%@</div><div class=\"sourcetime\">%@ <a class=\"source\" href=\"%@\">/View source</a></div>%@",cssFilePath,jsFilePath,weakSelf.detailModel.title,dateString,weakSelf.detailModel.source_url,weakSelf.detailModel.body];
         htmlString = [htmlString stringByAppendingString:@"</body></html>"];
         [_webView loadHTMLString:htmlString baseURL:nil];
     } failure:^(NSError *error) {
@@ -542,7 +542,7 @@
 {
     switch (section) {
         case 1:
-            return 4;
+            return MIN(_detailModel.recommend_news.count + 1, 4);
             break;
         case 2:
             if (_commentArray.count > 0) {
