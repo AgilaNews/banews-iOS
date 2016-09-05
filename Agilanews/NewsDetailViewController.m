@@ -176,6 +176,7 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    [SVProgressHUD dismiss];
     // 打点-文章页退出-010225
     NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
                                    [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
@@ -192,6 +193,8 @@
 
 - (void)dealloc
 {
+    [_task cancel];
+    [SVProgressHUD dismiss];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     if (_model.news_id.length <= 0) {
         return;
