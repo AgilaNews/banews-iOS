@@ -124,6 +124,30 @@
         [NSKeyedArchiver archiveRootObject:_refreshTimeDic toFile:refreshFilePath];
     }
     
+    // 清除详情缓存图片
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    NSString *folderPath = [[paths objectAtIndex:0] stringByAppendingPathComponent:@"ImageFolder/"];
+    NSFileManager* fileMgr = [NSFileManager defaultManager];
+    NSArray* filesArray = [fileMgr contentsOfDirectoryAtPath:folderPath error:nil];
+    long long folderSize = 0 ;
+    for (NSString *fileName in filesArray) {
+        NSString *fileAbsolutePath = [folderPath stringByAppendingPathComponent:fileName];
+        folderSize += [self fileSizeAtPath:fileAbsolutePath];
+    }
+    if ((folderSize / (1024.0 * 1024.0) > 50)) {
+        for (NSString *branchPath in filesArray)
+        {
+            @autoreleasepool {
+                NSError *error = nil ;
+                NSString *path = [folderPath stringByAppendingPathComponent:branchPath];
+                if ([[NSFileManager defaultManager] fileExistsAtPath:path])
+                {
+                    [[NSFileManager defaultManager] removeItemAtPath:path error:&error];
+                }
+            }
+        }
+    }
+
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 }
@@ -492,6 +516,16 @@
     if (!existed) {
         [fileManager createDirectoryAtPath:filePath withIntermediateDirectories:YES attributes:nil error:nil];
     }
+}
+
+// 计算文件大小
+- (long long)fileSizeAtPath:(NSString *)filePath
+{
+    NSFileManager *manager = [NSFileManager defaultManager];
+    if ([manager fileExistsAtPath:filePath]){
+        return [[manager attributesOfItemAtPath:filePath error:nil] fileSize];
+    }
+    return 0 ;
 }
 
 @end
