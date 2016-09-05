@@ -600,7 +600,7 @@
 #if DEBUG
     [iConsole info:[NSString stringWithFormat:@"Home_List_UpLoad:%@",articleParams],nil];
 #endif
-    [self requestDataWithChannelID:_model.channelID isLater:NO isShowHUD:NO];
+    [self requestDataWithChannelID:_model.channelID isLater:NO isShowHUD:YES];
 }
 
 
