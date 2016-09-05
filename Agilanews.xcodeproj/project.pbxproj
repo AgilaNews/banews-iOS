@@ -122,6 +122,7 @@
 		5F8D85AB1D76A99700FF4019 /* WebViewJavascriptBridge_JS.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F8D85A51D76A99700FF4019 /* WebViewJavascriptBridge_JS.m */; };
 		5F8D85AC1D76A99700FF4019 /* WebViewJavascriptBridgeBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F8D85A71D76A99700FF4019 /* WebViewJavascriptBridgeBase.m */; };
 		5F8D85AD1D76A99700FF4019 /* WKWebViewJavascriptBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F8D85A91D76A99700FF4019 /* WKWebViewJavascriptBridge.m */; };
+		5F8D85D21D7D1AA800FF4019 /* placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 5F8D85D11D7D1AA800FF4019 /* placeholder.png */; };
 		5FD55E681D4EFB0D00B0E17D /* FavoriteDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FD55E671D4EFB0D00B0E17D /* FavoriteDetailViewController.m */; };
 		5FE7220D1D4EFCE30026BFC3 /* TwitterKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5FE722091D4EFCE30026BFC3 /* TwitterKit.framework */; };
 		5FE7220E1D4EFCE30026BFC3 /* TwitterKitResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5FE7220A1D4EFCE30026BFC3 /* TwitterKitResources.bundle */; };
@@ -390,6 +391,7 @@
 		5F8D85A71D76A99700FF4019 /* WebViewJavascriptBridgeBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewJavascriptBridgeBase.m; sourceTree = "<group>"; };
 		5F8D85A81D76A99700FF4019 /* WKWebViewJavascriptBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKWebViewJavascriptBridge.h; sourceTree = "<group>"; };
 		5F8D85A91D76A99700FF4019 /* WKWebViewJavascriptBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKWebViewJavascriptBridge.m; sourceTree = "<group>"; };
+		5F8D85D11D7D1AA800FF4019 /* placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = placeholder.png; sourceTree = "<group>"; };
 		5FD55E661D4EFB0D00B0E17D /* FavoriteDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FavoriteDetailViewController.h; sourceTree = "<group>"; };
 		5FD55E671D4EFB0D00B0E17D /* FavoriteDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FavoriteDetailViewController.m; sourceTree = "<group>"; };
 		5FE722081D4EFCE30026BFC3 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
@@ -1040,6 +1042,7 @@
 				5F635ED71D41EB51006AAE3D /* webView.css */,
 				5F571FE31D64057500604CDD /* webView.js */,
 				5FE722211D50B5B70026BFC3 /* textonly.png */,
+				5F8D85D11D7D1AA800FF4019 /* placeholder.png */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -1258,6 +1261,7 @@
 				5F635ED31D4065C1006AAE3D /* LaunchScreen.storyboard in Resources */,
 				5F42C0121D34E3EC00B89651 /* Info.plist in Resources */,
 				5FE722221D50B5B70026BFC3 /* textonly.png in Resources */,
+				5F8D85D21D7D1AA800FF4019 /* placeholder.png in Resources */,
 				5F42C09F1D34E42A00B89651 /* SVProgressHUD.bundle in Resources */,
 				5F635ED81D41EB51006AAE3D /* webView.css in Resources */,
 				5F635CCE1D3E3EDF006AAE3D /* ShareSDKUI.bundle in Resources */,

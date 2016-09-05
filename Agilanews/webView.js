@@ -40,34 +40,34 @@ var elems = null;
 
 /*与OC交互的所有JS方法都要放在此处注册*/
 setupWebViewJavascriptBridge(function(bridge) {
-                             if (elems != null) {
-                             return;
-                             }
-                             elems = document.getElementsByClassName("ready-to-load");
-                             for (var i = 0; i < elems.length; i++) {
-                             var elem = elems[i];
-                             var url = elem.getAttribute("data-src");
-                             if (url == null || url == undefined || url == '') {
-                             continue;
-                             }
-                             bridge.callHandler('ObjcCallback', {
-                                                url: url,
-                                                id: i
-                                                },
-                                                function(response) {
-                                                var local_index = response.id;
-                                                if (local_index < elems.length && local_index >= 0) {
-                                                elems[local_index].setAttribute("src", response.path);
-                                                }
-                                                });
-                             }
-                             })
-//                             bridge.registerHandler('testJavascriptHandler', function(data, responseCallback) {
-//                                                    log('ObjC called testJavascriptHandler with', data)
-//                                                    var responseData = { 'Javascript Says':'Right back atcha!' }
-//                                                    log('JS responding with', responseData)
-//                                                    responseCallback(responseData)
-//                                                    })
+    if (elems != null) {
+    return;
+    }
+    elems = document.getElementsByClassName("ready-to-load");
+    for (var i = 0; i < elems.length; i++) {
+        var elem = elems[i];
+        var url = elem.getAttribute("data-src");
+        if (url == null || url == undefined || url == '') {
+            continue;
+        }
+        bridge.callHandler('ObjcCallback', {url: url, id: i},
+        function(response) {
+            var local_index = response.id;
+            if (local_index < elems.length && local_index >= 0) {
+                var imageSrc = response.path;
+                if (imageSrc != null && imageSrc != undefined && imageSrc != '') {
+                    elems[local_index].setAttribute("src", imageSrc);
+                }
+            }
+        });
+    }
+})
+//bridge.registerHandler('testJavascriptHandler', function(data, responseCallback) {
+//                    log('ObjC called testJavascriptHandler with', data)
+//                    var responseData = { 'Javascript Says':'Right back atcha!' }
+//                    log('JS responding with', responseData)
+//                    responseCallback(responseData)
+//                    })
 
 
 

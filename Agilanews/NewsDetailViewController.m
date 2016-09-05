@@ -192,6 +192,10 @@
 
 - (void)dealloc
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    if (_model.news_id.length <= 0) {
+        return;
+    }
     // 服务器打点-详情页返回-020201
     NSMutableDictionary *eventDic = [NSMutableDictionary dictionary];
     [eventDic setObject:@"020201" forKey:@"id"];
@@ -212,7 +216,6 @@
     [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     [appDelegate.eventArray addObject:eventDic];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - Network
