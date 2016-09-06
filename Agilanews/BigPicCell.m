@@ -7,6 +7,8 @@
 //
 
 #import "BigPicCell.h"
+#import "ImageModel.h"
+#import "AppDelegate.h"
 
 #define titleFont_Normal        [UIFont systemFontOfSize:16]
 #define titleFont_ExtraLarge    [UIFont systemFontOfSize:20]
@@ -56,12 +58,12 @@
     // 标题图片布局
     [self.titleImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(weakSelf.titleLabel.mas_left);
-        make.top.mas_equalTo(10);
+        make.top.mas_equalTo(weakSelf.titleLabel.mas_bottom).offset(10);
         make.width.mas_equalTo(kScreenWidth - 22);
         make.height.mas_equalTo(162);
     }];
     // 来源布局
-    CGSize sourceLabelSize = [_model.source calculateSize:CGSizeMake(kScreenWidth - 22 - 9 - 108 - 60, 12) font:self.sourceLabel.font];
+    CGSize sourceLabelSize = [_model.source calculateSize:CGSizeMake(kScreenWidth - 22 - 11 - 60, 12) font:self.sourceLabel.font];
     [self.sourceLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(weakSelf.titleLabel.mas_left);
         make.bottom.mas_equalTo(-7);
@@ -82,7 +84,89 @@
         make.width.mas_equalTo(80);
         make.height.mas_equalTo(13);
     }];
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    __weak typeof(self) weakSelf = self;
     
+    // 标题布局
+    CGSize titleLabelSize = [_model.title calculateSize:CGSizeMake(kScreenWidth - 22, 40) font:self.titleLabel.font];
+    [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.width.mas_equalTo(titleLabelSize.width);
+        make.height.mas_equalTo(titleLabelSize.height);
+    }];
+    // 标题图片布局
+    [self.titleImageView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(weakSelf.titleLabel.mas_left);
+        make.top.mas_equalTo(weakSelf.titleLabel.mas_bottom).offset(10);
+        make.width.mas_equalTo(kScreenWidth - 22);
+        make.height.mas_equalTo(162);
+    }];
+    // 来源布局
+    CGSize sourceLabelSize = [_model.source calculateSize:CGSizeMake(kScreenWidth - 22 - 11 - 60, 12) font:self.sourceLabel.font];
+    [self.sourceLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(weakSelf.titleLabel.mas_left);
+        make.width.mas_equalTo(sourceLabelSize.width);
+        make.height.mas_equalTo(sourceLabelSize.height);
+    }];
+    // 时钟布局
+    [self.timeView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(weakSelf.sourceLabel.mas_right).offset(20);
+        make.centerY.mas_equalTo(weakSelf.sourceLabel.mas_centerY);
+    }];
+    // 时间布局
+    NSString *timeString = nil;
+    if (_bgColor == [UIColor whiteColor]) {
+        timeString = [TimeStampToString getNewsStringWhitTimeStamp:[_model.public_time longLongValue]];
+    } else {
+        timeString = [TimeStampToString getRecommendedNewsStringWhitTimeStamp:[_model.public_time longLongValue]];
+    }
+    CGSize timeLabelSize = [timeString calculateSize:CGSizeMake(80, 13) font:self.timeLabel.font];
+    [self.timeLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.width.mas_equalTo(timeLabelSize.width);
+        make.height.mas_equalTo(timeLabelSize.height);
+        make.left.mas_equalTo(weakSelf.timeView.mas_right).offset(5);
+        make.centerY.mas_equalTo(weakSelf.sourceLabel.mas_centerY);
+    }];
+    
+    [super updateConstraints];
+    
+    // 设置内容
+    self.titleLabel.text = _model.title;
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    if ([[appDelegate.checkDic valueForKey:_model.news_id] isEqualToNumber:@1]) {
+        self.titleLabel.textColor = kGrayColor;
+    } else {
+        if (_bgColor == [UIColor whiteColor]) {
+            _titleLabel.textColor = kBlackColor;
+        } else {
+            _titleLabel.textColor = SSColor(68, 68, 68);
+        }
+    }
+    
+    self.sourceLabel.text = _model.source;
+    self.timeLabel.text = timeString;
+    
+    NSNumber *textOnlyMode = DEF_PERSISTENT_GET_OBJECT(SS_textOnlyMode);
+    if ([textOnlyMode integerValue] == 1) {
+        self.titleImageView.contentMode = UIViewContentModeCenter;
+        self.titleImageView.image = [UIImage imageNamed:@"holderImage"];
+        return;
+    }
+    ImageModel *imageModel = _model.imgs.firstObject;
+    float width = kScreenWidth - 22;
+    NSString *imageUrl = [imageModel.pattern stringByReplacingOccurrencesOfString:@"{w}" withString:[NSString stringWithFormat:@"%d",((int)width * 2)]];
+    imageUrl = [imageUrl stringByReplacingOccurrencesOfString:@"{h}" withString:[NSString stringWithFormat:@"%d",162 * 2]];
+    imageUrl = [imageUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    [self.titleImageView sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:[UIImage imageNamed:@"holderImage"] options:SDWebImageRetryFailed completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        if (!image) {
+            _titleImageView.image = [UIImage imageNamed:@"holderImage"];
+        } else {
+            _titleImageView.image = image;
+        }
+    }];
 }
 
 - (UILabel *)titleLabel

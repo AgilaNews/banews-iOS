@@ -13,6 +13,7 @@
 #import "ManyPicCell.h"
 #import "SinglePicCell.h"
 #import "NoPicCell.h"
+#import "BigPicCell.h"
 #import "OnlyPicCell.h"
 #import "GifPicCell.h"
 #import "AppDelegate.h"
@@ -171,19 +172,25 @@
         {
             CGSize titleLabelSize = [model.title calculateSize:CGSizeMake(kScreenWidth - 22, 40) font:titleFont];
             return 11 + titleLabelSize.height + 10 + 70 + 10 + 11 + 11;
-        }
             break;
+        }
         case NEWS_SinglePic:
         {
             return 12 + 68 + 12;
-        }
             break;
+        }
         case NEWS_NoPic:
         {
             CGSize titleLabelSize = [model.title calculateSize:CGSizeMake(kScreenWidth - 22, 60) font:titleFont];
             return 11 + titleLabelSize.height + 15 + 11 + 11;
-        }
             break;
+        }
+        case NEWS_BigPic:
+        {
+            CGSize titleLabelSize = [model.title calculateSize:CGSizeMake(kScreenWidth - 22, 40) font:titleFont];
+            return 12 + titleLabelSize.height + 162 + 20 + 11 + 11;
+            break;
+        }
 //        case NEWS_OnlyPic:
 //        {
 //            
@@ -216,8 +223,8 @@
             cell.model = model;
             [cell setNeedsLayout];
             return cell;
-        }
             break;
+        }
         case NEWS_SinglePic:
         {
             // 单图cell
@@ -229,8 +236,8 @@
             cell.model = model;
             [cell setNeedsLayout];
             return cell;
-        }
             break;
+        }
         case NEWS_NoPic:
         {
             // 无图cell
@@ -242,8 +249,21 @@
             cell.model = model;
             [cell setNeedsLayout];
             return cell;
-        }
             break;
+        }
+        case NEWS_BigPic:
+        {
+            // 大图cell
+            static NSString *cellID = @"BigPicCellID";
+            BigPicCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+            if (cell == nil) {
+                cell = [[BigPicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
+            }
+            cell.model = model;
+            [cell setNeedsLayout];
+            return cell;
+            break;
+        }
 //        case NEWS_OnlyPic:
 //        {
 //            // 纯图cell
