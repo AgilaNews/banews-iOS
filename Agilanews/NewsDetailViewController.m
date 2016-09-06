@@ -496,6 +496,24 @@
     [[SSHttpRequest sharedInstance] post:kHomeUrl_Comment params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
         CommentModel *model = [CommentModel mj_objectWithKeyValues:responseObj[@"comment"]];
         [weakSelf.commentArray insertObject:model atIndex:0];
+        _commentsLabel.hidden = NO;
+        _detailModel.commentCount = [NSNumber numberWithInteger:_detailModel.commentCount.integerValue + 1];
+        int width;
+        if (_detailModel.commentCount.integerValue < 10) {
+            width = 12;
+        } else if (_detailModel.commentCount.integerValue < 100) {
+            width = 16;
+        } else if (_detailModel.commentCount.integerValue < 1000) {
+            width = 22;
+        } else {
+            width = 28;
+        }
+        _commentsLabel.width = width;
+        if (_detailModel.commentCount.integerValue < 1000) {
+            _commentsLabel.text = _detailModel.commentCount.stringValue;
+        } else {
+            _commentsLabel.text = @"999+";
+        }
         [_tableView reloadData];
         [_commentTextView.textView resignFirstResponder];
         [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
@@ -1022,34 +1040,38 @@
             }
             [_commentsView addSubview:button];
             
-            if (i == 0 && _detailModel.commentCount.integerValue > 0) {
-                int width;
-                if (_detailModel.commentCount.integerValue < 10) {
-                    width = 12;
-                } else if (_detailModel.commentCount.integerValue < 100) {
-                    width = 16;
-                } else if (_detailModel.commentCount.integerValue < 1000) {
-                    width = 22;
-                } else {
-                    width = 28;
+            if (i == 0) {
+                _commentsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 10, 10)];
+                _commentsLabel.center = CGPointMake(button.right - 10, button.top + 16);
+                _commentsLabel.backgroundColor = SSColor(255, 0, 0);
+                _commentsLabel.layer.cornerRadius = 5.0f;
+                _commentsLabel.layer.masksToBounds = YES;
+                _commentsLabel.textAlignment = NSTextAlignmentCenter;
+                _commentsLabel.font = [UIFont systemFontOfSize:10];
+                _commentsLabel.textColor = [UIColor whiteColor];
+                _commentsLabel.hidden = YES;
+                [_commentsView addSubview:_commentsLabel];
+                if (_detailModel.commentCount.integerValue > 0) {
+                    _commentsLabel.hidden = NO;
+                    int width;
+                    if (_detailModel.commentCount.integerValue < 10) {
+                        width = 12;
+                    } else if (_detailModel.commentCount.integerValue < 100) {
+                        width = 16;
+                    } else if (_detailModel.commentCount.integerValue < 1000) {
+                        width = 22;
+                    } else {
+                        width = 28;
+                    }
+                    _commentsLabel.width = width;
+                    if (_detailModel.commentCount.integerValue < 1000) {
+                        _commentsLabel.text = _detailModel.commentCount.stringValue;
+                    } else {
+                        _commentsLabel.text = @"999+";
+                    }
                 }
-                UILabel *commentsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, width, 10)];
-                commentsLabel.center = CGPointMake(button.right - 10, button.top + 16);
-                commentsLabel.backgroundColor = SSColor(255, 0, 0);
-                commentsLabel.layer.cornerRadius = 5.0f;
-                commentsLabel.layer.masksToBounds = YES;
-                commentsLabel.textAlignment = NSTextAlignmentCenter;
-                commentsLabel.font = [UIFont systemFontOfSize:10];
-                commentsLabel.textColor = [UIColor whiteColor];
-                if (_detailModel.commentCount.integerValue < 1000) {
-                    commentsLabel.text = _detailModel.commentCount.stringValue;
-                } else {
-                    commentsLabel.text = @"999+";
-                }
-                [_commentsView addSubview:commentsLabel];
             }
         }
-        
     }
     return _commentsView;
 }

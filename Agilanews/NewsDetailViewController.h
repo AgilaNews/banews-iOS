@@ -33,6 +33,7 @@
 @property (nonatomic, strong) NSString *channelName;    // 频道名
 @property (nonatomic, assign) long long enterTime;      // 文章进入时间
 @property (nonatomic, assign) BOOL isRecommendShow;     // 推荐文章展示
+@property (nonatomic, strong) UILabel *commentsLabel;   // 评论数标签
 @property (nonatomic, strong) UIView *blankView;
 @property (nonatomic, strong) UILabel *blankLabel;
 @property (nonatomic, strong) UIImageView *failureView;
