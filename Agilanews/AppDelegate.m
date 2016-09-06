@@ -181,30 +181,6 @@
     // 设备宽高
     [params setObject:[NSNumber numberWithInt:(int)kScreenWidth_DP] forKey:@"r_w"];
     [params setObject:[NSNumber numberWithInt:(int)kScreenHeight_DP] forKey:@"r_h"];
-    // 网络运营商
-    CTTelephonyNetworkInfo *networInfo = [[CTTelephonyNetworkInfo alloc] init];
-    CTCarrier *carrier = [networInfo subscriberCellularProvider];
-    if ([carrier carrierName] == nil) {
-        [params setObject:@"" forKey:@"isp"];
-    } else {
-        [params setObject:[carrier carrierName] forKey:@"isp"];
-    }
-    // 网络情况
-    NSString *netType = networInfo.currentRadioAccessTechnology;
-    if ([@"WiFi" isEqualToString:DEF_PERSISTENT_GET_OBJECT(@"netStatus")]) {
-        netType = @"wifi";
-    } else {
-        if ([netType isEqualToString:@"CTRadioAccessTechnologyGPRS"] || [netType isEqualToString:@"CTRadioAccessTechnologyEdge"]) {
-            netType = @"2G";
-        } else if ([netType isEqualToString:@"CTRadioAccessTechnologyHSDPA"] || [netType isEqualToString:@"CTRadioAccessTechnologyWCDMA"] || [netType isEqualToString:@"CTRadioAccessTechnologyHSUPA"] || [netType isEqualToString:@"CTRadioAccessTechnologyCDMA1x"] || [netType isEqualToString:@"CTRadioAccessTechnologyCDMAEVDORev0"] || [netType isEqualToString:@"CTRadioAccessTechnologyCDMAEVDORevA"] || [netType isEqualToString:@"CTRadioAccessTechnologyCDMAEVDORevB"] || [netType isEqualToString:@"CTRadioAccessTechnologyeHRPD"]) {
-            netType = @"3G";
-        } else if ([netType isEqualToString:@"CTRadioAccessTechnologyLTE"]){
-            netType = @"4G";
-        } else {
-            netType = @"unknow";
-        }
-    }
-    [params setObject:netType forKey:@"net"];
     // 时间戳
     [params setObject:[NSNumber numberWithInt:[[NSDate date] timeIntervalSince1970]] forKey:@"client_time"];
     [[SSHttpRequest sharedInstance] get:@"" params:params contentType:UrlencodedType serverType:NetServer_Home success:^(id responseObj) {
@@ -474,6 +450,7 @@
     return 0 ;
 }
 
+// 缓存数据
 - (void)cacheAllData
 {
     @autoreleasepool {

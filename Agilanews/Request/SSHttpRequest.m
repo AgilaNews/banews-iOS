@@ -127,6 +127,16 @@ static SSHttpRequest *_manager = nil;
     NSString *dateString = [dateFormatter stringFromDate:currentDate];
     [_manager.requestSerializer setValue:dateString forHTTPHeaderField:@"Date"];
     // 添加默认参数
+    // 网络运营商
+    CTTelephonyNetworkInfo *networInfo = [[CTTelephonyNetworkInfo alloc] init];
+    CTCarrier *carrier = [networInfo subscriberCellularProvider];
+    if ([carrier carrierName] == nil) {
+        [params setObject:@"" forKey:@"isp"];
+    } else {
+        [params setObject:[carrier carrierName] forKey:@"isp"];
+    }
+    // 网络情况
+    [params setObject:[NetType getNetType] forKey:@"net"];
     // 时区设置
     [params setObject:[NSString stringWithFormat:@"%@",[NSTimeZone systemTimeZone]] forKey:@"tz"];
     // 经纬度
@@ -151,7 +161,20 @@ static SSHttpRequest *_manager = nil;
     [params setObject:@"ios" forKey:@"os"];
     // 系统版本号
     [params setObject:[NSString stringWithFormat:@"%@",[[UIDevice currentDevice] systemVersion]] forKey:@"os_version"];
-    
+    // X-开头的字段
+    NSDictionary *headerDic = _manager.requestSerializer.HTTPRequestHeaders;
+    NSMutableArray *headerStringArray = [NSMutableArray array];
+    for (NSString *key in headerDic.allKeys) {
+        if ([key hasPrefix:@"X-"]) {
+            NSString *headerString = [NSString stringWithFormat:@"%@:%@\n",key,headerDic[key]];
+            [headerStringArray addObject:headerString];
+        }
+    }
+    NSArray * headerStrings = [headerStringArray sortedArrayUsingSelector:@selector(compare:)];
+    NSString * signHeader = [NSString string];
+    for (NSString *string in headerStrings) {
+        signHeader = [signHeader stringByAppendingString:string];
+    }
     // 签名所需参数
     NSMutableArray *paramArray = [NSMutableArray array];
     for (NSString *key in params.allKeys) {
@@ -164,8 +187,9 @@ static SSHttpRequest *_manager = nil;
     for (NSString *string in paramStrings) {
         signParam = [signParam stringByAppendingString:string];
     }
+    NSURL *homeUrl = [NSURL URLWithString:_urlString];
     // 签名算法
-    NSString *string = [NSString stringWithFormat:@"GET\n \n%@\n%@\nX-DENSITY:%dx%d;%d;l\nX-SESSION:%@\nX-USER-A:%@\nX-USER-D:%@\n%@\n%@",contentType == UrlencodedType ? @"APPLICATION/X-WWW-FORM-URLENCODED" : @"APPLICATION/JSON", dateString, (int)kScreenWidth_DP, (int)kScreenHeight_DP, iPhone6Plus ? 401 : 326, DEF_PERSISTENT_GET_OBJECT(@"UUID"), userA,DEF_PERSISTENT_GET_OBJECT(@"IDFA"), url, signParam];
+    NSString *string = [NSString stringWithFormat:@"GET\n \n%@\nDate:%@\n%@%@\n%@",contentType == UrlencodedType ? @"APPLICATION/X-WWW-FORM-URLENCODED" : @"APPLICATION/JSON", dateString, signHeader, homeUrl.path, signParam];
     SSLog(@"签名字符串------%@",string);
     NSString *signString = [Signature hmacsha1:string key:@"7intJWbSmtjkrIrb"];
     [_manager.requestSerializer setValue:signString forHTTPHeaderField:@"Authorization"];
@@ -232,6 +256,16 @@ static SSHttpRequest *_manager = nil;
     
     NSMutableDictionary *baseParams = [NSMutableDictionary dictionary];
     // 添加默认参数
+    // 网络运营商
+    CTTelephonyNetworkInfo *networInfo = [[CTTelephonyNetworkInfo alloc] init];
+    CTCarrier *carrier = [networInfo subscriberCellularProvider];
+    if ([carrier carrierName] == nil) {
+        [baseParams setObject:@"" forKey:@"isp"];
+    } else {
+        [baseParams setObject:[carrier carrierName] forKey:@"isp"];
+    }
+    // 网络情况
+    [baseParams setObject:[NetType getNetType] forKey:@"net"];
     // 时区设置
     [baseParams setObject:[NSString stringWithFormat:@"%@",[NSTimeZone systemTimeZone]] forKey:@"tz"];
     // 经纬度
@@ -325,8 +359,23 @@ static SSHttpRequest *_manager = nil;
     [dateFormatter setDateFormat:@"ccc, d LLL YYYY hh:mm:ss zzz"];
     NSString *dateString = [dateFormatter stringFromDate:currentDate];
     [_manager.requestSerializer setValue:dateString forHTTPHeaderField:@"Date"];
+    // X-开头的字段
+    NSDictionary *headerDic = _manager.requestSerializer.HTTPRequestHeaders;
+    NSMutableArray *headerStringArray = [NSMutableArray array];
+    for (NSString *key in headerDic.allKeys) {
+        if ([key hasPrefix:@"X-"]) {
+            NSString *headerString = [NSString stringWithFormat:@"%@:%@\n",key,headerDic[key]];
+            [headerStringArray addObject:headerString];
+        }
+    }
+    NSArray * headerStrings = [headerStringArray sortedArrayUsingSelector:@selector(compare:)];
+    NSString * signHeader = [NSString string];
+    for (NSString *string in headerStrings) {
+        signHeader = [signHeader stringByAppendingString:string];
+    }
+    NSURL *homeUrl = [NSURL URLWithString:_urlString];
     // 签名算法
-    NSString *string = [NSString stringWithFormat:@"GET\n \n%@\n%@\nX-DENSITY:%dx%d;%d;l\nX-SESSION:%@\nX-USER-A:%@\nX-USER-D:%@\n%@\n",contentType == UrlencodedType ? @"APPLICATION/X-WWW-FORM-URLENCODED" : @"APPLICATION/JSON", dateString, (int)kScreenWidth_DP, (int)kScreenHeight_DP, iPhone6Plus ? 401 : 326, DEF_PERSISTENT_GET_OBJECT(@"UUID"), userA,DEF_PERSISTENT_GET_OBJECT(@"IDFA"), url];
+    NSString *string = [NSString stringWithFormat:@"POST\n \n%@\nDate:%@\n%@%@\n",contentType == UrlencodedType ? @"APPLICATION/X-WWW-FORM-URLENCODED" : @"APPLICATION/JSON", dateString, signHeader, homeUrl.path];
     SSLog(@"签名字符串------%@",string);
     NSString *signString = [Signature hmacsha1:string key:@"7intJWbSmtjkrIrb"];
     [_manager.requestSerializer setValue:signString forHTTPHeaderField:@"Authorization"];
@@ -448,15 +497,18 @@ static SSHttpRequest *_manager = nil;
     [dateFormatter setDateFormat:@"ccc, d LLL YYYY hh:mm:ss zzz"];
     NSString *dateString = [dateFormatter stringFromDate:currentDate];
     [_manager.requestSerializer setValue:dateString forHTTPHeaderField:@"Date"];
-    // 签名算法
-    NSString *string = [NSString stringWithFormat:@"GET\n \n%@\n%@\nX-DENSITY:%dx%d;%d;l\nX-SESSION:%@\nX-USER-A:%@\nX-USER-D:%@\n%@\n",contentType == UrlencodedType ? @"APPLICATION/X-WWW-FORM-URLENCODED" : @"APPLICATION/JSON", dateString, (int)kScreenWidth_DP, (int)kScreenHeight_DP, iPhone6Plus ? 401 : 326, DEF_PERSISTENT_GET_OBJECT(@"UUID"), userA,DEF_PERSISTENT_GET_OBJECT(@"IDFA"), url];
-    SSLog(@"签名字符串------%@",string);
-    NSString *signString = [Signature hmacsha1:string key:@"7intJWbSmtjkrIrb"];
-    [_manager.requestSerializer setValue:signString forHTTPHeaderField:@"Authorization"];
-    
-    _manager.requestSerializer.HTTPMethodsEncodingParametersInURI = [NSSet setWithArray:@[@"GET", @"HEAD"]];
     
     // 添加默认参数
+    // 网络运营商
+    CTTelephonyNetworkInfo *networInfo = [[CTTelephonyNetworkInfo alloc] init];
+    CTCarrier *carrier = [networInfo subscriberCellularProvider];
+    if ([carrier carrierName] == nil) {
+        [params setObject:@"" forKey:@"isp"];
+    } else {
+        [params setObject:[carrier carrierName] forKey:@"isp"];
+    }
+    // 网络情况
+    [params setObject:[NetType getNetType] forKey:@"net"];
     // 时区设置
     [params setObject:[NSString stringWithFormat:@"%@",[NSTimeZone systemTimeZone]] forKey:@"tz"];
     // 经纬度
@@ -481,7 +533,42 @@ static SSHttpRequest *_manager = nil;
     [params setObject:@"ios" forKey:@"os"];
     // 系统版本号
     [params setObject:[NSString stringWithFormat:@"%@",[[UIDevice currentDevice] systemVersion]] forKey:@"os_version"];
-    // 设置超时时间为5s
+    
+    // X-开头的字段
+    NSDictionary *headerDic = _manager.requestSerializer.HTTPRequestHeaders;
+    NSMutableArray *headerStringArray = [NSMutableArray array];
+    for (NSString *key in headerDic.allKeys) {
+        if ([key hasPrefix:@"X-"]) {
+            NSString *headerString = [NSString stringWithFormat:@"%@:%@\n",key,headerDic[key]];
+            [headerStringArray addObject:headerString];
+        }
+    }
+    NSArray * headerStrings = [headerStringArray sortedArrayUsingSelector:@selector(compare:)];
+    NSString * signHeader = [NSString string];
+    for (NSString *string in headerStrings) {
+        signHeader = [signHeader stringByAppendingString:string];
+    }
+    // 签名所需参数
+    NSMutableArray *paramArray = [NSMutableArray array];
+    for (NSString *key in params.allKeys) {
+        NSString *paramString = [NSString stringWithFormat:@"%@:%@\n",key,params[key]];
+        [paramArray addObject:paramString];
+    }
+    // 排序
+    NSArray * paramStrings = [paramArray sortedArrayUsingSelector:@selector(compare:)];
+    NSString * signParam = [NSString string];
+    for (NSString *string in paramStrings) {
+        signParam = [signParam stringByAppendingString:string];
+    }
+    NSURL *homeUrl = [NSURL URLWithString:_urlString];
+    // 签名算法
+    NSString *string = [NSString stringWithFormat:@"GET\n \n%@\nDate:%@\n%@%@\n%@",contentType == UrlencodedType ? @"APPLICATION/X-WWW-FORM-URLENCODED" : @"APPLICATION/JSON", dateString, signHeader, homeUrl.path, signParam];
+    SSLog(@"签名字符串------%@",string);
+    NSString *signString = [Signature hmacsha1:string key:@"7intJWbSmtjkrIrb"];
+    [_manager.requestSerializer setValue:signString forHTTPHeaderField:@"Authorization"];
+    
+    _manager.requestSerializer.HTTPMethodsEncodingParametersInURI = [NSSet setWithArray:@[@"GET", @"HEAD"]];
+    // 设置超时时间
     [_manager.requestSerializer willChangeValueForKey:@"timeoutInterval"];
     [_manager.requestSerializer setTimeoutInterval:8.0f];
     [_manager.requestSerializer didChangeValueForKey:@"timeoutInterval"];
