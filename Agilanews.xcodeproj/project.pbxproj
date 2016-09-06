@@ -118,12 +118,12 @@
 		5F64627A1D474CD3008EEDEC /* CommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F6462791D474CD3008EEDEC /* CommentCell.m */; };
 		5F64627D1D4855F7008EEDEC /* CommentTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F64627C1D4855F7008EEDEC /* CommentTextField.m */; };
 		5F6462801D48AD3A008EEDEC /* CommentTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F64627F1D48AD3A008EEDEC /* CommentTextView.m */; };
-		5F8E264E1D7428E100B48130 /* BigPicCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F8E264D1D7428E100B48130 /* BigPicCell.m */; };
 		5F8D85AA1D76A99700FF4019 /* WebViewJavascriptBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F8D85A31D76A99700FF4019 /* WebViewJavascriptBridge.m */; };
 		5F8D85AB1D76A99700FF4019 /* WebViewJavascriptBridge_JS.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F8D85A51D76A99700FF4019 /* WebViewJavascriptBridge_JS.m */; };
 		5F8D85AC1D76A99700FF4019 /* WebViewJavascriptBridgeBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F8D85A71D76A99700FF4019 /* WebViewJavascriptBridgeBase.m */; };
 		5F8D85AD1D76A99700FF4019 /* WKWebViewJavascriptBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F8D85A91D76A99700FF4019 /* WKWebViewJavascriptBridge.m */; };
 		5F8D85D21D7D1AA800FF4019 /* placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 5F8D85D11D7D1AA800FF4019 /* placeholder.png */; };
+		5F8E264E1D7428E100B48130 /* BigPicCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F8E264D1D7428E100B48130 /* BigPicCell.m */; };
 		5FD55E681D4EFB0D00B0E17D /* FavoriteDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FD55E671D4EFB0D00B0E17D /* FavoriteDetailViewController.m */; };
 		5FE7220D1D4EFCE30026BFC3 /* TwitterKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5FE722091D4EFCE30026BFC3 /* TwitterKit.framework */; };
 		5FE7220E1D4EFCE30026BFC3 /* TwitterKitResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5FE7220A1D4EFCE30026BFC3 /* TwitterKitResources.bundle */; };
@@ -384,8 +384,6 @@
 		5F64627C1D4855F7008EEDEC /* CommentTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentTextField.m; sourceTree = "<group>"; };
 		5F64627E1D48AD3A008EEDEC /* CommentTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentTextView.h; sourceTree = "<group>"; };
 		5F64627F1D48AD3A008EEDEC /* CommentTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentTextView.m; sourceTree = "<group>"; };
-		5F8E264C1D7428E100B48130 /* BigPicCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BigPicCell.h; sourceTree = "<group>"; };
-		5F8E264D1D7428E100B48130 /* BigPicCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BigPicCell.m; sourceTree = "<group>"; };
 		5F8D85A21D76A99700FF4019 /* WebViewJavascriptBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewJavascriptBridge.h; sourceTree = "<group>"; };
 		5F8D85A31D76A99700FF4019 /* WebViewJavascriptBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewJavascriptBridge.m; sourceTree = "<group>"; };
 		5F8D85A41D76A99700FF4019 /* WebViewJavascriptBridge_JS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewJavascriptBridge_JS.h; sourceTree = "<group>"; };
@@ -395,6 +393,8 @@
 		5F8D85A81D76A99700FF4019 /* WKWebViewJavascriptBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKWebViewJavascriptBridge.h; sourceTree = "<group>"; };
 		5F8D85A91D76A99700FF4019 /* WKWebViewJavascriptBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKWebViewJavascriptBridge.m; sourceTree = "<group>"; };
 		5F8D85D11D7D1AA800FF4019 /* placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = placeholder.png; sourceTree = "<group>"; };
+		5F8E264C1D7428E100B48130 /* BigPicCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BigPicCell.h; sourceTree = "<group>"; };
+		5F8E264D1D7428E100B48130 /* BigPicCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BigPicCell.m; sourceTree = "<group>"; };
 		5FD55E661D4EFB0D00B0E17D /* FavoriteDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FavoriteDetailViewController.h; sourceTree = "<group>"; };
 		5FD55E671D4EFB0D00B0E17D /* FavoriteDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FavoriteDetailViewController.m; sourceTree = "<group>"; };
 		5FE722081D4EFCE30026BFC3 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
