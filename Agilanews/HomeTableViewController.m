@@ -667,12 +667,7 @@
             [self.tableView.header beginRefreshing];
         }
     } else {
-        @autoreleasepool {
-            NSString *newsFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/news.data"];
-            NSDictionary *newsData = [NSKeyedUnarchiver unarchiveObjectWithFile:newsFilePath];
-            _dataList = [NSMutableArray arrayWithArray:newsData[newsData.allKeys.firstObject][_model.channelID]];
-            [self.tableView reloadData];
-        }
+        [self.tableView reloadData];
     }
 }
 
