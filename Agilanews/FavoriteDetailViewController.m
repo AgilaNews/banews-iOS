@@ -27,6 +27,44 @@
     _webView.backgroundColor = kWhiteBgColor;
     _webView.delegate = self;
     [self.view addSubview:_webView];
+    self.bridge = [WebViewJavascriptBridge bridgeForWebView:_webView];
+    [_bridge setWebViewDelegate:self];
+    [_bridge registerHandler:@"ObjcCallback" handler:^(id data, WVJBResponseCallback responseCallback)
+     {
+         NSString *urlString = data[@"url"];
+         NSNumber *callbackId = data[@"id"];
+         urlString = [urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+         NSString *md5String = [NSString encryptPassword:urlString];
+         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+         NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:[NSString stringWithFormat:@"ImageFolder/%@.jpg", md5String]];
+         NSFileManager *fileManager = [NSFileManager defaultManager];
+         if ([fileManager fileExistsAtPath:filePath]) {
+             NSString *imagePath = [NSString stringWithFormat:@"file://%@/",filePath];
+             responseCallback(@{
+                                @"path": imagePath,
+                                @"id": callbackId
+                                });
+         } else {
+             SDWebImageDownloader *downloader = [SDWebImageDownloader sharedDownloader];
+             [downloader downloadImageWithURL:[NSURL URLWithString:urlString]
+                                      options:0
+                                     progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+                                         // progression tracking code
+                                     }
+                                    completed:^(UIImage *image, NSData *data, NSError *error, BOOL finished) {
+                                        if (image && finished) {
+                                            if ([data writeToFile:filePath atomically:YES]) {
+                                                NSString *imagePath = [NSString stringWithFormat:@"file://%@/",filePath];
+                                                responseCallback(@{
+                                                                   @"path": imagePath,
+                                                                   @"id": callbackId
+                                                                   });
+                                            }
+                                        }
+                                    }];
+         }
+     }];
+
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     NSString *htmlFilePath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/%@.data",appDelegate.model.user_id]];
     NSMutableDictionary *dataDic = [NSKeyedUnarchiver unarchiveObjectWithFile:htmlFilePath];
