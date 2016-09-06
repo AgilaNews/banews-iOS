@@ -27,6 +27,44 @@
     _webView.backgroundColor = kWhiteBgColor;
     _webView.delegate = self;
     [self.view addSubview:_webView];
+    self.bridge = [WebViewJavascriptBridge bridgeForWebView:_webView];
+    [_bridge setWebViewDelegate:self];
+    [_bridge registerHandler:@"ObjcCallback" handler:^(id data, WVJBResponseCallback responseCallback)
+     {
+         NSString *urlString = data[@"url"];
+         NSNumber *callbackId = data[@"id"];
+         urlString = [urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+         NSString *md5String = [NSString encryptPassword:urlString];
+         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+         NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:[NSString stringWithFormat:@"ImageFolder/%@.jpg", md5String]];
+         NSFileManager *fileManager = [NSFileManager defaultManager];
+         if ([fileManager fileExistsAtPath:filePath]) {
+             NSString *imagePath = [NSString stringWithFormat:@"file://%@/",filePath];
+             responseCallback(@{
+                                @"path": imagePath,
+                                @"id": callbackId
+                                });
+         } else {
+             SDWebImageDownloader *downloader = [SDWebImageDownloader sharedDownloader];
+             [downloader downloadImageWithURL:[NSURL URLWithString:urlString]
+                                      options:0
+                                     progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+                                         // progression tracking code
+                                     }
+                                    completed:^(UIImage *image, NSData *data, NSError *error, BOOL finished) {
+                                        if (image && finished) {
+                                            if ([data writeToFile:filePath atomically:YES]) {
+                                                NSString *imagePath = [NSString stringWithFormat:@"file://%@/",filePath];
+                                                responseCallback(@{
+                                                                   @"path": imagePath,
+                                                                   @"id": callbackId
+                                                                   });
+                                            }
+                                        }
+                                    }];
+         }
+     }];
+
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     NSString *htmlFilePath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/%@.data",appDelegate.model.user_id]];
     NSMutableDictionary *dataDic = [NSKeyedUnarchiver unarchiveObjectWithFile:htmlFilePath];
@@ -34,28 +72,29 @@
 
     if (model) {
         // css文件路径
-        NSString *filePath = [[NSBundle mainBundle] pathForResource:@"webView" ofType:@"css"];
+        NSString *cssFilePath = [[NSBundle mainBundle] pathForResource:@"webView" ofType:@"css"];
+        NSString *jsFilePath = [[NSBundle mainBundle] pathForResource:@"webView" ofType:@"js"];
         // 格式化日期
         NSDate *currentDate = [NSDate dateWithTimeIntervalSince1970:[model.public_time longLongValue]];
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         NSString *dateString = [dateFormatter stringFromDate:currentDate];
         // 替换图片url
-        for (int i = 0; i < model.imgs.count; i++) {
-            @autoreleasepool {
+        @autoreleasepool {
+            for (int i = 0; i < model.imgs.count; i++) {
                 if ([DEF_PERSISTENT_GET_OBJECT(SS_textOnlyMode) isEqualToNumber:@1]) {
                     NSString *imageFilePath = [[NSBundle mainBundle] pathForResource:@"textonly" ofType:@"png"];
                     NSString *imageUrl = [NSString stringWithFormat:@"<img src=file:///%@/>",imageFilePath];
                     model.body = [model.body stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"<!--IMG%d-->",i] withString:imageUrl];
                 } else {
                     ImageModel *imageModel = model.imgs[i];
-                    NSString *imageUrl = [NSString stringWithFormat:@"<img src=\"%@\"/>",imageModel.src];
+                    NSString *imageUrl = [NSString stringWithFormat:@"<img src=\"\" data-src=\"%@\" height=\"%fpx\" width=\"%fpx\" class=\"ready-to-load\"/>",imageModel.src, imageModel.height.integerValue / 2.0, imageModel.width.integerValue / 2.0];
                     model.body = [model.body stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"<!--IMG%d-->",i] withString:imageUrl];
                 }
             }
         }
         // 拼接HTML
-        NSString *htmlString = [NSString stringWithFormat:@"<html><head><link rel=\"stylesheet\" type=\"text/css\" href=\"file:///%@\"/></head><body><div class=\"title\">%@</div><div class=\"sourcetime\">%@  %@ <a class=\"source\" href=" ">/View source</a></div>%@",filePath,model.title,dateString,model.source,model.body];
+        NSString *htmlString = [NSString stringWithFormat:@"<html><head><link rel=\"stylesheet\" type=\"text/css\" href=\"file:///%@\"/><script src=\"file://%@\"></script></head><body><div class=\"title\">%@</div><div class=\"sourcetime\">%@ <a class=\"source\" href=\"%@\">/View source</a></div>%@", cssFilePath, jsFilePath, model.title, dateString, model.source_url, model.body];
         htmlString = [htmlString stringByAppendingString:@"</body></html>"];
         [_webView loadHTMLString:htmlString baseURL:nil];
     } else {
@@ -101,28 +140,29 @@
         [SVProgressHUD dismiss];
         NewsDetailModel *detailModel = [NewsDetailModel mj_objectWithKeyValues:responseObj];
         // css文件路径
-        NSString *filePath = [[NSBundle mainBundle] pathForResource:@"webView" ofType:@"css"];
+        NSString *cssFilePath = [[NSBundle mainBundle] pathForResource:@"webView" ofType:@"css"];
+        NSString *jsFilePath = [[NSBundle mainBundle] pathForResource:@"webView" ofType:@"js"];
         // 格式化日期
         NSDate *currentDate = [NSDate dateWithTimeIntervalSince1970:[detailModel.public_time longLongValue]];
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         NSString *dateString = [dateFormatter stringFromDate:currentDate];
         // 替换图片url
-        for (int i = 0; i < detailModel.imgs.count; i++) {
-            @autoreleasepool {
+        @autoreleasepool {
+            for (int i = 0; i < detailModel.imgs.count; i++) {
                 if ([DEF_PERSISTENT_GET_OBJECT(SS_textOnlyMode) isEqualToNumber:@1]) {
                     NSString *imageFilePath = [[NSBundle mainBundle] pathForResource:@"textonly" ofType:@"png"];
                     NSString *imageUrl = [NSString stringWithFormat:@"<img src=file:///%@/>",imageFilePath];
                     detailModel.body = [detailModel.body stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"<!--IMG%d-->",i] withString:imageUrl];
                 } else {
                     ImageModel *imageModel = detailModel.imgs[i];
-                    NSString *imageUrl = [NSString stringWithFormat:@"<img src=\"%@\"/>",imageModel.src];
+                    NSString *imageUrl = [NSString stringWithFormat:@"<img src=\"\" data-src=\"%@\" height=\"%fpx\" width=\"%fpx\" class=\"ready-to-load\"/>",imageModel.src, imageModel.height.integerValue / 2.0, imageModel.width.integerValue / 2.0];
                     detailModel.body = [detailModel.body stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"<!--IMG%d-->",i] withString:imageUrl];
                 }
             }
         }
         // 拼接HTML
-        NSString *htmlString = [NSString stringWithFormat:@"<html><head><link rel=\"stylesheet\" type=\"text/css\" href=\"file:///%@\"/></head><body><div class=\"title\">%@</div><div class=\"sourcetime\">%@  %@ <a class=\"source\" href=" ">/View source</a></div>%@",filePath,detailModel.title,dateString,detailModel.source,detailModel.body];
+        NSString *htmlString = [NSString stringWithFormat:@"<html><head><link rel=\"stylesheet\" type=\"text/css\" href=\"file:///%@\"/><script src=\"file://%@\"></script></head><body><div class=\"title\">%@</div><div class=\"sourcetime\">%@ <a class=\"source\" href=\"%@\">/View source</a></div>%@", cssFilePath, jsFilePath, detailModel.title, dateString, detailModel.source_url, detailModel.body];
         htmlString = [htmlString stringByAppendingString:@"</body></html>"];
         [_webView loadHTMLString:htmlString baseURL:nil];
     } failure:^(NSError *error) {

@@ -119,6 +119,11 @@
 		5F64627D1D4855F7008EEDEC /* CommentTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F64627C1D4855F7008EEDEC /* CommentTextField.m */; };
 		5F6462801D48AD3A008EEDEC /* CommentTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F64627F1D48AD3A008EEDEC /* CommentTextView.m */; };
 		5F8E264E1D7428E100B48130 /* BigPicCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F8E264D1D7428E100B48130 /* BigPicCell.m */; };
+		5F8D85AA1D76A99700FF4019 /* WebViewJavascriptBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F8D85A31D76A99700FF4019 /* WebViewJavascriptBridge.m */; };
+		5F8D85AB1D76A99700FF4019 /* WebViewJavascriptBridge_JS.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F8D85A51D76A99700FF4019 /* WebViewJavascriptBridge_JS.m */; };
+		5F8D85AC1D76A99700FF4019 /* WebViewJavascriptBridgeBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F8D85A71D76A99700FF4019 /* WebViewJavascriptBridgeBase.m */; };
+		5F8D85AD1D76A99700FF4019 /* WKWebViewJavascriptBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F8D85A91D76A99700FF4019 /* WKWebViewJavascriptBridge.m */; };
+		5F8D85D21D7D1AA800FF4019 /* placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 5F8D85D11D7D1AA800FF4019 /* placeholder.png */; };
 		5FD55E681D4EFB0D00B0E17D /* FavoriteDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FD55E671D4EFB0D00B0E17D /* FavoriteDetailViewController.m */; };
 		5FE7220D1D4EFCE30026BFC3 /* TwitterKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5FE722091D4EFCE30026BFC3 /* TwitterKit.framework */; };
 		5FE7220E1D4EFCE30026BFC3 /* TwitterKitResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5FE7220A1D4EFCE30026BFC3 /* TwitterKitResources.bundle */; };
@@ -381,6 +386,16 @@
 		5F64627F1D48AD3A008EEDEC /* CommentTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentTextView.m; sourceTree = "<group>"; };
 		5F8E264C1D7428E100B48130 /* BigPicCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BigPicCell.h; sourceTree = "<group>"; };
 		5F8E264D1D7428E100B48130 /* BigPicCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BigPicCell.m; sourceTree = "<group>"; };
+		5F8D85A21D76A99700FF4019 /* WebViewJavascriptBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewJavascriptBridge.h; sourceTree = "<group>"; };
+		5F8D85A31D76A99700FF4019 /* WebViewJavascriptBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewJavascriptBridge.m; sourceTree = "<group>"; };
+		5F8D85A41D76A99700FF4019 /* WebViewJavascriptBridge_JS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewJavascriptBridge_JS.h; sourceTree = "<group>"; };
+		5F8D85A51D76A99700FF4019 /* WebViewJavascriptBridge_JS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewJavascriptBridge_JS.m; sourceTree = "<group>"; };
+		5F8D85A61D76A99700FF4019 /* WebViewJavascriptBridgeBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewJavascriptBridgeBase.h; sourceTree = "<group>"; };
+		5F8D85A71D76A99700FF4019 /* WebViewJavascriptBridgeBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewJavascriptBridgeBase.m; sourceTree = "<group>"; };
+		5F8D85A81D76A99700FF4019 /* WKWebViewJavascriptBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKWebViewJavascriptBridge.h; sourceTree = "<group>"; };
+		5F8D85A91D76A99700FF4019 /* WKWebViewJavascriptBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKWebViewJavascriptBridge.m; sourceTree = "<group>"; };
+		5F8D85D11D7D1AA800FF4019 /* placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = placeholder.png; sourceTree = "<group>"; };
+>>>>>>> master
 		5FD55E661D4EFB0D00B0E17D /* FavoriteDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FavoriteDetailViewController.h; sourceTree = "<group>"; };
 		5FD55E671D4EFB0D00B0E17D /* FavoriteDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FavoriteDetailViewController.m; sourceTree = "<group>"; };
 		5FE722081D4EFCE30026BFC3 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
@@ -614,6 +629,7 @@
 		5F42BFE61D34E3BC00B89651 /* Tools */ = {
 			isa = PBXGroup;
 			children = (
+				5F8D85A11D76A99700FF4019 /* WebViewJavascriptBridge */,
 				5F571FE21D63F9F500604CDD /* iConsole */,
 				5FF4B7351D37BC1400CC6704 /* Addtions */,
 				5FF4B7B71D3A174900CC6704 /* MJRefresh */,
@@ -932,6 +948,21 @@
 			name = Views;
 			sourceTree = "<group>";
 		};
+		5F8D85A11D76A99700FF4019 /* WebViewJavascriptBridge */ = {
+			isa = PBXGroup;
+			children = (
+				5F8D85A21D76A99700FF4019 /* WebViewJavascriptBridge.h */,
+				5F8D85A31D76A99700FF4019 /* WebViewJavascriptBridge.m */,
+				5F8D85A41D76A99700FF4019 /* WebViewJavascriptBridge_JS.h */,
+				5F8D85A51D76A99700FF4019 /* WebViewJavascriptBridge_JS.m */,
+				5F8D85A61D76A99700FF4019 /* WebViewJavascriptBridgeBase.h */,
+				5F8D85A71D76A99700FF4019 /* WebViewJavascriptBridgeBase.m */,
+				5F8D85A81D76A99700FF4019 /* WKWebViewJavascriptBridge.h */,
+				5F8D85A91D76A99700FF4019 /* WKWebViewJavascriptBridge.m */,
+			);
+			path = WebViewJavascriptBridge;
+			sourceTree = "<group>";
+		};
 		5FF4B6E51D36432800CC6704 /* Login */ = {
 			isa = PBXGroup;
 			children = (
@@ -1015,6 +1046,7 @@
 				5F635ED71D41EB51006AAE3D /* webView.css */,
 				5F571FE31D64057500604CDD /* webView.js */,
 				5FE722211D50B5B70026BFC3 /* textonly.png */,
+				5F8D85D11D7D1AA800FF4019 /* placeholder.png */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -1235,6 +1267,7 @@
 				5F635ED31D4065C1006AAE3D /* LaunchScreen.storyboard in Resources */,
 				5F42C0121D34E3EC00B89651 /* Info.plist in Resources */,
 				5FE722221D50B5B70026BFC3 /* textonly.png in Resources */,
+				5F8D85D21D7D1AA800FF4019 /* placeholder.png in Resources */,
 				5F42C09F1D34E42A00B89651 /* SVProgressHUD.bundle in Resources */,
 				5F635ED81D41EB51006AAE3D /* webView.css in Resources */,
 				5F635CCE1D3E3EDF006AAE3D /* ShareSDKUI.bundle in Resources */,
@@ -1287,6 +1320,7 @@
 				5FF4B7B41D38F7B200CC6704 /* NSLayoutConstraint+MASDebugAdditions.m in Sources */,
 				5FF4B7841D38DE7800CC6704 /* ManyPicCell.m in Sources */,
 				5FF4B7D41D3A174900CC6704 /* MJRefreshHeader.m in Sources */,
+				5F8D85AD1D76A99700FF4019 /* WKWebViewJavascriptBridge.m in Sources */,
 				5F635CBA1D3E1E7A006AAE3D /* NewsDetailModel.m in Sources */,
 				5F42C0141D34E3EC00B89651 /* MJFoundation.m in Sources */,
 				5FF4B76F1D37BD2C00CC6704 /* NSObject+UhouAddition.m in Sources */,
@@ -1302,6 +1336,7 @@
 				5FF4B7B61D38F7B200CC6704 /* ViewController+MASAdditions.m in Sources */,
 				5F42C01C1D34E3EC00B89651 /* NSString+MJExtension.m in Sources */,
 				5F42BFB81D34E2F000B89651 /* AppDelegate.m in Sources */,
+				5F8D85AB1D76A99700FF4019 /* WebViewJavascriptBridge_JS.m in Sources */,
 				5F42C0851D34E41D00B89651 /* SDWebImageCompat.m in Sources */,
 				5F42C08D1D34E41D00B89651 /* UIImage+MultiFormat.m in Sources */,
 				5F42BFF61D34E3D500B89651 /* AFNetworkReachabilityManager.m in Sources */,
@@ -1344,10 +1379,12 @@
 				5F571F701D58742B00604CDD /* FlurryEmpty.m in Sources */,
 				5F5AE9711D5353B400A5A8B7 /* BannerView.m in Sources */,
 				5F42BFB51D34E2F000B89651 /* main.m in Sources */,
+				5F8D85AC1D76A99700FF4019 /* WebViewJavascriptBridgeBase.m in Sources */,
 				5FF4B7721D37BD2C00CC6704 /* NSUserDefaults+UhouAdditions.m in Sources */,
 				5F42BFF71D34E3D500B89651 /* AFSecurityPolicy.m in Sources */,
 				5FF4B7B21D38F7B200CC6704 /* MASViewConstraint.m in Sources */,
 				5F42C0861D34E41D00B89651 /* SDWebImageDecoder.m in Sources */,
+				5F8D85AA1D76A99700FF4019 /* WebViewJavascriptBridge.m in Sources */,
 				5FF4B6E31D362F0000CC6704 /* base64.m in Sources */,
 				5F571F781D598DDC00604CDD /* FeedbackSubview.m in Sources */,
 				5F635EC61D3F62BD006AAE3D /* LeftCell.m in Sources */,
@@ -1547,7 +1584,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.banews.agila;
 				PRODUCT_NAME = Agila;
-				PROVISIONING_PROFILE = "6264f1ad-ebaa-4ba4-878a-eb0869ce2497";
+				PROVISIONING_PROFILE = "52baba3d-c6db-416e-8ac2-551d7ffe41a1";
 				VALID_ARCHS = "arm64 armv7s armv7";
 			};
 			name = Debug;
@@ -1667,7 +1704,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.banews.agila;
 				PRODUCT_NAME = Agila;
-				PROVISIONING_PROFILE = "ba5fba90-121b-4ed7-bfaf-67bb109ee59b";
+				PROVISIONING_PROFILE = "877582f3-d48a-4fd3-8e0e-cd6ef2ba2abf";
 				VALID_ARCHS = "arm64 armv7s armv7";
 			};
 			name = AdHoc;

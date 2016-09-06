@@ -55,12 +55,15 @@
     [self locationServices];
     // 冷启动
     [self coldBoot:YES];
+    // 创建图片文件夹
+    [self createImageFolderAtPath];
     // 启动上报打点
     NSString *logFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/log.data"];
     NSMutableArray *logData = [NSKeyedUnarchiver unarchiveObjectWithFile:logFilePath];
     if (logData.count > 0 && logData != nil) {
         [self serverLogWithEventArray:logData];
     }
+    _eventArray = [NSMutableArray array];
     //设置启动页面时间
     [NSThread sleepForTimeInterval:2.0];
     return YES;
@@ -89,6 +92,31 @@
     #endif
     // 服务端打点上报
     [self serverLogWithEventArray:_eventArray];
+    
+    // 清除详情缓存图片
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    NSString *folderPath = [[paths objectAtIndex:0] stringByAppendingPathComponent:@"ImageFolder/"];
+    NSFileManager* fileMgr = [NSFileManager defaultManager];
+    NSArray* filesArray = [fileMgr contentsOfDirectoryAtPath:folderPath error:nil];
+    long long folderSize = 0 ;
+    for (NSString *fileName in filesArray) {
+        NSString *fileAbsolutePath = [folderPath stringByAppendingPathComponent:fileName];
+        folderSize += [self fileSizeAtPath:fileAbsolutePath];
+    }
+    if ((folderSize / (1024.0 * 1024.0) > 50)) {
+        for (NSString *branchPath in filesArray)
+        {
+            @autoreleasepool {
+                NSError *error = nil ;
+                NSString *path = [folderPath stringByAppendingPathComponent:branchPath];
+                if ([[NSFileManager defaultManager] fileExistsAtPath:path])
+                {
+                    [[NSFileManager defaultManager] removeItemAtPath:path error:&error];
+                }
+            }
+        }
+    }
+
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 }
@@ -109,22 +137,8 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     SSLog(@"程序将要终止");
-    // 缓存新闻查看记录
-    NSString *checkFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/check.data"];
-    NSDictionary *checkData = [NSDictionary dictionaryWithObject:_checkDic forKey:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]]];
-    [NSKeyedArchiver archiveRootObject:checkData toFile:checkFilePath];
-    // 缓存新闻列表
-    BaseNavigationController *baseNav = (BaseNavigationController *)_window.rootViewController;
-    HomeViewController *homeVC = baseNav.viewControllers.firstObject;
-    NSMutableDictionary *newsDic = [NSMutableDictionary dictionary];
-    for (HomeTableViewController *homeTabVC in homeVC.segmentVC.subViewControllers) {
-        if (homeTabVC.dataList.count > 0) {
-            [newsDic setObject:homeTabVC.dataList forKey:homeTabVC.model.channelID];
-        }
-    }
-    NSString *newsFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/news.data"];
-    NSDictionary *newsData = [NSDictionary dictionaryWithObject:newsDic forKey:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]]];
-    [NSKeyedArchiver archiveRootObject:newsData toFile:newsFilePath];
+    // 缓存所有数据
+    [self cacheAllData];
     // 缓存打点记录
     NSString *logFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/log.data"];
     NSMutableArray *logData = [NSKeyedUnarchiver unarchiveObjectWithFile:logFilePath];
@@ -134,9 +148,6 @@
         logData = [NSMutableArray arrayWithArray:_eventArray];
     }
     [NSKeyedArchiver archiveRootObject:logData toFile:logFilePath];
-    // 缓存频道刷新记录
-    NSString *refreshFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/refresh.data"];
-    [NSKeyedArchiver archiveRootObject:_refreshTimeDic toFile:refreshFilePath];
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
@@ -170,30 +181,6 @@
     // 设备宽高
     [params setObject:[NSNumber numberWithInt:(int)kScreenWidth_DP] forKey:@"r_w"];
     [params setObject:[NSNumber numberWithInt:(int)kScreenHeight_DP] forKey:@"r_h"];
-    // 网络运营商
-    CTTelephonyNetworkInfo *networInfo = [[CTTelephonyNetworkInfo alloc] init];
-    CTCarrier *carrier = [networInfo subscriberCellularProvider];
-    if ([carrier carrierName] == nil) {
-        [params setObject:@"" forKey:@"isp"];
-    } else {
-        [params setObject:[carrier carrierName] forKey:@"isp"];
-    }
-    // 网络情况
-    NSString *netType = networInfo.currentRadioAccessTechnology;
-    if ([@"WiFi" isEqualToString:DEF_PERSISTENT_GET_OBJECT(@"netStatus")]) {
-        netType = @"wifi";
-    } else {
-        if ([netType isEqualToString:@"CTRadioAccessTechnologyGPRS"] || [netType isEqualToString:@"CTRadioAccessTechnologyEdge"]) {
-            netType = @"2G";
-        } else if ([netType isEqualToString:@"CTRadioAccessTechnologyHSDPA"] || [netType isEqualToString:@"CTRadioAccessTechnologyWCDMA"] || [netType isEqualToString:@"CTRadioAccessTechnologyHSUPA"] || [netType isEqualToString:@"CTRadioAccessTechnologyCDMA1x"] || [netType isEqualToString:@"CTRadioAccessTechnologyCDMAEVDORev0"] || [netType isEqualToString:@"CTRadioAccessTechnologyCDMAEVDORevA"] || [netType isEqualToString:@"CTRadioAccessTechnologyCDMAEVDORevB"] || [netType isEqualToString:@"CTRadioAccessTechnologyeHRPD"]) {
-            netType = @"3G";
-        } else if ([netType isEqualToString:@"CTRadioAccessTechnologyLTE"]){
-            netType = @"4G";
-        } else {
-            netType = @"unknow";
-        }
-    }
-    [params setObject:netType forKey:@"net"];
     // 时间戳
     [params setObject:[NSNumber numberWithInt:[[NSDate date] timeIntervalSince1970]] forKey:@"client_time"];
     [[SSHttpRequest sharedInstance] get:@"" params:params contentType:UrlencodedType serverType:NetServer_Home success:^(id responseObj) {
@@ -203,7 +190,8 @@
         DEF_PERSISTENT_SET_OBJECT(Server_Mon, responseObj[@"interfaces"][@"mon"]);
         DEF_PERSISTENT_SET_OBJECT(Server_Referrer, responseObj[@"interfaces"][@"referrer"]);
         // 分类存入模型
-        if (responseObj[@"categories"] == nil) {
+        NSArray *categories = responseObj[@"categories"];
+        if (categories.count > 0) {
             return;
         }
         _categoriesArray = [NSMutableArray array];
@@ -302,20 +290,30 @@
 - (void)loadUserData
 {
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        NSString *loginFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/userinfo.data"];
-        LoginModel *model = [NSKeyedUnarchiver unarchiveObjectWithFile:loginFilePath];
-        _model = model;
-        _likedDic = [NSMutableDictionary dictionary];
-        _checkDic = [NSMutableDictionary dictionary];
-        _eventArray = [NSMutableArray array];
-        NSString *checkFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/check.data"];
-        NSDictionary *checkData = [NSKeyedUnarchiver unarchiveObjectWithFile:checkFilePath];
-        NSNumber *checkNum = checkData.allKeys.firstObject;
-        if ([[NSDate date] timeIntervalSince1970] - checkNum.longLongValue < 3600) {
-            _checkDic = checkData[checkData.allKeys.firstObject];
+        @autoreleasepool {
+            // 加载登录信息
+            NSString *loginFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/userinfo.data"];
+            _model = [NSKeyedUnarchiver unarchiveObjectWithFile:loginFilePath];
+            // 加载点赞记录
+            _likedDic = [NSMutableDictionary dictionary];
+            NSString *likeFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/like.data"];
+            NSDictionary *likeData = [NSKeyedUnarchiver unarchiveObjectWithFile:likeFilePath];
+            NSNumber *likeNum = likeData.allKeys.firstObject;
+            if ([[NSDate date] timeIntervalSince1970] - likeNum.longLongValue < 3600) {
+                _likedDic = likeData[likeData.allKeys.firstObject];
+            }
+            // 加载新闻查看记录
+            _checkDic = [NSMutableDictionary dictionary];
+            NSString *checkFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/check.data"];
+            NSDictionary *checkData = [NSKeyedUnarchiver unarchiveObjectWithFile:checkFilePath];
+            NSNumber *checkNum = checkData.allKeys.firstObject;
+            if ([[NSDate date] timeIntervalSince1970] - checkNum.longLongValue < 3600) {
+                _checkDic = checkData[checkData.allKeys.firstObject];
+            }
+            // 加载频道刷新记录
+            NSString *refreshFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/refresh.data"];
+            _refreshTimeDic = [NSMutableDictionary dictionaryWithDictionary:[NSKeyedUnarchiver unarchiveObjectWithFile:refreshFilePath]];
         }
-        NSString *refreshFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/refresh.data"];
-        _refreshTimeDic = [NSMutableDictionary dictionaryWithDictionary:[NSKeyedUnarchiver unarchiveObjectWithFile:refreshFilePath]];
     });
 }
 
@@ -418,6 +416,72 @@
     else
     {
         [iConsole error:@"unrecognised command, try 'version' instead"];
+    }
+}
+
+- (void)applicationDidReceiveMemoryWarning:(UIApplication *)application
+{
+    SDWebImageManager *mgr = [SDWebImageManager sharedManager];
+    // 取消正在下载的图片
+    [mgr cancelAll];
+    // 清除内存缓存
+    [mgr.imageCache clearMemory];
+}
+
+// 创建图片文件夹
+- (void)createImageFolderAtPath
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:@"ImageFolder"];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    BOOL existed = [fileManager fileExistsAtPath:filePath];
+    if (!existed) {
+        [fileManager createDirectoryAtPath:filePath withIntermediateDirectories:YES attributes:nil error:nil];
+    }
+}
+
+// 计算文件大小
+- (long long)fileSizeAtPath:(NSString *)filePath
+{
+    NSFileManager *manager = [NSFileManager defaultManager];
+    if ([manager fileExistsAtPath:filePath]){
+        return [[manager attributesOfItemAtPath:filePath error:nil] fileSize];
+    }
+    return 0 ;
+}
+
+// 缓存数据
+- (void)cacheAllData
+{
+    @autoreleasepool {
+        UINavigationController *navCtrl = (UINavigationController *)_window.rootViewController;
+        HomeViewController *homeVC = navCtrl.viewControllers.firstObject;
+        // 缓存新闻列表
+        NSMutableDictionary *newsDic = [NSMutableDictionary dictionary];
+        for (HomeTableViewController *homeTabVC in homeVC.segmentVC.subViewControllers) {
+            if (homeTabVC.dataList.count > 0) {
+                NSInteger length = 30;
+                if (homeTabVC.dataList.count > length) {
+                    [newsDic setObject:[NSMutableArray arrayWithArray:[homeTabVC.dataList subarrayWithRange:NSMakeRange(0, length)]] forKey:homeTabVC.model.channelID];
+                } else {
+                    [newsDic setObject:[NSMutableArray arrayWithArray:homeTabVC.dataList] forKey:homeTabVC.model.channelID];
+                }
+            }
+        }
+        NSString *newsFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/news.data"];
+        NSDictionary *newsData = [NSDictionary dictionaryWithObject:newsDic forKey:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]]];
+        [NSKeyedArchiver archiveRootObject:newsData toFile:newsFilePath];
+        // 缓存点赞记录
+        NSString *likeFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/like.data"];
+        NSDictionary *likeData = [NSDictionary dictionaryWithObject:_likedDic forKey:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]]];
+        [NSKeyedArchiver archiveRootObject:likeData toFile:likeFilePath];
+        // 缓存新闻查看记录
+        NSString *checkFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/check.data"];
+        NSDictionary *checkData = [NSDictionary dictionaryWithObject:_checkDic forKey:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]]];
+        [NSKeyedArchiver archiveRootObject:checkData toFile:checkFilePath];
+        // 缓存频道刷新记录
+        NSString *refreshFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/refresh.data"];
+        [NSKeyedArchiver archiveRootObject:_refreshTimeDic toFile:refreshFilePath];
     }
 }
 

@@ -192,6 +192,9 @@
             viewCtrls.tableView.scrollsToTop = NO;
         }
     }
+    if (_currentIndex == index - HEADBTN_TAG) {
+        return;
+    }
     // 打点-页面进入-010101
     NSString *channelName = _titleArray[index - HEADBTN_TAG];
     NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -207,6 +210,12 @@
 }
 
 #pragma mark - ScrollViewDelegate
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    if (scrollView == _mainScrollView) {
+        _currentIndex = scrollView.contentOffset.x / MainScreenWidth;
+    }
+}
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
     if (scrollView == _mainScrollView) {
@@ -215,6 +224,9 @@
         NSInteger currentIndex = scrollView.contentOffset.x / MainScreenWidth;
         [self didSelectSegmentIndex:currentIndex + HEADBTN_TAG];
         [_headerView scrollRectToVisible:CGRectMake(_buttonX, 0, MainScreenWidth, _headerView.frame.size.height) animated:YES];
+        if (_currentIndex == currentIndex) {
+            return;
+        }
         AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
         [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Scroll_Channel object:appDelegate.categoriesArray[currentIndex]];
     }

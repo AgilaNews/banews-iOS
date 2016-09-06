@@ -13,10 +13,11 @@
 #import "AppDelegate.h"
 #import "CommentTextView.h"
 
-@interface NewsDetailViewController : BaseViewController <UIWebViewDelegate, UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, UITextViewDelegate, FBSDKSharingDelegate>
+@interface NewsDetailViewController : BaseViewController <UIWebViewDelegate, UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, UITextViewDelegate, FBSDKSharingDelegate, UIWebViewDelegate>
 
 @property (nonatomic, strong) NewsModel *model;
 @property (nonatomic, strong) UIWebView *webView;
+@property (nonatomic, strong) WebViewJavascriptBridge *bridge;
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UIView *commentsView;         
 @property (nonatomic, strong) UIButton *likeButton;         // 点赞按钮
@@ -32,6 +33,7 @@
 @property (nonatomic, strong) NSString *channelName;    // 频道名
 @property (nonatomic, assign) long long enterTime;      // 文章进入时间
 @property (nonatomic, assign) BOOL isRecommendShow;     // 推荐文章展示
+@property (nonatomic, strong) UILabel *commentsLabel;   // 评论数标签
 @property (nonatomic, strong) UIView *blankView;
 @property (nonatomic, strong) UILabel *blankLabel;
 @property (nonatomic, strong) UIImageView *failureView;

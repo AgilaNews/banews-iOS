@@ -180,7 +180,7 @@ static CGFloat const ButtonHeight = 40;
     // 添加关键帧动画
     [_titleButton.layer addAnimation:keyFrame forKey:@"keyFrame"];
     [_titleButton setUserInteractionEnabled:NO];
-    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Refresh object:[NSNumber numberWithInteger:_segmentVC.selectIndex]];
+    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Refresh object:[NSNumber numberWithInteger:_segmentVC.selectIndex + 1]];
 }
 
 /**

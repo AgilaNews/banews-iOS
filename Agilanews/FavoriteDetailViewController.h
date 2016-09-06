@@ -15,5 +15,6 @@
 @property (nonatomic, strong) NewsModel *model;
 @property (nonatomic, strong) UIWebView *webView;
 @property (nonatomic, strong) NSURLSessionDataTask *task;
+@property (nonatomic, strong) WebViewJavascriptBridge *bridge;
 
 @end

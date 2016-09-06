@@ -101,15 +101,7 @@
     }];
     [super updateConstraints];
 
-    [self.avatarView sd_setImageWithURL:[NSURL URLWithString:_model.user_portrait_url] placeholderImage:[UIImage imageNamed:@"icon_sidebar_head"] options:SDWebImageLowPriority | SDWebImageRetryFailed completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-        if (image)
-        {
-            weakSelf.avatarView.image = [weakSelf.avatarView.image yal_imageWithRoundedCornersAndSize:weakSelf.avatarView.frame.size andCornerRadius:weakSelf.avatarView.height * 0.5];
-        } else
-        {
-            weakSelf.avatarView.image = [UIImage imageNamed:@"icon_sidebar_head"];
-        }
-    }];
+    [self.avatarView sd_setImageWithURL:[NSURL URLWithString:_model.user_portrait_url] placeholderImage:[UIImage imageNamed:@"icon_sidebar_head"] options:SDWebImageRetryFailed completed:nil];
     self.nameLabel.text = _model.user_name;
     self.contentLabel.text = _model.comment;
     self.timeLabel.text = time;
@@ -121,6 +113,8 @@
         _avatarView = [[UIImageView alloc] init];
         _avatarView.backgroundColor = kWhiteBgColor;
         _avatarView.contentMode = UIViewContentModeScaleAspectFit;
+        _avatarView.layer.cornerRadius = 17;
+        _avatarView.layer.masksToBounds = YES;
     }
     return _avatarView;
 }

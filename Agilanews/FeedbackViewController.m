@@ -115,7 +115,7 @@
 #pragma mark - 输入框改变
 - (void)feedbackViewControllerTextChange
 {
-    if (_textView.feedbackTextView.text.length > 0) {
+    if (_textView.feedbackTextView.text.length > 0 && _textView.feedbackTextView.text.length <= 300) {
         _sendButton.enabled = YES;
     } else {
         _sendButton.enabled = NO;

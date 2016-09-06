@@ -102,25 +102,15 @@
                 weakSelf.tableView.footer.state = MJRefreshFooterStateNoMoreData;
                 return;
             }
-            [_dataList addObjectsFromArray:models];
+            [weakSelf.dataList addObjectsFromArray:models];
+            weakSelf.dataList = _dataList;
         } else {
-            _dataList = [NSMutableArray arrayWithArray:models];
-            if (_dataList.count > 9) {
-                [weakSelf.tableView addLegendFooterWithRefreshingBlock:^{
-                    [weakSelf tableViewDidTriggerFooterRefresh];
-                    [weakSelf.tableView.footer beginRefreshing];
-                }];
-                [weakSelf.tableView.footer setTitle:@"" forState:MJRefreshFooterStateIdle];
-                [weakSelf.tableView.footer setTitle:@"Loading..." forState:MJRefreshFooterStateRefreshing];
-                [weakSelf.tableView.footer setTitle:@"No more favorites" forState:MJRefreshFooterStateNoMoreData];
-            } else {
-                [weakSelf.tableView removeFooter];
-            }
+            weakSelf.dataList = [NSMutableArray arrayWithArray:models];
         }
         if (_dataList.count == 0) {
-            self.showBlankView = YES;
+            weakSelf.showBlankView = YES;
         } else {
-            self.showBlankView = NO;
+            weakSelf.showBlankView = NO;
         }
         [_tableView reloadData];
     } failure:^(NSError *error) {
@@ -155,7 +145,7 @@
 #if DEBUG
         [iConsole info:@"Favor_DelButton_Click_Y",nil];
 #endif
-        [_dataList removeObjectsInArray:_selectedList];
+        [weakSelf.dataList removeObjectsInArray:_selectedList];
         AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
         NSString *htmlFilePath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/%@.data",appDelegate.model.user_id]];
         NSMutableDictionary *dataDic = [NSKeyedUnarchiver unarchiveObjectWithFile:htmlFilePath];
@@ -197,7 +187,7 @@
 #if DEBUG
         [iConsole info:@"Favor_DelButton_Click_Y",nil];
 #endif
-        [_dataList removeObjectsInArray:_selectedList];
+        [self.dataList removeObjectsInArray:_selectedList];
         AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
         NSString *filePath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/%@.data",appDelegate.model.user_id]];
         NSMutableDictionary *dataDic = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
@@ -440,6 +430,24 @@
             [_blankView removeFromSuperview];
             _blankView = nil;
         }
+    }
+}
+
+- (void)setDataList:(NSMutableArray *)dataList
+{
+    _dataList = dataList;
+    
+    if (_dataList.count > 5) {
+        __weak typeof(self) weakSelf = self;
+        [self.tableView addLegendFooterWithRefreshingBlock:^{
+            [weakSelf tableViewDidTriggerFooterRefresh];
+            [weakSelf.tableView.footer beginRefreshing];
+        }];
+        [self.tableView.footer setTitle:@"" forState:MJRefreshFooterStateIdle];
+        [self.tableView.footer setTitle:@"Loading..." forState:MJRefreshFooterStateRefreshing];
+        [self.tableView.footer setTitle:@"No more favorites" forState:MJRefreshFooterStateNoMoreData];
+    } else {
+        [self.tableView removeFooter];
     }
 }
 

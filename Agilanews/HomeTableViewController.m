@@ -76,7 +76,6 @@
                                                  name:UIApplicationWillEnterForegroundNotification
                                                object:nil];
     
-    
     // 创建表视图
     self.tableView.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight);
     self.tableView.dataSource = self;
@@ -101,15 +100,21 @@
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     NSNumber *refreshNum = appDelegate.refreshTimeDic[_model.channelID];
     _refreshTime = refreshNum.longLongValue;
-    NSString *newsFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/news.data"];
-    NSDictionary *newsData = [NSKeyedUnarchiver unarchiveObjectWithFile:newsFilePath];
-    NSNumber *checkNum = newsData.allKeys.firstObject;
-    if ([[NSDate date] timeIntervalSince1970] - checkNum.longLongValue < 3600) {
-        _dataList = [NSMutableArray arrayWithArray:newsData[newsData.allKeys.firstObject][_model.channelID]];
-    } else if ([_model.channelID isEqualToNumber:@10001])
-    {
-        // 请求数据
-        [self requestDataWithChannelID:_model.channelID isLater:YES isShowHUD:NO];
+    @autoreleasepool {
+        NSString *newsFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/news.data"];
+        NSDictionary *newsData = [NSKeyedUnarchiver unarchiveObjectWithFile:newsFilePath];
+        NSNumber *checkNum = newsData.allKeys.firstObject;
+        NSArray *dataList = newsData[newsData.allKeys.firstObject][_model.channelID];
+        if ([[NSDate date] timeIntervalSince1970] - checkNum.longLongValue < 3600) {
+            // 加载缓存
+            _dataList = [NSMutableArray arrayWithArray:dataList];
+        } else if ([[NetType getNetType] isEqualToString:@"unknow"] && dataList.count > 0) {
+            // 无网状态下加载缓存
+            _dataList = [NSMutableArray arrayWithArray:dataList];
+        } else if ([_model.channelID isEqualToNumber:@10001]) {
+            // 请求数据
+            [self requestDataWithChannelID:_model.channelID isLater:YES isShowHUD:NO];
+        }
     }
     if (![DEF_PERSISTENT_GET_OBJECT(SS_GuideHomeKey) isEqualToNumber:@1] && [_model.channelID isEqualToNumber:@10001]) {
         [[UIApplication sharedApplication].keyWindow addSubview:[GuideRefreshView sharedInstance]];
@@ -282,6 +287,9 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (indexPath.row >= _dataList.count) {
+        return;
+    }
     NewsModel *model = _dataList[indexPath.row];
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
 
@@ -446,6 +454,7 @@
         [params setObject:@"older" forKey:@"dir"];
     }
     [[SSHttpRequest sharedInstance] get:kHomeUrl_NewsList params:params contentType:UrlencodedType serverType:NetServer_Home success:^(id responseObj) {
+        [SVProgressHUD dismiss];
         NSMutableArray *models = [NSMutableArray array];
         for (NSDictionary *dic in [responseObj valueForKey:[responseObj allKeys].firstObject])
         {
@@ -465,6 +474,9 @@
                 }
                 [models addObject:model];
             }
+        }
+        if (_dataList == nil) {
+            _dataList = [NSMutableArray array];
         }
         if (later == YES) {
             // 打点-下拉刷新成功-010113
@@ -527,7 +539,8 @@
             [iConsole info:@"NetFailure_Enter",nil];
 #endif
             weakSelf.showTableBlankView = YES;
-            UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tableViewDidTriggerHeaderRefresh)];
+            weakSelf.blankView.userInteractionEnabled = YES;
+            UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchFailureView)];
             [weakSelf.blankView addGestureRecognizer:tap];
             if ([AFNetworkReachabilityManager sharedManager].networkReachabilityStatus == AFNetworkReachabilityStatusNotReachable) {
                 weakSelf.blankLabel.text = @"Network unavailable";
@@ -560,6 +573,20 @@
 }
 
 /**
+ *  点击失败页面
+ */
+- (void)touchFailureView
+{
+    if (self.showTableBlankView) {
+        self.showTableBlankView = NO;
+        self.blankView.userInteractionEnabled = NO;
+        SVProgressHUD.defaultStyle = SVProgressHUDStyleCustom;
+        [SVProgressHUD show];
+    }
+    [self requestDataWithChannelID:_model.channelID isLater:YES isShowHUD:YES];
+}
+
+/**
  *  上拉加载事件
  */
 - (void)tableViewDidTriggerFooterRefresh
@@ -573,7 +600,7 @@
 #if DEBUG
     [iConsole info:[NSString stringWithFormat:@"Home_List_UpLoad:%@",articleParams],nil];
 #endif
-    [self requestDataWithChannelID:_model.channelID isLater:NO isShowHUD:NO];
+    [self requestDataWithChannelID:_model.channelID isLater:NO isShowHUD:YES];
 }
 
 
@@ -585,9 +612,12 @@
  */
 - (void)requestDataWithRefreshNotif:(NSNotification *)notif
 {
-    if ([self.tableView isDisplayedInScreen]) {
+    if ([_model.channelID isEqualToNumber:notif.object]) {
+        [self.tableView setContentOffset:self.tableView.contentOffset animated:NO];
         [self.tableView.header beginRefreshing];
     }
+//    if ([self.tableView isDisplayedInScreen]) {
+//    }
 }
 
 /**
@@ -617,7 +647,6 @@
     CategoriesModel *cateModel = notif.object;
     if ([cateModel.channelID isEqualToNumber:_model.channelID] && _dataList.count <= 0) {
         [self.tableView.header beginRefreshing];
-//        [self requestDataWithChannelID:_model.channelID isLater:YES isShowHUD:NO];
     } else if ([cateModel.channelID isEqualToNumber:_model.channelID] && ([[NSDate date] timeIntervalSince1970] - _refreshTime) > 3600) {
         [self.tableView.header beginRefreshing];
     } else {
@@ -630,16 +659,16 @@
  */
 - (void)applicationWillEnterForeground
 {
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        NSNumber *backgroundTime = DEF_PERSISTENT_GET_OBJECT(@"BackgroundTime");
-        if ([[NSDate date] timeIntervalSince1970] - backgroundTime.longLongValue > 3600)
-        {
-            _dataList = [NSMutableArray array];
-            if ([self.tableView isDisplayedInScreen]) {
-                [self.tableView.header beginRefreshing];
-            }
+    NSNumber *backgroundTime = DEF_PERSISTENT_GET_OBJECT(@"BackgroundTime");
+    if ([[NSDate date] timeIntervalSince1970] - backgroundTime.longLongValue > 3600)
+    {
+        _dataList = [NSMutableArray array];
+        if ([self.tableView isDisplayedInScreen]) {
+            [self.tableView.header beginRefreshing];
         }
-    });
+    } else {
+        [self.tableView reloadData];
+    }
 }
 
 /**

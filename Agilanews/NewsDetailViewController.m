@@ -78,21 +78,82 @@
     _webView.backgroundColor = kWhiteBgColor;
     _webView.delegate = self;
     _webView.scrollView.delegate = self;
-//    _webView.scrollView.scrollEnabled = NO;
     _webView.scrollView.scrollsToTop = NO;
     _webView.scrollView.showsHorizontalScrollIndicator = NO;
     _webView.scrollView.showsVerticalScrollIndicator = NO;
-    
+    self.bridge = [WebViewJavascriptBridge bridgeForWebView:_webView];
+    [_bridge setWebViewDelegate:self];
+    [_bridge registerHandler:@"ObjcCallback" handler:^(id data, WVJBResponseCallback responseCallback)
+     {
+         NSString *urlString = data[@"url"];
+         NSNumber *callbackId = data[@"id"];
+         urlString = [urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+         NSString *md5String = [NSString encryptPassword:urlString];
+         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+         NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:[NSString stringWithFormat:@"ImageFolder/%@.jpg", md5String]];
+         NSFileManager *fileManager = [NSFileManager defaultManager];
+         if ([fileManager fileExistsAtPath:filePath]) {
+             NSString *imagePath = [NSString stringWithFormat:@"file://%@/",filePath];
+             responseCallback(@{
+                                @"path": imagePath,
+                                @"id": callbackId
+                                });
+         } else {
+             SDWebImageDownloader *downloader = [SDWebImageDownloader sharedDownloader];
+             [downloader downloadImageWithURL:[NSURL URLWithString:urlString]
+                                      options:0
+                                     progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+                                         // progression tracking code
+                                     }
+                                    completed:^(UIImage *image, NSData *data, NSError *error, BOOL finished) {
+                                        if (image && finished) {
+                                            if ([data writeToFile:filePath atomically:YES]) {
+                                                NSString *imagePath = [NSString stringWithFormat:@"file://%@/",filePath];
+                                                responseCallback(@{
+                                                                   @"path": imagePath,
+                                                                   @"id": callbackId
+                                                                   });
+                                            }
+                                        }
+                                    }];
+         }
+     }];
+
     // 请求新闻详情
     [self requestDataWithNewsID:_model.news_id ShowHUD:YES];
     
     // 注册通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginSuccess:) name:KNOTIFICATION_Login_Success object:nil];
     // 注册键盘将要弹出通知
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHidden) name:UIKeyboardWillHideNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(fontChange) name:KNOTIFICATION_FontSize_Change object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(touchFavorite) name:KNOTIFICATION_TouchFavorite object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHidden)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(fontChange)
+                                                 name:KNOTIFICATION_FontSize_Change
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(touchFavorite) name:KNOTIFICATION_TouchFavorite
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(applicationDidEnterBackground)
+                                                 name:UIApplicationDidEnterBackgroundNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(applicationWillEnterForeground)
+                                                 name:UIApplicationWillEnterForegroundNotification
+                                               object:nil];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -115,6 +176,7 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    [SVProgressHUD dismiss];
     // 打点-文章页退出-010225
     NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
                                    [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
@@ -131,6 +193,12 @@
 
 - (void)dealloc
 {
+    [_task cancel];
+    [SVProgressHUD dismiss];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    if (_model.news_id.length <= 0) {
+        return;
+    }
     // 服务器打点-详情页返回-020201
     NSMutableDictionary *eventDic = [NSMutableDictionary dictionary];
     [eventDic setObject:@"020201" forKey:@"id"];
@@ -151,7 +219,6 @@
     [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     [appDelegate.eventArray addObject:eventDic];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - Network
@@ -280,7 +347,8 @@
     __weak typeof(self) weakSelf = self;
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setObject:_model.news_id forKey:@"news_id"];
-    [params setObject:@"loder" forKey:@"prefer"];
+//    [params setObject:@"loder" forKey:@"prefer"];
+    [params setObject:@"later" forKey:@"prefer"];
     CommentModel *commentModel = _commentArray.lastObject;
     [params setObject:commentModel.commentID forKey:@"last_id"];
     [[SSHttpRequest sharedInstance] get:kHomeUrl_Comment params:params contentType:UrlencodedType serverType:NetServer_Home success:^(id responseObj) {
@@ -428,6 +496,24 @@
     [[SSHttpRequest sharedInstance] post:kHomeUrl_Comment params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
         CommentModel *model = [CommentModel mj_objectWithKeyValues:responseObj[@"comment"]];
         [weakSelf.commentArray insertObject:model atIndex:0];
+        _commentsLabel.hidden = NO;
+        _detailModel.commentCount = [NSNumber numberWithInteger:_detailModel.commentCount.integerValue + 1];
+        int width;
+        if (_detailModel.commentCount.integerValue < 10) {
+            width = 12;
+        } else if (_detailModel.commentCount.integerValue < 100) {
+            width = 16;
+        } else if (_detailModel.commentCount.integerValue < 1000) {
+            width = 22;
+        } else {
+            width = 28;
+        }
+        _commentsLabel.width = width;
+        if (_detailModel.commentCount.integerValue < 1000) {
+            _commentsLabel.text = _detailModel.commentCount.stringValue;
+        } else {
+            _commentsLabel.text = @"999+";
+        }
         [_tableView reloadData];
         [_commentTextView.textView resignFirstResponder];
         [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
@@ -477,7 +563,7 @@
 {
     switch (section) {
         case 1:
-            return 4;
+            return MIN(_detailModel.recommend_news.count + 1, 4);
             break;
         case 2:
             if (_commentArray.count > 0) {
@@ -753,7 +839,9 @@
                 NewsDetailViewController *newsDetailVC = [[NewsDetailViewController alloc] init];
                 newsDetailVC.model = model;
                 newsDetailVC.channelName = _channelName;
-
+                if (model.news_id.length <= 0) {
+                    return;
+                }
                 // 打点-推荐区文章点击-010218
                 NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
                                                [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
@@ -866,6 +954,9 @@
     [self.view addSubview:self.commentsView];
     [_tableView reloadData];
     [_tableView setContentOffset:CGPointMake(_tableView.contentOffset.x, _webviewOffsetY) animated:NO];
+//    [_bridge callHandler:@"testJavascriptHandler" data:@{@"123": @"456"} responseCallback:^(id response) {
+//        NSLog(@"testJavascriptHandler responded: %@", response);
+//    }];
 }
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(nullable NSError *)error
 {
@@ -936,6 +1027,10 @@
                     [button setImage:[UIImage imageNamed:@"icon_article_collect_default"] forState:UIControlStateNormal];
                     [button setImage:[UIImage imageNamed:@"icon_article_collect_select"] forState:UIControlStateSelected];
                     [button setImage:[UIImage imageNamed:@"icon_article_collect_select"] forState:UIControlStateHighlighted];
+                    if (![_detailModel.collect_id isEqualToNumber:@0]) {
+                        button.selected = YES;
+                        _collectID = _detailModel.collect_id;
+                    }
                     break;
                 case 2:
                     [button setImage:[UIImage imageNamed:@"facebook"] forState:UIControlStateNormal];
@@ -945,34 +1040,38 @@
             }
             [_commentsView addSubview:button];
             
-            if (i == 0 && _detailModel.commentCount.integerValue > 0) {
-                int width;
-                if (_detailModel.commentCount.integerValue < 10) {
-                    width = 12;
-                } else if (_detailModel.commentCount.integerValue < 100) {
-                    width = 16;
-                } else if (_detailModel.commentCount.integerValue < 1000) {
-                    width = 22;
-                } else {
-                    width = 28;
+            if (i == 0) {
+                _commentsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 10, 10)];
+                _commentsLabel.center = CGPointMake(button.right - 10, button.top + 16);
+                _commentsLabel.backgroundColor = SSColor(255, 0, 0);
+                _commentsLabel.layer.cornerRadius = 5.0f;
+                _commentsLabel.layer.masksToBounds = YES;
+                _commentsLabel.textAlignment = NSTextAlignmentCenter;
+                _commentsLabel.font = [UIFont systemFontOfSize:10];
+                _commentsLabel.textColor = [UIColor whiteColor];
+                _commentsLabel.hidden = YES;
+                [_commentsView addSubview:_commentsLabel];
+                if (_detailModel.commentCount.integerValue > 0) {
+                    _commentsLabel.hidden = NO;
+                    int width;
+                    if (_detailModel.commentCount.integerValue < 10) {
+                        width = 12;
+                    } else if (_detailModel.commentCount.integerValue < 100) {
+                        width = 16;
+                    } else if (_detailModel.commentCount.integerValue < 1000) {
+                        width = 22;
+                    } else {
+                        width = 28;
+                    }
+                    _commentsLabel.width = width;
+                    if (_detailModel.commentCount.integerValue < 1000) {
+                        _commentsLabel.text = _detailModel.commentCount.stringValue;
+                    } else {
+                        _commentsLabel.text = @"999+";
+                    }
                 }
-                UILabel *commentsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, width, 10)];
-                commentsLabel.center = CGPointMake(button.right - 10, button.top + 16);
-                commentsLabel.backgroundColor = SSColor(255, 0, 0);
-                commentsLabel.layer.cornerRadius = 5.0f;
-                commentsLabel.layer.masksToBounds = YES;
-                commentsLabel.textAlignment = NSTextAlignmentCenter;
-                commentsLabel.font = [UIFont systemFontOfSize:10];
-                commentsLabel.textColor = [UIColor whiteColor];
-                if (_detailModel.commentCount.integerValue < 1000) {
-                    commentsLabel.text = _detailModel.commentCount.stringValue;
-                } else {
-                    commentsLabel.text = @"999+";
-                }
-                [_commentsView addSubview:commentsLabel];
             }
         }
-        
     }
     return _commentsView;
 }
@@ -1002,7 +1101,8 @@
             _likeButton.selected = YES;
         }
     }
-    if (_detailModel.likedCount > 0) {
+    if (_detailModel.likedCount.integerValue > 0) {
+        _likeButton.imageEdgeInsets = UIEdgeInsetsMake(0, -5, 0, 0);
         NSString *buttonTitle = [NSString stringWithFormat:@"%@",_detailModel.likedCount];
         switch (buttonTitle.length) {
             case 1:
@@ -1023,8 +1123,8 @@
                 break;
         }
     } else {
-        _likeButton.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, -4);
-        [_likeButton setTitle:@"0" forState:UIControlStateNormal];
+        _likeButton.imageEdgeInsets = UIEdgeInsetsMake(0, 3, 0, 0);
+        [_likeButton setTitle:@"" forState:UIControlStateNormal];
     }
     return _likeButton;
 }
@@ -1147,6 +1247,65 @@
         _commentTextView.textView.delegate = self;
         [_commentTextView.cancelButton addTarget:self action:@selector(cancelAction) forControlEvents:UIControlEventTouchUpInside];
         [_commentTextView.sendButton addTarget:self action:@selector(sendAction) forControlEvents:UIControlEventTouchUpInside];
+    } else if ([notif.object[@"isShareFacebook"] isEqualToNumber:@1]) {
+        // 分享Facebook
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
+            NSString *shareString = _detailModel.share_url;
+            shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"facebook"];
+            content.contentURL = [NSURL URLWithString:shareString];
+            content.contentTitle = _detailModel.title;
+            ImageModel *imageModel = _detailModel.imgs.firstObject;
+            content.imageURL = [NSURL URLWithString:imageModel.src];
+            [FBSDKShareDialog showFromViewController:self
+                                         withContent:content
+                                            delegate:self];
+        });
+    } else if ([notif.object[@"isShareTwitter"] isEqualToNumber:@1]) {
+        // 分享Twitter
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            NSString *shareString = _detailModel.share_url;
+            shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"twitter"];
+            TWTRComposer *composer = [[TWTRComposer alloc] init];
+            [composer setText:_detailModel.title];
+            [composer setURL:[NSURL URLWithString:shareString]];
+            @try {
+                [composer showFromViewController:self completion:^(TWTRComposerResult result) {
+                    if (result == TWTRComposerResultCancelled) {
+                        // 取消分享
+                        SSLog(@"Tweet composition cancelled");
+                    } else {
+                        // 分享成功
+                        SSLog(@"Sending Tweet!");
+                    }
+                }];
+            }
+            @catch (NSException *exception) {
+                SSLog(@"%s\n%@", __FUNCTION__, exception);
+            }
+        });
+    } else if ([notif.object[@"isShareGoogle"] isEqualToNumber:@1]) {
+        // 分享Google
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            NSString *shareString = _detailModel.share_url;
+            shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"googleplus"];
+            NSURLComponents* urlComponents = [[NSURLComponents alloc]
+                                              initWithString:@"https://plus.google.com/share"];
+            urlComponents.queryItems = @[[[NSURLQueryItem alloc]
+                                          initWithName:@"url"
+                                          value:[[NSURL URLWithString:shareString] absoluteString]]];
+            NSURL* url = [urlComponents URL];
+            if ([SFSafariViewController class]) {
+                // Open the URL in SFSafariViewController (iOS 9+)
+                SFSafariViewController* controller = [[SFSafariViewController alloc]
+                                                      initWithURL:url];
+                //            controller.delegate = self;
+                [self presentViewController:controller animated:YES completion:nil];
+            } else {
+                // Open the URL in the device's browser
+                [[UIApplication sharedApplication] openURL:url];
+            }
+        });
     }
 }
 
@@ -1227,6 +1386,29 @@
     }
 }
 
+/**
+ *  程序已经进入后台通知
+ */
+- (void)applicationDidEnterBackground
+{
+    // 缓存详情信息
+    NSString *detailFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/detail.data"];
+    [NSKeyedArchiver archiveRootObject:_detailModel toFile:detailFilePath];
+}
+
+/**
+ *  程序即将进入前台通知
+ */
+- (void)applicationWillEnterForeground
+{
+    // 加载详情信息
+    NSString *detailFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/detail.data"];
+    NewsDetailModel *model = [NSKeyedUnarchiver unarchiveObjectWithFile:detailFilePath];
+    if ([model.news_id isEqualToString:_model.news_id]) {
+        _detailModel = model;
+    }
+}
+
 #pragma mark - 按钮点击事件
 /**
  *  点赞按钮点击事件
@@ -1246,19 +1428,20 @@
     [iConsole info:[NSString stringWithFormat:@"Article_Like_Click:%@",articleParams],nil];
 #endif
     if (button.selected) {
-        if (button.titleLabel.text.intValue > 0) {
-            [button setTitle:[NSString stringWithFormat:@"%d",button.titleLabel.text.intValue - 1] forState:UIControlStateNormal];
+        if (button.titleLabel.text.intValue > 1) {
+            _detailModel.likedCount = [NSNumber numberWithInteger:_detailModel.likedCount.integerValue - 1];
         } else {
-            [button setTitle:@"0" forState:UIControlStateNormal];
+            [button setTitle:@"" forState:UIControlStateNormal];
+            _detailModel.likedCount = @0;
         }
     } else {
-        [button setTitle:[NSString stringWithFormat:@"%d",button.titleLabel.text.intValue + 1] forState:UIControlStateNormal];
+        _detailModel.likedCount = [NSNumber numberWithInteger:_detailModel.likedCount.integerValue + 1];
         AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
         if (appDelegate.likedDic[_model.news_id] == nil) {
             [self likedNewsWithAppDelegate:appDelegate button:button];
         }
     }
-    button.selected = !button.selected;
+    self.likeButton.selected = !button.selected;
 }
 
 /**
@@ -1350,17 +1533,6 @@
         case 2:
         {
             // 点击facebook按钮
-            FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
-            NSString *shareString = _detailModel.share_url;
-            shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"facebook"];
-            content.contentURL = [NSURL URLWithString:shareString];
-            content.contentTitle = _detailModel.title;
-            ImageModel *imageModel = _detailModel.imgs.firstObject;
-            content.imageURL = [NSURL URLWithString:imageModel.src];
-            [FBSDKShareDialog showFromViewController:self
-                                         withContent:content
-                                            delegate:self];
-
             // 打点-分享至facebook-010219
             NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
                                            [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
@@ -1371,6 +1543,25 @@
 #if DEBUG
             [iConsole info:[NSString stringWithFormat:@"Article_Share_Facebook_Click:%@",articleParams],nil];
 #endif
+            AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+            if (appDelegate.model) {
+                FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
+                NSString *shareString = _detailModel.share_url;
+                shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"facebook"];
+                content.contentURL = [NSURL URLWithString:shareString];
+                content.contentTitle = _detailModel.title;
+                ImageModel *imageModel = _detailModel.imgs.firstObject;
+                content.imageURL = [NSURL URLWithString:imageModel.src];
+                [FBSDKShareDialog showFromViewController:self
+                                             withContent:content
+                                                delegate:self];
+            } else {
+                // 登录后分享
+                LoginViewController *loginVC = [[LoginViewController alloc] init];
+                loginVC.isShareFacebook = YES;
+                UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:loginVC];
+                [self.navigationController presentViewController:navCtrl animated:YES completion:nil];
+            }
             break;
         }
         default:
@@ -1410,17 +1601,25 @@
 #if DEBUG
         [iConsole info:[NSString stringWithFormat:@"Article_Share_Facebook_Click:%@",articleParams],nil];
 #endif
-        FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
-        NSString *shareString = _detailModel.share_url;
-        shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"facebook"];
-        content.contentURL = [NSURL URLWithString:shareString];
-        content.contentTitle = _detailModel.title;
-        ImageModel *imageModel = _detailModel.imgs.firstObject;
-        content.imageURL = [NSURL URLWithString:imageModel.src];
-        [FBSDKShareDialog showFromViewController:weakSelf
-                                     withContent:content
-                                        delegate:weakSelf];
-        
+        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        if (appDelegate.model) {
+            FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
+            NSString *shareString = _detailModel.share_url;
+            shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"facebook"];
+            content.contentURL = [NSURL URLWithString:shareString];
+            content.contentTitle = _detailModel.title;
+            ImageModel *imageModel = _detailModel.imgs.firstObject;
+            content.imageURL = [NSURL URLWithString:imageModel.src];
+            [FBSDKShareDialog showFromViewController:weakSelf
+                                         withContent:content
+                                            delegate:weakSelf];
+        } else {
+            // 登录后分享
+            LoginViewController *loginVC = [[LoginViewController alloc] init];
+            loginVC.isShareFacebook = YES;
+            UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:loginVC];
+            [weakSelf.navigationController presentViewController:navCtrl animated:YES completion:nil];
+        }
     }];
     
     // 分享到twitter
@@ -1435,24 +1634,33 @@
 #if DEBUG
         [iConsole info:[NSString stringWithFormat:@"Article_Share_Twitter_Click:%@",articleParams],nil];
 #endif
-        NSString *shareString = _detailModel.share_url;
-        shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"twitter"];
-        TWTRComposer *composer = [[TWTRComposer alloc] init];
-        [composer setText:_detailModel.title];
-        [composer setURL:[NSURL URLWithString:shareString]];
-        @try {
-            [composer showFromViewController:weakSelf completion:^(TWTRComposerResult result) {
-                if (result == TWTRComposerResultCancelled) {
-                    // 取消分享
-                    NSLog(@"Tweet composition cancelled");
-                } else {
-                    // 分享成功
-                    NSLog(@"Sending Tweet!");
-                }
-            }];
-        }
-        @catch (NSException *exception) {
-            NSLog(@"%s\n%@", __FUNCTION__, exception);
+        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        if (appDelegate.model) {
+            NSString *shareString = _detailModel.share_url;
+            shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"twitter"];
+            TWTRComposer *composer = [[TWTRComposer alloc] init];
+            [composer setText:_detailModel.title];
+            [composer setURL:[NSURL URLWithString:shareString]];
+            @try {
+                [composer showFromViewController:weakSelf completion:^(TWTRComposerResult result) {
+                    if (result == TWTRComposerResultCancelled) {
+                        // 取消分享
+                        SSLog(@"Tweet composition cancelled");
+                    } else {
+                        // 分享成功
+                        SSLog(@"Sending Tweet!");
+                    }
+                }];
+            }
+            @catch (NSException *exception) {
+                SSLog(@"%s\n%@", __FUNCTION__, exception);
+            }
+        } else {
+            // 登录后分享
+            LoginViewController *loginVC = [[LoginViewController alloc] init];
+            loginVC.isShareTwitter = YES;
+            UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:loginVC];
+            [weakSelf.navigationController presentViewController:navCtrl animated:YES completion:nil];
         }
     }];
 
@@ -1468,25 +1676,33 @@
 #if DEBUG
         [iConsole info:[NSString stringWithFormat:@"Article_Share_Google+_Click:%@",articleParams],nil];
 #endif
-        NSString *shareString = _detailModel.share_url;
-        shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"googleplus"];
-        NSURLComponents* urlComponents = [[NSURLComponents alloc]
-                                          initWithString:@"https://plus.google.com/share"];
-        urlComponents.queryItems = @[[[NSURLQueryItem alloc]
-                                      initWithName:@"url"
-                                      value:[[NSURL URLWithString:shareString] absoluteString]]];
-        NSURL* url = [urlComponents URL];
-        if ([SFSafariViewController class]) {
-            // Open the URL in SFSafariViewController (iOS 9+)
-            SFSafariViewController* controller = [[SFSafariViewController alloc]
-                                                  initWithURL:url];
-//            controller.delegate = self;
-            [self presentViewController:controller animated:YES completion:nil];
+        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        if (appDelegate.model) {
+            NSString *shareString = _detailModel.share_url;
+            shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"googleplus"];
+            NSURLComponents* urlComponents = [[NSURLComponents alloc]
+                                              initWithString:@"https://plus.google.com/share"];
+            urlComponents.queryItems = @[[[NSURLQueryItem alloc]
+                                          initWithName:@"url"
+                                          value:[[NSURL URLWithString:shareString] absoluteString]]];
+            NSURL* url = [urlComponents URL];
+            if ([SFSafariViewController class]) {
+                // Open the URL in SFSafariViewController (iOS 9+)
+                SFSafariViewController* controller = [[SFSafariViewController alloc]
+                                                      initWithURL:url];
+                //            controller.delegate = self;
+                [weakSelf presentViewController:controller animated:YES completion:nil];
+            } else {
+                // Open the URL in the device's browser
+                [[UIApplication sharedApplication] openURL:url];
+            }
         } else {
-            // Open the URL in the device's browser
-            [[UIApplication sharedApplication] openURL:url];
+            // 登录后分享
+            LoginViewController *loginVC = [[LoginViewController alloc] init];
+            loginVC.isShareGoogle = YES;
+            UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:loginVC];
+            [weakSelf.navigationController presentViewController:navCtrl animated:YES completion:nil];
         }
-        
     }];
     
     [ShareSDK showShareActionSheet:self.view

@@ -48,6 +48,8 @@ typedef NS_ENUM(NSInteger, SegmentControlStyle) {
 @property (nonatomic, assign) CGFloat buttonX;
 // button宽度数组
 @property (nonatomic, strong) NSArray *sizeArray;
+// 滑动频道之前选中位置
+@property (nonatomic, assign) NSInteger currentIndex;
 //初始化方法
 - (void)initSegment;
 //点击标签栏按钮调用方法
