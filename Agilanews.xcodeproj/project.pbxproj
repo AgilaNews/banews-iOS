@@ -123,6 +123,7 @@
 		5F8D85AC1D76A99700FF4019 /* WebViewJavascriptBridgeBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F8D85A71D76A99700FF4019 /* WebViewJavascriptBridgeBase.m */; };
 		5F8D85AD1D76A99700FF4019 /* WKWebViewJavascriptBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F8D85A91D76A99700FF4019 /* WKWebViewJavascriptBridge.m */; };
 		5F8D85D21D7D1AA800FF4019 /* placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 5F8D85D11D7D1AA800FF4019 /* placeholder.png */; };
+		5F8D86761D80012300FF4019 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5F8D86751D80012300FF4019 /* GoogleService-Info.plist */; };
 		5F8E264E1D7428E100B48130 /* BigPicCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F8E264D1D7428E100B48130 /* BigPicCell.m */; };
 		5FD55E681D4EFB0D00B0E17D /* FavoriteDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FD55E671D4EFB0D00B0E17D /* FavoriteDetailViewController.m */; };
 		5FE7220D1D4EFCE30026BFC3 /* TwitterKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5FE722091D4EFCE30026BFC3 /* TwitterKit.framework */; };
@@ -393,6 +394,7 @@
 		5F8D85A81D76A99700FF4019 /* WKWebViewJavascriptBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKWebViewJavascriptBridge.h; sourceTree = "<group>"; };
 		5F8D85A91D76A99700FF4019 /* WKWebViewJavascriptBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKWebViewJavascriptBridge.m; sourceTree = "<group>"; };
 		5F8D85D11D7D1AA800FF4019 /* placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = placeholder.png; sourceTree = "<group>"; };
+		5F8D86751D80012300FF4019 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5F8E264C1D7428E100B48130 /* BigPicCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BigPicCell.h; sourceTree = "<group>"; };
 		5F8E264D1D7428E100B48130 /* BigPicCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BigPicCell.m; sourceTree = "<group>"; };
 		5FD55E661D4EFB0D00B0E17D /* FavoriteDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FavoriteDetailViewController.h; sourceTree = "<group>"; };
@@ -608,6 +610,7 @@
 				5F42BFBF1D34E2F000B89651 /* Assets.xcassets */,
 				5F42BFC11D34E2F000B89651 /* LaunchScreen.storyboard */,
 				5F42BFC41D34E2F000B89651 /* Info.plist */,
+				5F8D86751D80012300FF4019 /* GoogleService-Info.plist */,
 				5F42BFB31D34E2F000B89651 /* Supporting Files */,
 			);
 			path = Agilanews;
@@ -1237,6 +1240,11 @@
 					5F42BFAF1D34E2F000B89651 = {
 						CreatedOnToolsVersion = 7.3.1;
 						DevelopmentTeam = NV593L7ML4;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -1276,6 +1284,7 @@
 				5FE7220E1D4EFCE30026BFC3 /* TwitterKitResources.bundle in Resources */,
 				5F571F8C1D5C1FFE00604CDD /* GooglePlus.bundle in Resources */,
 				5F42BFC01D34E2F000B89651 /* Assets.xcassets in Resources */,
+				5F8D86761D80012300FF4019 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1583,7 +1592,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.banews.agila;
 				PRODUCT_NAME = Agila;
-				PROVISIONING_PROFILE = "52baba3d-c6db-416e-8ac2-551d7ffe41a1";
+				PROVISIONING_PROFILE = "acc5daff-0f57-4610-93c3-0deb8a34aed7";
 				VALID_ARCHS = "arm64 armv7s armv7";
 			};
 			name = Debug;
@@ -1623,7 +1632,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.banews.agila;
 				PRODUCT_NAME = Agila;
-				PROVISIONING_PROFILE = "be8fe500-a866-4e3c-a230-7aadaa5e127d";
+				PROVISIONING_PROFILE = "19aff322-757e-4984-b26e-c39039e620dc";
 				VALID_ARCHS = "arm64 armv7s armv7";
 			};
 			name = Release;
@@ -1703,7 +1712,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.banews.agila;
 				PRODUCT_NAME = Agila;
-				PROVISIONING_PROFILE = "877582f3-d48a-4fd3-8e0e-cd6ef2ba2abf";
+				PROVISIONING_PROFILE = "657d8a3e-d669-4b14-b03c-0f416763ab8f";
 				VALID_ARCHS = "arm64 armv7s armv7";
 			};
 			name = AdHoc;

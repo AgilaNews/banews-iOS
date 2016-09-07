@@ -31,7 +31,11 @@
     [self registerShareSDK];
     // 注册Twitter/Crashlytics
     [Fabric with:@[[Twitter class], [Crashlytics class]]];
-
+    // 注册firebase
+//    [FIRApp configure];
+//    [[NSNotificationCenter defaultCenter] addObserver:self
+//                                             selector:@selector(tokenRefreshNotification:)
+//                                                 name:kFIRInstanceIDTokenRefreshNotification object:nil];
 #if DEBUG
     _window = [[iConsoleWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     _window.backgroundColor = SSColor(0, 0, 0);
@@ -51,6 +55,8 @@
     [self loadUserData];
     // 监听网络状态
     [self networkMonitoring];
+    // 注册通知
+    [self registNotifications];
     // 开始定位
     [self locationServices];
     // 冷启动
@@ -76,6 +82,8 @@
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     SSLog(@"进入后台");
+    // FIRMessaging断开连接
+//    [[FIRMessaging messaging] disconnect];
     // 记录进入后台时间
     DEF_PERSISTENT_SET_OBJECT(@"BackgroundTime", [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]]);
     // 打点-退出APP-010002
@@ -132,6 +140,8 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     SSLog(@"处于活跃状态");
+    // FIRMessaging连接
+//    [self connectToFcm];
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 }
 
@@ -207,6 +217,67 @@
         
     } isShowHUD:NO];
 }
+
+/**
+ *  注册通知
+ */
+- (void)registNotifications
+{
+    if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerForRemoteNotifications)]) {
+        [[UIApplication sharedApplication] registerForRemoteNotifications];
+        UIUserNotificationType notificationTypes = UIUserNotificationTypeBadge |
+        UIUserNotificationTypeSound |
+        UIUserNotificationTypeAlert;
+        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:notificationTypes categories:nil];
+        [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+    } else {
+        UIRemoteNotificationType notificationTypes = UIRemoteNotificationTypeBadge |
+        UIRemoteNotificationTypeSound |
+        UIRemoteNotificationTypeAlert;
+        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:notificationTypes];
+    }
+}
+// 注册deviceToken成功
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+{
+    SSLog(@"%@", deviceToken);
+}
+// 注册deviceToken失败
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
+{
+    SSLog(@"%@", error);
+}
+//- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+//    // If you are receiving a notification message while your app is in the background,
+//    // this callback will not be fired till the user taps on the notification launching the application.
+//    // TODO: Handle data of notification
+////    [[FIRMessaging messaging] subscribeToTopic:@"/topics/news"];
+//
+//    // Print message ID.
+//    SSLog(@"Message ID: %@", userInfo[@"gcm.message_id"]);
+//    
+//    // Pring full message.
+//    SSLog(@"%@", userInfo);
+//}
+//- (void)tokenRefreshNotification:(NSNotification *)notification {
+//    // Note that this callback will be fired everytime a new token is generated, including the first
+//    // time. So if you need to retrieve the token as soon as it is available this is where that
+//    // should be done.
+//    NSString *refreshedToken = [[FIRInstanceID instanceID] token];
+//    SSLog(@"InstanceID token: %@", refreshedToken);
+//    // Connect to FCM since connection may have failed when attempted before having a token.
+//    [self connectToFcm];
+//    // TODO: If necessary send token to application server.
+//}
+//- (void)connectToFcm {
+//    [[FIRMessaging messaging] connectWithCompletion:^(NSError * _Nullable error) {
+//        if (error != nil) {
+//            SSLog(@"Unable to connect to FCM. %@", error);
+//        } else {
+//            SSLog(@"Connected to FCM.");
+//        }
+//    }];
+//}
 
 /**
  *  监听网络状态
@@ -419,6 +490,7 @@
     }
 }
 
+// 内存警告
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application
 {
     SDWebImageManager *mgr = [SDWebImageManager sharedManager];
