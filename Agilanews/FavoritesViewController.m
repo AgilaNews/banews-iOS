@@ -478,6 +478,7 @@
 #endif
     if (self.tableView.editing) {
         self.isEdit = NO;
+        _editBtn.selected = NO;
         [self.tableView setEditing:NO animated:YES];
         return;
     }
