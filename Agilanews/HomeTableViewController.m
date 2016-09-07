@@ -108,9 +108,11 @@
         if ([[NSDate date] timeIntervalSince1970] - checkNum.longLongValue < 3600) {
             // 加载缓存
             _dataList = [NSMutableArray arrayWithArray:dataList];
+            [self.tableView reloadData];
         } else if ([[NetType getNetType] isEqualToString:@"unknow"] && dataList.count > 0) {
             // 无网状态下加载缓存
             _dataList = [NSMutableArray arrayWithArray:dataList];
+            [self.tableView reloadData];
         } else if ([_model.channelID isEqualToNumber:@10001]) {
             // 请求数据
             [self requestDataWithChannelID:_model.channelID isLater:YES isShowHUD:NO];
@@ -202,78 +204,80 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NewsModel *model = _dataList[indexPath.row];
-    switch ([model.tpl integerValue])
-    {
-        case NEWS_ManyPic:
+    if (_dataList.count > 0) {
+        NewsModel *model = _dataList[indexPath.row];
+        switch ([model.tpl integerValue])
         {
-            // 多图cell
-            static NSString *cellID = @"ManyPicCellID";
-            ManyPicCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
-            if (cell == nil) {
-                cell = [[ManyPicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
+            case NEWS_ManyPic:
+            {
+                // 多图cell
+                static NSString *cellID = @"ManyPicCellID";
+                ManyPicCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+                if (cell == nil) {
+                    cell = [[ManyPicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
+                }
+                cell.model = model;
+                [cell setNeedsLayout];
+                return cell;
             }
-            cell.model = model;
-            [cell setNeedsLayout];
-            return cell;
-        }
-            break;
-        case NEWS_SinglePic:
-        {
-            // 单图cell
-            static NSString *cellID = @"SinglePicCellID";
-            SinglePicCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
-            if (cell == nil) {
-                cell = [[SinglePicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
+                break;
+            case NEWS_SinglePic:
+            {
+                // 单图cell
+                static NSString *cellID = @"SinglePicCellID";
+                SinglePicCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+                if (cell == nil) {
+                    cell = [[SinglePicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
+                }
+                cell.model = model;
+                [cell setNeedsLayout];
+                return cell;
             }
-            cell.model = model;
-            [cell setNeedsLayout];
-            return cell;
-        }
-            break;
-        case NEWS_NoPic:
-        {
-            // 无图cell
-            static NSString *cellID = @"NoPicCellID";
-            NoPicCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
-            if (cell == nil) {
-                cell = [[NoPicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
+                break;
+            case NEWS_NoPic:
+            {
+                // 无图cell
+                static NSString *cellID = @"NoPicCellID";
+                NoPicCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+                if (cell == nil) {
+                    cell = [[NoPicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
+                }
+                cell.model = model;
+                [cell setNeedsLayout];
+                return cell;
             }
-            cell.model = model;
-            [cell setNeedsLayout];
-            return cell;
+                break;
+                //        case NEWS_OnlyPic:
+                //        {
+                //            // 纯图cell
+                //            NSLog(@"纯图cell");
+                //            static NSString *cellID = @"OnlyPicCellID";
+                //            OnlyPicCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+                //            if (cell == nil) {
+                //                cell = [[OnlyPicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+                //            }
+                //            cell.model = model;
+                //            [cell setNeedsLayout];
+                //            return cell;
+                //        }
+                //            break;
+                //        case NEWS_GifPic:
+                //        {
+                //            // gif图cell
+                //            NSLog(@"gif图cell");
+                //            static NSString *cellID = @"GifPicCellID";
+                //            GifPicCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+                //            if (cell == nil) {
+                //                cell = [[GifPicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+                //            }
+                //            cell.model = model;
+                //            [cell setNeedsLayout];
+                //            return cell;
+                //        }
+                //            break;
+            default:
+                break;
         }
-            break;
-//        case NEWS_OnlyPic:
-//        {
-//            // 纯图cell
-//            NSLog(@"纯图cell");
-//            static NSString *cellID = @"OnlyPicCellID";
-//            OnlyPicCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
-//            if (cell == nil) {
-//                cell = [[OnlyPicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
-//            }
-//            cell.model = model;
-//            [cell setNeedsLayout];
-//            return cell;
-//        }
-//            break;
-//        case NEWS_GifPic:
-//        {
-//            // gif图cell
-//            NSLog(@"gif图cell");
-//            static NSString *cellID = @"GifPicCellID";
-//            GifPicCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
-//            if (cell == nil) {
-//                cell = [[GifPicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
-//            }
-//            cell.model = model;
-//            [cell setNeedsLayout];
-//            return cell;
-//        }
-//            break;
-        default:
-            break;
     }
     static NSString *cellID = @"newsListCellID";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
