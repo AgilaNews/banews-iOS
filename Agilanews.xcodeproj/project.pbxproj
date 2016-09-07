@@ -124,6 +124,13 @@
 		5F8D85AD1D76A99700FF4019 /* WKWebViewJavascriptBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F8D85A91D76A99700FF4019 /* WKWebViewJavascriptBridge.m */; };
 		5F8D85D21D7D1AA800FF4019 /* placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 5F8D85D11D7D1AA800FF4019 /* placeholder.png */; };
 		5F8D86761D80012300FF4019 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5F8D86751D80012300FF4019 /* GoogleService-Info.plist */; };
+		5F8D87BA1D800F1D00FF4019 /* FirebaseAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F8D87B51D800F1D00FF4019 /* FirebaseAnalytics.framework */; };
+		5F8D87BB1D800F1D00FF4019 /* FirebaseInstanceID.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F8D87B61D800F1D00FF4019 /* FirebaseInstanceID.framework */; };
+		5F8D87BC1D800F1D00FF4019 /* GoogleInterchangeUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F8D87B71D800F1D00FF4019 /* GoogleInterchangeUtilities.framework */; };
+		5F8D87BD1D800F1D00FF4019 /* GoogleSymbolUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F8D87B81D800F1D00FF4019 /* GoogleSymbolUtilities.framework */; };
+		5F8D87BE1D800F1D00FF4019 /* GoogleUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F8D87B91D800F1D00FF4019 /* GoogleUtilities.framework */; };
+		5F8D87C11D800F2A00FF4019 /* FirebaseMessaging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F8D87BF1D800F2A00FF4019 /* FirebaseMessaging.framework */; };
+		5F8D87C21D800F2A00FF4019 /* GoogleIPhoneUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F8D87C01D800F2A00FF4019 /* GoogleIPhoneUtilities.framework */; };
 		5F8E264E1D7428E100B48130 /* BigPicCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F8E264D1D7428E100B48130 /* BigPicCell.m */; };
 		5FD55E681D4EFB0D00B0E17D /* FavoriteDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FD55E671D4EFB0D00B0E17D /* FavoriteDetailViewController.m */; };
 		5FE7220D1D4EFCE30026BFC3 /* TwitterKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5FE722091D4EFCE30026BFC3 /* TwitterKit.framework */; };
@@ -395,6 +402,13 @@
 		5F8D85A91D76A99700FF4019 /* WKWebViewJavascriptBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKWebViewJavascriptBridge.m; sourceTree = "<group>"; };
 		5F8D85D11D7D1AA800FF4019 /* placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = placeholder.png; sourceTree = "<group>"; };
 		5F8D86751D80012300FF4019 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		5F8D87B51D800F1D00FF4019 /* FirebaseAnalytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FirebaseAnalytics.framework; sourceTree = "<group>"; };
+		5F8D87B61D800F1D00FF4019 /* FirebaseInstanceID.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FirebaseInstanceID.framework; sourceTree = "<group>"; };
+		5F8D87B71D800F1D00FF4019 /* GoogleInterchangeUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleInterchangeUtilities.framework; sourceTree = "<group>"; };
+		5F8D87B81D800F1D00FF4019 /* GoogleSymbolUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleSymbolUtilities.framework; sourceTree = "<group>"; };
+		5F8D87B91D800F1D00FF4019 /* GoogleUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleUtilities.framework; sourceTree = "<group>"; };
+		5F8D87BF1D800F2A00FF4019 /* FirebaseMessaging.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FirebaseMessaging.framework; sourceTree = "<group>"; };
+		5F8D87C01D800F2A00FF4019 /* GoogleIPhoneUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleIPhoneUtilities.framework; sourceTree = "<group>"; };
 		5F8E264C1D7428E100B48130 /* BigPicCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BigPicCell.h; sourceTree = "<group>"; };
 		5F8E264D1D7428E100B48130 /* BigPicCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BigPicCell.m; sourceTree = "<group>"; };
 		5FD55E661D4EFB0D00B0E17D /* FavoriteDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FavoriteDetailViewController.h; sourceTree = "<group>"; };
@@ -540,6 +554,9 @@
 				5F42C0BC1D34ED8E00B89651 /* Security.framework in Frameworks */,
 				5FE7221D1D5051BB0026BFC3 /* AdSupport.framework in Frameworks */,
 				5F635CE41D3E3FA3006AAE3D /* AddressBook.framework in Frameworks */,
+				5F8D87BD1D800F1D00FF4019 /* GoogleSymbolUtilities.framework in Frameworks */,
+				5F8D87BA1D800F1D00FF4019 /* FirebaseAnalytics.framework in Frameworks */,
+				5F8D87C11D800F2A00FF4019 /* FirebaseMessaging.framework in Frameworks */,
 				5F635CE21D3E3F99006AAE3D /* AssetsLibrary.framework in Frameworks */,
 				5F635CE01D3E3F91006AAE3D /* MediaPlayer.framework in Frameworks */,
 				5F635CDE1D3E3F85006AAE3D /* CoreLocation.framework in Frameworks */,
@@ -558,15 +575,19 @@
 				5F42C0BA1D34ED8700B89651 /* QuartzCore.framework in Frameworks */,
 				5F42C0B81D34ED7F00B89651 /* MobileCoreServices.framework in Frameworks */,
 				5F571F901D5C227600604CDD /* Fabric.framework in Frameworks */,
+				5F8D87BE1D800F1D00FF4019 /* GoogleUtilities.framework in Frameworks */,
 				5F42C0B61D34ED7400B89651 /* ImageIO.framework in Frameworks */,
 				5F635CCC1D3E3EDF006AAE3D /* ShareSDK.framework in Frameworks */,
 				5F571F811D5C1FBD00604CDD /* FBSDKCoreKit.framework in Frameworks */,
 				5F571F8D1D5C1FFE00604CDD /* GooglePlus.framework in Frameworks */,
+				5F8D87BC1D800F1D00FF4019 /* GoogleInterchangeUtilities.framework in Frameworks */,
 				5F635CCD1D3E3EDF006AAE3D /* ShareSDKExtension.framework in Frameworks */,
 				5FE7220F1D4EFCE30026BFC3 /* TwitterCore.framework in Frameworks */,
 				5F571F871D5C1FE000604CDD /* FBSDKMessengerShareKit.framework in Frameworks */,
 				5F42C0B31D34ED5500B89651 /* Foundation.framework in Frameworks */,
+				5F8D87BB1D800F1D00FF4019 /* FirebaseInstanceID.framework in Frameworks */,
 				5F42C0B11D34ED4C00B89651 /* CoreGraphics.framework in Frameworks */,
+				5F8D87C21D800F2A00FF4019 /* GoogleIPhoneUtilities.framework in Frameworks */,
 				5F571F831D5C1FC900604CDD /* FBSDKLoginKit.framework in Frameworks */,
 				5F635CD21D3E3EDF006AAE3D /* ShareSDKConnector.framework in Frameworks */,
 				5FE7220D1D4EFCE30026BFC3 /* TwitterKit.framework in Frameworks */,
@@ -770,6 +791,13 @@
 		5F42C0B41D34ED6300B89651 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5F8D87BF1D800F2A00FF4019 /* FirebaseMessaging.framework */,
+				5F8D87C01D800F2A00FF4019 /* GoogleIPhoneUtilities.framework */,
+				5F8D87B51D800F1D00FF4019 /* FirebaseAnalytics.framework */,
+				5F8D87B61D800F1D00FF4019 /* FirebaseInstanceID.framework */,
+				5F8D87B71D800F1D00FF4019 /* GoogleInterchangeUtilities.framework */,
+				5F8D87B81D800F1D00FF4019 /* GoogleSymbolUtilities.framework */,
+				5F8D87B91D800F1D00FF4019 /* GoogleUtilities.framework */,
 				5F571F8F1D5C227600604CDD /* Fabric.framework */,
 				5F571F681D58269600604CDD /* Crashlytics.framework */,
 				5FE7221C1D5051BB0026BFC3 /* AdSupport.framework */,
@@ -1574,6 +1602,7 @@
 					"\"$(SRCROOT)/../FacebookSDKs-iOS-4.14.0\"",
 					"\"$(SRCROOT)/../../Downloads/google-plus-ios-sdk-1.7.1\"",
 					"$(PROJECT_DIR)",
+					"\"$(SRCROOT)/../../Downloads/Firebase\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/Agilanews/Agilanews.pch";
@@ -1614,6 +1643,7 @@
 					"\"$(SRCROOT)/../FacebookSDKs-iOS-4.14.0\"",
 					"\"$(SRCROOT)/../../Downloads/google-plus-ios-sdk-1.7.1\"",
 					"$(PROJECT_DIR)",
+					"\"$(SRCROOT)/../../Downloads/Firebase\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/Agilanews/Agilanews.pch";
@@ -1694,6 +1724,7 @@
 					"\"$(SRCROOT)/../FacebookSDKs-iOS-4.14.0\"",
 					"\"$(SRCROOT)/../../Downloads/google-plus-ios-sdk-1.7.1\"",
 					"$(PROJECT_DIR)",
+					"\"$(SRCROOT)/../../Downloads/Firebase\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/Agilanews/Agilanews.pch";
