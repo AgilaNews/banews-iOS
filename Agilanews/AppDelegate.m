@@ -191,17 +191,29 @@
         DEF_PERSISTENT_SET_OBJECT(Server_Referrer, responseObj[@"interfaces"][@"referrer"]);
         // 分类存入模型
         NSArray *categories = responseObj[@"categories"];
-        if (categories.count > 0) {
+        if (categories.count <= 0) {
             return;
         }
-        _categoriesArray = [NSMutableArray array];
-        for (NSDictionary *dic in responseObj[@"categories"]) {
-            CategoriesModel *categoriesModel = [CategoriesModel mj_objectWithKeyValues:dic];
-            [_categoriesArray addObject:categoriesModel];
+        NSMutableArray *newArray = [NSMutableArray array];
+        for (NSDictionary *newDic in categories) {
+            CategoriesModel *categoriesModel = [CategoriesModel mj_objectWithKeyValues:newDic];
+            [newArray addObject:categoriesModel];
         }
-        if (isFirst && _categoriesArray.count > 0) {
-            // 通知刷新
+        // 频道数不相同通知刷新
+        if (_categoriesArray.count != categories.count) {
+            _categoriesArray = newArray;
             [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Categories object:nil];
+            return;
+        }
+        // 频道顺序不同通知刷新
+        for (int i = 0; i < newArray.count; i++) {
+            CategoriesModel *newModel = newArray[i];
+            CategoriesModel *model = _categoriesArray[i];
+            if (![newModel.name isEqualToString:model.name]) {
+                _categoriesArray = newArray;
+                [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Categories object:nil];
+                return;
+            }
         }
     } failure:^(NSError *error) {
         
