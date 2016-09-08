@@ -285,7 +285,6 @@
     [[FIRMessaging messaging] subscribeToTopic:@"/topics/notification"];
     NSString * version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     [[FIRMessaging messaging] subscribeToTopic:[NSString stringWithFormat:@"/topics/ios_v%@",version]];
-    
 }
 - (void)connectToFcm {
     [[FIRMessaging messaging] connectWithCompletion:^(NSError * _Nullable error) {
