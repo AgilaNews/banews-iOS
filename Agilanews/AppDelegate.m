@@ -36,6 +36,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(tokenRefreshNotification:)
                                                  name:kFIRInstanceIDTokenRefreshNotification object:nil];
+    // 消除小红点
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
 #if DEBUG
     _window = [[iConsoleWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     _window.backgroundColor = SSColor(0, 0, 0);
@@ -247,17 +249,18 @@
 {
     SSLog(@"%@", error);
 }
+// 收到推送回调
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     // If you are receiving a notification message while your app is in the background,
     // this callback will not be fired till the user taps on the notification launching the application.
     // TODO: Handle data of notification
-
     // Print message ID.
     SSLog(@"Message ID: %@", userInfo[@"gcm.message_id"]);
-    
     // Pring full message.
     SSLog(@"%@", userInfo);
+    [SVProgressHUD showInfoWithStatus:[NSString stringWithFormat:@"%@", userInfo]];
 }
+// 刷新推送token回调
 - (void)tokenRefreshNotification:(NSNotification *)notification {
     // Note that this callback will be fired everytime a new token is generated, including the first
     // time. So if you need to retrieve the token as soon as it is available this is where that
@@ -270,6 +273,7 @@
     [[FIRMessaging messaging] subscribeToTopic:@"/topics/notification"];
     NSString * version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     [[FIRMessaging messaging] subscribeToTopic:[NSString stringWithFormat:@"/topics/ios_v%@",version]];
+    
 }
 - (void)connectToFcm {
     [[FIRMessaging messaging] connectWithCompletion:^(NSError * _Nullable error) {
