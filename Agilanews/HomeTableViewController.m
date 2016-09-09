@@ -20,6 +20,7 @@
 #import "BannerView.h"
 #import "AppDelegate.h"
 #import "HomeViewController.h"
+#import "ImageModel.h"
 
 #define titleFont_Normal        [UIFont systemFontOfSize:16]
 #define titleFont_ExtraLarge    [UIFont systemFontOfSize:20]
@@ -193,10 +194,12 @@
             return 12 + titleLabelSize.height + 162 + 20 + 11 + 11;
             break;
         }
-//        case NEWS_OnlyPic:
-//        {
-//            
-//        }
+        case NEWS_OnlyPic:
+        {
+            CGSize titleLabelSize = [model.title calculateSize:CGSizeMake(kScreenWidth - 22, 40) font:titleFont];
+            ImageModel *imageModel = model.imgs.firstObject;
+            return 12 + titleLabelSize.height + 10 + imageModel.height.integerValue / 2.0 + 12 + 18 + 12;
+        }
 //            break;
 //        case NEWS_GifPic:
 //        {
@@ -267,20 +270,22 @@
                 return cell;
                 break;
             }
-//        case NEWS_OnlyPic:
-//        {
-//            // 纯图cell
-//            NSLog(@"纯图cell");
-//            static NSString *cellID = @"OnlyPicCellID";
-//            OnlyPicCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
-//            if (cell == nil) {
-//                cell = [[OnlyPicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
-//            }
-//            cell.model = model;
-//            [cell setNeedsLayout];
-//            return cell;
-//        }
-//            break;
+            case NEWS_OnlyPic:
+            {
+                // 纯图cell
+                static NSString *cellID = @"OnlyPicCellID";
+                OnlyPicCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+                if (cell == nil) {
+                    cell = [[OnlyPicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
+                    [cell.likeButton addTarget:self action:@selector(likeAction:) forControlEvents:UIControlEventTouchUpInside];
+                    [cell.shareButton addTarget:self action:@selector(shareAction:) forControlEvents:UIControlEventTouchUpInside];
+                }
+                cell.model = model;
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                [cell setNeedsLayout];
+                return cell;
+                break;
+            }
 //        case NEWS_GifPic:
 //        {
 //            // gif图cell
@@ -312,6 +317,9 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.row >= _dataList.count) {
+        return;
+    }
+    if ([_model.channelID isEqualToNumber:@10011]) {
         return;
     }
     NewsModel *model = _dataList[indexPath.row];
@@ -625,6 +633,43 @@
     [iConsole info:[NSString stringWithFormat:@"Home_List_UpLoad:%@",articleParams],nil];
 #endif
     [self requestDataWithChannelID:_model.channelID isLater:NO isShowHUD:YES];
+}
+
+#pragma mark - 按钮点击事件
+/**
+ *  点赞按钮点击事件
+ *
+ *  @param button 点赞按钮
+ */
+- (void)likeAction:(UIButton *)button
+{
+    id cell = button.superview;
+    do {
+        if ([cell isKindOfClass:[UITableViewCell class]]) {
+            break;
+        }
+        cell = ((UIView *)cell).superview;
+    } while (cell != nil);
+    NSString *newsID = ((OnlyPicCell *)cell).model.news_id;
+    NSLog(@"%@",newsID);
+}
+
+ /**
+ *  分享按钮点击事件
+ *
+ *  @param button 分享按钮
+ */
+- (void)shareAction:(UIButton *)button
+{
+    id cell = button.superview;
+    do {
+        if ([cell isKindOfClass:[UITableViewCell class]]) {
+            break;
+        }
+        cell = ((UIView *)cell).superview;
+    } while (cell != nil);
+    NSString *newsID = ((OnlyPicCell *)cell).model.news_id;
+    NSLog(@"%@",newsID);
 }
 
 
