@@ -685,8 +685,6 @@
         [self.tableView setContentOffset:self.tableView.contentOffset animated:NO];
         [self.tableView.header beginRefreshing];
     }
-//    if ([self.tableView isDisplayedInScreen]) {
-//    }
 }
 
 /**
