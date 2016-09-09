@@ -148,6 +148,9 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (indexPath.row >= _dataList.count) {
+        return 50;
+    }
     NewsModel *model = _dataList[indexPath.row];
     UIFont *titleFont = nil;
     switch ([DEF_PERSISTENT_GET_OBJECT(SS_FontSize) integerValue]) {
