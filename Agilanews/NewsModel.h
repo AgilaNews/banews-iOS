@@ -17,9 +17,10 @@
 @property (nonatomic, strong) NSString *source;     // 新闻来源
 @property (nonatomic, strong) NSString *source_url; // 来源地址
 @property (nonatomic, strong) NSString *title;      // 新闻标题
-@property (nonatomic, strong) NSString *likedCount; // 点赞数
+@property (nonatomic, strong) NSNumber *likedCount; // 点赞数
 @property (nonatomic, strong) NSNumber *tpl;        // 模版号
 @property (nonatomic, strong) NSNumber *commentCount; // 评论数
 @property (nonatomic, strong) NSNumber *collect_id; // 收藏ID
+@property (nonatomic, strong) NSString *share_url;  // 分享链接
 
 @end

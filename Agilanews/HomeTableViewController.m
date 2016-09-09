@@ -21,12 +21,14 @@
 #import "AppDelegate.h"
 #import "HomeViewController.h"
 #import "ImageModel.h"
+#import "LoginViewController.h"
 
 #define titleFont_Normal        [UIFont systemFontOfSize:16]
 #define titleFont_ExtraLarge    [UIFont systemFontOfSize:20]
 #define titleFont_Large         [UIFont systemFontOfSize:18]
 #define titleFont_Small         [UIFont systemFontOfSize:14]
 
+@import SafariServices;
 @interface HomeTableViewController ()
 
 @end
@@ -635,6 +637,27 @@
     [self requestDataWithChannelID:_model.channelID isLater:NO isShowHUD:YES];
 }
 
+/**
+ *  点赞按钮网络请求
+ *
+ *  @param appDelegate
+ *  @param button      点赞按钮
+ */
+- (void)likedNewsWithAppDelegate:(AppDelegate *)appDelegate button:(UIButton *)button model:(NewsModel *)model
+{
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    [params setObject:model.news_id forKey:@"news_id"];
+    [[SSHttpRequest sharedInstance] post:kHomeUrl_Like params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
+        [appDelegate.likedDic setValue:@1 forKey:model.news_id];
+        model.likedCount = responseObj[@"liked"];
+        [button setTitle:[NSString stringWithFormat:@"%@",responseObj[@"liked"]] forState:UIControlStateNormal];
+        button.selected = YES;
+    } failure:^(NSError *error) {
+        //        [button setTitle:[NSString stringWithFormat:@"%d",button.titleLabel.text.intValue - 1] forState:UIControlStateNormal];
+        //        weakSelf.likeButton.selected = NO;
+    } isShowHUD:NO];
+}
+
 #pragma mark - 按钮点击事件
 /**
  *  点赞按钮点击事件
@@ -650,8 +673,36 @@
         }
         cell = ((UIView *)cell).superview;
     } while (cell != nil);
-    NSString *newsID = ((OnlyPicCell *)cell).model.news_id;
-    NSLog(@"%@",newsID);
+    NewsModel *newsModel = ((OnlyPicCell *)cell).model;
+    // 打点-点赞-010207
+    NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
+                                   [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
+                                   _model.name, @"channel",
+                                   newsModel.news_id, @"article",
+                                   nil];
+    [Flurry logEvent:@"Article_Like_Click" withParameters:articleParams];
+#if DEBUG
+    [iConsole info:[NSString stringWithFormat:@"Article_Like_Click:%@",articleParams],nil];
+#endif
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    if (button.selected) {
+        if (button.titleLabel.text.intValue > 1) {
+            newsModel.likedCount = [NSNumber numberWithInteger:newsModel.likedCount.integerValue - 1];
+        } else {
+            [button setTitle:@"" forState:UIControlStateNormal];
+            newsModel.likedCount = @0;
+        }
+        [appDelegate.likedDic setValue:@0 forKey:newsModel.news_id];
+    } else {
+        newsModel.likedCount = [NSNumber numberWithInteger:newsModel.likedCount.integerValue + 1];
+        if (appDelegate.likedDic[newsModel.news_id] == nil) {
+            [self likedNewsWithAppDelegate:appDelegate button:button model:newsModel];
+        } else {
+            [appDelegate.likedDic setValue:@1 forKey:newsModel.news_id];
+        }
+    }
+    button.selected = !button.selected;
+    [((OnlyPicCell *)cell) setNeedsLayout];
 }
 
  /**
@@ -668,10 +719,170 @@
         }
         cell = ((UIView *)cell).superview;
     } while (cell != nil);
-    NSString *newsID = ((OnlyPicCell *)cell).model.news_id;
-    NSLog(@"%@",newsID);
+    NewsModel *newsModel = ((OnlyPicCell *)cell).model;
+    
+//    // 打点-点击右上方分享-010203
+//    NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
+//                                   [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
+//                                   _channelName, @"channel",
+//                                   _model.news_id, @"article",
+//                                   nil];
+//    [Flurry logEvent:@"Article_UpShare_Click" withParameters:articleParams];
+//#if DEBUG
+//    [iConsole info:[NSString stringWithFormat:@"Article_UpShare_Click:%@",articleParams],nil];
+//#endif
+    __weak typeof(self) weakSelf = self;
+    [SSUIShareActionSheetStyle setCancelButtonLabelColor:kGrayColor];
+    [SSUIShareActionSheetStyle setItemNameFont:[UIFont systemFontOfSize:13]];
+    [SSUIShareActionSheetStyle setItemNameColor:kBlackColor];
+    
+    // 分享到facebook
+    SSUIShareActionSheetCustomItem *facebook = [SSUIShareActionSheetCustomItem itemWithIcon:[UIImage imageNamed:@"icon_share_facebook"] label:@"Facebook" onClick:^{
+        // 打点-分享至facebook-010219
+        NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
+                                       [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
+                                       _model.name, @"channel",
+                                       newsModel.news_id, @"article",
+                                       nil];
+        [Flurry logEvent:@"Article_Share_Facebook_Click" withParameters:articleParams];
+#if DEBUG
+        [iConsole info:[NSString stringWithFormat:@"Article_Share_Facebook_Click:%@",articleParams],nil];
+#endif
+        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        if (appDelegate.model) {
+            FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
+            NSString *shareString = newsModel.share_url;
+            shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"facebook"];
+            content.contentURL = [NSURL URLWithString:shareString];
+            content.contentTitle = newsModel.title;
+            ImageModel *imageModel = newsModel.imgs.firstObject;
+            content.imageURL = [NSURL URLWithString:imageModel.src];
+            [FBSDKShareDialog showFromViewController:weakSelf
+                                         withContent:content
+                                            delegate:weakSelf];
+        } else {
+            // 登录后分享
+            LoginViewController *loginVC = [[LoginViewController alloc] init];
+            loginVC.isShareFacebook = YES;
+            UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:loginVC];
+            [weakSelf.navigationController presentViewController:navCtrl animated:YES completion:nil];
+        }
+    }];
+    
+    // 分享到twitter
+    SSUIShareActionSheetCustomItem *twitter = [SSUIShareActionSheetCustomItem itemWithIcon:[UIImage imageNamed:@"icon_share_twitter"] label:@"Twitter" onClick:^{
+        // 打点-分享至Twitter-010220
+        NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
+                                       [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
+                                       _model.name, @"channel",
+                                       newsModel.news_id, @"article",
+                                       nil];
+        [Flurry logEvent:@"Article_Share_Twitter_Click" withParameters:articleParams];
+#if DEBUG
+        [iConsole info:[NSString stringWithFormat:@"Article_Share_Twitter_Click:%@",articleParams],nil];
+#endif
+        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        if (appDelegate.model) {
+            NSString *shareString = newsModel.share_url;
+            shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"twitter"];
+            TWTRComposer *composer = [[TWTRComposer alloc] init];
+            [composer setText:newsModel.title];
+            [composer setURL:[NSURL URLWithString:shareString]];
+            @try {
+                [composer showFromViewController:weakSelf completion:^(TWTRComposerResult result) {
+                    if (result == TWTRComposerResultCancelled) {
+                        // 取消分享
+                        SSLog(@"Tweet composition cancelled");
+                    } else {
+                        // 分享成功
+                        SSLog(@"Sending Tweet!");
+                    }
+                }];
+            }
+            @catch (NSException *exception) {
+                SSLog(@"%s\n%@", __FUNCTION__, exception);
+            }
+        } else {
+            // 登录后分享
+            LoginViewController *loginVC = [[LoginViewController alloc] init];
+            loginVC.isShareTwitter = YES;
+            UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:loginVC];
+            [weakSelf.navigationController presentViewController:navCtrl animated:YES completion:nil];
+        }
+    }];
+    
+    // 分享到google+
+    SSUIShareActionSheetCustomItem *googleplus = [SSUIShareActionSheetCustomItem itemWithIcon:[UIImage imageNamed:@"icon_share_google"] label:@"Google+" onClick:^{
+        // 打点-分享至google+-010221
+        NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
+                                       [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
+                                       _model.name, @"channel",
+                                       newsModel.news_id, @"article",
+                                       nil];
+        [Flurry logEvent:@"Article_Share_Google+_Click" withParameters:articleParams];
+#if DEBUG
+        [iConsole info:[NSString stringWithFormat:@"Article_Share_Google+_Click:%@",articleParams],nil];
+#endif
+        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        if (appDelegate.model) {
+            NSString *shareString = newsModel.share_url;
+            shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"googleplus"];
+            NSURLComponents* urlComponents = [[NSURLComponents alloc]
+                                              initWithString:@"https://plus.google.com/share"];
+            urlComponents.queryItems = @[[[NSURLQueryItem alloc]
+                                          initWithName:@"url"
+                                          value:[[NSURL URLWithString:shareString] absoluteString]]];
+            NSURL* url = [urlComponents URL];
+            if ([SFSafariViewController class]) {
+                // Open the URL in SFSafariViewController (iOS 9+)
+                SFSafariViewController* controller = [[SFSafariViewController alloc]
+                                                      initWithURL:url];
+                //            controller.delegate = self;
+                [weakSelf presentViewController:controller animated:YES completion:nil];
+            } else {
+                // Open the URL in the device's browser
+                [[UIApplication sharedApplication] openURL:url];
+            }
+        } else {
+            // 登录后分享
+            LoginViewController *loginVC = [[LoginViewController alloc] init];
+            loginVC.isShareGoogle = YES;
+            UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:loginVC];
+            [weakSelf.navigationController presentViewController:navCtrl animated:YES completion:nil];
+        }
+    }];
+    
+    [ShareSDK showShareActionSheet:self.view
+                             items:@[facebook, twitter, googleplus]
+                       shareParams:nil
+               onShareStateChanged:^(SSDKResponseState state, SSDKPlatformType platformType, NSDictionary *userData, SSDKContentEntity *contentEntity, NSError *error, BOOL end)
+     {
+         switch (state)
+         {
+             case SSDKResponseStateCancel:
+             {
+                 SSLog(@"取消分享");
+                 break;
+             }
+             default:
+                 break;
+         }
+     }];
 }
 
+#pragma mark - FBSDKSharingDelegate
+- (void)sharer:(id<FBSDKSharing>)sharer didCompleteWithResults:(NSDictionary *)results
+{
+    SSLog(@"分享成功");
+}
+- (void)sharer:(id<FBSDKSharing>)sharer didFailWithError:(NSError *)error
+{
+    SSLog(@"分享失败");
+}
+- (void)sharerDidCancel:(id<FBSDKSharing>)sharer
+{
+    SSLog(@"取消分享");
+}
 
 #pragma mark - Notification
 /**

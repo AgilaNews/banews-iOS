@@ -236,7 +236,7 @@ static SSHttpRequest *_manager = nil;
             }
         }
         if (failure) {
-            SSLog(@"\n------网络请求失败------\n%@",error);
+            SSLog(@"\n------网络请求失败------\n%@",error.userInfo);
             failure(error);
         }
     }];
@@ -422,7 +422,7 @@ static SSHttpRequest *_manager = nil;
             }
         }
         if (failure) {
-            SSLog(@"\n------网络请求失败------\n%@",error);
+            SSLog(@"\n------网络请求失败------\n%@",error.userInfo);
             failure(error);
         }
     }];
@@ -607,7 +607,7 @@ static SSHttpRequest *_manager = nil;
             }
         }
         if (failure) {
-            SSLog(@"\n------网络请求失败------\n%@",error);
+            SSLog(@"\n------网络请求失败------\n%@",error.userInfo);
             failure(error);
         }
     }];

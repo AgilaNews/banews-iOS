@@ -192,10 +192,13 @@
         [_likeButton setBackgroundColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_likeButton setImage:[UIImage imageNamed:@"icon_like_d"] forState:UIControlStateNormal];
         [_likeButton setImage:[UIImage imageNamed:@"icon_like_s"] forState:UIControlStateSelected];
-        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-        if (appDelegate.likedDic[_model.news_id] != nil) {
-            _likeButton.selected = YES;
-        }
+    }
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    NSNumber *likeNum = appDelegate.likedDic[_model.news_id];
+    if (likeNum != nil && [likeNum isEqualToNumber:@1]) {
+        _likeButton.selected = YES;
+    } else {
+        _likeButton.selected = NO;
     }
     if (_model.likedCount.integerValue > 0) {
         NSString *buttonTitle = [NSString stringWithFormat:@"%@",_model.likedCount];

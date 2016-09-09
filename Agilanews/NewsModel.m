@@ -26,7 +26,8 @@ MJCodingImplementation
              @"likedCount":@"likedCount",
              @"tpl":@"tpl",
              @"collect_id":@"collect_id",
-             @"commentCount":@"commentCount"
+             @"commentCount":@"commentCount",
+             @"share_url":@"share_url"
              };
 }
 
