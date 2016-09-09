@@ -697,11 +697,9 @@
         newsModel.likedCount = [NSNumber numberWithInteger:newsModel.likedCount.integerValue + 1];
         if (appDelegate.likedDic[newsModel.news_id] == nil) {
             [self likedNewsWithAppDelegate:appDelegate button:button model:newsModel];
-        } else {
-            [appDelegate.likedDic setValue:@1 forKey:newsModel.news_id];
         }
+        [appDelegate.likedDic setValue:@1 forKey:newsModel.news_id];
     }
-    button.selected = !button.selected;
     [((OnlyPicCell *)cell) setNeedsLayout];
 }
 

@@ -109,6 +109,7 @@
 #pragma mark - backAction返回按钮点击事件
 - (void)backAction:(UIButton *)button
 {
+    [SVProgressHUD dismiss];
     if (self.navigationController.viewControllers.count > 1) {
         [self.navigationController popViewControllerAnimated:YES];
     }
@@ -117,6 +118,7 @@
 #pragma mark - backAction关闭按钮点击事件
 - (void)closeAction:(UIButton *)button
 {
+    [SVProgressHUD dismiss];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
