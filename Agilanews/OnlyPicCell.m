@@ -245,7 +245,7 @@
         _shareButton.imageEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
         [_shareButton setBackgroundColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_shareButton setImage:[UIImage imageNamed:@"icon_share_d"] forState:UIControlStateNormal];
-        [_shareButton setImage:[UIImage imageNamed:@"icon_share_s"] forState:UIControlStateSelected];
+        [_shareButton setImage:[UIImage imageNamed:@"icon_share_s"] forState:UIControlStateHighlighted];
     }
     return _shareButton;
 }
