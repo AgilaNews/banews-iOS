@@ -1404,29 +1404,6 @@
     }
 }
 
-/**
- *  程序已经进入后台通知
- */
-- (void)applicationDidEnterBackground
-{
-    // 缓存详情信息
-    NSString *detailFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/detail.data"];
-    [NSKeyedArchiver archiveRootObject:_detailModel toFile:detailFilePath];
-}
-
-/**
- *  程序即将进入前台通知
- */
-- (void)applicationWillEnterForeground
-{
-    // 加载详情信息
-    NSString *detailFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/detail.data"];
-    NewsDetailModel *model = [NSKeyedUnarchiver unarchiveObjectWithFile:detailFilePath];
-    if ([model.news_id isEqualToString:_model.news_id]) {
-        _detailModel = model;
-    }
-}
-
 #pragma mark - 按钮点击事件
 /**
  *  点赞按钮点击事件
