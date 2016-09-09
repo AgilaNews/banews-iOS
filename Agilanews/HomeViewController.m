@@ -180,7 +180,8 @@ static CGFloat const ButtonHeight = 40;
     // 添加关键帧动画
     [_titleButton.layer addAnimation:keyFrame forKey:@"keyFrame"];
     [_titleButton setUserInteractionEnabled:NO];
-    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Refresh object:[NSNumber numberWithInteger:_segmentVC.selectIndex + 1]];
+    HomeTableViewController *homeTBC = _segmentVC.subViewControllers[_segmentVC.selectIndex - 10000];
+    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Refresh object:homeTBC.model.channelID];
 }
 
 /**
