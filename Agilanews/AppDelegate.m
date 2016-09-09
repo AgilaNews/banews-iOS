@@ -116,10 +116,7 @@
             }
         }
     }
-    // 刷新页面
-    for (HomeTableViewController *homeTabVC in homeVC.segmentVC.subViewControllers) {
-        [homeTabVC.tableView reloadData];
-    }
+    
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 }
@@ -135,6 +132,12 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     SSLog(@"处于活跃状态");
+    // 刷新页面
+    UINavigationController *navCtrl = (UINavigationController *)_window.rootViewController;
+    HomeViewController *homeVC = navCtrl.viewControllers.firstObject;
+    for (HomeTableViewController *homeTabVC in homeVC.segmentVC.subViewControllers) {
+        [homeTabVC.tableView reloadData];
+    }
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 }
 
