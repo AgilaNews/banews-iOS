@@ -31,7 +31,6 @@
     [self registerShareSDK];
     // 注册Twitter/Crashlytics
     [Fabric with:@[[Twitter class], [Crashlytics class]]];
-
 #if DEBUG
     _window = [[iConsoleWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     _window.backgroundColor = SSColor(0, 0, 0);
@@ -66,10 +65,14 @@
     _eventArray = [NSMutableArray array];
     //设置启动页面时间
     [NSThread sleepForTimeInterval:2.0];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        _isStart = YES;
+    });
     return YES;
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
+    SSLog(@"进入不活跃状态");
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
 }
@@ -132,11 +135,13 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     SSLog(@"处于活跃状态");
-    // 刷新页面
-    UINavigationController *navCtrl = (UINavigationController *)_window.rootViewController;
-    HomeViewController *homeVC = navCtrl.viewControllers.firstObject;
-    for (HomeTableViewController *homeTabVC in homeVC.segmentVC.subViewControllers) {
-        [homeTabVC.tableView reloadData];
+    if (_isStart) {
+        // 刷新页面
+        UINavigationController *navCtrl = (UINavigationController *)_window.rootViewController;
+        HomeViewController *homeVC = navCtrl.viewControllers.firstObject;
+        for (HomeTableViewController *homeTabVC in homeVC.segmentVC.subViewControllers) {
+            [homeTabVC.tableView reloadData];
+        }
     }
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 }
