@@ -73,6 +73,28 @@
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     SSLog(@"进入不活跃状态");
+    if (_isStart) {
+        // 刷新页面
+        UINavigationController *navCtrl = (UINavigationController *)_window.rootViewController;
+        HomeViewController *homeVC = navCtrl.viewControllers.firstObject;
+        // 缓存新闻列表
+        NSMutableDictionary *newsDic = [NSMutableDictionary dictionary];
+        for (HomeTableViewController *homeTabVC in homeVC.segmentVC.subViewControllers) {
+            if (homeTabVC.dataList.count > 0) {
+                NSInteger length = 30;
+                if (homeTabVC.dataList.count > length) {
+                    [newsDic setObject:[NSMutableArray arrayWithArray:[homeTabVC.dataList subarrayWithRange:NSMakeRange(0, length)]] forKey:homeTabVC.model.channelID];
+                } else {
+                    [newsDic setObject:[NSMutableArray arrayWithArray:homeTabVC.dataList] forKey:homeTabVC.model.channelID];
+                }
+                [homeTabVC.dataList removeAllObjects];
+            }
+            [homeTabVC.tableView reloadData];
+        }
+        NSString *newsFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/news.data"];
+        NSDictionary *newsData = [NSDictionary dictionaryWithObject:newsDic forKey:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]]];
+        [NSKeyedArchiver archiveRootObject:newsData toFile:newsFilePath];
+    }
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
 }
@@ -136,10 +158,18 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     SSLog(@"处于活跃状态");
     if (_isStart) {
+        NSString *newsFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/news.data"];
+        NSDictionary *newsData = [NSKeyedUnarchiver unarchiveObjectWithFile:newsFilePath];
+        NSNumber *checkNum = newsData.allKeys.firstObject;
         // 刷新页面
         UINavigationController *navCtrl = (UINavigationController *)_window.rootViewController;
         HomeViewController *homeVC = navCtrl.viewControllers.firstObject;
         for (HomeTableViewController *homeTabVC in homeVC.segmentVC.subViewControllers) {
+            NSMutableArray *dataList = newsData[checkNum][homeTabVC.model.channelID];
+            if (dataList == nil) {
+                dataList = [NSMutableArray array];
+            }
+            homeTabVC.dataList = dataList;
             [homeTabVC.tableView reloadData];
         }
     }

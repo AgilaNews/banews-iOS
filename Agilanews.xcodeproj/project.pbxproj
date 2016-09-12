@@ -1577,7 +1577,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.banews.agila;
 				PRODUCT_NAME = Agila;
-				PROVISIONING_PROFILE = "acc5daff-0f57-4610-93c3-0deb8a34aed7";
+				PROVISIONING_PROFILE = "c198a787-e073-4967-9b9b-f10710758cfe";
 				VALID_ARCHS = "arm64 armv7s armv7";
 			};
 			name = Debug;
