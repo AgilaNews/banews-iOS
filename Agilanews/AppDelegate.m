@@ -349,6 +349,9 @@
 {
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         @autoreleasepool {
+            // 加载频道列表
+            NSString *categoryFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/category.data"];
+            _categoriesArray = [NSKeyedUnarchiver unarchiveObjectWithFile:categoryFilePath];
             // 加载登录信息
             NSString *loginFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/userinfo.data"];
             _model = [NSKeyedUnarchiver unarchiveObjectWithFile:loginFilePath];

@@ -10,6 +10,8 @@
 
 @implementation CategoriesModel
 
+MJCodingImplementation
+
 + (NSDictionary *)mj_replacedKeyFromPropertyName
 {
     return @{
