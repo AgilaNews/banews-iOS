@@ -274,6 +274,7 @@
     SSLog(@"Message ID: %@", userInfo[@"gcm.message_id"]);
     // Pring full message.
     SSLog(@"%@", userInfo);
+    
     [SVProgressHUD showInfoWithStatus:[NSString stringWithFormat:@"%@", userInfo]];
 }
 // 刷新推送token回调
@@ -289,6 +290,9 @@
     [[FIRMessaging messaging] subscribeToTopic:@"/topics/notification"];
     NSString * version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     [[FIRMessaging messaging] subscribeToTopic:[NSString stringWithFormat:@"/topics/ios_v%@",version]];
+    if (refreshedToken.length) {
+        [self uploadRefreshedToken:refreshedToken];
+    }
 }
 - (void)connectToFcm {
     [[FIRMessaging messaging] connectWithCompletion:^(NSError * _Nullable error) {
@@ -298,6 +302,28 @@
             SSLog(@"Connected to FCM.");
         }
     }];
+}
+/**
+ *  绑定PushToken
+ *
+ *  @param refreshedToken 刷新token
+ */
+- (void)uploadRefreshedToken:(NSString *)refreshedToken
+{
+    __weak typeof(self) weakSelf = self;
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    [params setObject:refreshedToken forKey:@"token"];
+    [params setObject:@"ios" forKey:@"os"];
+    [params setObject:@"apple" forKey:@"vendor"];
+    [params setObject:DEF_PERSISTENT_GET_OBJECT(@"IDFA") forKey:@"ios_did"];
+    [params setObject:[NSString stringWithFormat:@"%@",[[UIDevice currentDevice] systemVersion]] forKey:@"os_version"];
+    [[SSHttpRequest sharedInstance] post:kHomeUrl_Push params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
+        
+    } failure:^(NSError *error) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(60 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [weakSelf uploadRefreshedToken:refreshedToken];
+        });
+    } isShowHUD:NO];
 }
 
 /**
