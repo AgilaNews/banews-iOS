@@ -62,6 +62,8 @@
 #import "Flurry/Flurry.h"
 #import "iConsole.h"
 #import "WebViewJavascriptBridge.h"
+#import <AppsFlyer/AppsFlyer.h>
+
 
 ////////////////////////////////////////
 

@@ -31,6 +31,9 @@
     [self registerShareSDK];
     // 注册Twitter/Crashlytics
     [Fabric with:@[[Twitter class], [Crashlytics class]]];
+    // 注册AppsFlyer
+    [AppsFlyerTracker sharedTracker].appsFlyerDevKey = @"vKsiczVKraASChBxaENvbe";
+    [AppsFlyerTracker sharedTracker].appleAppID = @"1146695204";
 #if DEBUG
     _window = [[iConsoleWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     _window.backgroundColor = SSColor(0, 0, 0);
@@ -157,6 +160,8 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     SSLog(@"处于活跃状态");
+    // 激活AppsFlyer
+    [[AppsFlyerTracker sharedTracker] trackAppLaunch];
     if (_isStart) {
         NSString *newsFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/news.data"];
         NSDictionary *newsData = [NSKeyedUnarchiver unarchiveObjectWithFile:newsFilePath];
