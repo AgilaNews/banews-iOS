@@ -67,6 +67,7 @@
 #import <FirebaseInstanceID/FIRInstanceID.h>
 #import <FirebaseMessaging/FirebaseMessaging.h>
 #import <FirebaseMessaging/FIRMessaging.h>
+#import <AppsFlyer/AppsFlyer.h>
 
 
 ////////////////////////////////////////

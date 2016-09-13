@@ -11,6 +11,8 @@
 		5F2E0A1E1D87B47A00FEC0AC /* HZPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F2E0A181D87B47A00FEC0AC /* HZPhotoBrowser.m */; };
 		5F2E0A1F1D87B47A00FEC0AC /* HZPhotoBrowserView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F2E0A1B1D87B47A00FEC0AC /* HZPhotoBrowserView.m */; };
 		5F2E0A201D87B47A00FEC0AC /* whiteplaceholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 5F2E0A1C1D87B47A00FEC0AC /* whiteplaceholder.png */; };
+		5F2E09FE1D86554900FEC0AC /* AppsFlyer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F2E09FD1D86554900FEC0AC /* AppsFlyer.framework */; };
+		5F2E0A001D86557A00FEC0AC /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F2E09FF1D86557A00FEC0AC /* iAd.framework */; };
 		5F42BFB51D34E2F000B89651 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F42BFB41D34E2F000B89651 /* main.m */; };
 		5F42BFB81D34E2F000B89651 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F42BFB71D34E2F000B89651 /* AppDelegate.m */; };
 		5F42BFC01D34E2F000B89651 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5F42BFBF1D34E2F000B89651 /* Assets.xcassets */; };
@@ -212,6 +214,8 @@
 		5F2E0A1A1D87B47A00FEC0AC /* HZPhotoBrowserView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HZPhotoBrowserView.h; sourceTree = "<group>"; };
 		5F2E0A1B1D87B47A00FEC0AC /* HZPhotoBrowserView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HZPhotoBrowserView.m; sourceTree = "<group>"; };
 		5F2E0A1C1D87B47A00FEC0AC /* whiteplaceholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = whiteplaceholder.png; sourceTree = "<group>"; };
+		5F2E09FD1D86554900FEC0AC /* AppsFlyer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AppsFlyer.framework; sourceTree = "<group>"; };
+		5F2E09FF1D86557A00FEC0AC /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
 		5F42BFB01D34E2F000B89651 /* Agila.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Agila.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5F42BFB41D34E2F000B89651 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		5F42BFB61D34E2F000B89651 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -562,6 +566,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5F2E0A001D86557A00FEC0AC /* iAd.framework in Frameworks */,
 				5F42C0BE1D34ED9700B89651 /* SystemConfiguration.framework in Frameworks */,
 				5F42C0BC1D34ED8E00B89651 /* Security.framework in Frameworks */,
 				5FE7221D1D5051BB0026BFC3 /* AdSupport.framework in Frameworks */,
@@ -583,6 +588,7 @@
 				5F635CD01D3E3EDF006AAE3D /* MOBFoundation.framework in Frameworks */,
 				5F571F851D5C1FD300604CDD /* FBSDKShareKit.framework in Frameworks */,
 				5F635CCF1D3E3EDF006AAE3D /* ShareSDKUI.framework in Frameworks */,
+				5F2E09FE1D86554900FEC0AC /* AppsFlyer.framework in Frameworks */,
 				5F42C0C01D34EFEE00B89651 /* UIKit.framework in Frameworks */,
 				5F42C0BA1D34ED8700B89651 /* QuartzCore.framework in Frameworks */,
 				5F42C0B81D34ED7F00B89651 /* MobileCoreServices.framework in Frameworks */,
@@ -826,6 +832,8 @@
 				5F8D87B71D800F1D00FF4019 /* GoogleInterchangeUtilities.framework */,
 				5F8D87B81D800F1D00FF4019 /* GoogleSymbolUtilities.framework */,
 				5F8D87B91D800F1D00FF4019 /* GoogleUtilities.framework */,
+				5F2E09FF1D86557A00FEC0AC /* iAd.framework */,
+				5F2E09FD1D86554900FEC0AC /* AppsFlyer.framework */,
 				5F571F8F1D5C227600604CDD /* Fabric.framework */,
 				5F571F681D58269600604CDD /* Crashlytics.framework */,
 				5FE7221C1D5051BB0026BFC3 /* AdSupport.framework */,

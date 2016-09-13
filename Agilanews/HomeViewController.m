@@ -105,6 +105,9 @@ static CGFloat const ButtonHeight = 40;
 {
     _segmentVC.subViewControllers = nil;
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    // 缓存频道数据
+    NSString *categoryFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/category.data"];
+    [NSKeyedArchiver archiveRootObject:appDelegate.categoriesArray toFile:categoryFilePath];
     // 添加标题
     NSMutableArray *titleArray = [NSMutableArray array];
     for (CategoriesModel *model in appDelegate.categoriesArray) {
