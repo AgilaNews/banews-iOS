@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "NewsModel.h"
+#import "HZPhotoBrowser.h"
 
-@interface OnlyPicCell : UITableViewCell
+@interface OnlyPicCell : UITableViewCell <HZPhotoBrowserDelegate>
 
 @property (nonatomic, strong) NewsModel *model;
 @property (nonatomic, strong) UILabel *titleLabel;          // 标题

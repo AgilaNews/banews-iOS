@@ -15,7 +15,7 @@
 #define titleFont_Large         [UIFont systemFontOfSize:18]
 #define titleFont_Small         [UIFont systemFontOfSize:14]
 
-@implementation OnlyPicCell
+@implementation OnlyPicCell 
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier bgColor:(UIColor *)bgColor
 {
@@ -172,9 +172,12 @@
     if (_titleImageView == nil) {
         _titleImageView = [[UIImageView alloc] init];
         _titleImageView.backgroundColor = SSColor(235, 235, 235);
-        _titleImageView.contentMode = UIViewContentModeScaleAspectFill;
+        _titleImageView.contentMode = UIViewContentModeScaleAspectFit;
         _titleImageView.clipsToBounds = YES;
         _titleImageView.image = [UIImage imageNamed:@"holderImage"];
+        _titleImageView.userInteractionEnabled = YES;
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapAction)];
+        [_titleImageView addGestureRecognizer:tap];
     }
     return _titleImageView;
 }
@@ -270,6 +273,31 @@
             break;
     }
     [self setNeedsLayout];
+}
+
+- (void)tapAction
+{
+    HZPhotoBrowser *browserVc = [[HZPhotoBrowser alloc] init];
+    browserVc.sourceImagesContainerView = self.titleImageView; // 原图的父控件
+    browserVc.imageCount = 1; // 图片总数
+    browserVc.currentImageIndex = 0;
+    browserVc.delegate = self;
+    [browserVc show];
+}
+
+#pragma mark - photobrowser代理方法
+- (UIImage *)photoBrowser:(HZPhotoBrowser *)browser placeholderImageForIndex:(NSInteger)index
+{
+    return self.titleImageView.image;
+}
+
+- (NSURL *)photoBrowser:(HZPhotoBrowser *)browser highQualityImageURLForIndex:(NSInteger)index
+{
+//    NSString *urlStr = [[self.photoItemArray[index] thumbnail_pic] stringByReplacingOccurrencesOfString:@"thumbnail" withString:@"bmiddle"];
+//    return [NSURL URLWithString:urlStr];
+    ImageModel *imageModel = _model.imgs.firstObject;
+    NSString *imageUrl = [imageModel.src stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    return [NSURL URLWithString:imageUrl];
 }
 
 - (void)awakeFromNib {

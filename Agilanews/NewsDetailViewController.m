@@ -143,17 +143,6 @@
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(touchFavorite) name:KNOTIFICATION_TouchFavorite
                                                object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(applicationDidEnterBackground)
-                                                 name:UIApplicationDidEnterBackgroundNotification
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(applicationWillEnterForeground)
-                                                 name:UIApplicationWillEnterForegroundNotification
-                                               object:nil];
-
 }
 
 - (void)viewWillAppear:(BOOL)animated
