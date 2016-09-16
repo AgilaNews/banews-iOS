@@ -41,7 +41,7 @@
     [_editBtn setTitle:@"Cancel" forState:UIControlStateSelected];
     [_editBtn addTarget:self action:@selector(editAction:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *editItem = [[UIBarButtonItem alloc]initWithCustomView:_editBtn];
-    if ([[[[UIDevice currentDevice] systemVersion] substringToIndex:1] intValue] >= 7) {
+    if ([UIDevice currentDevice].systemVersion.floatValue >= 7.0) {
         UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
         negativeSpacer.width = -20;
         self.navigationItem.rightBarButtonItems = @[negativeSpacer, editItem];

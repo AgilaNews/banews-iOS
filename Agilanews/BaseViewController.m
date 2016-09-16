@@ -94,7 +94,7 @@
 {
     if (Bool == YES) {
         UIBarButtonItem *buttonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
-        if ([[[[UIDevice currentDevice] systemVersion] substringToIndex:1] intValue] >=7 ) {
+        if ([UIDevice currentDevice].systemVersion.floatValue >= 7.0) {
             UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
             negativeSpacer.width = -20;
             self.navigationItem.leftBarButtonItems = @[negativeSpacer, buttonItem];
