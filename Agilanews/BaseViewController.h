@@ -19,10 +19,10 @@
 /**
  *  隐藏NavgationBar
  */
-- (void) hidenNavBar;
+//- (void) hidenNavBar;
 
 /**
  *  显示NavgationBar
  */
-- (void) showNavBar;
+//- (void) showNavBar;
 @end

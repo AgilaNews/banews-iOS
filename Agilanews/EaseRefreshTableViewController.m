@@ -352,7 +352,7 @@
  */
 - (void)hidenNavBar
 {
-    [self.navigationController.navigationBar lt_setBackgroundColor:[UIColor clearColor]];
+    //[self.navigationController.navigationBar lt_setBackgroundColor:[UIColor clearColor]];
     self.navigationController.navigationBar.backgroundColor = [UIColor clearColor];
     self.navigationController.navigationBar.shadowImage = [UIImage new];
     self.navigationController.navigationBarHidden = YES;
