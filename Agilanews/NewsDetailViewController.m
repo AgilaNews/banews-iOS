@@ -57,7 +57,7 @@
     [moreBtn setImage:[UIImage imageNamed:@"icon_article_font"] forState:UIControlStateNormal];
     [moreBtn addTarget:self action:@selector(moreAction) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *moreItem = [[UIBarButtonItem alloc]initWithCustomView:moreBtn];
-    if ([[[[UIDevice currentDevice] systemVersion] substringToIndex:1] intValue] >=7 ) {
+    if ([UIDevice currentDevice].systemVersion.floatValue >= 7.0) {
         UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
         negativeSpacer.width = -10;
         self.navigationItem.rightBarButtonItems = @[negativeSpacer, moreItem, shareItem];
@@ -965,7 +965,7 @@
 //        NSLog(@"testJavascriptHandler responded: %@", response);
 //    }];
 }
-- (void)webView:(UIWebView *)webView didFailLoadWithError:(nullable NSError *)error
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
     if ([AFNetworkReachabilityManager sharedManager].networkReachabilityStatus == AFNetworkReachabilityStatusNotReachable)
     {

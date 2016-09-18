@@ -63,7 +63,7 @@
 - (CGSize)calculateSize:(CGSize)size font:(UIFont *)font {
     CGSize expectedLabelSize = CGSizeZero;
     
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7) {
+    if ([UIDevice currentDevice].systemVersion.floatValue >= 7.0) {
         NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
         paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
         NSDictionary *attributes = @{NSFontAttributeName:font, NSParagraphStyleAttributeName:paragraphStyle};

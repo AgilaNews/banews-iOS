@@ -21,7 +21,18 @@
     
     // 设置背景颜色
     self.view.backgroundColor = kWhiteBgColor;
-    [self.navigationController.navigationBar lt_setBackgroundColor:kOrangeColor];
+    if ([UIDevice currentDevice].systemVersion.floatValue >= 10.0) {
+        [self.navigationController.navigationBar setBarTintColor:kOrangeColor];
+        UIView *barBgView = self.navigationController.navigationBar.subviews.firstObject;
+        for (UIView *subview in barBgView.subviews) {
+            if([subview isKindOfClass:[UIVisualEffectView class]]) {
+                subview.backgroundColor = kOrangeColor;
+                [subview removeAllSubviews];
+            }
+        }
+    } else {
+        [self.navigationController.navigationBar lt_setBackgroundColor:kOrangeColor];
+    }
     // 设置导航栏标题字体大小
     [self.navigationController.navigationBar setTitleTextAttributes:
      @{NSFontAttributeName:[UIFont boldSystemFontOfSize:18],
@@ -94,7 +105,7 @@
 {
     if (Bool == YES) {
         UIBarButtonItem *buttonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
-        if ([[[[UIDevice currentDevice] systemVersion] substringToIndex:1] intValue] >=7 ) {
+        if ([UIDevice currentDevice].systemVersion.floatValue >= 7.0) {
             UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
             negativeSpacer.width = -20;
             self.navigationItem.leftBarButtonItems = @[negativeSpacer, buttonItem];
@@ -125,9 +136,10 @@
 /**
  *  隐藏navgationbar
  */
+/*
 - (void)hidenNavBar
 {
-    [self.navigationController.navigationBar lt_setBackgroundColor:[UIColor clearColor]];
+    //[self.navigationController.navigationBar lt_setBackgroundColor:[UIColor clearColor]];
     self.navigationController.navigationBar.backgroundColor = [UIColor clearColor];
     self.navigationController.navigationBar.shadowImage = [UIImage new];
     
@@ -139,9 +151,9 @@
     [self.navigationController.navigationBar setHidden:NO];
     [self.navigationController setNavigationBarHidden:NO];
     self.navigationController.navigationBarHidden = NO;
-    [self.navigationController.navigationBar lt_setBackgroundColor:kOrangeColor];
+    //[self.navigationController.navigationBar lt_setBackgroundColor:kOrangeColor];
 }
-    
+*/
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

@@ -15,9 +15,20 @@
     // Do any additional setup after loading the view.
     
     // 将导航栏设置为透明
-//    self.navigationBar.translucent = YES;
+    //self.navigationBar.translucent = YES;
     // 设置导航栏背景颜色
-    [self.navigationBar lt_setBackgroundColor:kOrangeColor];
+    if ([UIDevice currentDevice].systemVersion.floatValue >= 10.0) {
+        [self.navigationBar setBarTintColor:kOrangeColor];
+        UIView *barBgView = self.navigationBar.subviews.firstObject;
+        for (UIView *subview in barBgView.subviews) {
+            if([subview isKindOfClass:[UIVisualEffectView class]]) {
+                subview.backgroundColor = kOrangeColor;
+                [subview removeAllSubviews];
+            }
+        }
+    } else {
+        [self.navigationBar lt_setBackgroundColor:kOrangeColor];
+    }
     // 设置导航栏阴影
     self.navigationBar.shadowImage = [UIImage new];
     // 设置手势返回代理对象
