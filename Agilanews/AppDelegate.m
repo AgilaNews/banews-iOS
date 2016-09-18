@@ -240,8 +240,17 @@
     [iConsole info:[NSString stringWithFormat:@"App_Lanch:%@",articleParams],nil];
 #endif
     // 设置IDFA（广告标识符）
-    NSString *IDFA = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
-    DEF_PERSISTENT_SET_OBJECT(@"IDFA", IDFA);
+    NSString *IDFA = DEF_PERSISTENT_GET_OBJECT(@"IDFA");
+    if (!IDFA.length) {
+        KeychainItemWrapper *keychain = [[KeychainItemWrapper alloc] initWithIdentifier:@"IDFA" accessGroup:nil];
+        IDFA = [keychain objectForKey:(id)kSecValueData];
+        if (!IDFA.length) {
+            IDFA = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
+            [keychain setObject:IDFA forKey:(__bridge id)kSecValueData];
+        }
+        DEF_PERSISTENT_SET_OBJECT(@"IDFA", IDFA);
+    }
+    
     NSString *uuid = [[NSUUID UUID] UUIDString];
     // 刷新session
     NSNumber *backgroundTime = DEF_PERSISTENT_GET_OBJECT(@"BackgroundTime");

@@ -7,12 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5F2E09FE1D86554900FEC0AC /* AppsFlyer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F2E09FD1D86554900FEC0AC /* AppsFlyer.framework */; };
+		5F2E0A001D86557A00FEC0AC /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F2E09FF1D86557A00FEC0AC /* iAd.framework */; };
 		5F2E0A1D1D87B47A00FEC0AC /* HZIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F2E0A161D87B47A00FEC0AC /* HZIndicatorView.m */; };
 		5F2E0A1E1D87B47A00FEC0AC /* HZPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F2E0A181D87B47A00FEC0AC /* HZPhotoBrowser.m */; };
 		5F2E0A1F1D87B47A00FEC0AC /* HZPhotoBrowserView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F2E0A1B1D87B47A00FEC0AC /* HZPhotoBrowserView.m */; };
 		5F2E0A201D87B47A00FEC0AC /* whiteplaceholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 5F2E0A1C1D87B47A00FEC0AC /* whiteplaceholder.png */; };
-		5F2E09FE1D86554900FEC0AC /* AppsFlyer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F2E09FD1D86554900FEC0AC /* AppsFlyer.framework */; };
-		5F2E0A001D86557A00FEC0AC /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F2E09FF1D86557A00FEC0AC /* iAd.framework */; };
 		5F42BFB51D34E2F000B89651 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F42BFB41D34E2F000B89651 /* main.m */; };
 		5F42BFB81D34E2F000B89651 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F42BFB71D34E2F000B89651 /* AppDelegate.m */; };
 		5F42BFC01D34E2F000B89651 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5F42BFBF1D34E2F000B89651 /* Assets.xcassets */; };
@@ -85,6 +85,7 @@
 		5F5AE9711D5353B400A5A8B7 /* BannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5AE9701D5353B400A5A8B7 /* BannerView.m */; };
 		5F5AE9761D54364E00A5A8B7 /* GuideRefreshView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5AE9751D54364E00A5A8B7 /* GuideRefreshView.m */; };
 		5F5AE9791D54A4C900A5A8B7 /* GuideFavoritesView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5AE9781D54A4C900A5A8B7 /* GuideFavoritesView.m */; };
+		5F5C63791D8E5FED005D3578 /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5C63781D8E5FED005D3578 /* KeychainItemWrapper.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		5F635CA41D3CCC50006AAE3D /* UIView+UIScreenDisplaying.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F635CA31D3CCC50006AAE3D /* UIView+UIScreenDisplaying.m */; };
 		5F635CA71D3CFA58006AAE3D /* TimeStampToString.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F635CA61D3CFA58006AAE3D /* TimeStampToString.m */; };
 		5F635CB11D3DD4C3006AAE3D /* LeftView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F635CB01D3DD4C3006AAE3D /* LeftView.m */; };
@@ -206,6 +207,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5F2E09FD1D86554900FEC0AC /* AppsFlyer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AppsFlyer.framework; sourceTree = "<group>"; };
+		5F2E09FF1D86557A00FEC0AC /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
 		5F2E0A151D87B47A00FEC0AC /* HZIndicatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HZIndicatorView.h; sourceTree = "<group>"; };
 		5F2E0A161D87B47A00FEC0AC /* HZIndicatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HZIndicatorView.m; sourceTree = "<group>"; };
 		5F2E0A171D87B47A00FEC0AC /* HZPhotoBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HZPhotoBrowser.h; sourceTree = "<group>"; };
@@ -214,8 +217,6 @@
 		5F2E0A1A1D87B47A00FEC0AC /* HZPhotoBrowserView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HZPhotoBrowserView.h; sourceTree = "<group>"; };
 		5F2E0A1B1D87B47A00FEC0AC /* HZPhotoBrowserView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HZPhotoBrowserView.m; sourceTree = "<group>"; };
 		5F2E0A1C1D87B47A00FEC0AC /* whiteplaceholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = whiteplaceholder.png; sourceTree = "<group>"; };
-		5F2E09FD1D86554900FEC0AC /* AppsFlyer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AppsFlyer.framework; sourceTree = "<group>"; };
-		5F2E09FF1D86557A00FEC0AC /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
 		5F42BFB01D34E2F000B89651 /* Agila.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Agila.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5F42BFB41D34E2F000B89651 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		5F42BFB61D34E2F000B89651 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -349,6 +350,9 @@
 		5F5AE9751D54364E00A5A8B7 /* GuideRefreshView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GuideRefreshView.m; sourceTree = "<group>"; };
 		5F5AE9771D54A4C900A5A8B7 /* GuideFavoritesView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuideFavoritesView.h; sourceTree = "<group>"; };
 		5F5AE9781D54A4C900A5A8B7 /* GuideFavoritesView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GuideFavoritesView.m; sourceTree = "<group>"; };
+		5F5C63751D8E5AE7005D3578 /* Agila.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Agila.entitlements; sourceTree = "<group>"; };
+		5F5C63771D8E5FED005D3578 /* KeychainItemWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeychainItemWrapper.h; sourceTree = "<group>"; };
+		5F5C63781D8E5FED005D3578 /* KeychainItemWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeychainItemWrapper.m; sourceTree = "<group>"; };
 		5F635CA21D3CCC50006AAE3D /* UIView+UIScreenDisplaying.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+UIScreenDisplaying.h"; sourceTree = "<group>"; };
 		5F635CA31D3CCC50006AAE3D /* UIView+UIScreenDisplaying.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+UIScreenDisplaying.m"; sourceTree = "<group>"; };
 		5F635CA51D3CFA58006AAE3D /* TimeStampToString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeStampToString.h; sourceTree = "<group>"; };
@@ -566,9 +570,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5F42C0BC1D34ED8E00B89651 /* Security.framework in Frameworks */,
 				5F2E0A001D86557A00FEC0AC /* iAd.framework in Frameworks */,
 				5F42C0BE1D34ED9700B89651 /* SystemConfiguration.framework in Frameworks */,
-				5F42C0BC1D34ED8E00B89651 /* Security.framework in Frameworks */,
 				5FE7221D1D5051BB0026BFC3 /* AdSupport.framework in Frameworks */,
 				5F635CE41D3E3FA3006AAE3D /* AddressBook.framework in Frameworks */,
 				5F8D87BD1D800F1D00FF4019 /* GoogleSymbolUtilities.framework in Frameworks */,
@@ -633,6 +637,7 @@
 		5F42BFA71D34E2F000B89651 = {
 			isa = PBXGroup;
 			children = (
+				5F5C63751D8E5AE7005D3578 /* Agila.entitlements */,
 				5F42C0B41D34ED6300B89651 /* Frameworks */,
 				5F42BFB21D34E2F000B89651 /* Agilanews */,
 				5F42BFB11D34E2F000B89651 /* Products */,
@@ -685,6 +690,7 @@
 		5F42BFE61D34E3BC00B89651 /* Tools */ = {
 			isa = PBXGroup;
 			children = (
+				5F5C63761D8E5FED005D3578 /* KeychainItemWrapper */,
 				5F2E0A141D87B47A00FEC0AC /* HZPhotoBrowser */,
 				5F8D85A11D76A99700FF4019 /* WebViewJavascriptBridge */,
 				5F571FE21D63F9F500604CDD /* iConsole */,
@@ -900,6 +906,15 @@
 				5F5AE9781D54A4C900A5A8B7 /* GuideFavoritesView.m */,
 			);
 			name = Guide;
+			sourceTree = "<group>";
+		};
+		5F5C63761D8E5FED005D3578 /* KeychainItemWrapper */ = {
+			isa = PBXGroup;
+			children = (
+				5F5C63771D8E5FED005D3578 /* KeychainItemWrapper.h */,
+				5F5C63781D8E5FED005D3578 /* KeychainItemWrapper.m */,
+			);
+			path = KeychainItemWrapper;
 			sourceTree = "<group>";
 		};
 		5F635CA81D3DD3B9006AAE3D /* Left */ = {
@@ -1308,6 +1323,9 @@
 							com.apple.BackgroundModes = {
 								enabled = 1;
 							};
+							com.apple.Keychain = {
+								enabled = 1;
+							};
 						};
 					};
 				};
@@ -1432,6 +1450,7 @@
 				5F42C0841D34E41D00B89651 /* SDImageCache.m in Sources */,
 				5F42C0171D34E3EC00B89651 /* MJPropertyType.m in Sources */,
 				5F635CA71D3CFA58006AAE3D /* TimeStampToString.m in Sources */,
+				5F5C63791D8E5FED005D3578 /* KeychainItemWrapper.m in Sources */,
 				5FF4B7D31D3A174900CC6704 /* MJRefreshGifHeader.m in Sources */,
 				5FF4B76B1D37BD2C00CC6704 /* NSArray+UhouAdditions.m in Sources */,
 				5FF4B7751D37BD2C00CC6704 /* UIButton+UhouAdditions.m in Sources */,
@@ -1634,6 +1653,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Agila.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: zhendong Wang (4PX74E3WFB)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: zhendong Wang (4PX74E3WFB)";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1675,6 +1695,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Agila.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: zhendong Wang (CA8M4AL9S7)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: zhendong Wang (CA8M4AL9S7)";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1758,6 +1779,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Agila.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: zhendong Wang (CA8M4AL9S7)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: zhendong Wang (CA8M4AL9S7)";
 				FRAMEWORK_SEARCH_PATHS = (

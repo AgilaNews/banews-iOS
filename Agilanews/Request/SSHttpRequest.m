@@ -156,6 +156,9 @@ static SSHttpRequest *_manager = nil;
     if (DEF_PERSISTENT_GET_OBJECT(@"IDFA") != nil) {
         [params setObject:DEF_PERSISTENT_GET_OBJECT(@"IDFA") forKey:@"idfv"];
         [params setObject:DEF_PERSISTENT_GET_OBJECT(@"IDFA") forKey:@"idfa"];
+    } else {
+        [params setObject:@"" forKey:@"idfv"];
+        [params setObject:@"" forKey:@"idfa"];
     }
     // 系统
     [params setObject:@"ios" forKey:@"os"];
@@ -285,6 +288,9 @@ static SSHttpRequest *_manager = nil;
     if (DEF_PERSISTENT_GET_OBJECT(@"IDFA") != nil) {
         [baseParams setObject:DEF_PERSISTENT_GET_OBJECT(@"IDFA") forKey:@"idfv"];
         [baseParams setObject:DEF_PERSISTENT_GET_OBJECT(@"IDFA") forKey:@"idfa"];
+    } else {
+        [params setObject:@"" forKey:@"idfv"];
+        [params setObject:@"" forKey:@"idfa"];
     }
     // 系统
     [baseParams setObject:@"ios" forKey:@"os"];
@@ -528,6 +534,9 @@ static SSHttpRequest *_manager = nil;
     if (DEF_PERSISTENT_GET_OBJECT(@"IDFA") != nil) {
         [params setObject:DEF_PERSISTENT_GET_OBJECT(@"IDFA") forKey:@"idfv"];
         [params setObject:DEF_PERSISTENT_GET_OBJECT(@"IDFA") forKey:@"idfa"];
+    } else {
+        [params setObject:@"" forKey:@"idfv"];
+        [params setObject:@"" forKey:@"idfa"];
     }
     // 系统
     [params setObject:@"ios" forKey:@"os"];
