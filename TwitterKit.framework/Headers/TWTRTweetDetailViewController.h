@@ -40,23 +40,23 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  * The background color of the view.
  */
-@property (nonatomic, null_resettable) UIColor *backgroundColor;
+@property (nonatomic, assign, null_resettable) UIColor *backgroundColor;
 
 /**
  * The primary text color. This value will be applied to the 
  * username and tweet text.
  */
-@property (nonatomic, null_resettable) UIColor *primaryTextColor;
+@property (nonatomic, assign, null_resettable) UIColor *primaryTextColor;
 
 /**
  * The secondary text color.
  */
-@property (nonatomic, null_resettable) UIColor *secondaryTextColor;
+@property (nonatomic, assign, null_resettable) UIColor *secondaryTextColor;
 
 /**
  * A color to apply to links.
  */
-@property (nonatomic, null_resettable) UIColor *linkTextColor;
+@property (nonatomic, assign, null_resettable) UIColor *linkTextColor;
 
 /**
  * A value indicating the amount that the action bar should be offset

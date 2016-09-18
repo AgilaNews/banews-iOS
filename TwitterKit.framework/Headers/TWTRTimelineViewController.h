@@ -45,7 +45,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  for ads to be injected.
  *  @note Changing this will force a reload of the timeline. You can only set this once. Must be set on the main thread.
  */
-@property (nonatomic, nullable) TWTRMoPubAdConfiguration *adConfiguration;
+@property (nonatomic, assign, nullable) TWTRMoPubAdConfiguration *adConfiguration;
 
 /**
  *  Whether action buttons (Like, Share) should be shown on the `TWTRTweetTableViewCell`s inside the tableview.

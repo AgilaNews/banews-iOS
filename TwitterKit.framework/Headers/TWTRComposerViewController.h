@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  * A theme to use for the composer. If nil will default to the light theme.
  */
-@property (nonatomic, null_resettable) TWTRComposerTheme *theme;
+@property (nonatomic, assign, null_resettable) TWTRComposerTheme *theme;
 
 /**
  * An array of hashtags that will be added to the composer. This property must be

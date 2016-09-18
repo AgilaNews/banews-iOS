@@ -101,9 +101,9 @@
                 }
                 // 记录列表页滚动位置
                 [scrollDic setObject:[NSNumber numberWithFloat:homeTabVC.tableView.contentOffset.y] forKey:homeTabVC.model.channelID];
-                [homeTabVC.dataList removeAllObjects];
+//                [homeTabVC.dataList removeAllObjects];
             }
-            [homeTabVC.tableView reloadData];
+//            [homeTabVC.tableView reloadData];
         }
         NSString *newsFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/news.data"];
         NSDictionary *newsData = [NSDictionary dictionaryWithObject:newsDic forKey:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]]];
@@ -159,10 +159,6 @@
                 }
             }
         }
-    }
-    // 刷新页面
-    for (HomeTableViewController *homeTabVC in homeVC.segmentVC.subViewControllers) {
-        [homeTabVC.tableView reloadData];
     }
 
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
@@ -334,17 +330,40 @@
     SSLog(@"%@", error);
 }
 // 收到推送回调
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
+{
     // If you are receiving a notification message while your app is in the background,
     // this callback will not be fired till the user taps on the notification launching the application.
     // TODO: Handle data of notification
     // Print message ID.
     SSLog(@"Message ID: %@", userInfo[@"gcm.message_id"]);
     // Pring full message.
-    SSLog(@"%@", userInfo);
-    
-    [SVProgressHUD showInfoWithStatus:[NSString stringWithFormat:@"%@", userInfo]];
+    SSLog(@"userInfo: %@", userInfo);
+    SSLog(@"BackgroundFetchResult: %@",completionHandler);
+    if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
+        NSString *title = @"Breaking News";
+        NSString *message = userInfo[@"notification"][@"body"];
+        UIAlertController *notificationAlert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+        NSMutableAttributedString *alertControllerStr = [[NSMutableAttributedString alloc] initWithString:title];
+        [alertControllerStr addAttribute:NSForegroundColorAttributeName value:kBlackColor range:NSMakeRange(0, title.length)];
+        [alertControllerStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:18] range:NSMakeRange(0, title.length)];
+        [notificationAlert setValue:alertControllerStr forKey:@"attributedTitle"];
+        NSMutableAttributedString *alertControllerMessageStr = [[NSMutableAttributedString alloc] initWithString:message];
+        [alertControllerMessageStr addAttribute:NSForegroundColorAttributeName value:SSColor(102, 102, 102) range:NSMakeRange(0, message.length)];
+        [alertControllerMessageStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:14] range:NSMakeRange(0, message.length)];
+        [notificationAlert setValue:alertControllerMessageStr forKey:@"attributedMessage"];
+        UIAlertAction *noAction = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleDefault handler:nil];
+        UIAlertAction *yesAction = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+            
+        }];
+        [notificationAlert addAction:noAction];
+        [notificationAlert addAction:yesAction];
+        [_window.rootViewController presentViewController:notificationAlert animated:YES completion:nil];
+    } else {
+        [SVProgressHUD showInfoWithStatus:[NSString stringWithFormat:@"%@", userInfo]];
+    }
 }
+
 // 刷新推送token回调
 - (void)tokenRefreshNotification:(NSNotification *)notification {
     // Note that this callback will be fired everytime a new token is generated, including the first

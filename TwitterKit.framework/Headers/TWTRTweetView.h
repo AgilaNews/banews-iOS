@@ -98,17 +98,17 @@ typedef NS_ENUM(NSUInteger, TWTRTweetViewTheme) {
 /**
  *  Background color of the Tweet view and all text labels (fullname, username, Tweet text, timestamp).
  */
-@property (nonatomic) UIColor *backgroundColor UI_APPEARANCE_SELECTOR;
+@property (nonatomic, assign) UIColor *backgroundColor UI_APPEARANCE_SELECTOR;
 
 /**
  *  Color of Tweet text and full name.
  */
-@property (nonatomic) UIColor *primaryTextColor UI_APPEARANCE_SELECTOR;
+@property (nonatomic, assign) UIColor *primaryTextColor UI_APPEARANCE_SELECTOR;
 
 /**
  *  Color of links in Tweet text.
  */
-@property (nonatomic) UIColor *linkTextColor UI_APPEARANCE_SELECTOR;
+@property (nonatomic, assign) UIColor *linkTextColor UI_APPEARANCE_SELECTOR;
 
 /**
  *  Set whether the border should be shown.

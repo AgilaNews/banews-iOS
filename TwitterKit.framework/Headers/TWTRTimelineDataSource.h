@@ -42,7 +42,7 @@ typedef void (^TWTRLoadTimelineCompletion)(NSArray<TWTRTweet *> * _Nullable twee
  * You will, likely, not need to alter this value unless you are implementing your
  * own timeline view controller.
  */
-@property (nonatomic) TWTRAPIClient *APIClient;
+@property (nonatomic, assign) TWTRAPIClient *APIClient;
 
 @end
 

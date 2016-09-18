@@ -173,7 +173,7 @@
     [iConsole info:@"Info_Logout_Click",nil];
 #endif
     NSString *title = @"Logout Confirmation";
-    NSString *message = @"If you log out of the account ,you will not be able to post comments, view favorites,are you sure to exit?";
+    NSString *message = @"If you log out of the account, you will not be able to post comments, view favorites, are you sure to exit?";
     UIAlertController *logoutAlert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
     NSMutableAttributedString *alertControllerStr = [[NSMutableAttributedString alloc] initWithString:title];
     [alertControllerStr addAttribute:NSForegroundColorAttributeName value:kBlackColor range:NSMakeRange(0, title.length)];

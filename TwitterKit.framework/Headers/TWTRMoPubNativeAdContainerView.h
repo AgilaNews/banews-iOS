@@ -54,22 +54,22 @@ typedef NS_ENUM(NSUInteger, TWTRNativeAdTheme) {
 /**
  *  Background color of this ad container view. Defaults to #F5F8FA.
  */
-@property (nonatomic) UIColor *backgroundColor UI_APPEARANCE_SELECTOR;
+@property (nonatomic, assign) UIColor *backgroundColor UI_APPEARANCE_SELECTOR;
 
 /**
  *  Background color of the ad within the container. Defaults to #FFFFFF.
  */
-@property (nonatomic) UIColor *adBackgroundColor UI_APPEARANCE_SELECTOR;
+@property (nonatomic, assign) UIColor *adBackgroundColor UI_APPEARANCE_SELECTOR;
 
 /**
  *  Primary text color used within the ad cell including the underlying ad. Defaults to #292F33.
  */
-@property (nonatomic) UIColor *primaryTextColor UI_APPEARANCE_SELECTOR;
+@property (nonatomic, assign) UIColor *primaryTextColor UI_APPEARANCE_SELECTOR;
 
 /**
  *  Background color of buttons. Defaults to #174791.
  */
-@property (nonatomic) UIColor *buttonBackgroundColor UI_APPEARANCE_SELECTOR;
+@property (nonatomic, assign) UIColor *buttonBackgroundColor UI_APPEARANCE_SELECTOR;
 
 
 @end
