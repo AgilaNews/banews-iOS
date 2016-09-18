@@ -677,15 +677,15 @@
         cell = ((UIView *)cell).superview;
     } while (cell != nil);
     NewsModel *newsModel = ((OnlyPicCell *)cell).model;
-    // 打点-点赞-010207
+    // 打点-点赞-010117
     NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
                                    [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
                                    _model.name, @"channel",
                                    newsModel.news_id, @"article",
                                    nil];
-    [Flurry logEvent:@"Article_Like_Click" withParameters:articleParams];
+    [Flurry logEvent:@"Home_List_Like_Click" withParameters:articleParams];
 #if DEBUG
-    [iConsole info:[NSString stringWithFormat:@"Article_Like_Click:%@",articleParams],nil];
+    [iConsole info:[NSString stringWithFormat:@"Home_List_Like_Click:%@",articleParams],nil];
 #endif
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     if (button.selected) {
@@ -745,9 +745,9 @@
                                        _model.name, @"channel",
                                        newsModel.news_id, @"article",
                                        nil];
-        [Flurry logEvent:@"Article_Share_Facebook_Click" withParameters:articleParams];
+        [Flurry logEvent:@"Home_List_Share_FacebookClick" withParameters:articleParams];
 #if DEBUG
-        [iConsole info:[NSString stringWithFormat:@"Article_Share_Facebook_Click:%@",articleParams],nil];
+        [iConsole info:[NSString stringWithFormat:@"Home_List_Share_FacebookClick:%@",articleParams],nil];
 #endif
         AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
         if (appDelegate.model) {
@@ -778,9 +778,9 @@
                                        _model.name, @"channel",
                                        newsModel.news_id, @"article",
                                        nil];
-        [Flurry logEvent:@"Article_Share_Twitter_Click" withParameters:articleParams];
+        [Flurry logEvent:@"Home_List_Share_TwitterClick" withParameters:articleParams];
 #if DEBUG
-        [iConsole info:[NSString stringWithFormat:@"Article_Share_Twitter_Click:%@",articleParams],nil];
+        [iConsole info:[NSString stringWithFormat:@"Home_List_Share_TwitterClick:%@",articleParams],nil];
 #endif
         AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
         if (appDelegate.model) {
@@ -820,9 +820,9 @@
                                        _model.name, @"channel",
                                        newsModel.news_id, @"article",
                                        nil];
-        [Flurry logEvent:@"Article_Share_Google+_Click" withParameters:articleParams];
+        [Flurry logEvent:@"Home_List_Share_Google+Click" withParameters:articleParams];
 #if DEBUG
-        [iConsole info:[NSString stringWithFormat:@"Article_Share_Google+_Click:%@",articleParams],nil];
+        [iConsole info:[NSString stringWithFormat:@"Home_List_Share_Google+Click:%@",articleParams],nil];
 #endif
         AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
         if (appDelegate.model) {

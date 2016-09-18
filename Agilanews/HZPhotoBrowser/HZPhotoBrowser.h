@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "HZPhotoBrowserView.h"
+#import "NewsModel.h"
 
 @class HZPhotoBrowser;
 
@@ -22,7 +23,7 @@
 @property (nonatomic, weak) UIView *sourceImagesContainerView;
 @property (nonatomic, assign) int currentImageIndex;
 @property (nonatomic, assign) NSInteger imageCount;//图片总数
-
+@property (nonatomic, strong) NewsModel *model;
 @property (nonatomic, weak) id<HZPhotoBrowserDelegate> delegate;
 
 - (void)show;

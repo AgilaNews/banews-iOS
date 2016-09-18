@@ -271,8 +271,31 @@
                             if ([clearAlert valueForKey:@"attributedMessage"]) {
                                 [clearAlert setValue:alertControllerMessageStr forKey:@"attributedMessage"];
                             }
-                            UIAlertAction *noAction = [UIAlertAction actionWithTitle:@"Update Later" style:UIAlertActionStyleDefault handler:nil];
+                            UIAlertAction *noAction = [UIAlertAction actionWithTitle:@"Update Later" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                                // 打点-点击版本更新对话框中稍后更新选项-010005
+                                NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+                                NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
+                                                               [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
+                                                               [NetType getNetType], @"network",
+                                                               [NSString stringWithFormat:@"v%@",version], @"current version",
+                                                               nil];
+                                [Flurry logEvent:@"UpdataDialog_UPDATALATER_Click" withParameters:articleParams];
+#if DEBUG
+                                [iConsole info:[NSString stringWithFormat:@"UpdataDialog_UPDATALATER_Click:%@",articleParams],nil];
+#endif
+                            }];
                             UIAlertAction *yesAction = [UIAlertAction actionWithTitle:@"Update Now" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+                                // 打点-点击版本更新对话框中立即更新选项-010006
+                                NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+                                NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
+                                                               [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
+                                                               [NetType getNetType], @"network",
+                                                               [NSString stringWithFormat:@"v%@",version], @"current version",
+                                                               nil];
+                                [Flurry logEvent:@"UpdataDialog_UPDATANOW_Click" withParameters:articleParams];
+#if DEBUG
+                                [iConsole info:[NSString stringWithFormat:@"UpdataDialog_UPDATANOW_Click:%@",articleParams],nil];
+#endif
                                 dispatch_after(0.2, dispatch_get_main_queue(), ^{
                                     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"itms-apps://%@", responseObj[@"updates"][@"update_url"]]]];
                                 });

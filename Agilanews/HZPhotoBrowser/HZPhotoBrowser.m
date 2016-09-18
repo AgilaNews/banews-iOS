@@ -8,6 +8,8 @@
 
 #import "HZPhotoBrowser.h"
 #import "HZPhotoBrowserConfig.h"
+#import "HomeViewController.h"
+#import "HomeTableViewController.h"
 
 @interface HZPhotoBrowser() <UIScrollViewDelegate>
 @property (nonatomic,strong) UIScrollView *scrollView;
@@ -233,6 +235,20 @@
 #pragma mark 保存图像
 - (void)saveImage
 {
+    // 打点-长按图片点击下载-010008
+    UINavigationController *navCtrl = (UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+    HomeViewController *homeVC = navCtrl.viewControllers.firstObject;
+    HomeTableViewController *homeTBC = homeVC.segmentVC.subViewControllers[homeVC.segmentVC.selectIndex - 10000];
+    NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
+                                   homeTBC.model.name, @"channel",
+                                   _model.news_id, @"article",
+                                   [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
+                                   [NetType getNetType], @"network",
+                                   nil];
+    [Flurry logEvent:@"PhotoFullScreen_SavePhoto_Click" withParameters:articleParams];
+#if DEBUG
+    [iConsole info:[NSString stringWithFormat:@"PhotoFullScreen_SavePhoto_Click:%@",articleParams],nil];
+#endif
     int index = _scrollView.contentOffset.x / _scrollView.bounds.size.width;
     
     HZPhotoBrowserView *currentView = _scrollView.subviews[index];
@@ -261,6 +277,20 @@
 - (void)show
 {
     [[[[UIApplication sharedApplication] keyWindow] rootViewController] presentViewController:self animated:NO completion:nil];
+    // 打点-图片全屏展示页页面进入-010009
+    UINavigationController *navCtrl = (UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+    HomeViewController *homeVC = navCtrl.viewControllers.firstObject;
+    HomeTableViewController *homeTBC = homeVC.segmentVC.subViewControllers[homeVC.segmentVC.selectIndex - 10000];
+    NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
+                                   homeTBC.model.name, @"channel",
+                                   _model.news_id, @"article",
+                                   [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
+                                   [NetType getNetType], @"network",
+                                   nil];
+    [Flurry logEvent:@"PhotoFullScreen_Enter" withParameters:articleParams];
+#if DEBUG
+    [iConsole info:[NSString stringWithFormat:@"PhotoFullScreen_Enter:%@",articleParams],nil];
+#endif
 }
 
 #pragma mark 单击隐藏图片浏览器
