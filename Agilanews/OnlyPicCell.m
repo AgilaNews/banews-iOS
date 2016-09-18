@@ -122,7 +122,13 @@
             _titleLabel.textColor = SSColor(68, 68, 68);
         }
     }
+    self.likeButton.hidden = NO;
     
+    NSNumber *textOnlyMode = DEF_PERSISTENT_GET_OBJECT(SS_textOnlyMode);
+    if ([textOnlyMode integerValue] == 1) {
+        self.titleImageView.image = [UIImage imageNamed:@"holderImage"];
+        return;
+    }
     NSString *imageUrl = [imageModel.src stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     [self.titleImageView sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:[UIImage imageNamed:@"holderImage"] options:SDWebImageRetryFailed completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         if (!image) {
@@ -132,7 +138,6 @@
         }
     }];
     
-    self.likeButton.hidden = NO;
 }
 
 - (UILabel *)titleLabel
@@ -277,6 +282,11 @@
 
 - (void)tapAction
 {
+    // 无图模式点击图片不进入全屏显示状态
+    NSNumber *textOnlyMode = DEF_PERSISTENT_GET_OBJECT(SS_textOnlyMode);
+    if ([textOnlyMode integerValue] == 1) {
+        return;
+    }
     HZPhotoBrowser *browserVc = [[HZPhotoBrowser alloc] init];
     browserVc.sourceImagesContainerView = self.titleImageView; // 原图的父控件
     browserVc.imageCount = 1; // 图片总数
@@ -293,8 +303,6 @@
 
 - (NSURL *)photoBrowser:(HZPhotoBrowser *)browser highQualityImageURLForIndex:(NSInteger)index
 {
-//    NSString *urlStr = [[self.photoItemArray[index] thumbnail_pic] stringByReplacingOccurrencesOfString:@"thumbnail" withString:@"bmiddle"];
-//    return [NSURL URLWithString:urlStr];
     ImageModel *imageModel = _model.imgs.firstObject;
     NSString *imageUrl = [imageModel.src stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     return [NSURL URLWithString:imageUrl];

@@ -29,6 +29,7 @@
     [self setUpFrames];
     
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressAction:)];
+//    longPress.minimumPressDuration = 1;
     [self.view addGestureRecognizer:longPress];
 }
 
@@ -251,28 +252,10 @@
     [_indicatorView removeFromSuperview];
     SVProgressHUD.defaultStyle = SVProgressHUDStyleDark;
     if (error) {
-#warning todo - showErrorWithStatus
-        [SVProgressHUD showErrorWithStatus:@"Fetching failed, please try again"];
+        [SVProgressHUD showErrorWithStatus:@"Save failed."];
     } else {
         [SVProgressHUD showSuccessWithStatus:@"Saved to your album."];
     }
-//    UILabel *label = [[UILabel alloc] init];
-//    label.textColor = [UIColor whiteColor];
-//    label.backgroundColor = [UIColor colorWithRed:0.1f green:0.1f blue:0.1f alpha:0.50f];
-//    label.layer.cornerRadius = 5;
-//    label.clipsToBounds = YES;
-//    label.bounds = CGRectMake(0, 0, 150, 60);
-//    label.center = self.view.center;
-//    label.textAlignment = NSTextAlignmentCenter;
-//    label.font = [UIFont boldSystemFontOfSize:21];
-//    [[UIApplication sharedApplication].keyWindow addSubview:label];
-//    [[UIApplication sharedApplication].keyWindow bringSubviewToFront:label];
-//    if (error) {
-//        label.text = @"保存失败";
-//    }   else {
-//        label.text = @"保存成功";
-//    }
-//    [label performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1.0];
 }
 
 - (void)show
