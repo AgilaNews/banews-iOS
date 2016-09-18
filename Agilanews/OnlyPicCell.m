@@ -231,10 +231,15 @@
                 _likeButton.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, -16);
                 [_likeButton setTitle:buttonTitle forState:UIControlStateNormal];
                 break;
-            default:
+            case 5:
                 _likeButton.imageEdgeInsets = UIEdgeInsetsMake(0, 5, 0, 0);
                 _likeButton.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, -20);
                 [_likeButton setTitle:@"9999+" forState:UIControlStateNormal];
+                break;
+            default:
+                _likeButton.imageEdgeInsets = UIEdgeInsetsMake(0, -12, 0, 0);
+                _likeButton.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, -4);
+                [_likeButton setTitle:buttonTitle forState:UIControlStateNormal];
                 break;
         }
     } else {
