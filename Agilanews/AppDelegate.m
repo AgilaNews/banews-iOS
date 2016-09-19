@@ -18,7 +18,7 @@
 @end
 
 @implementation AppDelegate
-
+#pragma mark - APP生命周期
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     // 注册Flurry
@@ -220,7 +220,7 @@
     [NSKeyedArchiver archiveRootObject:logData toFile:logFilePath];
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
-
+#pragma mark - 冷启动
 /**
  *  冷启动
  */
@@ -298,7 +298,7 @@
         
     } isShowHUD:NO];
 }
-
+#pragma mark - Notifications
 /**
  *  注册通知
  */
@@ -333,10 +333,7 @@
 {
     // If you are receiving a notification message while your app is in the background,
     // this callback will not be fired till the user taps on the notification launching the application.
-    // TODO: Handle data of notification
-    // Print message ID.
     SSLog(@"Message ID: %@", userInfo[@"gcm.message_id"]);
-    // Pring full message.
     SSLog(@"userInfo: %@", userInfo);
     if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
         return;
@@ -380,7 +377,7 @@
     SSLog(@"InstanceID token: %@", refreshedToken);
     // Connect to FCM since connection may have failed when attempted before having a token.
     [self connectToFcm];
-    // TODO: If necessary send token to application server.
+    // 注册topics
     [[FIRMessaging messaging] subscribeToTopic:@"/topics/notification"];
     NSString * version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     [[FIRMessaging messaging] subscribeToTopic:[NSString stringWithFormat:@"/topics/ios_v%@",version]];
@@ -419,7 +416,7 @@
         });
     } isShowHUD:NO];
 }
-
+#pragma mark - 监听网络状态
 /**
  *  监听网络状态
  */
@@ -458,7 +455,7 @@
     }];
     [manager startMonitoring];
 }
-
+#pragma mark - 获取定位信息
 /**
  *  定位
  */
@@ -495,7 +492,7 @@
     DEF_PERSISTENT_SET_OBJECT(SS_LATITUDE, latitude);
     DEF_PERSISTENT_SET_OBJECT(SS_LONGITUDE,longitude);
 }
-
+#pragma mark - 读取用户信息
 /**
  *  读取用户登录信息/配置信息
  */
@@ -568,7 +565,7 @@
     [textOnlyAlert addAction:yesAction];
     [self.window.rootViewController presentViewController:textOnlyAlert animated:YES completion:nil];
 }
-
+#pragma mark - 服务端打点上报
 /**
  *  服务端打点上报
  */
@@ -633,7 +630,7 @@
         [iConsole error:@"unrecognised command, try 'version' instead"];
     }
 }
-
+#pragma mark - 缓存管理
 // 内存警告
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application
 {
