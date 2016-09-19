@@ -343,11 +343,9 @@
     }
     
     [self.view.window addSubview:tempImageView];
-    
     [self dismissViewControllerAnimated:NO completion:nil];
     [UIView animateWithDuration:kPhotoBrowserHideDuration animations:^{
         tempImageView.frame = targetTemp;
-        
     } completion:^(BOOL finished) {
         [tempImageView removeFromSuperview];
     }];

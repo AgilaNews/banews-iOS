@@ -15,7 +15,7 @@ typedef enum {
 #define kAppHeight [UIScreen mainScreen].bounds.size.height
 
 //图片缩放比例
-#define kMinZoomScale 0.6f
+#define kMinZoomScale 0.8f
 #define kMaxZoomScale 2.0f
 
 //是否支持横屏
@@ -32,7 +32,7 @@ typedef enum {
 #define kIndicatorViewItemMargin 10
 
 // browser消失的动画时长
-#define kPhotoBrowserHideDuration 0.4f
+#define kPhotoBrowserHideDuration 0.3f
 
 // browser出现的动画时长
-#define kPhotoBrowserShowDuration 0.4f
+#define kPhotoBrowserShowDuration 0.3f

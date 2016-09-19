@@ -11,6 +11,7 @@
 #import "BaseNavigationController.h"
 #import "AppDelegate+ShareSDK.h"
 #import "HomeTableViewController.h"
+#import "NewsDetailViewController.h"
 
 @interface AppDelegate ()
 
@@ -340,28 +341,38 @@
     // Pring full message.
     SSLog(@"userInfo: %@", userInfo);
     SSLog(@"BackgroundFetchResult: %@",completionHandler);
-    if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
-        NSString *title = @"Breaking News";
-        NSString *message = userInfo[@"notification"][@"body"];
-        UIAlertController *notificationAlert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
-        NSMutableAttributedString *alertControllerStr = [[NSMutableAttributedString alloc] initWithString:title];
-        [alertControllerStr addAttribute:NSForegroundColorAttributeName value:kBlackColor range:NSMakeRange(0, title.length)];
-        [alertControllerStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:18] range:NSMakeRange(0, title.length)];
-        [notificationAlert setValue:alertControllerStr forKey:@"attributedTitle"];
-        NSMutableAttributedString *alertControllerMessageStr = [[NSMutableAttributedString alloc] initWithString:message];
-        [alertControllerMessageStr addAttribute:NSForegroundColorAttributeName value:SSColor(102, 102, 102) range:NSMakeRange(0, message.length)];
-        [alertControllerMessageStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:14] range:NSMakeRange(0, message.length)];
-        [notificationAlert setValue:alertControllerMessageStr forKey:@"attributedMessage"];
-        UIAlertAction *noAction = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleDefault handler:nil];
-        UIAlertAction *yesAction = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-            
-        }];
-        [notificationAlert addAction:noAction];
-        [notificationAlert addAction:yesAction];
-        [_window.rootViewController presentViewController:notificationAlert animated:YES completion:nil];
-    } else {
-        [SVProgressHUD showInfoWithStatus:[NSString stringWithFormat:@"%@", userInfo]];
+    if (userInfo[@"news_id"]) {
+        if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
+            // 在前台时收到推送
+            NSString *title = @"Breaking News";
+            NSString *message = userInfo[@"notification"][@"body"];
+            UIAlertController *notificationAlert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+            NSMutableAttributedString *alertControllerStr = [[NSMutableAttributedString alloc] initWithString:title];
+            [alertControllerStr addAttribute:NSForegroundColorAttributeName value:kBlackColor range:NSMakeRange(0, title.length)];
+            [alertControllerStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:18] range:NSMakeRange(0, title.length)];
+            [notificationAlert setValue:alertControllerStr forKey:@"attributedTitle"];
+            NSMutableAttributedString *alertControllerMessageStr = [[NSMutableAttributedString alloc] initWithString:message];
+            [alertControllerMessageStr addAttribute:NSForegroundColorAttributeName value:SSColor(102, 102, 102) range:NSMakeRange(0, message.length)];
+            [alertControllerMessageStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:14] range:NSMakeRange(0, message.length)];
+            [notificationAlert setValue:alertControllerMessageStr forKey:@"attributedMessage"];
+            UIAlertAction *noAction = [UIAlertAction actionWithTitle:@"Do not care" style:UIAlertActionStyleDefault handler:nil];
+            UIAlertAction *yesAction = [UIAlertAction actionWithTitle:@"Go to veiw" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+                NewsDetailViewController *newsDetailVC = [[NewsDetailViewController alloc] init];
+                newsDetailVC.model.news_id = userInfo[@"news_id"];
+                newsDetailVC.channelName = _model.name;
+                [(UINavigationController *)_window.rootViewController pushViewController:newsDetailVC animated:YES];
+            }];
+            [notificationAlert addAction:noAction];
+            [notificationAlert addAction:yesAction];
+            [_window.rootViewController presentViewController:notificationAlert animated:YES completion:nil];
+        } else {
+            NewsDetailViewController *newsDetailVC = [[NewsDetailViewController alloc] init];
+            newsDetailVC.model.news_id = userInfo[@"news_id"];
+            newsDetailVC.channelName = _model.name;
+            [(UINavigationController *)_window.rootViewController pushViewController:newsDetailVC animated:YES];
+        }
     }
+    [SVProgressHUD showInfoWithStatus:[NSString stringWithFormat:@"%@", userInfo]];
 }
 
 // 刷新推送token回调
