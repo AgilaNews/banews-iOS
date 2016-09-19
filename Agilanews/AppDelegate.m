@@ -345,27 +345,56 @@
             NSString *message = userInfo[@"aps"][@"alert"];
             UIAlertController *notificationAlert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
             UIAlertAction *noAction = [UIAlertAction actionWithTitle:@"Do not care" style:UIAlertActionStyleDefault handler:nil];
+            __weak typeof(self) weakSelf = self;
             UIAlertAction *yesAction = [UIAlertAction actionWithTitle:@"Go to veiw" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-                NewsDetailViewController *newsDetailVC = [[NewsDetailViewController alloc] init];
-                NewsModel *model = [[NewsModel alloc] init];
-                model.news_id = userInfo[@"news_id"];
-                newsDetailVC.model = model;
-                [(UINavigationController *)_window.rootViewController pushViewController:newsDetailVC animated:YES];
+                [weakSelf pushEnterWithUserInfo:userInfo];
             }];
             [notificationAlert addAction:noAction];
             [notificationAlert addAction:yesAction];
             [_window.rootViewController presentViewController:notificationAlert animated:YES completion:nil];
         } else {
             // 在后台收到推送
-            NewsDetailViewController *newsDetailVC = [[NewsDetailViewController alloc] init];
-            NewsModel *model = [[NewsModel alloc] init];
-            model.news_id = userInfo[@"news_id"];
-            newsDetailVC.model = model;
-            [(UINavigationController *)_window.rootViewController pushViewController:newsDetailVC animated:NO];
+            [self pushEnterWithUserInfo:userInfo];
         }
     }
     // 消除小红点
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+}
+- (void)pushEnterWithUserInfo:(NSDictionary *)userInfo
+{
+    // 服务器打点-用户从推送点击详情页-020105
+    NSMutableDictionary *eventDic = [NSMutableDictionary dictionary];
+    [eventDic setObject:@"020105" forKey:@"id"];
+    [eventDic setObject:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970] * 1000] forKey:@"time"];
+    [eventDic setObject:userInfo[@"news_id"] forKey:@"news_id"];
+    [eventDic setObject:userInfo[@"push_id"] forKey:@"push_id"];
+    [eventDic setObject:[NetType getNetType] forKey:@"net"];
+    if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
+        [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) forKey:@"lng"];
+        [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) forKey:@"lat"];
+    } else {
+        [eventDic setObject:@"" forKey:@"lng"];
+        [eventDic setObject:@"" forKey:@"lat"];
+    }
+    NSDictionary *sessionDic = [NSDictionary dictionaryWithObjectsAndKeys:
+                                DEF_PERSISTENT_GET_OBJECT(@"UUID"), @"id",
+                                [NSArray arrayWithObject:eventDic], @"events",
+                                nil];
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObject:[NSArray arrayWithObject:sessionDic] forKey:@"sessions"];
+    [[SSHttpRequest sharedInstance] post:@"" params:params contentType:JsonType serverType:NetServer_Log success:^(id responseObj) {
+        // 打点成功
+    } failure:^(NSError *error) {
+        // 打点失败
+        [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
+        [_eventArray addObject:eventDic];
+    } isShowHUD:NO];
+    
+    // 跳转到详情页
+    NewsDetailViewController *newsDetailVC = [[NewsDetailViewController alloc] init];
+    NewsModel *model = [[NewsModel alloc] init];
+    model.news_id = userInfo[@"news_id"];
+    newsDetailVC.model = model;
+    [(UINavigationController *)_window.rootViewController pushViewController:newsDetailVC animated:YES];
 }
 
 // 刷新推送token回调
