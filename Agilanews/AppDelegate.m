@@ -37,8 +37,6 @@
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(tokenRefreshNotification:)
                                                  name:kFIRInstanceIDTokenRefreshNotification object:nil];
-    // 消除小红点
-    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     // 注册AppsFlyer
     [AppsFlyerTracker sharedTracker].appsFlyerDevKey = @"vKsiczVKraASChBxaENvbe";
     [AppsFlyerTracker sharedTracker].appleAppID = @"1146695204";
@@ -340,26 +338,21 @@
     SSLog(@"Message ID: %@", userInfo[@"gcm.message_id"]);
     // Pring full message.
     SSLog(@"userInfo: %@", userInfo);
-    SSLog(@"BackgroundFetchResult: %@",completionHandler);
+    if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
+        return;
+    }
     if (userInfo[@"news_id"]) {
         if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
             // 在前台时收到推送
             NSString *title = @"Breaking News";
-            NSString *message = userInfo[@"notification"][@"body"];
+            NSString *message = userInfo[@"aps"][@"alert"];
             UIAlertController *notificationAlert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
-            NSMutableAttributedString *alertControllerStr = [[NSMutableAttributedString alloc] initWithString:title];
-            [alertControllerStr addAttribute:NSForegroundColorAttributeName value:kBlackColor range:NSMakeRange(0, title.length)];
-            [alertControllerStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:18] range:NSMakeRange(0, title.length)];
-            [notificationAlert setValue:alertControllerStr forKey:@"attributedTitle"];
-            NSMutableAttributedString *alertControllerMessageStr = [[NSMutableAttributedString alloc] initWithString:message];
-            [alertControllerMessageStr addAttribute:NSForegroundColorAttributeName value:SSColor(102, 102, 102) range:NSMakeRange(0, message.length)];
-            [alertControllerMessageStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:14] range:NSMakeRange(0, message.length)];
-            [notificationAlert setValue:alertControllerMessageStr forKey:@"attributedMessage"];
             UIAlertAction *noAction = [UIAlertAction actionWithTitle:@"Do not care" style:UIAlertActionStyleDefault handler:nil];
             UIAlertAction *yesAction = [UIAlertAction actionWithTitle:@"Go to veiw" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
                 NewsDetailViewController *newsDetailVC = [[NewsDetailViewController alloc] init];
-                newsDetailVC.model.news_id = userInfo[@"news_id"];
-                newsDetailVC.channelName = _model.name;
+                NewsModel *model = [[NewsModel alloc] init];
+                model.news_id = userInfo[@"news_id"];
+                newsDetailVC.model = model;
                 [(UINavigationController *)_window.rootViewController pushViewController:newsDetailVC animated:YES];
             }];
             [notificationAlert addAction:noAction];
@@ -368,12 +361,14 @@
         } else {
             // 在后台收到推送
             NewsDetailViewController *newsDetailVC = [[NewsDetailViewController alloc] init];
-            newsDetailVC.model.news_id = userInfo[@"news_id"];
-            newsDetailVC.channelName = _model.name;
-            [(UINavigationController *)_window.rootViewController pushViewController:newsDetailVC animated:YES];
+            NewsModel *model = [[NewsModel alloc] init];
+            model.news_id = userInfo[@"news_id"];
+            newsDetailVC.model = model;
+            [(UINavigationController *)_window.rootViewController pushViewController:newsDetailVC animated:NO];
         }
     }
-    [SVProgressHUD showInfoWithStatus:[NSString stringWithFormat:@"%@", userInfo]];
+    // 消除小红点
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
 }
 
 // 刷新推送token回调
