@@ -86,7 +86,7 @@
 		5F5AE9761D54364E00A5A8B7 /* GuideRefreshView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5AE9751D54364E00A5A8B7 /* GuideRefreshView.m */; };
 		5F5AE9791D54A4C900A5A8B7 /* GuideFavoritesView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5AE9781D54A4C900A5A8B7 /* GuideFavoritesView.m */; };
 		5F5C63791D8E5FED005D3578 /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5C63781D8E5FED005D3578 /* KeychainItemWrapper.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		5F5C637B1D8FEAB9005D3578 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5F5C637A1D8FEAB9005D3578 /* GoogleService-Info.plist */; };
+		5F5C637D1D8FFC77005D3578 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5F5C637C1D8FFC77005D3578 /* GoogleService-Info.plist */; };
 		5F635CA41D3CCC50006AAE3D /* UIView+UIScreenDisplaying.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F635CA31D3CCC50006AAE3D /* UIView+UIScreenDisplaying.m */; };
 		5F635CA71D3CFA58006AAE3D /* TimeStampToString.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F635CA61D3CFA58006AAE3D /* TimeStampToString.m */; };
 		5F635CB11D3DD4C3006AAE3D /* LeftView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F635CB01D3DD4C3006AAE3D /* LeftView.m */; };
@@ -353,7 +353,7 @@
 		5F5C63751D8E5AE7005D3578 /* Agila.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Agila.entitlements; sourceTree = "<group>"; };
 		5F5C63771D8E5FED005D3578 /* KeychainItemWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeychainItemWrapper.h; sourceTree = "<group>"; };
 		5F5C63781D8E5FED005D3578 /* KeychainItemWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeychainItemWrapper.m; sourceTree = "<group>"; };
-		5F5C637A1D8FEAB9005D3578 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		5F5C637C1D8FFC77005D3578 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5F635CA21D3CCC50006AAE3D /* UIView+UIScreenDisplaying.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+UIScreenDisplaying.h"; sourceTree = "<group>"; };
 		5F635CA31D3CCC50006AAE3D /* UIView+UIScreenDisplaying.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+UIScreenDisplaying.m"; sourceTree = "<group>"; };
 		5F635CA51D3CFA58006AAE3D /* TimeStampToString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeStampToString.h; sourceTree = "<group>"; };
@@ -669,7 +669,7 @@
 				5F42BFBF1D34E2F000B89651 /* Assets.xcassets */,
 				5F42BFC11D34E2F000B89651 /* LaunchScreen.storyboard */,
 				5F42BFC41D34E2F000B89651 /* Info.plist */,
-				5F5C637A1D8FEAB9005D3578 /* GoogleService-Info.plist */,
+				5F5C637C1D8FFC77005D3578 /* GoogleService-Info.plist */,
 				5F42BFB31D34E2F000B89651 /* Supporting Files */,
 			);
 			path = Agilanews;
@@ -1358,7 +1358,6 @@
 			files = (
 				5F635ED31D4065C1006AAE3D /* LaunchScreen.storyboard in Resources */,
 				5F42C0121D34E3EC00B89651 /* Info.plist in Resources */,
-				5F5C637B1D8FEAB9005D3578 /* GoogleService-Info.plist in Resources */,
 				5FE722221D50B5B70026BFC3 /* textonly.png in Resources */,
 				5F8D85D21D7D1AA800FF4019 /* placeholder.png in Resources */,
 				5F42C09F1D34E42A00B89651 /* SVProgressHUD.bundle in Resources */,
@@ -1369,6 +1368,7 @@
 				5FF4B7AC1D38F7B200CC6704 /* Info.plist in Resources */,
 				5F635CD11D3E3EDF006AAE3D /* ShareSDK.bundle in Resources */,
 				5FE7220E1D4EFCE30026BFC3 /* TwitterKitResources.bundle in Resources */,
+				5F5C637D1D8FFC77005D3578 /* GoogleService-Info.plist in Resources */,
 				5F571F8C1D5C1FFE00604CDD /* GooglePlus.bundle in Resources */,
 				5F42BFC01D34E2F000B89651 /* Assets.xcassets in Resources */,
 			);
