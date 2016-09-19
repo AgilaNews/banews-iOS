@@ -391,13 +391,13 @@
     // this callback will not be fired till the user taps on the notification launching the application.
     SSLog(@"Message ID: %@", userInfo[@"gcm.message_id"]);
     SSLog(@"userInfo: %@", userInfo);
-    if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
-        return;
-    }
     NSNumber *type = userInfo[@"type"];
     switch (type.integerValue) {
         case 1:
         {
+            if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
+                return;
+            }
             // 普通推送消息
             if (userInfo[@"news_id"]) {
                 if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
