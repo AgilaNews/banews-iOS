@@ -366,6 +366,7 @@
             [notificationAlert addAction:yesAction];
             [_window.rootViewController presentViewController:notificationAlert animated:YES completion:nil];
         } else {
+            // 在后台收到推送
             NewsDetailViewController *newsDetailVC = [[NewsDetailViewController alloc] init];
             newsDetailVC.model.news_id = userInfo[@"news_id"];
             newsDetailVC.channelName = _model.name;
