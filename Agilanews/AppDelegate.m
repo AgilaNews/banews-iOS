@@ -36,7 +36,8 @@
     [FIRApp configure];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(tokenRefreshNotification:)
-                                                 name:kFIRInstanceIDTokenRefreshNotification object:nil];
+                                                 name:kFIRInstanceIDTokenRefreshNotification
+                                               object:nil];
     // 注册AppsFlyer
     [AppsFlyerTracker sharedTracker].appsFlyerDevKey = @"vKsiczVKraASChBxaENvbe";
     [AppsFlyerTracker sharedTracker].appleAppID = @"1146695204";
@@ -317,6 +318,10 @@
         UIRemoteNotificationTypeAlert;
         [[UIApplication sharedApplication] registerForRemoteNotificationTypes:notificationTypes];
     }
+    NSString *refreshedToken = DEF_PERSISTENT_GET_OBJECT(@"refreshToken");
+    if (refreshedToken.length) {
+        [self uploadRefreshedToken:refreshedToken];
+    }
 }
 // 注册deviceToken成功
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
@@ -327,6 +332,57 @@
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
 {
     SSLog(@"%@", error);
+}
+// 刷新推送token回调
+- (void)tokenRefreshNotification:(NSNotification *)notification {
+    // Note that this callback will be fired everytime a new token is generated, including the first
+    // time. So if you need to retrieve the token as soon as it is available this is where that
+    // should be done.
+    NSString *refreshedToken = [[FIRInstanceID instanceID] token];
+    SSLog(@"InstanceID token: %@", refreshedToken);
+    // Connect to FCM since connection may have failed when attempted before having a token.
+    [self connectToFcm];
+    // 注册topics
+    [[FIRMessaging messaging] subscribeToTopic:@"/topics/notification"];
+    NSString * version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    [[FIRMessaging messaging] subscribeToTopic:[NSString stringWithFormat:@"/topics/ios_v%@",version]];
+    if (refreshedToken.length) {
+        DEF_PERSISTENT_SET_OBJECT(@"refreshToken", refreshedToken);
+        [self uploadRefreshedToken:refreshedToken];
+    }
+}
+- (void)connectToFcm {
+    [[FIRMessaging messaging] connectWithCompletion:^(NSError * _Nullable error) {
+        if (error != nil) {
+            SSLog(@"Unable to connect to FCM. %@", error);
+        } else {
+            SSLog(@"Connected to FCM.");
+        }
+    }];
+}
+/**
+ *  绑定PushToken
+ *
+ *  @param refreshedToken 刷新token
+ */
+- (void)uploadRefreshedToken:(NSString *)refreshedToken
+{
+    __weak typeof(self) weakSelf = self;
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    [params setObject:refreshedToken forKey:@"token"];
+    [params setObject:@"ios" forKey:@"os"];
+    [params setObject:@"apple" forKey:@"vendor"];
+    [params setObject:DEF_PERSISTENT_GET_OBJECT(@"IDFA") forKey:@"ios_did"];
+    [params setObject:[NSString stringWithFormat:@"%@",[[UIDevice currentDevice] systemVersion]] forKey:@"os_version"];
+    [[SSHttpRequest sharedInstance] post:kHomeUrl_Push params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
+        if ([responseObj[@"message"] isEqualToString:@"ok"]) {
+            DEF_PERSISTENT_SET_OBJECT(@"refreshToken", @"");
+        }
+    } failure:^(NSError *error) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(60 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [weakSelf uploadRefreshedToken:refreshedToken];
+        });
+    } isShowHUD:NO];
 }
 // 收到推送回调
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
@@ -396,55 +452,6 @@
     model.news_id = userInfo[@"news_id"];
     newsDetailVC.model = model;
     [(UINavigationController *)_window.rootViewController pushViewController:newsDetailVC animated:YES];
-}
-
-// 刷新推送token回调
-- (void)tokenRefreshNotification:(NSNotification *)notification {
-    // Note that this callback will be fired everytime a new token is generated, including the first
-    // time. So if you need to retrieve the token as soon as it is available this is where that
-    // should be done.
-    NSString *refreshedToken = [[FIRInstanceID instanceID] token];
-    SSLog(@"InstanceID token: %@", refreshedToken);
-    // Connect to FCM since connection may have failed when attempted before having a token.
-    [self connectToFcm];
-    // 注册topics
-    [[FIRMessaging messaging] subscribeToTopic:@"/topics/notification"];
-    NSString * version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-    [[FIRMessaging messaging] subscribeToTopic:[NSString stringWithFormat:@"/topics/ios_v%@",version]];
-    if (refreshedToken.length) {
-        [self uploadRefreshedToken:refreshedToken];
-    }
-}
-- (void)connectToFcm {
-    [[FIRMessaging messaging] connectWithCompletion:^(NSError * _Nullable error) {
-        if (error != nil) {
-            SSLog(@"Unable to connect to FCM. %@", error);
-        } else {
-            SSLog(@"Connected to FCM.");
-        }
-    }];
-}
-/**
- *  绑定PushToken
- *
- *  @param refreshedToken 刷新token
- */
-- (void)uploadRefreshedToken:(NSString *)refreshedToken
-{
-    __weak typeof(self) weakSelf = self;
-    NSMutableDictionary *params = [NSMutableDictionary dictionary];
-    [params setObject:refreshedToken forKey:@"token"];
-    [params setObject:@"ios" forKey:@"os"];
-    [params setObject:@"apple" forKey:@"vendor"];
-    [params setObject:DEF_PERSISTENT_GET_OBJECT(@"IDFA") forKey:@"ios_did"];
-    [params setObject:[NSString stringWithFormat:@"%@",[[UIDevice currentDevice] systemVersion]] forKey:@"os_version"];
-    [[SSHttpRequest sharedInstance] post:kHomeUrl_Push params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
-        
-    } failure:^(NSError *error) {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(60 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [weakSelf uploadRefreshedToken:refreshedToken];
-        });
-    } isShowHUD:NO];
 }
 #pragma mark - 监听网络状态
 /**
