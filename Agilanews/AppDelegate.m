@@ -360,6 +360,7 @@
     // 消除小红点
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
 }
+// 服务器打点并跳转到详情页
 - (void)pushEnterWithUserInfo:(NSDictionary *)userInfo
 {
     // 服务器打点-用户从推送点击详情页-020105

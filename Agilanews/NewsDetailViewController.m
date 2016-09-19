@@ -912,7 +912,7 @@
     float page_pos = (scrollView.contentOffset.y + kScreenHeight - 170) / _webView.height;
     if (page_pos >= 1.0 && !_webView.loading) {
         // 推荐文章展示
-        _isRecommendShow = YES;
+        self.isRecommendShow = YES;
     }
     if (![DEF_PERSISTENT_GET_OBJECT(SS_GuideFavKey) isEqualToNumber:@1]) {
         if (scrollView.contentOffset.y + kScreenHeight - 64 - 50 >= _tableView.contentSize.height && _tableView.numberOfSections == 3) {
@@ -1227,9 +1227,19 @@
                 [eventDic setObject:@"" forKey:@"lng"];
                 [eventDic setObject:@"" forKey:@"lat"];
             }
-            [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
-            AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-            [appDelegate.eventArray addObject:eventDic];
+            NSDictionary *sessionDic = [NSDictionary dictionaryWithObjectsAndKeys:
+                                        DEF_PERSISTENT_GET_OBJECT(@"UUID"), @"id",
+                                        [NSArray arrayWithObject:eventDic], @"events",
+                                        nil];
+            NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObject:[NSArray arrayWithObject:sessionDic] forKey:@"sessions"];
+            [[SSHttpRequest sharedInstance] post:@"" params:params contentType:JsonType serverType:NetServer_Log success:^(id responseObj) {
+                // 打点成功
+            } failure:^(NSError *error) {
+                // 打点失败
+                [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
+                AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+                [appDelegate.eventArray addObject:eventDic];
+            } isShowHUD:NO];
         }
     }
 }
