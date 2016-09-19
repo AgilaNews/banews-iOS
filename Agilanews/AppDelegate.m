@@ -394,27 +394,47 @@
     if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
         return;
     }
-    if (userInfo[@"news_id"]) {
-        if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
-            // 在前台时收到推送
-            NSString *title = @"Breaking News";
-            NSString *message = userInfo[@"aps"][@"alert"];
-            UIAlertController *notificationAlert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *noAction = [UIAlertAction actionWithTitle:@"Do not care" style:UIAlertActionStyleDefault handler:nil];
-            __weak typeof(self) weakSelf = self;
-            UIAlertAction *yesAction = [UIAlertAction actionWithTitle:@"Go to veiw" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-                [weakSelf pushEnterWithUserInfo:userInfo];
-            }];
-            [notificationAlert addAction:noAction];
-            [notificationAlert addAction:yesAction];
-            [_window.rootViewController presentViewController:notificationAlert animated:YES completion:nil];
-        } else {
-            // 在后台收到推送
-            [self pushEnterWithUserInfo:userInfo];
+    NSNumber *type = userInfo[@"type"];
+    switch (type.integerValue) {
+        case 1:
+        {
+            // 普通推送消息
+            if (userInfo[@"news_id"]) {
+                if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
+                    // 在前台时收到推送
+                    NSString *title = @"Breaking News";
+                    NSString *message = userInfo[@"aps"][@"alert"];
+                    UIAlertController *notificationAlert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+                    UIAlertAction *noAction = [UIAlertAction actionWithTitle:@"Do not care" style:UIAlertActionStyleDefault handler:nil];
+                    __weak typeof(self) weakSelf = self;
+                    UIAlertAction *yesAction = [UIAlertAction actionWithTitle:@"Go to veiw" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+                        [weakSelf pushEnterWithUserInfo:userInfo];
+                    }];
+                    [notificationAlert addAction:noAction];
+                    [notificationAlert addAction:yesAction];
+                    [_window.rootViewController presentViewController:notificationAlert animated:YES completion:nil];
+                } else {
+                    // 在后台收到推送
+                    [self pushEnterWithUserInfo:userInfo];
+                }
+            }
+            // 消除小红点
+            [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+            break;
         }
+        case 3:
+        {
+            // 透传推送消息
+            NSString *refreshedToken = [[FIRInstanceID instanceID] token];
+            if (refreshedToken.length) {
+                DEF_PERSISTENT_SET_OBJECT(@"refreshToken", refreshedToken);
+                [self uploadRefreshedToken:refreshedToken];
+            }
+            break;
+        }
+        default:
+            break;
     }
-    // 消除小红点
-    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
 }
 // 服务器打点并跳转到详情页
 - (void)pushEnterWithUserInfo:(NSDictionary *)userInfo
