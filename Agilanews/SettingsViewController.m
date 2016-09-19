@@ -33,7 +33,7 @@
     [self.view addSubview:_tableView];
     
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        _cacheSize = [NSString stringWithFormat : @"%.2fMB" , [self filePath]];
+        _cacheSize = [self filePath];
         dispatch_async(dispatch_get_main_queue(), ^{
             [_tableView reloadData];
         });
@@ -504,27 +504,30 @@
     }
     return 0 ;
 }
-// 遍历文件夹获得文件夹大小，返回多少 M
-- (float)folderSizeAtPath:(NSString *)folderPath
+
+// 显示缓存大小
+- (NSString *)filePath
 {
+    NSString *cachPath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
     NSFileManager *manager = [NSFileManager defaultManager];
-    if (![manager fileExistsAtPath:folderPath]) return 0 ;
-    NSEnumerator *childFilesEnumerator = [[manager subpathsAtPath:folderPath] objectEnumerator];
+    if (![manager fileExistsAtPath:cachPath]) return 0 ;
+    NSEnumerator *childFilesEnumerator = [[manager subpathsAtPath:cachPath] objectEnumerator];
     NSString *fileName;
     long long folderSize = 0 ;
     while ((fileName = [childFilesEnumerator nextObject]) != nil)
     {
-        NSString *fileAbsolutePath = [folderPath stringByAppendingPathComponent:fileName];
+        NSString *fileAbsolutePath = [cachPath stringByAppendingPathComponent:fileName];
         folderSize += [self fileSizeAtPath:fileAbsolutePath];
     }
-    return folderSize / (1024.0 * 1024.0);
-}
-// 显示缓存大小
-- (float)filePath
-{
-    NSString *cachPath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
-    
-    return [self folderSizeAtPath:cachPath];
+    if (folderSize > (1024.0 * 1024.0)) {
+        return [NSString stringWithFormat:@"%.2fM", folderSize / (1024.0 * 1024.0)];
+    } else if (folderSize > 1024.0) {
+        return [NSString stringWithFormat:@"%.2fKB", folderSize / 1024.0];
+    } else if (folderSize > 0){
+        return [NSString stringWithFormat:@"%.2lldB", folderSize];
+    } else {
+        return @"0.00B";
+    }
 }
 
 #pragma mark - 清理缓存
@@ -550,7 +553,7 @@
  */
 - (void)clearCachSuccess
 {
-    self.cacheSize = [NSString stringWithFormat : @"%.2fMB" , [self filePath]];
+    self.cacheSize = [self filePath];
 }
 
 - (void)didReceiveMemoryWarning {
