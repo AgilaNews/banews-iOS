@@ -87,6 +87,7 @@
 		5F5AE9791D54A4C900A5A8B7 /* GuideFavoritesView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5AE9781D54A4C900A5A8B7 /* GuideFavoritesView.m */; };
 		5F5C63791D8E5FED005D3578 /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5C63781D8E5FED005D3578 /* KeychainItemWrapper.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		5F5C637D1D8FFC77005D3578 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5F5C637C1D8FFC77005D3578 /* GoogleService-Info.plist */; };
+		5F5C63801D90FC29005D3578 /* VideoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5C637F1D90FC29005D3578 /* VideoModel.m */; };
 		5F635CA41D3CCC50006AAE3D /* UIView+UIScreenDisplaying.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F635CA31D3CCC50006AAE3D /* UIView+UIScreenDisplaying.m */; };
 		5F635CA71D3CFA58006AAE3D /* TimeStampToString.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F635CA61D3CFA58006AAE3D /* TimeStampToString.m */; };
 		5F635CB11D3DD4C3006AAE3D /* LeftView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F635CB01D3DD4C3006AAE3D /* LeftView.m */; };
@@ -354,6 +355,8 @@
 		5F5C63771D8E5FED005D3578 /* KeychainItemWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeychainItemWrapper.h; sourceTree = "<group>"; };
 		5F5C63781D8E5FED005D3578 /* KeychainItemWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeychainItemWrapper.m; sourceTree = "<group>"; };
 		5F5C637C1D8FFC77005D3578 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		5F5C637E1D90FC29005D3578 /* VideoModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoModel.h; sourceTree = "<group>"; };
+		5F5C637F1D90FC29005D3578 /* VideoModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoModel.m; sourceTree = "<group>"; };
 		5F635CA21D3CCC50006AAE3D /* UIView+UIScreenDisplaying.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+UIScreenDisplaying.h"; sourceTree = "<group>"; };
 		5F635CA31D3CCC50006AAE3D /* UIView+UIScreenDisplaying.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+UIScreenDisplaying.m"; sourceTree = "<group>"; };
 		5F635CA51D3CFA58006AAE3D /* TimeStampToString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeStampToString.h; sourceTree = "<group>"; };
@@ -1105,6 +1108,8 @@
 				5FF4B72D1D37982200CC6704 /* NewsModel.m */,
 				5FF4B72F1D379B1B00CC6704 /* ImageModel.h */,
 				5FF4B7301D379B1B00CC6704 /* ImageModel.m */,
+				5F5C637E1D90FC29005D3578 /* VideoModel.h */,
+				5F5C637F1D90FC29005D3578 /* VideoModel.m */,
 				5F635CB81D3E1E7A006AAE3D /* NewsDetailModel.h */,
 				5F635CB91D3E1E7A006AAE3D /* NewsDetailModel.m */,
 				5F635CBB1D3E22CD006AAE3D /* CommentModel.h */,
@@ -1528,6 +1533,7 @@
 				5F571FDB1D62DE0500604CDD /* FJSWaveProgress.m in Sources */,
 				5F2E0A1D1D87B47A00FEC0AC /* HZIndicatorView.m in Sources */,
 				5F42C0161D34E3EC00B89651 /* MJPropertyKey.m in Sources */,
+				5F5C63801D90FC29005D3578 /* VideoModel.m in Sources */,
 				5F635ED21D3F94C0006AAE3D /* LoginButton.m in Sources */,
 				5FE7221B1D5034970026BFC3 /* FeedbackTextView.m in Sources */,
 				5F571FDE1D632A5400604CDD /* iConsole.m in Sources */,

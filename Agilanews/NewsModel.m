@@ -8,6 +8,7 @@
 
 #import "NewsModel.h"
 #import "ImageModel.h"
+#import "VideoModel.h"
 
 @implementation NewsModel
 
@@ -27,7 +28,8 @@ MJCodingImplementation
              @"tpl":@"tpl",
              @"collect_id":@"collect_id",
              @"commentCount":@"commentCount",
-             @"share_url":@"share_url"
+             @"share_url":@"share_url",
+             @"videos":@"VideoModel"
              };
 }
 
