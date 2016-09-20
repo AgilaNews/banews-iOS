@@ -932,6 +932,7 @@
 }
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
+    _webView.height = 1;
     NSInteger textSize = 100;
     switch ([DEF_PERSISTENT_GET_OBJECT(SS_FontSize) integerValue]) {
         case 0:
