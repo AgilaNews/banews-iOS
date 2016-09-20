@@ -1098,6 +1098,7 @@
         _likeButton.titleLabel.font = [UIFont systemFontOfSize:13];
         _likeButton.imageEdgeInsets = UIEdgeInsetsMake(0, -5, 0, 0);
         _likeButton.hidden = YES;
+        [_likeButton setAdjustsImageWhenHighlighted:NO];
         [_likeButton setTitleColor:SSColor(102, 102, 102) forState:UIControlStateNormal];
         [_likeButton setBackgroundColor:kWhiteBgColor forState:UIControlStateNormal];
         [_likeButton setImage:[UIImage imageNamed:@"icon_article_like_default"] forState:UIControlStateNormal];

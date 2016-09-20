@@ -115,7 +115,7 @@
         _shadowView.left = kScreenWidth - SLIP_WIDTH;
         _shadowView.alpha = .7;
     } completion:^(BOOL finished) {
-        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
+//        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
     }];
 }
 
@@ -126,7 +126,7 @@
         _shadowView.left = -SLIP_WIDTH;
         _shadowView.alpha = 0;
     } completion:^(BOOL finished) {
-        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
+//        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
         [_tableView removeFromSuperview];
         [_shadowView removeFromSuperview];
         _tableView = nil;

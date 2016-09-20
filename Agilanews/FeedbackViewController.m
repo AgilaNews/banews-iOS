@@ -74,16 +74,22 @@
     [SVProgressHUD show];
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setObject:_textView.feedbackTextView.text forKey:@"fb_detail"];
-    if ([_textField.text rangeOfString:@"@"].location != NSNotFound) {
-        [params setObject:_textField.text forKey:@"email"];
-    } else if (_textField.text.length > 0) {
-        // 打点-提交失败-010806
-        [Flurry logEvent:@"FeedB_Submit_Click_N"];
+    // 判断邮箱格式
+    if (_textField.text.length > 0) {
+        NSString *regex = @"^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$";
+        NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
+        BOOL isMatch = [pred evaluateWithObject:_textField.text];
+        if (isMatch) {
+            [params setObject:_textField.text forKey:@"email"];
+        } else {
+            // 打点-提交失败-010806
+            [Flurry logEvent:@"FeedB_Submit_Click_N"];
 #if DEBUG
-        [iConsole info:@"FeedB_Submit_Click_N",nil];
+            [iConsole info:@"FeedB_Submit_Click_N",nil];
 #endif
-        [SVProgressHUD showErrorWithStatus:@"Please input right email address"];
-        return;
+            [SVProgressHUD showErrorWithStatus:@"Please input right email address"];
+            return;
+        }
     }
     [[SSHttpRequest sharedInstance] post:kHomeUrl_Feedback params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
         // 打点-提交成功-010805
