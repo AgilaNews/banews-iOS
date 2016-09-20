@@ -180,7 +180,7 @@
     CGRect rect = self.lineView.frame;
 //    rect.origin.x = (index - HEADBTN_TAG) * _buttonWidth;
     rect.origin.x = currentSelectBtn.left;
-    [UIView animateWithDuration:0.3 animations:^{
+    [UIView animateWithDuration:0.4 animations:^{
         self.lineView.frame = rect;
         self.lineView.width = [_sizeArray[index - HEADBTN_TAG] floatValue];
     }];
