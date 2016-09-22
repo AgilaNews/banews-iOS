@@ -7,23 +7,23 @@
 	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
 	<string>ca-app-pub-3940256099942544/4411468910</string>
 	<key>CLIENT_ID</key>
-	<string>1066815885426-24olhocet7n02490hn1eoujqj1niduvq.apps.googleusercontent.com</string>
+	<string>759516127227-j1sk8vjq3ielljmpsn01esjrf41u1isp.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.1066815885426-24olhocet7n02490hn1eoujqj1niduvq</string>
+	<string>com.googleusercontent.apps.759516127227-j1sk8vjq3ielljmpsn01esjrf41u1isp</string>
 	<key>ANDROID_CLIENT_ID</key>
-	<string>1066815885426-barmrkstmh8hckpeel9pkufmbdfaev2c.apps.googleusercontent.com</string>
+	<string>759516127227-f962sq4j140ifcjg47r0tpi5shelmr8a.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyAR9BHyTF-o22HVOi4AHWt44s3yaYgHkyo</string>
+	<string>AIzaSyBKui0onzCxU-zHgd0rl-nrrZ6h_4ZQuMQ</string>
 	<key>GCM_SENDER_ID</key>
-	<string>1066815885426</string>
+	<string>759516127227</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.banews.agila</string>
 	<key>PROJECT_ID</key>
-	<string>agilanews-sandbox</string>
+	<string>agila-news</string>
 	<key>STORAGE_BUCKET</key>
-	<string>agilanews-sandbox.appspot.com</string>
+	<string>agila-news.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<true/>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -35,8 +35,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true/>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:1066815885426:ios:11fece1a5ea0d25a</string>
+	<string>1:759516127227:ios:11fece1a5ea0d25a</string>
 	<key>DATABASE_URL</key>
-	<string>https://agilanews-sandbox.firebaseio.com</string>
+	<string>https://agila-news.firebaseio.com</string>
 </dict>
 </plist>
