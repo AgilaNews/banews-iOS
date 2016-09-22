@@ -149,17 +149,25 @@
 {
     [super viewWillAppear:animated];
     _enterTime = [[NSDate date] timeIntervalSince1970];
-    // 打点-页面进入-010201
     NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
                                    [NSNumber numberWithLongLong:_enterTime], @"time",
                                    _channelName, @"channel",
                                    _model.news_id, @"article",
                                    [NetType getNetType], @"network",
                                    nil];
-    [Flurry logEvent:@"Article_Enter" withParameters:articleParams];
+    if (_isPushEnter) {
+        // 打点-推送新闻详情页进入-010007
+        [Flurry logEvent:@"PushArticle_Enter" withParameters:articleParams];
 #if DEBUG
-    [iConsole info:[NSString stringWithFormat:@"Article_Enter:%@",articleParams],nil];
+        [iConsole info:[NSString stringWithFormat:@"PushArticle_Enter:%@",articleParams],nil];
 #endif
+    } else {
+        // 打点-页面进入-010201
+        [Flurry logEvent:@"Article_Enter" withParameters:articleParams];
+#if DEBUG
+        [iConsole info:[NSString stringWithFormat:@"Article_Enter:%@",articleParams],nil];
+#endif
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated

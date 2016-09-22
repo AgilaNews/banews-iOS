@@ -472,6 +472,7 @@
     NewsModel *model = [[NewsModel alloc] init];
     model.news_id = userInfo[@"news_id"];
     newsDetailVC.model = model;
+    newsDetailVC.isPushEnter = YES;
     [(UINavigationController *)_window.rootViewController pushViewController:newsDetailVC animated:YES];
 }
 #pragma mark - 监听网络状态
