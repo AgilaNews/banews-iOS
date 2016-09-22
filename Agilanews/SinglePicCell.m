@@ -170,7 +170,6 @@
         self.titleImageView.image = [UIImage imageNamed:@"holderImage"];
         return;
     }
-    self.titleImageView.contentMode = UIViewContentModeScaleAspectFit;
     ImageModel *imageModel = _model.imgs.firstObject;
     NSString *imageUrl = [imageModel.pattern stringByReplacingOccurrencesOfString:@"{w}" withString:[NSString stringWithFormat:@"%d",(108 * 2)]];
     imageUrl = [imageUrl stringByReplacingOccurrencesOfString:@"{h}" withString:[NSString stringWithFormat:@"%d",68 * 2]];
