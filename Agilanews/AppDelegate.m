@@ -313,14 +313,14 @@
         center.delegate = self;
         [center requestAuthorizationWithOptions:(UNAuthorizationOptionAlert | UNAuthorizationOptionBadge | UNAuthorizationOptionSound) completionHandler:^(BOOL granted, NSError * _Nullable error) {
         }];
-    } else {
-        [[UIApplication sharedApplication] registerForRemoteNotifications];
-        UIUserNotificationType notificationTypes = UIUserNotificationTypeBadge |
-        UIUserNotificationTypeSound |
-        UIUserNotificationTypeAlert;
-        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:notificationTypes categories:nil];
-        [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
     }
+    [[UIApplication sharedApplication] registerForRemoteNotifications];
+    UIUserNotificationType notificationTypes = UIUserNotificationTypeBadge |
+    UIUserNotificationTypeSound |
+    UIUserNotificationTypeAlert;
+    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:notificationTypes categories:nil];
+    [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+    
     NSString *refreshedToken = DEF_PERSISTENT_GET_OBJECT(@"refreshToken");
     if (refreshedToken.length) {
         [self uploadRefreshedToken:refreshedToken];
