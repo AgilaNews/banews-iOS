@@ -27,7 +27,18 @@
         self.backgroundColor = bgColor;
         // 初始化子视图
         [self _initSubviews];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(fontChange) name:KNOTIFICATION_FontSize_Change object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(fontChange)
+                                                     name:KNOTIFICATION_FontSize_Change
+                                                   object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(stopVideoNotif)
+                                                     name:KNOTIFICATION_Secect_Channel
+                                                   object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(stopVideoNotif)
+                                                     name:KNOTIFICATION_Scroll_Channel
+                                                   object:nil];
     }
     return self;
 }
@@ -128,7 +139,7 @@
     
     NSNumber *textOnlyMode = DEF_PERSISTENT_GET_OBJECT(SS_textOnlyMode);
     if ([textOnlyMode integerValue] == 1) {
-        self.titleImageView.image = [UIImage imageNamed:@"holderImage"];
+        self.titleImageView.image = nil;
         return;
     }
     NSString *imageUrl = [imageModel.src stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
@@ -265,6 +276,7 @@
     return _shareButton;
 }
 
+#pragma mark - Notification
 - (void)fontChange
 {
     switch ([DEF_PERSISTENT_GET_OBJECT(SS_FontSize) integerValue]) {
@@ -287,10 +299,97 @@
     [self setNeedsLayout];
 }
 
+- (void)stopVideoNotif
+{
+    [_downloadTask cancel];
+    [_playerLayer removeFromSuperlayer];
+    [_player pause];
+    _player = nil;
+    _isPlay = NO;
+}
+
+- (void)setModel:(NewsModel *)model
+{
+    if (_model != model) {
+        _model = model;
+        
+        [_downloadTask cancel];
+        [_playerLayer removeFromSuperlayer];
+        [_player pause];
+        _player = nil;
+        _isPlay = NO;
+    }
+}
+
 - (void)tapAction
 {
+    if (_isPlay) {
+        return;
+    }
+    _isPlay = YES;
     VideoModel *videoModel = _model.videos.firstObject;
-    NSLog(@"%@",videoModel.src);
+    NSString *urlString = [videoModel.src stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSString *md5String = [NSString encryptPassword:urlString];
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    NSString *mp4FilePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:[NSString stringWithFormat:@"ImageFolder/%@.mp4",md5String]];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    if ([fileManager fileExistsAtPath:mp4FilePath]) {
+        [self playVideoWithUrl:mp4FilePath];
+    } else {
+        __weak typeof(self) weakSelf = self;
+        NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString]];
+        _downloadTask = [[SSHttpRequest sharedInstance] downloadTaskWithRequest:request progress:nil destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
+            return [NSURL URLWithString:[NSString stringWithFormat:@"file://%@/",mp4FilePath]];
+        } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
+            if (error) {
+                if ([error code] == NSURLErrorCancelled)
+                {
+                    SSLog(@"\n------网络请求取消------\n%@",error);
+                    return;
+                }
+                if ([AFNetworkReachabilityManager sharedManager].networkReachabilityStatus == AFNetworkReachabilityStatusNotReachable)
+                {
+                    [SVProgressHUD showErrorWithStatus:@"Please check your network connection"];
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        [SVProgressHUD dismiss];
+                    });
+                } else {
+                    [SVProgressHUD showErrorWithStatus:@"Fetching failed, please try again"];
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        [SVProgressHUD dismiss];
+                    });
+                }
+            } else {
+                [weakSelf playVideoWithUrl:mp4FilePath];
+            }
+        }];
+        [_downloadTask resume];
+    }
+}
+// 播放视频
+- (void)playVideoWithUrl:(NSString *)urlString
+{
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"file://%@/",urlString]];
+    AVPlayerItem *item = [AVPlayerItem playerItemWithURL:url];
+    _player = [AVPlayer playerWithPlayerItem:item];
+    _playerLayer = [AVPlayerLayer playerLayerWithPlayer:_player];
+    _playerLayer.frame = self.titleImageView.bounds;
+    [self.titleImageView.layer addSublayer:_playerLayer];
+    [_player play];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playbackFinished:) name:AVPlayerItemDidPlayToEndTimeNotification object:self.player.currentItem];
+}
+- (void)playbackFinished:(NSNotification *)notification
+{
+    SSLog(@"视频播放完成.");
+    [_playerLayer removeFromSuperlayer];
+    _isPlay = NO;
+    VideoModel *videoModel = _model.videos.firstObject;
+    NSString *urlString = [videoModel.src stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSString *md5String = [NSString encryptPassword:urlString];
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    NSString *mp4FilePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:[NSString stringWithFormat:@"ImageFolder/%@.mp4",md5String]];
+    _isPlay = YES;
+    [self playVideoWithUrl:mp4FilePath];
 }
 
 - (void)awakeFromNib {

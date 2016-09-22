@@ -17,6 +17,11 @@
 @property (nonatomic, strong) UIButton *likeButton;         // 点赞按钮
 @property (nonatomic, strong) UIButton *shareButton;        // 分享按钮
 @property (nonatomic, strong) UIColor *bgColor;
+@property (nonatomic, strong) AVPlayer *player;             // 播放器对象
+@property (nonatomic, strong) AVPlayerLayer *playerLayer;   // 播放层
+@property (nonatomic, strong) NSURLSessionDownloadTask *downloadTask;
+@property (nonatomic, assign) BOOL isPlay;
+
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier bgColor:(UIColor *)bgColor;
 
