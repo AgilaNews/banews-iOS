@@ -68,6 +68,9 @@
     [self coldBoot:YES];
     // 创建图片文件夹
     [self createImageFolderAtPath];
+    // 消除小红点
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+
     // 启动上报打点
     NSString *logFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/log.data"];
     NSMutableArray *logData = [NSKeyedUnarchiver unarchiveObjectWithFile:logFilePath];
@@ -418,8 +421,6 @@
                     [self pushEnterWithUserInfo:userInfo];
                 }
             }
-            // 消除小红点
-            [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
             break;
         }
         case 3:
