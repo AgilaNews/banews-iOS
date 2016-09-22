@@ -87,6 +87,7 @@
 		5F5AE9791D54A4C900A5A8B7 /* GuideFavoritesView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5AE9781D54A4C900A5A8B7 /* GuideFavoritesView.m */; };
 		5F5C63791D8E5FED005D3578 /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5C63781D8E5FED005D3578 /* KeychainItemWrapper.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		5F5C637D1D8FFC77005D3578 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5F5C637C1D8FFC77005D3578 /* GoogleService-Info.plist */; };
+		5F5C638E1D938DA9005D3578 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F5C638D1D938DA9005D3578 /* UserNotifications.framework */; };
 		5F635CA41D3CCC50006AAE3D /* UIView+UIScreenDisplaying.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F635CA31D3CCC50006AAE3D /* UIView+UIScreenDisplaying.m */; };
 		5F635CA71D3CFA58006AAE3D /* TimeStampToString.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F635CA61D3CFA58006AAE3D /* TimeStampToString.m */; };
 		5F635CB11D3DD4C3006AAE3D /* LeftView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F635CB01D3DD4C3006AAE3D /* LeftView.m */; };
@@ -354,6 +355,7 @@
 		5F5C63771D8E5FED005D3578 /* KeychainItemWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeychainItemWrapper.h; sourceTree = "<group>"; };
 		5F5C63781D8E5FED005D3578 /* KeychainItemWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeychainItemWrapper.m; sourceTree = "<group>"; };
 		5F5C637C1D8FFC77005D3578 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		5F5C638D1D938DA9005D3578 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		5F635CA21D3CCC50006AAE3D /* UIView+UIScreenDisplaying.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+UIScreenDisplaying.h"; sourceTree = "<group>"; };
 		5F635CA31D3CCC50006AAE3D /* UIView+UIScreenDisplaying.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+UIScreenDisplaying.m"; sourceTree = "<group>"; };
 		5F635CA51D3CFA58006AAE3D /* TimeStampToString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeStampToString.h; sourceTree = "<group>"; };
@@ -570,6 +572,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5F5C638E1D938DA9005D3578 /* UserNotifications.framework in Frameworks */,
 				5F42C0BC1D34ED8E00B89651 /* Security.framework in Frameworks */,
 				5F2E0A001D86557A00FEC0AC /* iAd.framework in Frameworks */,
 				5F42C0BE1D34ED9700B89651 /* SystemConfiguration.framework in Frameworks */,
@@ -831,6 +834,7 @@
 		5F42C0B41D34ED6300B89651 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5F5C638D1D938DA9005D3578 /* UserNotifications.framework */,
 				5F8D87BF1D800F2A00FF4019 /* FirebaseMessaging.framework */,
 				5F8D87C01D800F2A00FF4019 /* GoogleIPhoneUtilities.framework */,
 				5F8D87B51D800F1D00FF4019 /* FirebaseAnalytics.framework */,

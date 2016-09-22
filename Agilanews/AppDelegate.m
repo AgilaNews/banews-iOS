@@ -308,18 +308,18 @@
  */
 - (void)registNotifications
 {
-    if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerForRemoteNotifications)]) {
+    if ([UIDevice currentDevice].systemVersion.floatValue >= 10.0) {
+        UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+        center.delegate = self;
+        [center requestAuthorizationWithOptions:(UNAuthorizationOptionAlert | UNAuthorizationOptionBadge | UNAuthorizationOptionSound) completionHandler:^(BOOL granted, NSError * _Nullable error) {
+        }];
+    } else {
         [[UIApplication sharedApplication] registerForRemoteNotifications];
         UIUserNotificationType notificationTypes = UIUserNotificationTypeBadge |
         UIUserNotificationTypeSound |
         UIUserNotificationTypeAlert;
         UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:notificationTypes categories:nil];
         [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
-    } else {
-        UIRemoteNotificationType notificationTypes = UIRemoteNotificationTypeBadge |
-        UIRemoteNotificationTypeSound |
-        UIRemoteNotificationTypeAlert;
-        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:notificationTypes];
     }
     NSString *refreshedToken = DEF_PERSISTENT_GET_OBJECT(@"refreshToken");
     if (refreshedToken.length) {
@@ -401,6 +401,9 @@
     switch (type.integerValue) {
         case 1:
         {
+            if ([UIDevice currentDevice].systemVersion.floatValue >= 10.0) {
+                return;
+            }
             // 普通推送消息
             if (userInfo[@"news_id"]) {
                 if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
@@ -420,6 +423,40 @@
                     // 在后台收到推送
                     [self pushEnterWithUserInfo:userInfo];
                 }
+            }
+            break;
+        }
+        case 3:
+        {
+            // 透传推送消息
+            NSString *refreshedToken = [[FIRInstanceID instanceID] token];
+            if (refreshedToken.length) {
+                DEF_PERSISTENT_SET_OBJECT(@"refreshToken", refreshedToken);
+                [self uploadRefreshedToken:refreshedToken];
+            }
+            break;
+        }
+        default:
+            break;
+    }
+}
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler {
+    // 应用在前台收到通知
+    SSLog(@"========%@", notification);
+    // 如果需要在应用在前台也展示通知
+    completionHandler(UNNotificationPresentationOptionBadge|UNNotificationPresentationOptionSound|UNNotificationPresentationOptionAlert);
+}
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler {
+    // 点击通知进入应用
+    SSLog(@"response:%@", response);
+    NSDictionary *userInfo = response.notification.request.content.userInfo;
+    NSNumber *type = userInfo[@"type"];
+    switch (type.integerValue) {
+        case 1:
+        {
+            // 普通推送消息
+            if (userInfo[@"news_id"]) {
+                [self pushEnterWithUserInfo:userInfo];
             }
             break;
         }
@@ -473,7 +510,7 @@
     model.news_id = userInfo[@"news_id"];
     newsDetailVC.model = model;
     newsDetailVC.isPushEnter = YES;
-    [(UINavigationController *)_window.rootViewController pushViewController:newsDetailVC animated:YES];
+    [(UINavigationController *)_window.rootViewController pushViewController:newsDetailVC animated:NO];
 }
 #pragma mark - 监听网络状态
 /**

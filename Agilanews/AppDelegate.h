@@ -10,8 +10,9 @@
 #import "CategoriesModel.h"
 #import "LoginModel.h"
 #import "iConsole.h"
+#import <UserNotifications/UserNotifications.h>
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate,CLLocationManagerDelegate,iConsoleDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate,CLLocationManagerDelegate,iConsoleDelegate,UNUserNotificationCenterDelegate>
 
 #if DEBUG
 @property (strong, nonatomic) iConsoleWindow *window; //这是关键，必须使用iConsoleWindow
