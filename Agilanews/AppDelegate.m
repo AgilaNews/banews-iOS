@@ -663,7 +663,7 @@
                                  nil];
             [sessions addObject:dic];
         }
-        NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObject:[NSArray arrayWithObject:sessionDic] forKey:@"sessions"];
+        NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObject:sessions forKey:@"sessions"];
         [[SSHttpRequest sharedInstance] post:@"" params:params contentType:JsonType serverType:NetServer_Log success:^(id responseObj) {
             // 打点成功
             [weakSelf serverLogWithEventArray:eventArray];
