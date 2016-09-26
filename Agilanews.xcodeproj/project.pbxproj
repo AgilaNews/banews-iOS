@@ -88,6 +88,7 @@
 		5F5C63791D8E5FED005D3578 /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5C63781D8E5FED005D3578 /* KeychainItemWrapper.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		5F5C637D1D8FFC77005D3578 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5F5C637C1D8FFC77005D3578 /* GoogleService-Info.plist */; };
 		5F5C63801D90FC29005D3578 /* VideoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5C637F1D90FC29005D3578 /* VideoModel.m */; };
+		5F5C63931D950AB4005D3578 /* LoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5C63921D950AB4005D3578 /* LoadingView.m */; };
 		5F635CA41D3CCC50006AAE3D /* UIView+UIScreenDisplaying.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F635CA31D3CCC50006AAE3D /* UIView+UIScreenDisplaying.m */; };
 		5F635CA71D3CFA58006AAE3D /* TimeStampToString.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F635CA61D3CFA58006AAE3D /* TimeStampToString.m */; };
 		5F635CB11D3DD4C3006AAE3D /* LeftView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F635CB01D3DD4C3006AAE3D /* LeftView.m */; };
@@ -357,6 +358,8 @@
 		5F5C637C1D8FFC77005D3578 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5F5C637E1D90FC29005D3578 /* VideoModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoModel.h; sourceTree = "<group>"; };
 		5F5C637F1D90FC29005D3578 /* VideoModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoModel.m; sourceTree = "<group>"; };
+		5F5C63911D950AB4005D3578 /* LoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadingView.h; sourceTree = "<group>"; };
+		5F5C63921D950AB4005D3578 /* LoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadingView.m; sourceTree = "<group>"; };
 		5F635CA21D3CCC50006AAE3D /* UIView+UIScreenDisplaying.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+UIScreenDisplaying.h"; sourceTree = "<group>"; };
 		5F635CA31D3CCC50006AAE3D /* UIView+UIScreenDisplaying.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+UIScreenDisplaying.m"; sourceTree = "<group>"; };
 		5F635CA51D3CFA58006AAE3D /* TimeStampToString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeStampToString.h; sourceTree = "<group>"; };
@@ -1162,6 +1165,8 @@
 				5F64627F1D48AD3A008EEDEC /* CommentTextView.m */,
 				5F5AE96F1D5353B400A5A8B7 /* BannerView.h */,
 				5F5AE9701D5353B400A5A8B7 /* BannerView.m */,
+				5F5C63911D950AB4005D3578 /* LoadingView.h */,
+				5F5C63921D950AB4005D3578 /* LoadingView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1520,6 +1525,7 @@
 				5FF4B77A1D37BD2C00CC6704 /* UILabel+UhouAdditions.m in Sources */,
 				5FE722181D4F5F3F0026BFC3 /* FeedbackViewController.m in Sources */,
 				5FF4B7901D38DEE400CC6704 /* GifPicCell.m in Sources */,
+				5F5C63931D950AB4005D3578 /* LoadingView.m in Sources */,
 				5F42BFF81D34E3D500B89651 /* AFURLRequestSerialization.m in Sources */,
 				5FF4B6FF1D372E5700CC6704 /* HomeViewController.m in Sources */,
 				5FF4B7D71D3A174900CC6704 /* UIScrollView+MJExtension.m in Sources */,

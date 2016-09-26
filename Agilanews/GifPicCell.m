@@ -55,6 +55,8 @@
 {
     [self.contentView addSubview:self.titleLabel];
     [self.contentView addSubview:self.titleImageView];
+    [self.contentView addSubview:self.playButton];
+    [self.contentView addSubview:self.loadingView];
     [self.contentView addSubview:self.likeButton];
     [self.contentView addSubview:self.shareButton];
     
@@ -73,6 +75,20 @@
         make.top.mas_equalTo(weakSelf.titleLabel.mas_bottom).offset(10);
         make.width.mas_equalTo(kScreenWidth - 22);
         make.height.mas_equalTo(500);
+    }];
+    // 播放按钮布局
+    [self.playButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.mas_equalTo(weakSelf.titleImageView.mas_centerX);
+        make.centerY.mas_equalTo(weakSelf.titleImageView.mas_centerY);
+        make.width.mas_equalTo(60);
+        make.height.mas_equalTo(60);
+    }];
+    // loading布局
+    [self.loadingView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.mas_equalTo(weakSelf.titleImageView.mas_centerX);
+        make.centerY.mas_equalTo(weakSelf.titleImageView.mas_centerY);
+        make.width.mas_equalTo(45);
+        make.height.mas_equalTo(45);
     }];
     // 点赞按钮布局
     [self.likeButton mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -110,6 +126,16 @@
         make.width.mas_equalTo(kScreenWidth - 22);
         make.height.mas_equalTo(width);
     }];
+    // 播放按钮布局
+    [self.playButton mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.centerX.mas_equalTo(weakSelf.titleImageView.mas_centerX);
+        make.centerY.mas_equalTo(weakSelf.titleImageView.mas_centerY);
+    }];
+    // loading布局
+    [self.loadingView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.centerX.mas_equalTo(weakSelf.titleImageView.mas_centerX);
+        make.centerY.mas_equalTo(weakSelf.titleImageView.mas_centerY);
+    }];
     // 点赞按钮布局
     [self.likeButton mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(weakSelf.titleLabel.mas_left);
@@ -140,10 +166,16 @@
     NSNumber *textOnlyMode = DEF_PERSISTENT_GET_OBJECT(SS_textOnlyMode);
     if ([textOnlyMode integerValue] == 1) {
         self.titleImageView.image = nil;
+        self.playButton.hidden = NO;
         return;
     }
+    self.playButton.hidden = YES;
     NSString *imageUrl = [imageModel.src stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     [self.titleImageView sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:[UIImage imageNamed:@"holderImage"] options:SDWebImageRetryFailed completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        if (weakSelf.loadingView.hidden) {
+            weakSelf.playButton.hidden = NO;
+            [weakSelf stop];
+        }
         if (!image) {
             _titleImageView.image = [UIImage imageNamed:@"holderImage"];
         } else {
@@ -193,11 +225,32 @@
         _titleImageView.contentMode = UIViewContentModeScaleAspectFit;
         _titleImageView.clipsToBounds = YES;
         _titleImageView.image = [UIImage imageNamed:@"holderImage"];
-        _titleImageView.userInteractionEnabled = YES;
-        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapAction)];
-        [_titleImageView addGestureRecognizer:tap];
+//        _titleImageView.userInteractionEnabled = YES;
+//        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapAction)];
+//        [_titleImageView addGestureRecognizer:tap];
     }
     return _titleImageView;
+}
+
+- (UIButton *)playButton
+{
+    if (_playButton == nil) {
+        _playButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_playButton setImage:[UIImage imageNamed:@"play_button"] forState:UIControlStateNormal];
+        [_playButton addTarget:self action:@selector(tapAction) forControlEvents:UIControlEventTouchUpInside];
+        _playButton.adjustsImageWhenHighlighted = NO;
+        _playButton.hidden = YES; 
+    }
+    return _playButton;
+}
+
+- (LoadingView *)loadingView
+{
+    if (_loadingView == nil) {
+        _loadingView = [[LoadingView alloc] init];
+        _loadingView.hidden = YES;
+    }
+    return _loadingView;
 }
 
 - (UIButton *)likeButton
@@ -301,32 +354,32 @@
 
 - (void)stopVideoNotif
 {
-    [_downloadTask cancel];
-    [_playerLayer removeFromSuperlayer];
-    [_player pause];
-    _player = nil;
-    _isPlay = NO;
+    [self stop];
 }
-
 - (void)setModel:(NewsModel *)model
 {
     if (_model != model) {
         _model = model;
-        
-        [_downloadTask cancel];
-        [_playerLayer removeFromSuperlayer];
-        [_player pause];
-        _player = nil;
-        _isPlay = NO;
+        [self stop];
+        [self setNeedsLayout];
     }
+}
+- (void)stop
+{
+    [_downloadTask cancel];
+    [self.playerLayer removeFromSuperlayer];
+    [self.player pause];
+    self.player = nil;
+    self.playButton.hidden = NO;
+    [self.loadingView stopAnimation];
 }
 
 - (void)tapAction
 {
-    if (_isPlay) {
+    if (self.playButton.hidden) {
         return;
     }
-    _isPlay = YES;
+    self.playButton.hidden = YES;
     VideoModel *videoModel = _model.videos.firstObject;
     NSString *urlString = [videoModel.src stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSString *md5String = [NSString encryptPassword:urlString];
@@ -336,11 +389,17 @@
     if ([fileManager fileExistsAtPath:mp4FilePath]) {
         [self playVideoWithUrl:mp4FilePath];
     } else {
+        [self.loadingView startAnimation];
         __weak typeof(self) weakSelf = self;
         NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString]];
-        _downloadTask = [[SSHttpRequest sharedInstance] downloadTaskWithRequest:request progress:nil destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
+        _downloadTask = [[SSHttpRequest sharedInstance] downloadTaskWithRequest:request progress:^(NSProgress * _Nonnull downloadProgress) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                weakSelf.loadingView.percent = [NSString stringWithFormat:@"%.f%%",(float)downloadProgress.completedUnitCount / (float)downloadProgress.totalUnitCount * 100];
+            });
+        } destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
             return [NSURL URLWithString:[NSString stringWithFormat:@"file://%@/",mp4FilePath]];
         } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
+            [weakSelf.loadingView stopAnimation];
             if (error) {
                 if ([error code] == NSURLErrorCancelled)
                 {
@@ -375,20 +434,18 @@
     _playerLayer = [AVPlayerLayer playerLayerWithPlayer:_player];
     _playerLayer.frame = self.titleImageView.bounds;
     [self.titleImageView.layer addSublayer:_playerLayer];
-    [_player play];
+    [self.player play];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playbackFinished:) name:AVPlayerItemDidPlayToEndTimeNotification object:self.player.currentItem];
 }
 - (void)playbackFinished:(NSNotification *)notification
 {
-    SSLog(@"视频播放完成.");
-    [_playerLayer removeFromSuperlayer];
-    _isPlay = NO;
+    SSLog(@"视频播放完成");
+    [self.playerLayer removeFromSuperlayer];
     VideoModel *videoModel = _model.videos.firstObject;
     NSString *urlString = [videoModel.src stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSString *md5String = [NSString encryptPassword:urlString];
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     NSString *mp4FilePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:[NSString stringWithFormat:@"ImageFolder/%@.mp4",md5String]];
-    _isPlay = YES;
     [self playVideoWithUrl:mp4FilePath];
 }
 
