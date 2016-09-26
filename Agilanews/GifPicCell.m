@@ -46,6 +46,7 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+//    [self removeObserverFromPlayerItem:self.player.currentItem];
 }
 
 /**
@@ -172,11 +173,11 @@
     self.playButton.hidden = YES;
     NSString *imageUrl = [imageModel.src stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     [self.titleImageView sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:[UIImage imageNamed:@"holderImage"] options:SDWebImageRetryFailed completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-        if (weakSelf.loadingView.hidden) {
+        if (weakSelf.loadingView.hidden && _isPlay == NO) {
             weakSelf.playButton.hidden = NO;
-            [weakSelf stop];
         }
         if (!image) {
+            weakSelf.playButton.hidden = YES;
             _titleImageView.image = [UIImage imageNamed:@"holderImage"];
         } else {
             _titleImageView.image = image;
@@ -368,6 +369,8 @@
 {
     [_downloadTask cancel];
     [self.playerLayer removeFromSuperlayer];
+//    [self removeObserverFromPlayerItem:self.player.currentItem];
+    _isPlay = NO;
     [self.player pause];
     self.player = nil;
     self.playButton.hidden = NO;
@@ -433,14 +436,18 @@
     _player = [AVPlayer playerWithPlayerItem:item];
     _playerLayer = [AVPlayerLayer playerLayerWithPlayer:_player];
     _playerLayer.frame = self.titleImageView.bounds;
+//    [self addObserverToPlayerItem:item];
     [self.titleImageView.layer addSublayer:_playerLayer];
     [self.player play];
+    _isPlay = YES;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playbackFinished:) name:AVPlayerItemDidPlayToEndTimeNotification object:self.player.currentItem];
 }
 - (void)playbackFinished:(NSNotification *)notification
 {
     SSLog(@"视频播放完成");
     [self.playerLayer removeFromSuperlayer];
+    _isPlay = NO;
+//    [self removeObserverFromPlayerItem:self.player.currentItem];
     VideoModel *videoModel = _model.videos.firstObject;
     NSString *urlString = [videoModel.src stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSString *md5String = [NSString encryptPassword:urlString];
@@ -448,6 +455,37 @@
     NSString *mp4FilePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:[NSString stringWithFormat:@"ImageFolder/%@.mp4",md5String]];
     [self playVideoWithUrl:mp4FilePath];
 }
+
+//- (void)addObserverToPlayerItem:(AVPlayerItem *)playerItem{
+//    //监控状态属性，注意AVPlayer也有一个status属性，通过监控它的status也可以获得播放状态
+//    [playerItem addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
+//    //监控网络加载情况属性
+//    [playerItem addObserver:self forKeyPath:@"loadedTimeRanges" options:NSKeyValueObservingOptionNew context:nil];
+//    //监听播放的区域缓存是否为空
+//    [playerItem addObserver:self forKeyPath:@"playbackBufferEmpty" options:NSKeyValueObservingOptionNew context:nil];
+//    //缓存可以播放的时候调用
+//    [playerItem addObserver:self forKeyPath:@"playbackLikelyToKeepUp" options:NSKeyValueObservingOptionNew context:nil];
+//}
+//- (void)removeObserverFromPlayerItem:(AVPlayerItem *)playerItem{
+//    [playerItem removeObserver:self forKeyPath:@"status"];
+//    [playerItem removeObserver:self forKeyPath:@"loadedTimeRanges"];
+//    [playerItem removeObserver:self forKeyPath:@"playbackBufferEmpty"];
+//    [playerItem removeObserver:self forKeyPath:@"playbackLikelyToKeepUp"];
+//}
+//- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+//{
+//    AVPlayerItem *playerItem = object;
+//    if ([keyPath isEqualToString:@"status"]) {
+//        AVPlayerStatus status= [[change objectForKey:@"new"] intValue];
+//        if(status == AVPlayerStatusReadyToPlay){
+//            NSLog(@"开始播放,视频总长度:%.2f",CMTimeGetSeconds(playerItem.duration));
+//        }else if(status == AVPlayerStatusUnknown){
+//            NSLog(@"%@",@"AVPlayerStatusUnknown");
+//        }else if (status == AVPlayerStatusFailed){
+//            NSLog(@"%@",@"AVPlayerStatusFailed");
+//        }
+//    }
+//}
 
 - (void)awakeFromNib {
     [super awakeFromNib];

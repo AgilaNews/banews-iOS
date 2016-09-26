@@ -23,6 +23,7 @@
 @property (nonatomic, strong) AVPlayerLayer *playerLayer;   // 播放层
 @property (nonatomic, strong) NSURLSessionDownloadTask *downloadTask;
 @property (nonatomic, strong) LoadingView *loadingView;
+@property (nonatomic, assign) BOOL isPlay;
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier bgColor:(UIColor *)bgColor;
 
