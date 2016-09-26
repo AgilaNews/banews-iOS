@@ -155,6 +155,7 @@
         self.titleImageView.image = [UIImage imageNamed:@"holderImage"];
         return;
     }
+    self.titleImageView.contentMode = UIViewContentModeScaleAspectFit;
     ImageModel *imageModel = _model.imgs.firstObject;
     float width = kScreenWidth - 22;
     NSString *imageUrl = [imageModel.pattern stringByReplacingOccurrencesOfString:@"{w}" withString:[NSString stringWithFormat:@"%d",((int)width * 2)]];
