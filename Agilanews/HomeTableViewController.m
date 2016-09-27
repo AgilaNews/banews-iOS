@@ -16,6 +16,7 @@
 #import "BigPicCell.h"
 #import "OnlyPicCell.h"
 #import "GifPicCell.h"
+#import "RefreshCell.h"
 #import "AppDelegate.h"
 #import "BannerView.h"
 #import "AppDelegate.h"
@@ -50,6 +51,7 @@
     // Do any additional setup after loading the view.
     self.view.backgroundColor = [UIColor whiteColor];
     self.automaticallyAdjustsScrollViewInsets = NO;
+    _isShowBanner = YES;
     // 注册通知
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(requestDataWithRefreshNotif:)
@@ -119,7 +121,7 @@
             [self.tableView reloadData];
         } else if ([_model.channelID isEqualToNumber:@10001]) {
             // 请求数据
-            [self requestDataWithChannelID:_model.channelID isLater:YES isShowHUD:NO];
+            [self requestDataWithChannelID:_model.channelID isLater:YES isShowHUD:NO isShowBanner:NO];
         }
     }
     if (![DEF_PERSISTENT_GET_OBJECT(SS_GuideHomeKey) isEqualToNumber:@1] && [_model.channelID isEqualToNumber:@10001]) {
@@ -155,6 +157,9 @@
     if (indexPath.row >= _dataList.count) {
         return 50;
     }
+    if ([_dataList[indexPath.row] isKindOfClass:[NSString class]]) {
+        return 35;
+    }
     NewsModel *model = _dataList[indexPath.row];
     UIFont *titleFont = nil;
     switch ([DEF_PERSISTENT_GET_OBJECT(SS_FontSize) integerValue]) {
@@ -180,24 +185,20 @@
         {
             CGSize titleLabelSize = [model.title calculateSize:CGSizeMake(kScreenWidth - 22, 40) font:titleFont];
             return 11 + titleLabelSize.height + 10 + 70 + 10 + 11 + 11;
-            break;
         }
         case NEWS_SinglePic:
         {
             return 12 + 68 + 12;
-            break;
         }
         case NEWS_NoPic:
         {
             CGSize titleLabelSize = [model.title calculateSize:CGSizeMake(kScreenWidth - 22, 60) font:titleFont];
             return 11 + titleLabelSize.height + 15 + 11 + 11;
-            break;
         }
         case NEWS_BigPic:
         {
             CGSize titleLabelSize = [model.title calculateSize:CGSizeMake(kScreenWidth - 22, 40) font:titleFont];
             return 12 + titleLabelSize.height + 162 + 20 + 11 + 11;
-            break;
         }
         case NEWS_OnlyPic:
         {
@@ -205,12 +206,12 @@
             ImageModel *imageModel = model.imgs.firstObject;
             return 12 + titleLabelSize.height + 10 + imageModel.height.integerValue / 2.0 + 12 + 18 + 12;
         }
-//            break;
-//        case NEWS_GifPic:
-//        {
-//            
-//        }
-//            break;
+        case NEWS_GifPic:
+        {
+            CGSize titleLabelSize = [model.title calculateSize:CGSizeMake(kScreenWidth - 22, 40) font:titleFont];
+            ImageModel *imageModel = model.imgs.firstObject;
+            return 12 + titleLabelSize.height + 10 + imageModel.height.integerValue / 2.0 + 12 + 18 + 12;
+        }
         default:
             return 50;
             break;
@@ -220,6 +221,17 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (_dataList.count > 0) {
+        if ([_dataList[indexPath.row] isKindOfClass:[NSString class]]) {
+            // 刷新cell
+            static NSString *cellID = @"RefreshCellID";
+            RefreshCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+            if (cell == nil) {
+                cell = [[RefreshCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            }
+            [cell setNeedsLayout];
+            return cell;
+        }
         NewsModel *model = _dataList[indexPath.row];
         switch ([model.tpl integerValue])
         {
@@ -234,7 +246,6 @@
                 cell.model = model;
                 [cell setNeedsLayout];
                 return cell;
-                break;
             }
             case NEWS_SinglePic:
             {
@@ -247,7 +258,6 @@
                 cell.model = model;
                 [cell setNeedsLayout];
                 return cell;
-                break;
             }
             case NEWS_NoPic:
             {
@@ -260,7 +270,6 @@
                 cell.model = model;
                 [cell setNeedsLayout];
                 return cell;
-                break;
             }
             case NEWS_BigPic:
             {
@@ -273,7 +282,6 @@
                 cell.model = model;
                 [cell setNeedsLayout];
                 return cell;
-                break;
             }
             case NEWS_OnlyPic:
             {
@@ -289,22 +297,22 @@
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
                 [cell setNeedsLayout];
                 return cell;
-                break;
             }
-//        case NEWS_GifPic:
-//        {
-//            // gif图cell
-//            NSLog(@"gif图cell");
-//            static NSString *cellID = @"GifPicCellID";
-//            GifPicCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
-//            if (cell == nil) {
-//                cell = [[GifPicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
-//            }
-//            cell.model = model;
-//            [cell setNeedsLayout];
-//            return cell;
-//        }
-//            break;
+            case NEWS_GifPic:
+            {
+                // gif图cell
+                static NSString *cellID = @"GifPicCellID";
+                GifPicCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+                if (cell == nil) {
+                    cell = [[GifPicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
+                    [cell.likeButton addTarget:self action:@selector(likeAction:) forControlEvents:UIControlEventTouchUpInside];
+                    [cell.shareButton addTarget:self action:@selector(shareAction:) forControlEvents:UIControlEventTouchUpInside];
+                }
+                cell.model = model;
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                [cell setNeedsLayout];
+                return cell;
+            }
             default:
                 break;
         }
@@ -324,7 +332,23 @@
     if (indexPath.row >= _dataList.count) {
         return;
     }
-    if ([_model.channelID isEqualToNumber:@10011]) {
+    if ([_dataList[indexPath.row] isKindOfClass:[NSString class]]) {
+        // 打点-刷新位置提醒bar被点击-010125
+        NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
+                                       [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
+                                       _model.name, @"channel",
+                                       [NetType getNetType], @"network",
+                                       nil];
+        [Flurry logEvent:@"Home_LocationRemindBar_Click" withParameters:articleParams];
+#if DEBUG
+        [iConsole info:[NSString stringWithFormat:@"Home_LocationRemindBar_Click:%@",articleParams],nil];
+#endif
+        [self.tableView setContentOffset:self.tableView.contentOffset animated:NO];
+        _isShowBanner = YES;
+        [self.tableView.header beginRefreshing];
+        return;
+    }
+    if ([_model.channelID isEqualToNumber:@10011] || [_model.channelID isEqualToNumber:@10012]) {
         return;
     }
     NewsModel *model = _dataList[indexPath.row];
@@ -414,6 +438,9 @@
             if (_dataList.count <= indexPath.row) {
                 return;
             }
+            if ([_dataList[indexPath.row] isKindOfClass:[NSString class]]) {
+                return;
+            }
             NewsModel *model = _dataList[indexPath.row];
             // 服务器打点-列表页滑动-020101
             NSMutableDictionary *eventDic = [NSMutableDictionary dictionary];
@@ -453,6 +480,9 @@
     if (_dataList.count <= indexPath.row) {
         return;
     }
+    if ([_dataList[indexPath.row] isKindOfClass:[NSString class]]) {
+        return;
+    }
     NewsModel *model = _dataList[indexPath.row];
     // 服务器打点-列表页滑动-020101
     NSMutableDictionary *eventDic = [NSMutableDictionary dictionary];
@@ -481,7 +511,7 @@
  *
  *  @param channelID 频道ID
  */
-- (void)requestDataWithChannelID:(NSNumber *)channelID isLater:(BOOL)later isShowHUD:(BOOL)showHUD
+- (void)requestDataWithChannelID:(NSNumber *)channelID isLater:(BOOL)later isShowHUD:(BOOL)showHUD isShowBanner:(BOOL)showBanner
 {
     __weak typeof(self) weakSelf = self;
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
@@ -512,10 +542,14 @@
                 [models addObject:model];
             }
         }
+        if (showBanner) {
+            [models addObject:[NSString stringWithFormat:@"refresh"]];
+        }
         if (_dataList == nil) {
             _dataList = [NSMutableArray array];
         }
         if (later == YES) {
+            _isShowBanner = YES;
             // 打点-下拉刷新成功-010113
             NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
                                            [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
@@ -525,6 +559,12 @@
 #if DEBUG
             [iConsole info:[NSString stringWithFormat:@"Home_List_DownRefresh_Y:%@",articleParams],nil];
 #endif
+            NSArray *dataList = [_dataList copy];
+            for (id object in dataList) {
+                if ([object isKindOfClass:[NSString class]]) {
+                    [_dataList removeObject:object];
+                }
+            }
             [_dataList insertObjects:models atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, models.count)]];
             [weakSelf tableViewDidFinishTriggerHeader:YES reload:YES];
             weakSelf.refreshTime = [[NSDate date] timeIntervalSince1970];
@@ -547,6 +587,7 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Refresh_Success object:nil];
     } failure:^(NSError *error) {
         if (later == YES) {
+            _isShowBanner = YES;
             // 打点-下拉刷新失败-010114
             NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
                                            [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
@@ -606,7 +647,7 @@
 #if DEBUG
     [iConsole info:[NSString stringWithFormat:@"Home_List_DownRefresh:%@",articleParams],nil];
 #endif
-    [self requestDataWithChannelID:_model.channelID isLater:YES isShowHUD:YES];
+    [self requestDataWithChannelID:_model.channelID isLater:YES isShowHUD:YES isShowBanner:_isShowBanner];
 }
 
 /**
@@ -620,7 +661,7 @@
         SVProgressHUD.defaultStyle = SVProgressHUDStyleCustom;
         [SVProgressHUD show];
     }
-    [self requestDataWithChannelID:_model.channelID isLater:YES isShowHUD:YES];
+    [self requestDataWithChannelID:_model.channelID isLater:YES isShowHUD:YES isShowBanner:NO];
 }
 
 /**
@@ -637,7 +678,7 @@
 #if DEBUG
     [iConsole info:[NSString stringWithFormat:@"Home_List_UpLoad:%@",articleParams],nil];
 #endif
-    [self requestDataWithChannelID:_model.channelID isLater:NO isShowHUD:YES];
+    [self requestDataWithChannelID:_model.channelID isLater:NO isShowHUD:YES isShowBanner:NO];
 }
 
 /**
@@ -722,16 +763,6 @@
     } while (cell != nil);
     NewsModel *newsModel = ((OnlyPicCell *)cell).model;
     
-//    // 打点-点击右上方分享-010203
-//    NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
-//                                   [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
-//                                   _channelName, @"channel",
-//                                   _model.news_id, @"article",
-//                                   nil];
-//    [Flurry logEvent:@"Article_UpShare_Click" withParameters:articleParams];
-//#if DEBUG
-//    [iConsole info:[NSString stringWithFormat:@"Article_UpShare_Click:%@",articleParams],nil];
-//#endif
     __weak typeof(self) weakSelf = self;
     [SSUIShareActionSheetStyle setCancelButtonLabelColor:kGrayColor];
     [SSUIShareActionSheetStyle setItemNameFont:[UIFont systemFontOfSize:13]];
@@ -895,6 +926,7 @@
 {
     if ([_model.channelID isEqualToNumber:notif.object]) {
         [self.tableView setContentOffset:self.tableView.contentOffset animated:NO];
+        _isShowBanner = YES;
         [self.tableView.header beginRefreshing];
     }
 }
@@ -908,8 +940,10 @@
 {
     CategoriesModel *cateModel = notif.object;
     if ([cateModel.channelID isEqualToNumber:_model.channelID] && _dataList.count <= 0) {
+        _isShowBanner = NO;
         [self.tableView.header beginRefreshing];
     } else if ([cateModel.channelID isEqualToNumber:_model.channelID] && ([[NSDate date] timeIntervalSince1970] - _refreshTime) > 3600) {
+        _isShowBanner = NO;
         [self.tableView.header beginRefreshing];
     } else {
         [self.tableView reloadData];
@@ -925,8 +959,10 @@
 {
     CategoriesModel *cateModel = notif.object;
     if ([cateModel.channelID isEqualToNumber:_model.channelID] && _dataList.count <= 0) {
+        _isShowBanner = NO;
         [self.tableView.header beginRefreshing];
     } else if ([cateModel.channelID isEqualToNumber:_model.channelID] && ([[NSDate date] timeIntervalSince1970] - _refreshTime) > 3600) {
+        _isShowBanner = NO;
         [self.tableView.header beginRefreshing];
     } else {
         [self.tableView reloadData];
@@ -943,6 +979,7 @@
     {
         _dataList = [NSMutableArray array];
         if ([self.tableView isDisplayedInScreen]) {
+            _isShowBanner = NO;
             [self.tableView.header beginRefreshing];
         }
     } else {

@@ -69,8 +69,9 @@
     // 创建图片文件夹
     [self createImageFolderAtPath];
     // 消除小红点
-    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
-
+    UILocalNotification *notification=[[UILocalNotification alloc]init];
+    notification.applicationIconBadgeNumber = -1;
+    [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
     // 启动上报打点
     NSString *logFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/log.data"];
     NSMutableArray *logData = [NSKeyedUnarchiver unarchiveObjectWithFile:logFilePath];
@@ -174,6 +175,10 @@
     [self coldBoot:NO];
     // 开始定位
     [self locationServices];
+    // 消除小红点
+    UILocalNotification *notification=[[UILocalNotification alloc]init];
+    notification.applicationIconBadgeNumber = -1;
+    [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
 }
 
@@ -478,7 +483,9 @@
 - (void)pushEnterWithUserInfo:(NSDictionary *)userInfo
 {
     // 消除小红点
-    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+    UILocalNotification *notification=[[UILocalNotification alloc]init];
+    notification.applicationIconBadgeNumber = -1;
+    [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
     // 服务器打点-用户从推送点击详情页-020105
     NSMutableDictionary *eventDic = [NSMutableDictionary dictionary];
     [eventDic setObject:@"020105" forKey:@"id"];

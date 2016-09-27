@@ -22,6 +22,7 @@
 @property (nonatomic, assign) long long beginScrollTime;    // 开始滚动时间
 @property (nonatomic, assign) long long refreshTime;        // 刷新时间
 @property (nonatomic, assign) BOOL isFailure;               // 进入失败页面
+@property (nonatomic, assign) BOOL isShowBanner;            // 显示刷新位置
 
 - (instancetype)initWithModel:(CategoriesModel *)model;
 
