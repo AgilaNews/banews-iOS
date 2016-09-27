@@ -227,6 +227,7 @@
             RefreshCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
             if (cell == nil) {
                 cell = [[RefreshCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
             }
             [cell setNeedsLayout];
             return cell;
