@@ -438,6 +438,9 @@
             if (_dataList.count <= indexPath.row) {
                 return;
             }
+            if ([_dataList[indexPath.row] isKindOfClass:[NSString class]]) {
+                return;
+            }
             NewsModel *model = _dataList[indexPath.row];
             // 服务器打点-列表页滑动-020101
             NSMutableDictionary *eventDic = [NSMutableDictionary dictionary];
@@ -475,6 +478,9 @@
     UITableViewCell *cell = self.tableView.visibleCells.lastObject;
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     if (_dataList.count <= indexPath.row) {
+        return;
+    }
+    if ([_dataList[indexPath.row] isKindOfClass:[NSString class]]) {
         return;
     }
     NewsModel *model = _dataList[indexPath.row];
