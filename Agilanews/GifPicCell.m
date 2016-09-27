@@ -382,6 +382,17 @@
     if (self.playButton.hidden) {
         return;
     }
+    // 打点-点击播放-010122
+    NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
+                                   [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
+                                   @"GIFs", @"channel",
+                                   _model.news_id, @"article",
+                                   [NetType getNetType], @"network",
+                                   nil];
+    [Flurry logEvent:@"Home_List_Play_Click" withParameters:articleParams];
+#if DEBUG
+    [iConsole info:[NSString stringWithFormat:@"Home_List_Play_Click:%@",articleParams],nil];
+#endif
     self.playButton.hidden = YES;
     VideoModel *videoModel = _model.videos.firstObject;
     NSString *urlString = [videoModel.src stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
@@ -409,6 +420,17 @@
                     SSLog(@"\n------网络请求取消------\n%@",error);
                     return;
                 }
+                // 打点-播放失败-010123
+                NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
+                                               [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
+                                               @"GIFs", @"channel",
+                                               _model.news_id, @"article",
+                                               [NetType getNetType], @"network",
+                                               nil];
+                [Flurry logEvent:@"Home_List_Play_Failure" withParameters:articleParams];
+#if DEBUG
+                [iConsole info:[NSString stringWithFormat:@"Home_List_Play_Failure:%@",articleParams],nil];
+#endif
                 if ([AFNetworkReachabilityManager sharedManager].networkReachabilityStatus == AFNetworkReachabilityStatusNotReachable)
                 {
                     [SVProgressHUD showErrorWithStatus:@"Please check your network connection"];
@@ -445,6 +467,17 @@
 - (void)playbackFinished:(NSNotification *)notification
 {
     SSLog(@"视频播放完成");
+    // 打点-播放结束-010124
+    NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
+                                   [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
+                                   @"GIFs", @"channel",
+                                   _model.news_id, @"article",
+                                   [NetType getNetType], @"network",
+                                   nil];
+    [Flurry logEvent:@"Home_List_Play_End" withParameters:articleParams];
+#if DEBUG
+    [iConsole info:[NSString stringWithFormat:@"Home_List_Play_End:%@",articleParams],nil];
+#endif
     [self.playerLayer removeFromSuperlayer];
     _isPlay = NO;
 //    [self removeObserverFromPlayerItem:self.player.currentItem];
