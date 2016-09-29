@@ -36,6 +36,7 @@
     _collectionView.minimumPressDuration = 0;
     _collectionView.edgeScrollEable = NO;
     _collectionView.shakeWhenMoveing = NO;
+    _collectionView.noMoveArray = @[@0 ,@1];
     [_collectionView registerClass:[ChannelCell class] forCellWithReuseIdentifier:@"ChannelCell"];
     [self.view addSubview:_collectionView];
 }

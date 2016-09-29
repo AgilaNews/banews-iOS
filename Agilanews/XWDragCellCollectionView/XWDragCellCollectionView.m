@@ -98,11 +98,20 @@ typedef NS_ENUM(NSUInteger, XWDragCellCollectionViewScrollDirection) {
 - (void)xwp_gestureBegan:(UILongPressGestureRecognizer *)longPressGesture{
     //获取手指所在的cell
     _originalIndexPath = [self indexPathForItemAtPoint:[longPressGesture locationOfTouch:0 inView:longPressGesture.view]];
+    // 不进行移动的cell
+    for (NSNumber *num in _noMoveArray) {
+        if ([_originalIndexPath isEqual:[NSIndexPath indexPathForItem:num.integerValue inSection:0]]) {
+            return;
+        }
+    }
     UICollectionViewCell *cell = [self cellForItemAtIndexPath:_originalIndexPath];
     UIView *tempMoveCell = [cell snapshotViewAfterScreenUpdates:NO];
     cell.hidden = YES;
     _tempMoveCell = tempMoveCell;
     _tempMoveCell.frame = cell.frame;
+    [UIView animateWithDuration:.25 animations:^{
+        _tempMoveCell.frame = CGRectMake(cell.left, cell.top, cell.width * 1.3, cell.height * 1.3);
+    }];
     [self addSubview:_tempMoveCell];
     //开启边缘滚动定时器
     [self xwp_setEdgeTimer];
@@ -128,6 +137,16 @@ typedef NS_ENUM(NSUInteger, XWDragCellCollectionViewScrollDirection) {
     _lastPoint = [longPressGesture locationOfTouch:0 inView:longPressGesture.view];
     for (UICollectionViewCell *cell in [self visibleCells]) {
         if ([self indexPathForCell:cell] == _originalIndexPath) {
+            continue;
+        }
+        // 不进行移动的cell
+        BOOL isContinue = NO;
+        for (NSNumber *num in _noMoveArray) {
+            if ([[self indexPathForCell:cell] isEqual:[NSIndexPath indexPathForItem:num.integerValue inSection:0]]) {
+                isContinue = YES;
+            }
+        }
+        if (isContinue) {
             continue;
         }
         //计算中心距
@@ -162,6 +181,7 @@ typedef NS_ENUM(NSUInteger, XWDragCellCollectionViewScrollDirection) {
     }
     [UIView animateWithDuration:0.25 animations:^{
         _tempMoveCell.center = cell.center;
+        _tempMoveCell.frame = cell.frame;
     } completion:^(BOOL finished) {
         [self xwp_stopShakeAllCell];
         [_tempMoveCell removeFromSuperview];

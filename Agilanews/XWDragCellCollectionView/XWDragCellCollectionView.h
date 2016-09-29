@@ -76,4 +76,6 @@
 /**抖动的等级(1.0f~10.0f)，默认4*/
 @property (nonatomic, assign) CGFloat shakeLevel;
 
+@property (nonatomic, strong) NSArray *noMoveArray;
+
 @end
