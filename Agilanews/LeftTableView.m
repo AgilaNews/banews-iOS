@@ -9,13 +9,14 @@
 #import "LeftTableView.h"
 #import "LeftCell.h"
 #import "LeftView.h"
+#import "BaseNavigationController.h"
+#import "HomeViewController.h"
 #import "LoginViewController.h"
 #import "UserInfoViewController.h"
 #import "SettingsViewController.h"
 #import "FavoritesViewController.h"
 #import "FeedbackViewController.h"
-#import "BaseNavigationController.h"
-#import "HomeViewController.h"
+#import "ChannelViewController.h"
 
 @implementation LeftTableView
 
@@ -71,7 +72,7 @@
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 3;
+    return 4;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -129,13 +130,17 @@
     switch (indexPath.section) {
         case 0:
             cell.titleImageView.image = [UIImage imageNamed:@"icon_sidebar_favorites"];
-            cell.titleLabel.text = @"Favorites";
+            cell.titleLabel.text = @"Channels";
             break;
         case 1:
+            cell.titleImageView.image = [UIImage imageNamed:@"icon_sidebar_favorites"];
+            cell.titleLabel.text = @"Favorites";
+            break;
+        case 2:
             cell.titleImageView.image = [UIImage imageNamed:@"icon_sidebar_feedback"];
             cell.titleLabel.text = @"Feedback";
             break;
-        case 2:
+        case 3:
             cell.titleImageView.image = [UIImage imageNamed:@"icon_sidebar_settings"];
             cell.titleLabel.text = @"Settings";
             break;
@@ -154,6 +159,18 @@
     switch (indexPath.section) {
         case 0:
         {
+//            // 打点-点击收藏-010403
+//            [Flurry logEvent:@"Info_Icon_Click"];
+//#if DEBUG
+//            [iConsole info:@"Info_Icon_Click",nil];
+//#endif
+            // 点击Channels
+            ChannelViewController *channelVC = [[ChannelViewController alloc] init];
+            [navCtrl pushViewController:channelVC animated:YES];
+            break;
+        }
+        case 1:
+        {
             // 打点-点击收藏-010403
             [Flurry logEvent:@"Info_Icon_Click"];
 #if DEBUG
@@ -162,7 +179,7 @@
             // 点击Favorites
             if (_appDelegate.model) {
                 // 直接进入收藏
-                FavoritesViewController *favoritesVC = [[FavoritesViewController  alloc] init];
+                FavoritesViewController *favoritesVC = [[FavoritesViewController alloc] init];
                 [navCtrl pushViewController:favoritesVC animated:YES];
             } else {
                 // 登录后进入收藏
@@ -170,9 +187,9 @@
                 loginVC.isFavorite = YES;
                 [navCtrl pushViewController:loginVC animated:YES];
             }
-        }
             break;
-        case 1:
+        }
+        case 2:
         {
             // 打点-点击反馈-010404
             [Flurry logEvent:@"Menu_FeedbackButton_Click"];
@@ -182,9 +199,9 @@
             // 点击Feedback
             FeedbackViewController *feedbackVC = [[FeedbackViewController alloc] init];
             [navCtrl pushViewController:feedbackVC animated:YES];
-        }
             break;
-        case 2:
+        }
+        case 3:
         {
             // 打点-点击设置-010406
             [Flurry logEvent:@"Menu_SetButton_Click"];
@@ -194,8 +211,8 @@
             // 点击Settings
             SettingsViewController *settingsVC = [[SettingsViewController alloc] init];
             [navCtrl pushViewController:settingsVC animated:YES];
-        }
             break;
+        }
         default:
             break;
     }

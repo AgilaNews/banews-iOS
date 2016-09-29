@@ -130,6 +130,9 @@
 		5F64627D1D4855F7008EEDEC /* CommentTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F64627C1D4855F7008EEDEC /* CommentTextField.m */; };
 		5F6462801D48AD3A008EEDEC /* CommentTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F64627F1D48AD3A008EEDEC /* CommentTextView.m */; };
 		5F767A5D1D9A44C900822BAC /* RefreshCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F767A5C1D9A44C800822BAC /* RefreshCell.m */; };
+		5F767A601D9BB6EA00822BAC /* ChannelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F767A5F1D9BB6EA00822BAC /* ChannelViewController.m */; };
+		5F767A641D9BBD4E00822BAC /* XWDragCellCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F767A631D9BBD4E00822BAC /* XWDragCellCollectionView.m */; };
+		5F767A671D9BC30000822BAC /* ChannelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F767A661D9BC30000822BAC /* ChannelCell.m */; };
 		5F8D85AA1D76A99700FF4019 /* WebViewJavascriptBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F8D85A31D76A99700FF4019 /* WebViewJavascriptBridge.m */; };
 		5F8D85AB1D76A99700FF4019 /* WebViewJavascriptBridge_JS.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F8D85A51D76A99700FF4019 /* WebViewJavascriptBridge_JS.m */; };
 		5F8D85AC1D76A99700FF4019 /* WebViewJavascriptBridgeBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F8D85A71D76A99700FF4019 /* WebViewJavascriptBridgeBase.m */; };
@@ -424,6 +427,12 @@
 		5F64627F1D48AD3A008EEDEC /* CommentTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentTextView.m; sourceTree = "<group>"; };
 		5F767A5B1D9A44C800822BAC /* RefreshCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RefreshCell.h; sourceTree = "<group>"; };
 		5F767A5C1D9A44C800822BAC /* RefreshCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RefreshCell.m; sourceTree = "<group>"; };
+		5F767A5E1D9BB6EA00822BAC /* ChannelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChannelViewController.h; sourceTree = "<group>"; };
+		5F767A5F1D9BB6EA00822BAC /* ChannelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChannelViewController.m; sourceTree = "<group>"; };
+		5F767A621D9BBD4E00822BAC /* XWDragCellCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XWDragCellCollectionView.h; sourceTree = "<group>"; };
+		5F767A631D9BBD4E00822BAC /* XWDragCellCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XWDragCellCollectionView.m; sourceTree = "<group>"; };
+		5F767A651D9BC30000822BAC /* ChannelCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChannelCell.h; sourceTree = "<group>"; };
+		5F767A661D9BC30000822BAC /* ChannelCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChannelCell.m; sourceTree = "<group>"; };
 		5F8D85A21D76A99700FF4019 /* WebViewJavascriptBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewJavascriptBridge.h; sourceTree = "<group>"; };
 		5F8D85A31D76A99700FF4019 /* WebViewJavascriptBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewJavascriptBridge.m; sourceTree = "<group>"; };
 		5F8D85A41D76A99700FF4019 /* WebViewJavascriptBridge_JS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewJavascriptBridge_JS.h; sourceTree = "<group>"; };
@@ -702,6 +711,7 @@
 		5F42BFE61D34E3BC00B89651 /* Tools */ = {
 			isa = PBXGroup;
 			children = (
+				5F767A611D9BBD4E00822BAC /* XWDragCellCollectionView */,
 				5F5C63761D8E5FED005D3578 /* KeychainItemWrapper */,
 				5F2E0A141D87B47A00FEC0AC /* HZPhotoBrowser */,
 				5F8D85A11D76A99700FF4019 /* WebViewJavascriptBridge */,
@@ -955,6 +965,8 @@
 				5FD55E671D4EFB0D00B0E17D /* FavoriteDetailViewController.m */,
 				5FE722161D4F5F3F0026BFC3 /* FeedbackViewController.h */,
 				5FE722171D4F5F3F0026BFC3 /* FeedbackViewController.m */,
+				5F767A5E1D9BB6EA00822BAC /* ChannelViewController.h */,
+				5F767A5F1D9BB6EA00822BAC /* ChannelViewController.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -972,6 +984,8 @@
 				5FE7221A1D5034970026BFC3 /* FeedbackTextView.m */,
 				5FE7221E1D506CD70026BFC3 /* FeedbackTextField.h */,
 				5FE7221F1D506CD70026BFC3 /* FeedbackTextField.m */,
+				5F767A651D9BC30000822BAC /* ChannelCell.h */,
+				5F767A661D9BC30000822BAC /* ChannelCell.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1040,6 +1054,15 @@
 				5F635ED11D3F94C0006AAE3D /* LoginButton.m */,
 			);
 			name = Views;
+			sourceTree = "<group>";
+		};
+		5F767A611D9BBD4E00822BAC /* XWDragCellCollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				5F767A621D9BBD4E00822BAC /* XWDragCellCollectionView.h */,
+				5F767A631D9BBD4E00822BAC /* XWDragCellCollectionView.m */,
+			);
+			path = XWDragCellCollectionView;
 			sourceTree = "<group>";
 		};
 		5F8D85A11D76A99700FF4019 /* WebViewJavascriptBridge */ = {
@@ -1439,6 +1462,7 @@
 				5F42C0141D34E3EC00B89651 /* MJFoundation.m in Sources */,
 				5FF4B76F1D37BD2C00CC6704 /* NSObject+UhouAddition.m in Sources */,
 				5FF4B7051D373E2200CC6704 /* EaseRefreshTableViewController.m in Sources */,
+				5F767A601D9BB6EA00822BAC /* ChannelViewController.m in Sources */,
 				5F42C0831D34E41D00B89651 /* NSData+ImageContentType.m in Sources */,
 				5FF4B7AE1D38F7B200CC6704 /* MASConstraint.m in Sources */,
 				5F42C0181D34E3EC00B89651 /* NSObject+MJClass.m in Sources */,
@@ -1484,6 +1508,7 @@
 				5F42C09E1D34E42A00B89651 /* SVProgressAnimatedView.m in Sources */,
 				5F5AE9761D54364E00A5A8B7 /* GuideRefreshView.m in Sources */,
 				5FF4B7711D37BD2C00CC6704 /* NSTimer+UhouAdditions.m in Sources */,
+				5F767A671D9BC30000822BAC /* ChannelCell.m in Sources */,
 				5FF4B76C1D37BD2C00CC6704 /* NSDate+UhouAdditions.m in Sources */,
 				5FF4B7B01D38F7B200CC6704 /* MASLayoutConstraint.m in Sources */,
 				5F42C08A1D34E41D00B89651 /* SDWebImagePrefetcher.m in Sources */,
@@ -1520,6 +1545,7 @@
 				5F42C0901D34E41D00B89651 /* UIImageView+WebCache.m in Sources */,
 				5FF4B7CF1D3A174900CC6704 /* MJRefreshComponent.m in Sources */,
 				5FF4B6F11D372A9300CC6704 /* BaseNavigationController.m in Sources */,
+				5F767A641D9BBD4E00822BAC /* XWDragCellCollectionView.m in Sources */,
 				5FF4B78A1D38DEA400CC6704 /* NoPicCell.m in Sources */,
 				5F6462711D45F64A008EEDEC /* FavoritesViewController.m in Sources */,
 				5FF4B7D61D3A174900CC6704 /* MJRefreshLegendHeader.m in Sources */,
