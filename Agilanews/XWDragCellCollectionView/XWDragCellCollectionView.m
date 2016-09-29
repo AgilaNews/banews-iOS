@@ -103,9 +103,6 @@ typedef NS_ENUM(NSUInteger, XWDragCellCollectionViewScrollDirection) {
     cell.hidden = YES;
     _tempMoveCell = tempMoveCell;
     _tempMoveCell.frame = cell.frame;
-    [UIView animateWithDuration:.25 animations:^{
-        _tempMoveCell.frame = CGRectMake(cell.left, cell.top, cell.width * 1.3, cell.height * 1.3);
-    }];
     [self addSubview:_tempMoveCell];
     //开启边缘滚动定时器
     [self xwp_setEdgeTimer];
@@ -165,7 +162,6 @@ typedef NS_ENUM(NSUInteger, XWDragCellCollectionViewScrollDirection) {
     }
     [UIView animateWithDuration:0.25 animations:^{
         _tempMoveCell.center = cell.center;
-        _tempMoveCell.frame = cell.frame;
     } completion:^(BOOL finished) {
         [self xwp_stopShakeAllCell];
         [_tempMoveCell removeFromSuperview];
