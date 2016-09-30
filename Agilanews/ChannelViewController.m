@@ -21,15 +21,15 @@
     self.title = @"Channels";
     self.isBackButton = YES;
     self.automaticallyAdjustsScrollViewInsets = NO;
-    
+    NSString *string = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
     _dataList = @[@"1",@"2",@"3",@"4",@"5",@"6",@"7",@"8",@"9",@"10",@"11",@"12",@"13"];
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-    layout.itemSize = CGSizeMake((kScreenWidth - 20) / 3.0, (kScreenWidth - 20) / 3.0);
-    layout.sectionInset = UIEdgeInsetsMake(10, 10, 10, 10);
+    layout.itemSize = CGSizeMake((kScreenWidth - 40) / 3.0, 50);
+    layout.sectionInset = UIEdgeInsetsMake(16, 20, 16, 20);
     layout.minimumLineSpacing = 0;
     layout.minimumInteritemSpacing = 0;
     layout.scrollDirection = UICollectionViewScrollDirectionVertical;
-    _collectionView = [[XWDragCellCollectionView alloc] initWithFrame:CGRectMake(0, 200, kScreenWidth, kScreenHeight - 200) collectionViewLayout:layout];
+    _collectionView = [[XWDragCellCollectionView alloc] initWithFrame:CGRectMake(0, 64 + 130, kScreenWidth, kScreenHeight - 64 - 130 - 48) collectionViewLayout:layout];
     _collectionView.delegate = self;
     _collectionView.dataSource = self;
     _collectionView.backgroundColor = [UIColor whiteColor];
