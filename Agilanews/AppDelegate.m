@@ -732,7 +732,7 @@
 {
     __weak typeof(self) weakSelf = self;
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
-    [params setObject:referrerID forKey:@"referrer"];
+    [params setObject:[NSString stringWithFormat:@"install_id=%@",referrerID] forKey:@"referrer"];
     NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     [params setObject:[NSString stringWithFormat:@"v%@",version] forKey:@"version"];
     [[SSHttpRequest sharedInstance] post:@"" params:params contentType:JsonType serverType:NetServer_Referrer success:^(id responseObj) {
