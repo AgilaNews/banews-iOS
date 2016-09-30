@@ -605,6 +605,12 @@
 {
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         @autoreleasepool {
+            // 上传安装ID
+            NSString *referrerID = DEF_PERSISTENT_GET_OBJECT(@"referrer");
+            if (!referrerID.length) {
+                referrerID = [[NSUUID UUID] UUIDString];
+                [self uploadReferrerWithReferrerID:referrerID];
+            }
             // 加载频道列表
             NSString *categoryFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/category.data"];
             _categoriesArray = [NSKeyedUnarchiver unarchiveObjectWithFile:categoryFilePath];
@@ -720,6 +726,22 @@
             [weakSelf serverLogWithEventArray:eventArray];
         } isShowHUD:NO];
     }
+}
+
+- (void)uploadReferrerWithReferrerID:(NSString *)referrerID
+{
+    __weak typeof(self) weakSelf = self;
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    [params setObject:referrerID forKey:@"referrer"];
+    NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    [params setObject:[NSString stringWithFormat:@"v%@",version] forKey:@"version"];
+    [[SSHttpRequest sharedInstance] post:@"" params:params contentType:JsonType serverType:NetServer_Referrer success:^(id responseObj) {
+        DEF_PERSISTENT_SET_OBJECT(@"referrer", referrerID);
+    } failure:^(NSError *error) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(60 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [weakSelf uploadReferrerWithReferrerID:referrerID];
+        });
+    } isShowHUD:NO];
 }
 
 - (void)handleConsoleCommand:(NSString *)command
