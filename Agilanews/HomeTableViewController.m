@@ -447,7 +447,9 @@
             [eventDic setObject:@"020101" forKey:@"id"];
             [eventDic setObject:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970] * 1000] forKey:@"time"];
             [eventDic setObject:_model.channelID forKey:@"channel"];
-            [eventDic setObject:model.news_id forKey:@"last_id"];
+            if (model.news_id) {
+                [eventDic setObject:model.news_id forKey:@"last_id"];
+            }
             long long duration = [[NSDate date] timeIntervalSince1970] * 1000 - _beginScrollTime;
             [eventDic setObject:[NSString stringWithFormat:@"%.1f",duration / 1000.0] forKey:@"duration"];
             [eventDic setObject:[NetType getNetType] forKey:@"net"];
@@ -489,7 +491,9 @@
     [eventDic setObject:@"020101" forKey:@"id"];
     [eventDic setObject:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970] * 1000] forKey:@"time"];
     [eventDic setObject:_model.channelID forKey:@"channel"];
-    [eventDic setObject:model.news_id forKey:@"last_id"];
+    if (model.news_id) {
+        [eventDic setObject:model.news_id forKey:@"last_id"];
+    }
     long long duration = [[NSDate date] timeIntervalSince1970] * 1000 - _beginScrollTime;
     [eventDic setObject:[NSString stringWithFormat:@"%.1f",duration / 1000.0] forKey:@"duration"];
     [eventDic setObject:[NetType getNetType] forKey:@"net"];
