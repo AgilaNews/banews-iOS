@@ -59,7 +59,7 @@ static GuideRefreshView *_guideView = nil;
 - (void)_initChannelGuide
 {
     _isNoTouch = YES;
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         _channelView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth - (kScreenWidth - 320) * .5, 225)];
         _channelView.image = [self stretchableImageWithPic:[UIImage imageNamed:@"swipe"]];
         [_guideView addSubview:_channelView];
@@ -106,7 +106,7 @@ static GuideRefreshView *_guideView = nil;
         return;
     }
     if (_refreshView) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Refresh object:@10001];
+//        [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Refresh object:@10001];
         [GuideRefreshView sharedInstance].swipe.direction = UISwipeGestureRecognizerDirectionLeft;
         [[GuideRefreshView sharedInstance] removeAllSubviews];
         [GuideRefreshView sharedInstance].refreshView = nil;
