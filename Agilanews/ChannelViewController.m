@@ -21,7 +21,7 @@
 //    self.title = @"Channels";
     self.isBackButton = YES;
     self.automaticallyAdjustsScrollViewInsets = NO;
-    
+    NSString *string = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
     _dataList = @[@"1",@"2",@"3",@"4",@"5",@"6",@"7",@"8",@"9",@"10",@"11",@"12",@"13"];
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
     layout.itemSize = CGSizeMake((kScreenWidth - 20) / 3.0, (kScreenWidth - 20) / 3.0);
