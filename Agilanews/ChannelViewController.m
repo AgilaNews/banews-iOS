@@ -18,25 +18,25 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.title = @"Channels";
+//    self.title = @"Channels";
     self.isBackButton = YES;
     self.automaticallyAdjustsScrollViewInsets = NO;
     
     _dataList = @[@"1",@"2",@"3",@"4",@"5",@"6",@"7",@"8",@"9",@"10",@"11",@"12",@"13"];
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
     layout.itemSize = CGSizeMake((kScreenWidth - 20) / 3.0, (kScreenWidth - 20) / 3.0);
-    layout.sectionInset = UIEdgeInsetsMake(10, 10, 10, 10);
+    layout.sectionInset = UIEdgeInsetsMake(210, 10, 10, 10);
     layout.minimumLineSpacing = 0;
     layout.minimumInteritemSpacing = 0;
     layout.scrollDirection = UICollectionViewScrollDirectionVertical;
-    _collectionView = [[XWDragCellCollectionView alloc] initWithFrame:CGRectMake(0, 200, kScreenWidth, kScreenHeight - 200) collectionViewLayout:layout];
+    _collectionView = [[XWDragCellCollectionView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight) collectionViewLayout:layout];
     _collectionView.delegate = self;
     _collectionView.dataSource = self;
     _collectionView.backgroundColor = [UIColor whiteColor];
     _collectionView.minimumPressDuration = 0;
     _collectionView.edgeScrollEable = NO;
     _collectionView.shakeWhenMoveing = NO;
-    _collectionView.noMoveArray = @[@0 ,@1];
+    _collectionView.noMoveArray = @[@0];
     [_collectionView registerClass:[ChannelCell class] forCellWithReuseIdentifier:@"ChannelCell"];
     [self.view addSubview:_collectionView];
 }
