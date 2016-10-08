@@ -151,7 +151,7 @@ typedef NS_ENUM(NSUInteger, XWDragCellCollectionViewScrollDirection) {
         }
         //计算中心距
         CGFloat space = sqrtf(powf(_tempMoveCell.center.x - cell.center.x, 2) + powf(_tempMoveCell.center.y - cell.center.y, 2));
-        if (space < _tempMoveCell.bounds.size.height * 0.5) {
+        if (space < _tempMoveCell.bounds.size.width * 0.5) {
             _moveIndexPath = [self indexPathForCell:cell];
             //更新数据源
             [self xwp_updateDataSource];
