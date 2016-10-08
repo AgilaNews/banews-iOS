@@ -12,6 +12,7 @@
 @interface LeftTableView : UITableView<UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong) UIImageView *headerViewAvatar;
+@property (nonatomic, strong) UILabel *loginLabel;
 @property (nonatomic, strong) AppDelegate *appDelegate;
 
 @end

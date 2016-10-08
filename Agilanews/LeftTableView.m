@@ -32,16 +32,26 @@
         UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.width, self.height - 328)];
         footerView.backgroundColor = kWhiteBgColor;
         self.tableFooterView = footerView;
-        UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.width, 140)];
+        UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.width, 140 + 40)];
         headerView.backgroundColor = SSColor(214, 214, 214);
         _headerViewAvatar = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 57, 57)];
-        _headerViewAvatar.center = headerView.center;
+        _headerViewAvatar.center = CGPointMake(headerView.center.x, headerView.center.y - 10);
         _headerViewAvatar.backgroundColor = SSColor(214, 214, 214);
         _headerViewAvatar.userInteractionEnabled = YES;
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapAction)];
         [_headerViewAvatar addGestureRecognizer:tap];
+        [headerView addSubview:_headerViewAvatar];
+        _loginLabel = [[UILabel alloc] initWithFrame:CGRectMake(_headerViewAvatar.center.x - 50, _headerViewAvatar.bottom + 10, 100, 18)];
+        _loginLabel.backgroundColor = SSColor(214, 214, 214);
+        _loginLabel.textAlignment = NSTextAlignmentCenter;
+        _loginLabel.font = [UIFont boldSystemFontOfSize:17];
+        _loginLabel.textColor = kOrangeColor;
+        _loginLabel.text = @"Log in";
+        [headerView addSubview:_loginLabel];
         _appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
         if (_appDelegate.model) {
+            _loginLabel.hidden = YES;
+            _headerViewAvatar.center = headerView.center;
             [_headerViewAvatar sd_setImageWithURL:[NSURL URLWithString:_appDelegate.model.portrait] placeholderImage:[UIImage imageNamed:@"icon_sidebar_head"] options:SDWebImageLowPriority | SDWebImageRetryFailed completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                 if (image)
                 {
@@ -52,9 +62,10 @@
                 }
             }];
         } else {
+            _loginLabel.hidden = NO;
+            _loginLabel.frame = CGRectMake(_headerViewAvatar.center.x - 50, _headerViewAvatar.bottom + 10, 100, 18);
             _headerViewAvatar.image = [UIImage imageNamed:@"icon_sidebar_head"];
         }
-        [headerView addSubview:_headerViewAvatar];
         self.tableHeaderView = headerView;
         
         // 注册通知
@@ -129,7 +140,7 @@
     }
     switch (indexPath.section) {
         case 0:
-            cell.titleImageView.image = [UIImage imageNamed:@"icon_sidebar_favorites"];
+            cell.titleImageView.image = [UIImage imageNamed:@"icon_sidebar_channel"];
             cell.titleLabel.text = @"Channels";
             break;
         case 1:
@@ -258,6 +269,8 @@
  */
 - (void)loginSuccess
 {
+    _loginLabel.hidden = YES;
+    _headerViewAvatar.center = self.tableHeaderView.center;
     [_headerViewAvatar sd_setImageWithURL:[NSURL URLWithString:_appDelegate.model.portrait] placeholderImage:[UIImage imageNamed:@"icon_sidebar_head"] options:SDWebImageLowPriority | SDWebImageRetryFailed completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         if (image)
         {
@@ -274,6 +287,8 @@
  */
 - (void)userLogOut
 {
+    _loginLabel.hidden = NO;
+    _loginLabel.frame = CGRectMake(_headerViewAvatar.center.x - 50, _headerViewAvatar.bottom + 10, 100, 18);
     _headerViewAvatar.image = [UIImage imageNamed:@"icon_sidebar_head"];
     _appDelegate.model = nil;
 }
