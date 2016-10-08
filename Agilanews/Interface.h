@@ -53,7 +53,6 @@ typedef enum {
 // 检查更新接口
 #define kHomeUrl_Check      @"/check"
 // push绑定接口
-#define kHomeUrl_Push      @"/firebase"
-
+#define kHomeUrl_Push       @"/firebase"
 
 #endif /* Interface_h */
