@@ -431,10 +431,11 @@
 #endif
     }
     _scrollY = scrollView.contentOffset.y;
+    __weak typeof(self) weakSelf = self;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         if (!_isDecelerating) {
-            UITableViewCell *cell = self.tableView.visibleCells.lastObject;
-            NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+            UITableViewCell *cell = weakSelf.tableView.visibleCells.lastObject;
+            NSIndexPath *indexPath = [weakSelf.tableView indexPathForCell:cell];
             if (_dataList.count <= indexPath.row) {
                 return;
             }
@@ -442,6 +443,9 @@
                 return;
             }
             NewsModel *model = _dataList[indexPath.row];
+            if (!model.news_id) {
+                return;
+            }
             // 服务器打点-列表页滑动-020101
             NSMutableDictionary *eventDic = [NSMutableDictionary dictionary];
             [eventDic setObject:@"020101" forKey:@"id"];
@@ -484,6 +488,9 @@
         return;
     }
     NewsModel *model = _dataList[indexPath.row];
+    if (!model.news_id) {
+        return;
+    }
     // 服务器打点-列表页滑动-020101
     NSMutableDictionary *eventDic = [NSMutableDictionary dictionary];
     [eventDic setObject:@"020101" forKey:@"id"];

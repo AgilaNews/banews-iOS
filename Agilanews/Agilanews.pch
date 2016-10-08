@@ -70,6 +70,7 @@
 #import <AppsFlyer/AppsFlyer.h>
 #import "KeychainItemWrapper.h"
 #import "XWDragCellCollectionView.h"
+#import <GoogleSignIn/GoogleSignIn.h>
 
 
 ////////////////////////////////////////
