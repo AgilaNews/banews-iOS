@@ -69,6 +69,7 @@
 #import <FirebaseMessaging/FIRMessaging.h>
 #import <AppsFlyer/AppsFlyer.h>
 #import "KeychainItemWrapper.h"
+#import <GoogleSignIn/GoogleSignIn.h>
 
 
 ////////////////////////////////////////

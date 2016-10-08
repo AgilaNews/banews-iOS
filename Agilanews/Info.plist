@@ -38,6 +38,22 @@
 				<string>twitterkit-XK2Hia7WY461HBldOCYtGEECl</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.759516127227-j1sk8vjq3ielljmpsn01esjrf41u1isp</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.220913118121-tsfqho6sgkbh2frs2k8h3kludcnnunf1</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>13</string>
