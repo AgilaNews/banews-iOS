@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "BaseViewController.h"
 
-@interface LoginViewController : BaseViewController
+@interface LoginViewController : BaseViewController <GIDSignInDelegate, UIApplicationDelegate, GIDSignInUIDelegate>
 
 @property (nonatomic, strong) UIImageView *titleImageView;
 @property (nonatomic, assign) BOOL isFavorite;  // 从侧边收藏进入

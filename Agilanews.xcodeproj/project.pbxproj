@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5F17B4581DA8A594008EBD51 /* GoogleSignIn.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5F17B4561DA8A594008EBD51 /* GoogleSignIn.bundle */; };
+		5F17B4591DA8A594008EBD51 /* GoogleSignIn.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F17B4571DA8A594008EBD51 /* GoogleSignIn.framework */; };
+		5F17B45B1DA8A5C1008EBD51 /* GoogleAppUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F17B45A1DA8A5C1008EBD51 /* GoogleAppUtilities.framework */; };
+		5F17B45D1DA8A5CD008EBD51 /* GoogleAuthUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F17B45C1DA8A5CD008EBD51 /* GoogleAuthUtilities.framework */; };
+		5F17B45F1DA8A5D6008EBD51 /* GoogleNetworkingUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F17B45E1DA8A5D6008EBD51 /* GoogleNetworkingUtilities.framework */; };
 		5F2E09FE1D86554900FEC0AC /* AppsFlyer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F2E09FD1D86554900FEC0AC /* AppsFlyer.framework */; };
 		5F2E0A001D86557A00FEC0AC /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F2E09FF1D86557A00FEC0AC /* iAd.framework */; };
 		5F2E0A1D1D87B47A00FEC0AC /* HZIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F2E0A161D87B47A00FEC0AC /* HZIndicatorView.m */; };
@@ -75,9 +80,9 @@
 		5F5AE9761D54364E00A5A8B7 /* GuideRefreshView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5AE9751D54364E00A5A8B7 /* GuideRefreshView.m */; };
 		5F5AE9791D54A4C900A5A8B7 /* GuideFavoritesView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5AE9781D54A4C900A5A8B7 /* GuideFavoritesView.m */; };
 		5F5C63791D8E5FED005D3578 /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5C63781D8E5FED005D3578 /* KeychainItemWrapper.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		5F5C637D1D8FFC77005D3578 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5F5C637C1D8FFC77005D3578 /* GoogleService-Info.plist */; };
 		5F5C63801D90FC29005D3578 /* VideoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5C637F1D90FC29005D3578 /* VideoModel.m */; };
 		5F5C638E1D938DA9005D3578 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F5C638D1D938DA9005D3578 /* UserNotifications.framework */; };
+		5F5C63901D93DC12005D3578 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5F5C638F1D93DC12005D3578 /* GoogleService-Info.plist */; };
 		5F5C63931D950AB4005D3578 /* LoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5C63921D950AB4005D3578 /* LoadingView.m */; };
 		5F635CA41D3CCC50006AAE3D /* UIView+UIScreenDisplaying.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F635CA31D3CCC50006AAE3D /* UIView+UIScreenDisplaying.m */; };
 		5F635CA71D3CFA58006AAE3D /* TimeStampToString.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F635CA61D3CFA58006AAE3D /* TimeStampToString.m */; };
@@ -225,6 +230,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5F17B4561DA8A594008EBD51 /* GoogleSignIn.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = GoogleSignIn.bundle; sourceTree = "<group>"; };
+		5F17B4571DA8A594008EBD51 /* GoogleSignIn.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleSignIn.framework; sourceTree = "<group>"; };
+		5F17B45A1DA8A5C1008EBD51 /* GoogleAppUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleAppUtilities.framework; sourceTree = "<group>"; };
+		5F17B45C1DA8A5CD008EBD51 /* GoogleAuthUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleAuthUtilities.framework; sourceTree = "<group>"; };
+		5F17B45E1DA8A5D6008EBD51 /* GoogleNetworkingUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleNetworkingUtilities.framework; sourceTree = "<group>"; };
 		5F2E09FD1D86554900FEC0AC /* AppsFlyer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AppsFlyer.framework; sourceTree = "<group>"; };
 		5F2E09FF1D86557A00FEC0AC /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
 		5F2E0A151D87B47A00FEC0AC /* HZIndicatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HZIndicatorView.h; sourceTree = "<group>"; };
@@ -349,10 +359,10 @@
 		5F5C63751D8E5AE7005D3578 /* Agila.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Agila.entitlements; sourceTree = "<group>"; };
 		5F5C63771D8E5FED005D3578 /* KeychainItemWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeychainItemWrapper.h; sourceTree = "<group>"; };
 		5F5C63781D8E5FED005D3578 /* KeychainItemWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeychainItemWrapper.m; sourceTree = "<group>"; };
-		5F5C637C1D8FFC77005D3578 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5F5C637E1D90FC29005D3578 /* VideoModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoModel.h; sourceTree = "<group>"; };
 		5F5C637F1D90FC29005D3578 /* VideoModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoModel.m; sourceTree = "<group>"; };
 		5F5C638D1D938DA9005D3578 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
+		5F5C638F1D93DC12005D3578 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5F5C63911D950AB4005D3578 /* LoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadingView.h; sourceTree = "<group>"; };
 		5F5C63921D950AB4005D3578 /* LoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadingView.m; sourceTree = "<group>"; };
 		5F635CA21D3CCC50006AAE3D /* UIView+UIScreenDisplaying.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+UIScreenDisplaying.h"; sourceTree = "<group>"; };
@@ -627,6 +637,7 @@
 				5F42C0BC1D34ED8E00B89651 /* Security.framework in Frameworks */,
 				5F2E0A001D86557A00FEC0AC /* iAd.framework in Frameworks */,
 				5F42C0BE1D34ED9700B89651 /* SystemConfiguration.framework in Frameworks */,
+				5F17B45D1DA8A5CD008EBD51 /* GoogleAuthUtilities.framework in Frameworks */,
 				5FE7221D1D5051BB0026BFC3 /* AdSupport.framework in Frameworks */,
 				5F635CE41D3E3FA3006AAE3D /* AddressBook.framework in Frameworks */,
 				5F8D87BD1D800F1D00FF4019 /* GoogleSymbolUtilities.framework in Frameworks */,
@@ -638,6 +649,7 @@
 				5F635CDC1D3E3F79006AAE3D /* CoreMotion.framework in Frameworks */,
 				5F571F711D58742B00604CDD /* libFlurry_7.6.6.a in Frameworks */,
 				5F635CDA1D3E3F64006AAE3D /* JavaScriptCore.framework in Frameworks */,
+				5F17B45F1DA8A5D6008EBD51 /* GoogleNetworkingUtilities.framework in Frameworks */,
 				5F635CD81D3E3F59006AAE3D /* libstdc++.tbd in Frameworks */,
 				5F571F691D58269600604CDD /* Crashlytics.framework in Frameworks */,
 				5F635CD61D3E3F4E006AAE3D /* libz.tbd in Frameworks */,
@@ -645,6 +657,7 @@
 				5F571F8B1D5C1FFE00604CDD /* GoogleOpenSource.framework in Frameworks */,
 				5F635CD01D3E3EDF006AAE3D /* MOBFoundation.framework in Frameworks */,
 				5F571F851D5C1FD300604CDD /* FBSDKShareKit.framework in Frameworks */,
+				5F17B45B1DA8A5C1008EBD51 /* GoogleAppUtilities.framework in Frameworks */,
 				5F635CCF1D3E3EDF006AAE3D /* ShareSDKUI.framework in Frameworks */,
 				5F2E09FE1D86554900FEC0AC /* AppsFlyer.framework in Frameworks */,
 				5F42C0C01D34EFEE00B89651 /* UIKit.framework in Frameworks */,
@@ -657,6 +670,7 @@
 				5F571F811D5C1FBD00604CDD /* FBSDKCoreKit.framework in Frameworks */,
 				5F571F8D1D5C1FFE00604CDD /* GooglePlus.framework in Frameworks */,
 				5F8D87BC1D800F1D00FF4019 /* GoogleInterchangeUtilities.framework in Frameworks */,
+				5F17B4591DA8A594008EBD51 /* GoogleSignIn.framework in Frameworks */,
 				5F635CCD1D3E3EDF006AAE3D /* ShareSDKExtension.framework in Frameworks */,
 				5FE7220F1D4EFCE30026BFC3 /* TwitterCore.framework in Frameworks */,
 				5F571F871D5C1FE000604CDD /* FBSDKMessengerShareKit.framework in Frameworks */,
@@ -723,7 +737,7 @@
 				5F42BFBF1D34E2F000B89651 /* Assets.xcassets */,
 				5F42BFC11D34E2F000B89651 /* LaunchScreen.storyboard */,
 				5F42BFC41D34E2F000B89651 /* Info.plist */,
-				5F5C637C1D8FFC77005D3578 /* GoogleService-Info.plist */,
+				5F5C638F1D93DC12005D3578 /* GoogleService-Info.plist */,
 				5F42BFB31D34E2F000B89651 /* Supporting Files */,
 			);
 			path = Agilanews;
@@ -858,6 +872,11 @@
 		5F42C0B41D34ED6300B89651 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5F17B45E1DA8A5D6008EBD51 /* GoogleNetworkingUtilities.framework */,
+				5F17B45C1DA8A5CD008EBD51 /* GoogleAuthUtilities.framework */,
+				5F17B45A1DA8A5C1008EBD51 /* GoogleAppUtilities.framework */,
+				5F17B4561DA8A594008EBD51 /* GoogleSignIn.bundle */,
+				5F17B4571DA8A594008EBD51 /* GoogleSignIn.framework */,
 				5F5C638D1D938DA9005D3578 /* UserNotifications.framework */,
 				5F8D87BF1D800F2A00FF4019 /* FirebaseMessaging.framework */,
 				5F8D87C01D800F2A00FF4019 /* GoogleIPhoneUtilities.framework */,
@@ -1457,7 +1476,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5F17B4581DA8A594008EBD51 /* GoogleSignIn.bundle in Resources */,
 				5F635ED31D4065C1006AAE3D /* LaunchScreen.storyboard in Resources */,
+				5F5C63901D93DC12005D3578 /* GoogleService-Info.plist in Resources */,
 				5FE722221D50B5B70026BFC3 /* textonly.png in Resources */,
 				5F8D85D21D7D1AA800FF4019 /* placeholder.png in Resources */,
 				5F42C09F1D34E42A00B89651 /* SVProgressHUD.bundle in Resources */,
@@ -1469,7 +1490,6 @@
 				5FF4B7AC1D38F7B200CC6704 /* Info.plist in Resources */,
 				5F635CD11D3E3EDF006AAE3D /* ShareSDK.bundle in Resources */,
 				5FE7220E1D4EFCE30026BFC3 /* TwitterKitResources.bundle in Resources */,
-				5F5C637D1D8FFC77005D3578 /* GoogleService-Info.plist in Resources */,
 				5F571F8C1D5C1FFE00604CDD /* GooglePlus.bundle in Resources */,
 				5F42BFC01D34E2F000B89651 /* Assets.xcassets in Resources */,
 			);

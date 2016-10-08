@@ -32,6 +32,11 @@
     } else {
         self.isBackButton = YES;
     }
+    [GIDSignIn sharedInstance].clientID = @"220913118121-tsfqho6sgkbh2frs2k8h3kludcnnunf1.apps.googleusercontent.com";
+    [GIDSignIn sharedInstance].scopes = @[@"profile", @"email"];
+    [GIDSignIn sharedInstance].delegate = self;
+    [GIDSignIn sharedInstance].uiDelegate = self;
+    [GIDSignIn sharedInstance].shouldFetchBasicProfile = YES;
     // 登录头像上边距
     float height = iPhone4 ? (kScreenHeight - 64 - 75 - 50 - 40 - 44 * 3) * .5 : 77 * kScreenHeight / 568;
     _titleImageView = [[UIImageView alloc] initWithFrame:CGRectMake((kScreenWidth - 75) * .5, height + 64, 75, 75)];
@@ -144,23 +149,24 @@
 #if DEBUG
             [iConsole info:@"Login_Google_Click",nil];
 #endif
-            [ShareSDK getUserInfo:SSDKPlatformTypeGooglePlus onStateChanged:^(SSDKResponseState state, SSDKUser *user, NSError *error) {
-                if (state == SSDKResponseStateSuccess) {
-                    // 打点-登陆Google＋成功-010607
-                    [Flurry logEvent:@"Login_Google_Click_Y"];
-#if DEBUG
-                    [iConsole info:@"Login_Google_Click_Y",nil];
-#endif
-                    [self loginWithUserData:user LoginType:GooglePuls];
-                } else {
-                    // 打点-登陆Google＋失败-010610
-                    [Flurry logEvent:@"Login_Google_Click_N"];
-#if DEBUG
-                    [iConsole info:@"Login_Google_Click_N",nil];
-#endif
-                    SSLog(@"%@",error);
-                }
-            }];
+            [[GIDSignIn sharedInstance] signIn];
+//            [ShareSDK getUserInfo:SSDKPlatformTypeGooglePlus onStateChanged:^(SSDKResponseState state, SSDKUser *user, NSError *error) {
+//                if (state == SSDKResponseStateSuccess) {
+//                    // 打点-登陆Google＋成功-010607
+//                    [Flurry logEvent:@"Login_Google_Click_Y"];
+//#if DEBUG
+//                    [iConsole info:@"Login_Google_Click_Y",nil];
+//#endif
+//                    [self loginWithUserData:user LoginType:GooglePuls];
+//                } else {
+//                    // 打点-登陆Google＋失败-010610
+//                    [Flurry logEvent:@"Login_Google_Click_N"];
+//#if DEBUG
+//                    [iConsole info:@"Login_Google_Click_N",nil];
+//#endif
+//                    SSLog(@"%@",error);
+//                }
+//            }];
         }
             break;
             
@@ -187,7 +193,8 @@
         case GooglePuls:
         {
             [params setValue:@"googleplus" forKey:@"source"];
-            NSString *email = user.rawData[@"emails"][0][@"value"];
+//            NSString *email = user.rawData[@"emails"][0][@"value"];
+            NSString *email = user.rawData[@"email"];
             [params setValue:email forKey:@"email"];
         }
             break;
@@ -208,6 +215,7 @@
             [params setValue:[NSNumber numberWithInt:0] forKey:@"gender"];
             break;
         default:
+            [params setValue:[NSNumber numberWithInt:0] forKey:@"gender"];
             break;
     }
     // 用户头像地址
@@ -258,6 +266,74 @@
     [iConsole info:@"Login_BackButton_Click",nil];
 #endif
     [super closeAction:button];
+}
+
+
+- (void)signIn:(GIDSignIn *)signIn didSignInForUser:(GIDGoogleUser *)user withError:(NSError *)error {
+    // Perform any operations on signed in user here.
+//    NSString *userId = user.userID;                  // For client-side use only!
+//    NSString *idToken = user.authentication.idToken; // Safe to send to the server
+//    NSString *fullName = user.profile.name;
+//    NSString *givenName = user.profile.givenName;
+//    NSString *familyName = user.profile.familyName;
+//    NSString *email = user.profile.email;
+    // ...
+    if (error == nil) {
+        // 打点-登陆Google＋成功-010607
+        [Flurry logEvent:@"Login_Google_Click_Y"];
+#if DEBUG
+        [iConsole info:@"Login_Google_Click_Y",nil];
+#endif
+        SSDKUser *loginUser = [[SSDKUser alloc] init];
+        loginUser.uid = user.userID;
+        loginUser.rawData = @{@"email":user.profile.email};
+        loginUser.nickname = user.profile.name;
+        GIDProfileData *profile = user.profile;
+        NSString *avatar = [NSString stringWithFormat:@"%@",[profile imageURLWithDimension:0]];
+        loginUser.icon = avatar;
+        [self loginWithUserData:loginUser LoginType:GooglePuls];
+    } else {
+        // 打点-登陆Google＋失败-010610
+        [Flurry logEvent:@"Login_Google_Click_N"];
+#if DEBUG
+        [iConsole info:@"Login_Google_Click_N",nil];
+#endif
+        SSLog(@"%@",error);
+    }
+}
+
+- (void)signInWillDispatch:(GIDSignIn *)signIn error:(NSError *)error
+{
+//    NSLog(@"%@",signIn);
+}
+
+- (void)signIn:(GIDSignIn *)signIn presentViewController:(UIViewController *)viewController
+{
+    [self presentViewController:viewController animated:YES completion:nil];
+}
+
+- (void)signIn:(GIDSignIn *)signIn dismissViewController:(UIViewController *)viewController
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (BOOL)application:(UIApplication *)application
+            openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication
+         annotation:(id)annotation
+{
+    return [[GIDSignIn sharedInstance] handleURL:url
+                               sourceApplication:sourceApplication
+                                      annotation:annotation];
+}
+
+- (BOOL)application:(UIApplication *)app
+            openURL:(NSURL *)url
+            options:(NSDictionary *)options
+{
+    return [[GIDSignIn sharedInstance] handleURL:url
+                               sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
+                                      annotation:options[UIApplicationOpenURLOptionsAnnotationKey]];
 }
 
 - (void)didReceiveMemoryWarning {
