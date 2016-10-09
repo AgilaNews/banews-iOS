@@ -17,5 +17,7 @@
 @property (nonatomic, strong) LeftView *leftView;
 @property (nonatomic, strong) UIView *navView;
 @property (nonatomic, strong) UIButton *titleButton;
+@property (nonatomic, strong) UIButton *leftButton;
+@property (nonatomic, strong) UIView *redPoint;
 
 @end

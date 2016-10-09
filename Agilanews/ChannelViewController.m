@@ -89,6 +89,7 @@
     for (CategoriesModel *model in appDelegate.categoriesArray) {
         model.isNew = NO;
     }
+    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_CleanNewChannel object:nil];
 }
 
 #pragma mark - XWDragCellCollectionViewDelegate

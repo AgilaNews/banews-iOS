@@ -142,6 +142,9 @@
         case 0:
             cell.titleImageView.image = [UIImage imageNamed:@"icon_sidebar_channel"];
             cell.titleLabel.text = @"Channels";
+            if ([DEF_PERSISTENT_GET_OBJECT(kHaveNewChannel) isEqual:@1]) {
+                [self addRedPointWithLable:cell.titleLabel];
+            }
             break;
         case 1:
             cell.titleImageView.image = [UIImage imageNamed:@"icon_sidebar_favorites"];
@@ -291,6 +294,15 @@
     _loginLabel.frame = CGRectMake(_headerViewAvatar.center.x - 50, _headerViewAvatar.bottom + 10, 100, 18);
     _headerViewAvatar.image = [UIImage imageNamed:@"icon_sidebar_head"];
     _appDelegate.model = nil;
+}
+
+- (void)addRedPointWithLable:(UILabel *)label
+{
+    UIView *redPoint = [[UIView alloc] initWithFrame:CGRectMake(label.right - 140, label.top - 10, 5, 5)];
+    redPoint.backgroundColor = SSColor(233, 51, 17);
+    redPoint.layer.cornerRadius = 2.5;
+    redPoint.layer.masksToBounds = YES;
+    [label addSubview:redPoint];
 }
 
 

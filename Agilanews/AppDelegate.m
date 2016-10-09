@@ -306,6 +306,13 @@
             CategoriesModel *categoriesModel = [CategoriesModel mj_objectWithKeyValues:newDic];
             [categoryArray addObject:categoriesModel];
         }
+//        CategoriesModel *categoriesModel = [[CategoriesModel alloc] init];
+//        categoriesModel.name = @"qweqeee";
+//        categoriesModel.index = @2;
+//        categoriesModel.channelID = @10001;
+//        categoriesModel.isNew = YES;
+//        [categoryArray addObject:categoriesModel];
+
         if (isFirst) {
             // 首次安装无频道
             _categoriesArray = categoryArray;
@@ -331,6 +338,9 @@
             for (CategoriesModel *newModel in newArray) {
                 [_categoriesArray insertObject:newModel atIndex:newModel.index.integerValue];
             }
+            if (newArray.count > 0) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_FindNewChannel object:nil];
+            }
             // 查找是否有删除频道
             NSMutableArray *deleteArray = [NSMutableArray array];
             for (CategoriesModel *model in _categoriesArray) {
@@ -352,7 +362,9 @@
                     [_categoriesArray removeObject:model];
                 }
             }
-            [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Categories object:nil];
+            if (newArray.count > 0 || deleteArray.count > 0) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Categories object:nil];
+            }
         }
     } failure:^(NSError *error) {
         

@@ -27,15 +27,18 @@ static CGFloat const ButtonHeight = 40;
     self.automaticallyAdjustsScrollViewInsets = NO;
 
     // 添加导航栏左侧按钮
-    UIButton *leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    leftButton.frame = CGRectMake(0, 0, 44, 44);
-    [leftButton setImage:[UIImage imageNamed:@"left"] forState:UIControlStateNormal];
-    [leftButton addTarget:self action:@selector(leftAction:) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *buttonItem = [[UIBarButtonItem alloc] initWithCustomView:leftButton];
+    _leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    _leftButton.frame = CGRectMake(0, 0, 44, 44);
+    [_leftButton setImage:[UIImage imageNamed:@"left"] forState:UIControlStateNormal];
+    [_leftButton addTarget:self action:@selector(leftAction:) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *buttonItem = [[UIBarButtonItem alloc] initWithCustomView:_leftButton];
     if ([UIDevice currentDevice].systemVersion.floatValue >= 7.0) {
         UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
         negativeSpacer.width = -12;
         self.navigationItem.leftBarButtonItems = @[negativeSpacer, buttonItem];
+    }
+    if ([DEF_PERSISTENT_GET_OBJECT(kHaveNewChannel) isEqual:@1]) {
+        [self addRedPoint];
     }
     
     // 添加导航栏标题按钮
@@ -49,6 +52,8 @@ static CGFloat const ButtonHeight = 40;
     // 注册通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addSegment) name:KNOTIFICATION_Categories object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refresh_success) name:KNOTIFICATION_Refresh_Success object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(findNewChannel) name:KNOTIFICATION_FindNewChannel object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cleanNewChannel) name:KNOTIFICATION_CleanNewChannel object:nil];
     
     // 添加分段控制器
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
@@ -191,6 +196,30 @@ static CGFloat const ButtonHeight = 40;
 - (void)refresh_success
 {
     [_titleButton setUserInteractionEnabled:YES];
+}
+
+// 发现新频道
+- (void)findNewChannel
+{
+    DEF_PERSISTENT_SET_OBJECT(kHaveNewChannel, @1);
+    [self addRedPoint];
+}
+
+// 添加小红点
+- (void)addRedPoint
+{
+    _redPoint = [[UIView alloc] initWithFrame:CGRectMake(_leftButton.right - 15, _leftButton.top + 10, 6, 6)];
+    _redPoint.backgroundColor = SSColor(233, 51, 17);
+    _redPoint.layer.cornerRadius = 3;
+    _redPoint.layer.masksToBounds = YES;
+    [_leftButton addSubview:_redPoint];
+}
+
+// 删除小红点
+- (void)cleanNewChannel
+{
+    DEF_PERSISTENT_SET_OBJECT(kHaveNewChannel, @0);
+    [_redPoint removeFromSuperview];
 }
 
 - (void)didReceiveMemoryWarning {
