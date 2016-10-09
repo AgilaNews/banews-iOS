@@ -14,5 +14,7 @@
 @property (nonatomic, strong) NSNumber *channelID;  // 频道ID
 @property (nonatomic, strong) NSNumber *index;      // 频道位置
 @property (nonatomic, strong) NSString *name;       // 频道名称
+@property (nonatomic, assign) BOOL tag;             // 是否为热门频道
+@property (nonatomic, assign) BOOL isNew;           // 是否为新频道
 
 @end

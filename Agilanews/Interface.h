@@ -56,5 +56,7 @@ typedef enum {
 #define kHomeUrl_Push       @"/firebase"
 // 安装上传接口
 #define kHomeUrl_Referrer   @"/login/referrer"
+// 频道下发接口
+#define kHomeUrl_Channel   @"/channel"
 
 #endif /* Interface_h */

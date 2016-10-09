@@ -18,7 +18,8 @@ MJCodingImplementation
              @"fixed":@"fixed",
              @"channelID":@"id",
              @"index":@"index",
-             @"name":@"name"
+             @"name":@"name",
+             @"tag":@"tag"
              };
 }
 

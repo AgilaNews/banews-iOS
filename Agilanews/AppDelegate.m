@@ -271,6 +271,7 @@
     [params setObject:[NSNumber numberWithInt:(int)kScreenHeight_DP] forKey:@"r_h"];
     // 时间戳
     [params setObject:[NSNumber numberWithInt:[[NSDate date] timeIntervalSince1970]] forKey:@"client_time"];
+    __weak typeof(self) weakSelf = self;
     [[SSHttpRequest sharedInstance] get:@"" params:params contentType:UrlencodedType serverType:NetServer_Home success:^(id responseObj) {
         // 地址存入NSUserDefaults
         DEF_PERSISTENT_SET_OBJECT(Server_Home, responseObj[@"interfaces"][@"home"]);
@@ -278,35 +279,69 @@
         DEF_PERSISTENT_SET_OBJECT(Server_Mon, responseObj[@"interfaces"][@"mon"]);
         DEF_PERSISTENT_SET_OBJECT(Server_Referrer, responseObj[@"interfaces"][@"referrer"]);
         // 分类存入模型
-        NSArray *categories = responseObj[@"categories"];
-        if (categories.count <= 0) {
-            return;
-        }
-        NSMutableArray *newArray = [NSMutableArray array];
-        for (NSDictionary *newDic in categories) {
-            CategoriesModel *categoriesModel = [CategoriesModel mj_objectWithKeyValues:newDic];
-            [newArray addObject:categoriesModel];
-        }
-        // 频道数不相同通知刷新
-        if (_categoriesArray.count != categories.count) {
-            _categoriesArray = newArray;
-            [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Categories object:nil];
-            return;
-        }
-        // 频道顺序不同通知刷新
-        for (int i = 0; i < newArray.count; i++) {
-            CategoriesModel *newModel = newArray[i];
-            CategoriesModel *model = _categoriesArray[i];
-            if (![newModel.name isEqualToString:model.name]) {
-                _categoriesArray = newArray;
-                [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Categories object:nil];
-                return;
+        NSNumber *channelVersion = responseObj[@"channel_version"];
+        NSNumber *currentVersion = DEF_PERSISTENT_GET_OBJECT(@"channel_version");
+        if (currentVersion == nil || currentVersion.integerValue < channelVersion.integerValue) {
+            DEF_PERSISTENT_SET_OBJECT(@"channel_version", channelVersion);
+            // 请求下发频道
+            if (!currentVersion) {
+                [weakSelf getChannelWithVersion:channelVersion isFirst:YES];
+            } else {
+                [weakSelf getChannelWithVersion:channelVersion isFirst:NO];
             }
         }
     } failure:^(NSError *error) {
         
     } isShowHUD:NO];
 }
+
+#pragma mark - 请求下发频道
+- (void)getChannelWithVersion:(NSNumber *)version isFirst:(BOOL)isFirst
+{
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    [params setObject:version forKey:@"version"];
+    [[SSHttpRequest sharedInstance] get:kHomeUrl_Channel params:params contentType:UrlencodedType serverType:NetServer_Home success:^(id responseObj) {
+        NSMutableArray *categoryArray = [NSMutableArray array];
+        for (NSDictionary *newDic in responseObj) {
+            CategoriesModel *categoriesModel = [CategoriesModel mj_objectWithKeyValues:newDic];
+            [categoryArray addObject:categoriesModel];
+        }
+        CategoriesModel *categoriesModel = [[CategoriesModel alloc] init];
+        categoriesModel.name = @"hahaha";
+        categoriesModel.index = @1;
+        [categoryArray addObject:categoriesModel];
+        if (isFirst) {
+            // 首次安装无频道
+            _categoriesArray = categoryArray;
+            [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Categories object:nil];
+        } else {
+            NSMutableArray *newArray = [NSMutableArray array];
+            // 查找是否有新频道
+            for (CategoriesModel *newModel in categoryArray) {
+                BOOL isNew = YES;
+                for (CategoriesModel *model in _categoriesArray) {
+                    if ([newModel.channelID isEqualToNumber:model.channelID]) {
+                        isNew = NO;
+                        break;
+                    }
+                }
+                if (isNew) {
+                    // 发现新频道
+                    newModel.isNew = YES;
+                    [newArray addObject:newModel];
+                }
+            }
+            for (CategoriesModel *newModel in newArray) {
+                // 插入新频道
+                [_categoriesArray insertObject:newModel atIndex:newModel.index.integerValue];
+            }
+            [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Categories object:nil];
+        }
+    } failure:^(NSError *error) {
+        
+    } isShowHUD:NO];
+}
+
 #pragma mark - Notifications
 /**
  *  注册通知
