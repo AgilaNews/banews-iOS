@@ -110,7 +110,7 @@ typedef NS_ENUM(NSUInteger, XWDragCellCollectionViewScrollDirection) {
     _tempMoveCell = tempMoveCell;
     _tempMoveCell.frame = cell.frame;
     [UIView animateWithDuration:.25 animations:^{
-        _tempMoveCell.frame = CGRectMake(cell.left, cell.top, cell.width * 1.3, cell.height * 1.3);
+        _tempMoveCell.frame = CGRectMake(cell.left, cell.top, cell.width * 1.2, cell.height * 1.2);
     }];
     [self addSubview:_tempMoveCell];
     //开启边缘滚动定时器
