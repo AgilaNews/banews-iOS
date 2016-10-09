@@ -306,10 +306,6 @@
             CategoriesModel *categoriesModel = [CategoriesModel mj_objectWithKeyValues:newDic];
             [categoryArray addObject:categoriesModel];
         }
-        CategoriesModel *categoriesModel = [[CategoriesModel alloc] init];
-        categoriesModel.name = @"hahaha";
-        categoriesModel.index = @1;
-        [categoryArray addObject:categoriesModel];
         if (isFirst) {
             // 首次安装无频道
             _categoriesArray = categoryArray;
@@ -331,9 +327,30 @@
                     [newArray addObject:newModel];
                 }
             }
+            // 插入新频道
             for (CategoriesModel *newModel in newArray) {
-                // 插入新频道
                 [_categoriesArray insertObject:newModel atIndex:newModel.index.integerValue];
+            }
+            // 查找是否有删除频道
+            NSMutableArray *deleteArray = [NSMutableArray array];
+            for (CategoriesModel *model in _categoriesArray) {
+                BOOL isHave = NO;
+                for (CategoriesModel *newModel in categoryArray) {
+                    if ([newModel.channelID isEqualToNumber:model.channelID]) {
+                        isHave = YES;
+                        break;
+                    }
+                    if (!isHave) {
+                        // 发现删除频道
+                        [deleteArray addObject:model];
+                    }
+                }
+            }
+            // 删除频道
+            if (deleteArray.count <= 3) {
+                for (CategoriesModel *model in deleteArray) {
+                    [_categoriesArray removeObject:model];
+                }
             }
             [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Categories object:nil];
         }

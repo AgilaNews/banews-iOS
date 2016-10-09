@@ -7,10 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CategoriesModel.h"
 
 @interface ChannelCell : UICollectionViewCell
 
-@property (nonatomic, strong) NSString *title;
 @property (nonatomic, strong) UILabel *titleLabel;
+@property (nonatomic, strong) CategoriesModel *model;
+@property (nonatomic, strong) UIImageView *labelView;
 
 @end

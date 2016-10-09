@@ -8,6 +8,7 @@
 
 #import "ChannelViewController.h"
 #import "ChannelCell.h"
+#import "AppDelegate.h"
 
 @interface ChannelViewController ()
 
@@ -26,13 +27,15 @@
     UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake(0, topInset, kScreenWidth, kScreenHeight - topInset)];
     bgView.backgroundColor = SSColor(246, 246, 246);
     [self.view addSubview:bgView];
-    _dataList = @[@"1",@"2",@"3",@"4",@"5",@"6",@"7",@"8",@"9",@"10",@"11",@"12",@"13"];
     
-    CGFloat itemWidth = (kScreenWidth - 18) / 3.0;
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    _dataList = appDelegate.categoriesArray;
+    
+    CGFloat itemWidth = (kScreenWidth - 30) / 3.0;
     CGFloat itemHeight = 46;
-    CGFloat spacing = 9;
+    CGFloat spacing = 12;
     for (int i = 0; i < _dataList.count; i++) {
-        UIView *cellBgView = [[UIView alloc] initWithFrame:CGRectMake(9 + 1 + spacing * .5 + i % 3 * itemWidth, 25 + 1 + spacing * .5 + i / 3 * itemHeight , itemWidth - spacing - 2, itemHeight - spacing - 2)];
+        UIView *cellBgView = [[UIView alloc] initWithFrame:CGRectMake(15 + 1 + spacing * .5 + i % 3 * itemWidth, 25 + 1 + spacing * .5 + i / 3 * itemHeight , itemWidth - spacing - 2, itemHeight - spacing - 2)];
         [bgView addSubview:cellBgView];
         CAShapeLayer *borderLayer = [CAShapeLayer layer];
         borderLayer.bounds = CGRectMake(0, 0, cellBgView.width, cellBgView.height);
@@ -47,7 +50,7 @@
 
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
     layout.itemSize = CGSizeMake(itemWidth, itemHeight);
-    layout.sectionInset = UIEdgeInsetsMake(topInset + 25, 9, 9, 9);
+    layout.sectionInset = UIEdgeInsetsMake(topInset + 25, 15, 15, 15);
     layout.minimumLineSpacing = 0;
     layout.minimumInteritemSpacing = 0;
     layout.scrollDirection = UICollectionViewScrollDirectionVertical;
@@ -78,7 +81,14 @@
     contentLabel.numberOfLines = 0;
     contentLabel.text = @"To reorder the channel，please long press and drag the following tags";
     [_collectionView addSubview:contentLabel];
-    
+}
+
+- (void)dealloc
+{
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    for (CategoriesModel *model in appDelegate.categoriesArray) {
+        model.isNew = NO;
+    }
 }
 
 #pragma mark - XWDragCellCollectionViewDelegate
@@ -100,7 +110,8 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     ChannelCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ChannelCell" forIndexPath:indexPath];
-    cell.title = _dataList[indexPath.item];
+    cell.model = _dataList[indexPath.item];
+    [cell setNeedsLayout];
     return cell;
 }
 
