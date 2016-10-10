@@ -23,6 +23,21 @@
     self.view.backgroundColor = SSColor(235, 235, 235);
     self.isBackButton = YES;
     self.automaticallyAdjustsScrollViewInsets = NO;
+    
+    // 添加导航栏右侧按钮
+    _okButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    _okButton.frame = CGRectMake(0, 0, 60, 40);
+    _okButton.titleLabel.font = [UIFont systemFontOfSize:17];
+    [_okButton setTitle:@"OK" forState:UIControlStateNormal];
+    [_okButton setTitleColor:[UIColor colorWithRed:1 green:1 blue:1 alpha:.4] forState:UIControlStateDisabled];
+    [_okButton addTarget:self action:@selector(okAction) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *okItem = [[UIBarButtonItem alloc]initWithCustomView:_okButton];
+    UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+    negativeSpacer.width = -20;
+    self.navigationItem.rightBarButtonItems = @[negativeSpacer, okItem];
+    _okButton.enabled = NO;
+
+    
     CGFloat topInset = 64 + 25 + 20 + 16 + 32 + 25;
     UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake(0, topInset, kScreenWidth, kScreenHeight - topInset)];
     bgView.backgroundColor = SSColor(246, 246, 246);
@@ -30,6 +45,7 @@
     
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     _dataList = appDelegate.categoriesArray;
+    _currentList = [_dataList copy];
     
     CGFloat itemWidth = (kScreenWidth - 30) / 3.0;
     CGFloat itemHeight = 46;
@@ -101,6 +117,18 @@
 - (void)dragCellCollectionView:(XWDragCellCollectionView *)collectionView newDataArrayAfterMove:(NSArray *)newDataArray
 {
     _dataList = newDataArray;
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        for (int i = 0; i < _dataList.count; i++) {
+            CategoriesModel *newModel = _dataList[i];
+            CategoriesModel *model = _currentList[i];
+            if (![newModel.name isEqualToString:model.name]) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    _okButton.enabled = YES;
+                    return;
+                });
+            }
+        }
+    });
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
@@ -120,6 +148,23 @@
 {
 //    XWCellModel *model = _data[indexPath.section][indexPath.item];
 //    NSLog(@"%@", model.title);
+}
+
+#pragma mark - 按钮点击事件
+- (void)backAction:(UIButton *)button
+{
+    [self okAction];
+    [super backAction:button];
+}
+
+- (void)okAction
+{
+    if (_dataList.count > 5) {
+        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        appDelegate.categoriesArray = [NSMutableArray arrayWithArray:_dataList];
+        [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Categories object:nil];
+    }
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 

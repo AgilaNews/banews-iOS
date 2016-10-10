@@ -543,7 +543,11 @@
                         model.public_time = [NSNumber numberWithLongLong:[lastModel.public_time longLongValue] - (arc4random() % 240 + 60)];
                     } else {
                         NewsModel *lastModel = _dataList.lastObject;
-                        model.public_time = [NSNumber numberWithLongLong:[lastModel.public_time longLongValue] - (arc4random() % 240 + 60)];
+                        if ([lastModel isKindOfClass:[NSString class]]) {
+                            model.public_time = [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]];
+                        } else {
+                            model.public_time = [NSNumber numberWithLongLong:[lastModel.public_time longLongValue] - (arc4random() % 240 + 60)];
+                        }
                     }
                 }
                 [models addObject:model];

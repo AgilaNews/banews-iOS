@@ -10,7 +10,9 @@
 
 @interface ChannelViewController : BaseViewController<XWDragCellCollectionViewDataSource, XWDragCellCollectionViewDelegate>
 
+@property (nonatomic, strong) UIButton *okButton;
 @property (nonatomic, strong) XWDragCellCollectionView *collectionView;
 @property (nonatomic, strong) NSArray *dataList;
+@property (nonatomic, strong) NSArray *currentList;
 
 @end
