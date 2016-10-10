@@ -29,7 +29,7 @@
         self.showsVerticalScrollIndicator = NO;
         self.dataSource = self;
         self.delegate = self;
-        UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.width, self.height - 328)];
+        UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.width, self.height - 384 - 40)];
         footerView.backgroundColor = kWhiteBgColor;
         self.tableFooterView = footerView;
         UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.width, 140 + 40)];

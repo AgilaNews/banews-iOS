@@ -27,27 +27,22 @@ static GuideChannelView *_guideView = nil;
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(removeAction)];
     [_guideView addGestureRecognizer:tap];
     
-    _channelView = [[UIImageView alloc] initWithFrame:CGRectMake((kScreenWidth - 262) * .5, (kScreenHeight - 125 - 27 - 42) * .5, 262, 125)];
+    _channelView = [[UIImageView alloc] initWithFrame:CGRectMake((kScreenWidth - 262) * .5, (kScreenHeight - 125 - 27 - 40) * .5, 262, 125)];
     _channelView.contentMode = UIViewContentModeScaleAspectFit;
     _channelView.image = [UIImage imageNamed:@"guide_channel"];
     [_guideView addSubview:_channelView];
     
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(28, _channelView.bottom + 27, kScreenWidth - 56, 42)];
-    titleLabel.textAlignment = NSTextAlignmentCenter;
-    titleLabel.numberOfLines = 0;
-    NSMutableAttributedString *attributedStr = [[NSMutableAttributedString alloc]initWithString:@"Please long press and drag the tab to set your own channel order"];
-    [attributedStr addAttributes:@{NSFontAttributeName : [UIFont italicSystemFontOfSize:17],
-                                   NSForegroundColorAttributeName : [UIColor whiteColor]
-                                   } range:NSMakeRange(0, attributedStr.length)];
-    titleLabel.attributedText = attributedStr;
-    [_guideView addSubview:titleLabel];
+    UIImageView *textView = [[UIImageView alloc] initWithFrame:CGRectMake((kScreenWidth - 290) * .5, _channelView.bottom + 27, 290, 40)];
+    textView.contentMode = UIViewContentModeScaleAspectFit;
+    textView.image = [UIImage imageNamed:@"guide_text"];
+    [_guideView addSubview:textView];
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [UIView animateWithDuration:.3 animations:^{
             _guideView.backgroundColor = [UIColor clearColor];
             _channelView.alpha = 0;
         } completion:^(BOOL finished) {
-//            DEF_PERSISTENT_SET_OBJECT(SS_GuideCnlKey, @1);
+            DEF_PERSISTENT_SET_OBJECT(SS_GuideCnlKey, @1);
             [_guideView removeFromSuperview];
         }];
     });
@@ -59,7 +54,7 @@ static GuideChannelView *_guideView = nil;
         _guideView.backgroundColor = [UIColor clearColor];
         _channelView.alpha = 0;
     } completion:^(BOOL finished) {
-//        DEF_PERSISTENT_SET_OBJECT(SS_GuideCnlKey, @1);
+        DEF_PERSISTENT_SET_OBJECT(SS_GuideCnlKey, @1);
         [_guideView removeFromSuperview];
     }];
 }
