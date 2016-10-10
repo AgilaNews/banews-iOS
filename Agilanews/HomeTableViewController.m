@@ -112,9 +112,13 @@
         NSNumber *checkNum = newsData.allKeys.firstObject;
         NSArray *dataList = newsData[checkNum][_model.channelID];
         if ([[NSDate date] timeIntervalSince1970] - _refreshTime < 3600) {
-            // 加载缓存
-            _dataList = [NSMutableArray arrayWithArray:dataList];
-            [self.tableView reloadData];
+            if (dataList.count == 0 && [_model.channelID isEqualToNumber:@10001]) {
+                [self requestDataWithChannelID:_model.channelID isLater:YES isShowHUD:NO isShowBanner:NO];
+            } else {                
+                // 加载缓存
+                _dataList = [NSMutableArray arrayWithArray:dataList];
+                [self.tableView reloadData];
+            }
         } else if ([[NetType getNetType] isEqualToString:@"unknow"] && dataList.count > 0) {
             // 无网状态下加载缓存
             _dataList = [NSMutableArray arrayWithArray:dataList];
