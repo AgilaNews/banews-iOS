@@ -794,6 +794,7 @@
     }
 }
 
+// 安装上报
 - (void)uploadReferrerWithReferrerID:(NSString *)referrerID
 {
     __weak typeof(self) weakSelf = self;

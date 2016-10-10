@@ -110,8 +110,8 @@
         NSString *newsFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/news.data"];
         NSDictionary *newsData = [NSKeyedUnarchiver unarchiveObjectWithFile:newsFilePath];
         NSNumber *checkNum = newsData.allKeys.firstObject;
-        NSArray *dataList = newsData[newsData.allKeys.firstObject][_model.channelID];
-        if ([[NSDate date] timeIntervalSince1970] - checkNum.longLongValue < 3600) {
+        NSArray *dataList = newsData[checkNum][_model.channelID];
+        if ([[NSDate date] timeIntervalSince1970] - _refreshTime < 3600) {
             // 加载缓存
             _dataList = [NSMutableArray arrayWithArray:dataList];
             [self.tableView reloadData];
