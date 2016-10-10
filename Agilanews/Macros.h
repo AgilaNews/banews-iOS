@@ -65,6 +65,7 @@
 #define SS_FontSize     @"FontSize"              // 字体大小
 #define SS_GuideHomeKey @"SS_GuideHomeKey_v1.0.1"// 引导页——主页
 #define SS_GuideFavKey  @"SS_GuideFavKey_v1.0.1" // 引导页——收藏
+#define SS_GuideCnlKey  @"SS_GuideCnlKey_v1.0.1" // 引导页——频道
 
 
 // 新闻模板

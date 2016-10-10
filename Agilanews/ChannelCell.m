@@ -20,8 +20,10 @@
             _titleLabel.font = [UIFont systemFontOfSize:13];
         } else if (iPhone6) {
             _titleLabel.font = [UIFont systemFontOfSize:15];
-        } else {
+        } else if (iPhone6Plus){
             _titleLabel.font = [UIFont systemFontOfSize:16];
+        } else {
+            _titleLabel.font = [UIFont systemFontOfSize:15];
         }
         _titleLabel.backgroundColor = [UIColor whiteColor];
         _titleLabel.textColor = SSColor(102, 102, 102);
@@ -45,8 +47,10 @@
             _titleLabel.font = [UIFont systemFontOfSize:10];
         } else if (iPhone6) {
             _titleLabel.font = [UIFont systemFontOfSize:11];
-        } else {
+        } else if (iPhone6Plus){
             _titleLabel.font = [UIFont systemFontOfSize:13];
+        } else {
+            _titleLabel.font = [UIFont systemFontOfSize:11];
         }
     }
     if (_model.fixed) {

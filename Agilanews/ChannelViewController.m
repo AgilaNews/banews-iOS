@@ -9,6 +9,7 @@
 #import "ChannelViewController.h"
 #import "ChannelCell.h"
 #import "AppDelegate.h"
+#import "GuideChannelView.h"
 
 @interface ChannelViewController ()
 
@@ -97,6 +98,10 @@
     contentLabel.numberOfLines = 0;
     contentLabel.text = @"To reorder the channel，please long press and drag the following tags";
     [_collectionView addSubview:contentLabel];
+    
+    if (![DEF_PERSISTENT_GET_OBJECT(SS_GuideCnlKey) isEqualToNumber:@1]) {
+        [[UIApplication sharedApplication].keyWindow addSubview:[GuideChannelView sharedInstance]];
+    }
 }
 
 - (void)dealloc

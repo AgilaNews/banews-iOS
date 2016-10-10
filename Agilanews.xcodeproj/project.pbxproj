@@ -12,6 +12,7 @@
 		5F17B45B1DA8A5C1008EBD51 /* GoogleAppUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F17B45A1DA8A5C1008EBD51 /* GoogleAppUtilities.framework */; };
 		5F17B45D1DA8A5CD008EBD51 /* GoogleAuthUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F17B45C1DA8A5CD008EBD51 /* GoogleAuthUtilities.framework */; };
 		5F17B45F1DA8A5D6008EBD51 /* GoogleNetworkingUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F17B45E1DA8A5D6008EBD51 /* GoogleNetworkingUtilities.framework */; };
+		5F17B4871DAB78A0008EBD51 /* GuideChannelView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F17B4861DAB78A0008EBD51 /* GuideChannelView.m */; };
 		5F2E09FE1D86554900FEC0AC /* AppsFlyer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F2E09FD1D86554900FEC0AC /* AppsFlyer.framework */; };
 		5F2E0A001D86557A00FEC0AC /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F2E09FF1D86557A00FEC0AC /* iAd.framework */; };
 		5F2E0A1D1D87B47A00FEC0AC /* HZIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F2E0A161D87B47A00FEC0AC /* HZIndicatorView.m */; };
@@ -224,6 +225,8 @@
 		5F17B45A1DA8A5C1008EBD51 /* GoogleAppUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleAppUtilities.framework; sourceTree = "<group>"; };
 		5F17B45C1DA8A5CD008EBD51 /* GoogleAuthUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleAuthUtilities.framework; sourceTree = "<group>"; };
 		5F17B45E1DA8A5D6008EBD51 /* GoogleNetworkingUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleNetworkingUtilities.framework; sourceTree = "<group>"; };
+		5F17B4851DAB78A0008EBD51 /* GuideChannelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuideChannelView.h; sourceTree = "<group>"; };
+		5F17B4861DAB78A0008EBD51 /* GuideChannelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GuideChannelView.m; sourceTree = "<group>"; };
 		5F2E09FD1D86554900FEC0AC /* AppsFlyer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AppsFlyer.framework; sourceTree = "<group>"; };
 		5F2E09FF1D86557A00FEC0AC /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
 		5F2E0A151D87B47A00FEC0AC /* HZIndicatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HZIndicatorView.h; sourceTree = "<group>"; };
@@ -917,6 +920,8 @@
 				5F5AE9751D54364E00A5A8B7 /* GuideRefreshView.m */,
 				5F5AE9771D54A4C900A5A8B7 /* GuideFavoritesView.h */,
 				5F5AE9781D54A4C900A5A8B7 /* GuideFavoritesView.m */,
+				5F17B4851DAB78A0008EBD51 /* GuideChannelView.h */,
+				5F17B4861DAB78A0008EBD51 /* GuideChannelView.m */,
 			);
 			name = Guide;
 			sourceTree = "<group>";
@@ -1510,6 +1515,7 @@
 				5F571F751D589BEF00604CDD /* NetType.m in Sources */,
 				5F767A851D9CE82E00822BAC /* NSObject+MJClass.m in Sources */,
 				5F64627D1D4855F7008EEDEC /* CommentTextField.m in Sources */,
+				5F17B4871DAB78A0008EBD51 /* GuideChannelView.m in Sources */,
 				5F42C0891D34E41D00B89651 /* SDWebImageManager.m in Sources */,
 				5F42C0A71D34E43A00B89651 /* SSBaseRequest.m in Sources */,
 				5F635EDE1D437034006AAE3D /* WebViewController.m in Sources */,
