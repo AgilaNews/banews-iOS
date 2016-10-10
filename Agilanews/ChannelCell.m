@@ -76,7 +76,11 @@
         _titleLabel.layer.borderColor = [UIColor clearColor].CGColor;
         self.labelView.hidden = YES;
     } else {
-        _titleLabel.textColor = SSColor(102, 102, 102);
+        if (_model.fixed) {
+            _titleLabel.textColor = SSColor(204, 204, 204);
+        } else {
+            _titleLabel.textColor = SSColor(102, 102, 102);
+        }
         _titleLabel.backgroundColor = [UIColor whiteColor];
         _titleLabel.layer.cornerRadius = (self.height - 12) * .5;
         _titleLabel.layer.borderColor = SSColor(235, 235, 235).CGColor;
