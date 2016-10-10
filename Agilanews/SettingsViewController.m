@@ -526,7 +526,7 @@
     } else if (folderSize > 0){
         return [NSString stringWithFormat:@"%.2lldB", folderSize];
     } else {
-        return @"0.00B";
+        return @"0B";
     }
 }
 
@@ -553,7 +553,7 @@
  */
 - (void)clearCachSuccess
 {
-    self.cacheSize = [self filePath];
+    self.cacheSize = @"0B";
 }
 
 - (void)didReceiveMemoryWarning {
