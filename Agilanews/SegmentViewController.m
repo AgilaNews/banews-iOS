@@ -20,7 +20,6 @@
 #define MainScreenHeight            [[UIScreen mainScreen]bounds].size.height
 
 @interface SegmentViewController ()<UIScrollViewDelegate>
-@property (nonatomic, strong) UIScrollView *headerView;
 @property (nonatomic, strong) UIScrollView *mainScrollView;
 @property (nonatomic, strong) UIView *lineView;
 

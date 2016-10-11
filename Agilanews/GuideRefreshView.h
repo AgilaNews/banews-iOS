@@ -12,8 +12,10 @@
 
 @property (nonatomic, strong) UIImageView *refreshView;
 @property (nonatomic, strong) UIImageView *handView;
+@property (nonatomic, strong) UITapGestureRecognizer *tap;
 @property (nonatomic, strong) UISwipeGestureRecognizer *swipe;
 @property (nonatomic, strong) UIImageView *channelView;
+@property (nonatomic, strong) UIImageView *menuView;
 @property (nonatomic, assign) BOOL isRefreshAnimation;
 @property (nonatomic, assign) BOOL isNoTouch;
 
