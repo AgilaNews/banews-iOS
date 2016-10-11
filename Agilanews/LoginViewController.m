@@ -32,7 +32,7 @@
     } else {
         self.isBackButton = YES;
     }
-    [GIDSignIn sharedInstance].clientID = @"220913118121-tsfqho6sgkbh2frs2k8h3kludcnnunf1.apps.googleusercontent.com";
+    [GIDSignIn sharedInstance].clientID = [FIRApp defaultApp].options.clientID;
     [GIDSignIn sharedInstance].scopes = @[@"profile", @"email"];
     [GIDSignIn sharedInstance].delegate = self;
     [GIDSignIn sharedInstance].uiDelegate = self;
@@ -298,7 +298,7 @@
 #if DEBUG
         [iConsole info:@"Login_Google_Click_N",nil];
 #endif
-        SSLog(@"%@",error);
+        SSLog(@"%@",error.localizedDescription);
     }
 }
 
@@ -315,25 +315,6 @@
 - (void)signIn:(GIDSignIn *)signIn dismissViewController:(UIViewController *)viewController
 {
     [self dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (BOOL)application:(UIApplication *)application
-            openURL:(NSURL *)url
-  sourceApplication:(NSString *)sourceApplication
-         annotation:(id)annotation
-{
-    return [[GIDSignIn sharedInstance] handleURL:url
-                               sourceApplication:sourceApplication
-                                      annotation:annotation];
-}
-
-- (BOOL)application:(UIApplication *)app
-            openURL:(NSURL *)url
-            options:(NSDictionary *)options
-{
-    return [[GIDSignIn sharedInstance] handleURL:url
-                               sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
-                                      annotation:options[UIApplicationOpenURLOptionsAnnotationKey]];
 }
 
 - (void)didReceiveMemoryWarning {
