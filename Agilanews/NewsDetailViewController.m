@@ -81,10 +81,13 @@
     _webView.scrollView.scrollsToTop = NO;
     _webView.scrollView.showsHorizontalScrollIndicator = NO;
     _webView.scrollView.showsVerticalScrollIndicator = NO;
+    
+    __weak typeof(self) weakSelf = self;
     self.bridge = [WebViewJavascriptBridge bridgeForWebView:_webView];
     [_bridge setWebViewDelegate:self];
     [_bridge registerHandler:@"ObjcCallback" handler:^(id data, WVJBResponseCallback responseCallback)
      {
+         [weakSelf createImageFolderAtPath];
          NSString *urlString = data[@"url"];
          NSNumber *callbackId = data[@"id"];
          urlString = [urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
@@ -1862,6 +1865,18 @@
     [iConsole info:[NSString stringWithFormat:@"Article_BackButton_Click:%@",articleParams],nil];
 #endif
     [super backAction:button];
+}
+
+// 创建图片文件夹
+- (void)createImageFolderAtPath
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:@"ImageFolder"];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    BOOL existed = [fileManager fileExistsAtPath:filePath];
+    if (!existed) {
+        [fileManager createDirectoryAtPath:filePath withIntermediateDirectories:YES attributes:nil error:nil];
+    }
 }
 
 #pragma mark - UITextViewDelegate

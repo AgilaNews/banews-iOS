@@ -393,6 +393,7 @@
 #if DEBUG
     [iConsole info:[NSString stringWithFormat:@"Home_List_Play_Click:%@",articleParams],nil];
 #endif
+    [self createImageFolderAtPath];
     self.playButton.hidden = YES;
     VideoModel *videoModel = _model.videos.firstObject;
     NSString *urlString = [videoModel.src stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
@@ -519,6 +520,18 @@
 //        }
 //    }
 //}
+
+// 创建图片文件夹
+- (void)createImageFolderAtPath
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:@"ImageFolder"];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    BOOL existed = [fileManager fileExistsAtPath:filePath];
+    if (!existed) {
+        [fileManager createDirectoryAtPath:filePath withIntermediateDirectories:YES attributes:nil error:nil];
+    }
+}
 
 - (void)awakeFromNib {
     [super awakeFromNib];
