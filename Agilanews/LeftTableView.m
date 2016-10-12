@@ -173,11 +173,11 @@
     switch (indexPath.section) {
         case 0:
         {
-//            // 打点-点击收藏-010403
-//            [Flurry logEvent:@"Info_Icon_Click"];
-//#if DEBUG
-//            [iConsole info:@"Info_Icon_Click",nil];
-//#endif
+            // 打点-点击频道-010407
+            [Flurry logEvent:@"Menu_Channels_Click"];
+#if DEBUG
+            [iConsole info:@"Menu_Channels_Click",nil];
+#endif
             // 点击Channels
             ChannelViewController *channelVC = [[ChannelViewController alloc] init];
             [navCtrl pushViewController:channelVC animated:YES];

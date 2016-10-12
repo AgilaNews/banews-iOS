@@ -10,6 +10,7 @@
 #import "ChannelCell.h"
 #import "AppDelegate.h"
 #import "GuideChannelView.h"
+#import "CategoriesModel.h"
 
 @interface ChannelViewController ()
 
@@ -25,6 +26,12 @@
     self.isBackButton = YES;
     self.automaticallyAdjustsScrollViewInsets = NO;
     
+    // 打点-页面进入-011201
+    [Flurry logEvent:@"Channels_Enter"];
+#if DEBUG
+    [iConsole info:@"Channels_Enter",nil];
+#endif
+    
     // 添加导航栏右侧按钮
     _okButton = [UIButton buttonWithType:UIButtonTypeCustom];
     _okButton.frame = CGRectMake(0, 0, 60, 40);
@@ -38,7 +45,6 @@
     self.navigationItem.rightBarButtonItems = @[negativeSpacer, okItem];
     _okButton.enabled = NO;
 
-    
     CGFloat topInset = 64 + 25 + 20 + 16 + 32 + 25;
     UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake(0, topInset, kScreenWidth, kScreenHeight - topInset)];
     bgView.backgroundColor = SSColor(246, 246, 246);
@@ -155,9 +161,23 @@
 //    NSLog(@"%@", model.title);
 }
 
+- (void)dragCellCollectionViewCellEndMoving:(XWDragCellCollectionView *)collectionView
+{
+    // 打点-长按频道-011204
+    [Flurry logEvent:@"Channels_Channel_LongPress"];
+#if DEBUG
+    [iConsole info:@"Channels_Channel_LongPress",nil];
+#endif
+}
+
 #pragma mark - 按钮点击事件
 - (void)backAction:(UIButton *)button
 {
+    // 打点-点击返回-011202
+    [Flurry logEvent:@"Channels_BackButton_Click"];
+#if DEBUG
+    [iConsole info:@"Channels_BackButton_Click",nil];
+#endif
     [self okAction];
     [super backAction:button];
 }
@@ -165,6 +185,38 @@
 - (void)okAction
 {
     if (_dataList.count > 5) {
+        NSNumber *currentVersion = DEF_PERSISTENT_GET_OBJECT(@"channel_version");
+        // 服务器打点-频道顺序调整上报-050101
+        NSMutableDictionary *eventDic = [NSMutableDictionary dictionary];
+        [eventDic setObject:@"050101" forKey:@"id"];
+        [eventDic setObject:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970] * 1000] forKey:@"time"];
+        [eventDic setObject:currentVersion forKey:@"version"];
+        NSMutableArray *channels = [NSMutableArray array];
+        for (CategoriesModel *model in _dataList) {
+            [channels addObject:model.channelID];
+        }
+        [eventDic setObject:channels forKey:@"channels"];
+        [eventDic setObject:[NetType getNetType] forKey:@"net"];
+        if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
+            [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) forKey:@"lng"];
+            [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) forKey:@"lat"];
+        } else {
+            [eventDic setObject:@"" forKey:@"lng"];
+            [eventDic setObject:@"" forKey:@"lat"];
+        }
+        NSDictionary *sessionDic = [NSDictionary dictionaryWithObjectsAndKeys:
+                                    DEF_PERSISTENT_GET_OBJECT(@"UUID"), @"id",
+                                    [NSArray arrayWithObject:eventDic], @"events",
+                                    nil];
+        NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObject:[NSArray arrayWithObject:sessionDic] forKey:@"sessions"];
+        [[SSHttpRequest sharedInstance] post:@"" params:params contentType:JsonType serverType:NetServer_Log success:^(id responseObj) {
+            // 打点成功
+        } failure:^(NSError *error) {
+            // 打点失败
+            [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
+            AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+            [appDelegate.eventArray addObject:eventDic];
+        } isShowHUD:NO];
         AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
         appDelegate.categoriesArray = [NSMutableArray arrayWithArray:_dataList];
         [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Categories object:nil];
