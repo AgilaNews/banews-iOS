@@ -424,32 +424,37 @@
 {
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setObject:_model.news_id forKey:@"news_id"];
-    [[SSHttpRequest sharedInstance] post:kHomeUrl_Collect params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
-        _collectID = [NSNumber numberWithInteger:[responseObj[@"collect_id"] integerValue]];
-        button.selected = YES;
-        [SVProgressHUD showSuccessWithStatus:@"Save the news and read it later by entering 'Favorites'"];
-        // 新闻详情本地缓存
-        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-        NSString *htmlFilePath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/%@.data",appDelegate.model.user_id]];
-        NSMutableDictionary *dataDic = [NSKeyedUnarchiver unarchiveObjectWithFile:htmlFilePath];
-        if ([dataDic isKindOfClass:[NSMutableDictionary class]] && dataDic.count > 0) {
-            [dataDic setObject:_detailModel forKey:_collectID];
-        } else {
-            dataDic = [NSMutableDictionary dictionary];
-            [dataDic setObject:_detailModel forKey:_collectID];
-        }
-        [NSKeyedArchiver archiveRootObject:dataDic toFile:htmlFilePath];
-        
-        // 打点-收藏成功-010215
-        NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
-                                       [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
-                                       _channelName, @"channel",
-                                       _model.news_id, @"article",
-                                       nil];
-        [Flurry logEvent:@"Article_Favorite_Click_Y" withParameters:articleParams];
+    [params setObject:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]] forKey:@"ctime"];
+    NSArray *paramsArray = [NSArray arrayWithObject:params];
+    [[SSHttpRequest sharedInstance] post:kHomeUrl_Collect params:paramsArray contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
+        NSArray *result = responseObj;
+        if (result) {
+            _collectID = [NSNumber numberWithInteger:[result.firstObject[@"collect_id"] integerValue]];
+            button.selected = YES;
+            [SVProgressHUD showSuccessWithStatus:@"Save the news and read it later by entering 'Favorites'"];
+            // 新闻详情本地缓存
+            AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+            NSString *htmlFilePath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/%@.data",appDelegate.model.user_id]];
+            NSMutableDictionary *dataDic = [NSKeyedUnarchiver unarchiveObjectWithFile:htmlFilePath];
+            if ([dataDic isKindOfClass:[NSMutableDictionary class]] && dataDic.count > 0) {
+                [dataDic setObject:_detailModel forKey:_collectID];
+            } else {
+                dataDic = [NSMutableDictionary dictionary];
+                [dataDic setObject:_detailModel forKey:_collectID];
+            }
+            [NSKeyedArchiver archiveRootObject:dataDic toFile:htmlFilePath];
+            
+            // 打点-收藏成功-010215
+            NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
+                                           [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
+                                           _channelName, @"channel",
+                                           _model.news_id, @"article",
+                                           nil];
+            [Flurry logEvent:@"Article_Favorite_Click_Y" withParameters:articleParams];
 #if DEBUG
-        [iConsole info:[NSString stringWithFormat:@"Article_Favorite_Click_Y:%@",articleParams],nil];
+            [iConsole info:[NSString stringWithFormat:@"Article_Favorite_Click_Y:%@",articleParams],nil];
 #endif
+        }
     } failure:^(NSError *error) {
         button.selected = NO;
         // 打点-收藏失败-010216

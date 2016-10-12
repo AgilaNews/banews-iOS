@@ -247,7 +247,7 @@ static SSHttpRequest *_manager = nil;
     return dataTask;
 }
 
-- (void)post:(NSString *)url params:(NSMutableDictionary *)params contentType:(ContentType)contentType serverType:(NetServerType)serverType success:(void (^)(id))success failure:(void (^)(NSError *))failure isShowHUD:(BOOL)showHUD
+- (void)post:(NSString *)url params:(id)params contentType:(ContentType)contentType serverType:(NetServerType)serverType success:(void (^)(id))success failure:(void (^)(NSError *))failure isShowHUD:(BOOL)showHUD
 {
     _manager.requestSerializer = [AFJSONRequestSerializer serializer];
     // 参数格式
@@ -289,8 +289,8 @@ static SSHttpRequest *_manager = nil;
         [baseParams setObject:DEF_PERSISTENT_GET_OBJECT(@"IDFA") forKey:@"idfv"];
         [baseParams setObject:DEF_PERSISTENT_GET_OBJECT(@"IDFA") forKey:@"idfa"];
     } else {
-        [params setObject:@"" forKey:@"idfv"];
-        [params setObject:@"" forKey:@"idfa"];
+        [baseParams setObject:@"" forKey:@"idfv"];
+        [baseParams setObject:@"" forKey:@"idfa"];
     }
     // 系统
     [baseParams setObject:@"ios" forKey:@"os"];
@@ -306,7 +306,6 @@ static SSHttpRequest *_manager = nil;
             } else {
                 _urlString = [NSString stringWithFormat:@"%@%@",kHomeUrl,url];
             }
-            [params addEntriesFromDictionary:baseParams];
         }
             break;
         case NetServer_Log:
