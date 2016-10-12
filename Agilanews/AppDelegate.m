@@ -204,7 +204,7 @@
             }
             // 列表页滚动位置还原
             NSNumber *contentOffsetY = scrollDic[homeTabVC.model.channelID];
-            if (contentOffsetY) {
+            if (contentOffsetY.integerValue > 10) {
                 [homeTabVC.tableView setContentOffset:CGPointMake(homeTabVC.tableView.contentOffset.x, contentOffsetY.floatValue) animated:NO];
             }
             homeTabVC.dataList = dataList;

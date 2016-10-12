@@ -188,7 +188,7 @@
         for (int i = 0; i < _dataList.count; i++) {
             CategoriesModel *newModel = _dataList[i];
             CategoriesModel *model = _currentList[i];
-            if (![newModel.name isEqualToString:model.name]) {                    
+            if (![newModel.name isEqualToString:model.name]) {
                 NSNumber *currentVersion = DEF_PERSISTENT_GET_OBJECT(@"channel_version");
                 // 服务器打点-频道顺序调整上报-050101
                 NSMutableDictionary *eventDic = [NSMutableDictionary dictionary];
@@ -226,7 +226,7 @@
                 AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
                 appDelegate.categoriesArray = [NSMutableArray arrayWithArray:_dataList];
                 [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Categories object:nil];
-                return;
+                break;
             }
         }
     }

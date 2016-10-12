@@ -60,6 +60,26 @@
     _tableView.tableFooterView = [UIView new];
     [self.view addSubview:_tableView];
     
+    UILabel *loginLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 43)];
+    loginLabel.backgroundColor = SSColor(239, 239, 239);
+    loginLabel.numberOfLines = 0;
+    loginLabel.textAlignment = NSTextAlignmentCenter;
+    loginLabel.userInteractionEnabled = YES;
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(login)];
+    [loginLabel addGestureRecognizer:tap];
+    NSMutableAttributedString *attributedStr = [[NSMutableAttributedString alloc]initWithString:@"Log in, your favorited news will always be saved in your account."];
+    [attributedStr addAttributes:@{NSFontAttributeName : [UIFont italicSystemFontOfSize:15],
+                                   NSForegroundColorAttributeName : kGrayColor,
+                                   NSUnderlineStyleAttributeName : [NSNumber numberWithInteger:NSUnderlineStyleSingle]
+                                   } range:NSMakeRange(0, 6)];
+    [attributedStr addAttributes:@{NSFontAttributeName : [UIFont systemFontOfSize:13],
+                                   NSForegroundColorAttributeName : kGrayColor,
+                                   NSUnderlineStyleAttributeName : [NSNumber numberWithInteger:NSUnderlineStyleNone],
+                                   } range:NSMakeRange(6, attributedStr.length - 6)];
+    loginLabel.attributedText = attributedStr;
+    _tableView.tableHeaderView = loginLabel;
+
+    
     // 请求数据
     [self requestDataWithIsFooter:NO];
 }
@@ -537,6 +557,12 @@
 #endif
     }
     button.selected = !button.selected;
+}
+
+// 登录
+- (void)login
+{
+    NSLog(@"123");
 }
 
 - (void)tableViewDidTriggerFooterRefresh
