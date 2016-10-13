@@ -29,6 +29,7 @@
 @end
 
 @implementation NewsDetailViewController
+
 #pragma mark - 视图生命周期
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -477,10 +478,10 @@
         NSString *htmlFilePath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/favorites.data"]];
         NSMutableArray *dataList = [NSKeyedUnarchiver unarchiveObjectWithFile:htmlFilePath];
         if ([dataList isKindOfClass:[NSMutableArray class]] && dataList.count > 0) {
-            [dataList addObject:[NSArray arrayWithObjects:_model, _detailModel, nil]];
+            [dataList addObject:[NSArray arrayWithObjects:_model, _detailModel, [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], nil]];
         } else {
             dataList = [NSMutableArray array];
-            [dataList addObject:[NSArray arrayWithObjects:_model, _detailModel, nil]];
+            [dataList addObject:[NSArray arrayWithObjects:_model, _detailModel, [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], nil]];
         }
         [NSKeyedArchiver archiveRootObject:dataList toFile:htmlFilePath];
         button.selected = YES;
@@ -505,13 +506,29 @@
  */
 - (void)deleteCollectNewsWithButton:(UIButton *)button
 {
-    NSMutableDictionary *params = [NSMutableDictionary dictionary];
-    [params setObject:@[_collectID] forKey:@"ids"];
-    [[SSHttpRequest sharedInstance] DELETE:kHomeUrl_Collect params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    if (appDelegate.model) {
+        NSMutableDictionary *params = [NSMutableDictionary dictionary];
+        [params setObject:@[_collectID] forKey:@"ids"];
+        [[SSHttpRequest sharedInstance] DELETE:kHomeUrl_Collect params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
+            button.selected = NO;
+        } failure:^(NSError *error) {
+            
+        } isShowHUD:NO];
+    } else {
+        NSString *htmlFilePath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/favorites.data"]];
+        NSMutableArray *dataList = [NSKeyedUnarchiver unarchiveObjectWithFile:htmlFilePath];
+        if ([dataList isKindOfClass:[NSMutableArray class]] && dataList.count > 0) {
+            for (NSArray *models in dataList) {
+                NewsModel *model = models.firstObject;
+                if ([model.news_id isEqualToString:_model.news_id]) {
+                    [dataList removeObject:models];
+                    [NSKeyedArchiver archiveRootObject:dataList toFile:htmlFilePath];
+                }
+            }
+        }
         button.selected = NO;
-    } failure:^(NSError *error) {
-
-    } isShowHUD:NO];
+    }
 }
 
 /**
@@ -1079,6 +1096,18 @@
                     if (![_detailModel.collect_id isEqualToNumber:@0]) {
                         button.selected = YES;
                         _collectID = _detailModel.collect_id;
+                    } else {
+                        NSString *htmlFilePath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/favorites.data"]];
+                        NSMutableArray *dataList = [NSKeyedUnarchiver unarchiveObjectWithFile:htmlFilePath];
+                        if ([dataList isKindOfClass:[NSMutableArray class]] && dataList.count > 0) {
+                            for (NSArray *models in dataList) {
+                                NewsModel *model = models.firstObject;
+                                if ([model.news_id isEqualToString:_model.news_id]) {
+                                    button.selected = YES;
+                                    break;
+                                }
+                            }
+                        }
                     }
                     break;
                 case 2:

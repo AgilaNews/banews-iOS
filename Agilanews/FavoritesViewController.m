@@ -63,14 +63,16 @@
     [self.view addSubview:_tableView];
     
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    NSString *htmlFilePath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/favorites.data"]];
+    NSMutableArray *data = [NSKeyedUnarchiver unarchiveObjectWithFile:htmlFilePath];
     if (appDelegate.model) {
-        // 请求数据
-        [self requestDataWithIsFooter:NO];
+        if (data.count <= 0) {
+            // 请求数据
+            [self requestDataWithIsFooter:NO];
+        }
     } else {
-        // 读取本地未登录收藏
-        NSString *htmlFilePath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/favorites.data"]];
-        NSMutableArray *data = [NSKeyedUnarchiver unarchiveObjectWithFile:htmlFilePath];
-        if ([data isKindOfClass:[NSMutableArray class]]) {
+        if ([data isKindOfClass:[NSMutableArray class]] && data.count > 0) {
+            // 读取本地未登录收藏
             NSMutableArray *modelList = [NSMutableArray array];
             NSMutableArray *detailModelList = [NSMutableArray array];
             for (NSArray *modelArray in data) {
@@ -79,6 +81,8 @@
             }
             self.dataList = modelList;
             self.detailList = detailModelList;
+        } else {
+            self.showBlankView = YES;
         }
     }
 }
@@ -94,6 +98,13 @@
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     if (appDelegate.model) {
         _tableView.tableHeaderView = nil;
+        NSString *favoritesFilePath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/favorites.data"]];
+        NSMutableArray *dataList = [NSKeyedUnarchiver unarchiveObjectWithFile:favoritesFilePath];
+        if ([dataList isKindOfClass:[NSMutableArray class]] && dataList.count > 0) {
+            // 同步本地收藏
+            [SVProgressHUD show];
+            [self uploadFavoritesWithDataList:dataList];
+        }
     } else if (_tableView.tableHeaderView == nil) {
         UILabel *loginLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 43)];
         loginLabel.backgroundColor = SSColor(239, 239, 239);
@@ -133,6 +144,7 @@
         [params setObject:model.collect_id forKey:@"last_id"];
     }
     [[SSHttpRequest sharedInstance] get:kHomeUrl_Collect params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
+        [SVProgressHUD dismiss];
         NSMutableArray *models = [NSMutableArray array];
         @autoreleasepool {
             for (NSDictionary *dic in responseObj) {
@@ -285,6 +297,38 @@
         [iConsole info:@"Favor_DelButton_Click_Y",nil];
 #endif
     }
+}
+
+- (void)uploadFavoritesWithDataList:(NSMutableArray *)dataList
+{
+    NSArray *favoritesArray = [NSArray array];
+    if (dataList.count >= 10) {
+        favoritesArray = [dataList subarrayWithRange:NSMakeRange(0, 10)];
+    } else {
+        favoritesArray = [NSArray arrayWithArray:dataList];
+    }
+    NSMutableArray *paramsArray = [NSMutableArray array];
+    for (NSArray *models in favoritesArray) {
+        NSMutableDictionary *params = [NSMutableDictionary dictionary];
+        NewsModel *model = models.firstObject;
+        [params setObject:model.news_id forKey:@"news_id"];
+        [params setObject:[models objectAtIndex:2] forKey:@"ctime"];
+        [paramsArray addObject:params];
+    }
+    __weak typeof(self) weakSelf = self;
+    [[SSHttpRequest sharedInstance] post:kHomeUrl_Collect params:paramsArray contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
+        if (dataList.count >= 10) {
+            [dataList removeObjectsInRange:NSMakeRange(0, 10)];
+            [weakSelf uploadFavoritesWithDataList:dataList];
+        } else {
+            [dataList removeAllObjects];
+            [weakSelf requestDataWithIsFooter:NO];
+        }
+        NSString *favoritesFilePath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/favorites.data"]];
+        [NSKeyedArchiver archiveRootObject:dataList toFile:favoritesFilePath];
+    } failure:^(NSError *error) {
+        [weakSelf requestDataWithIsFooter:NO];
+    } isShowHUD:NO];
 }
 
 #pragma mark - UITableViewDataSource
