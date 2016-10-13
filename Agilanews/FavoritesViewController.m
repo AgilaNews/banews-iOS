@@ -14,6 +14,8 @@
 #import "BigPicCell.h"
 #import "FavoriteDetailViewController.h"
 #import "AppDelegate.h"
+#import "LoginViewController.h"
+#import "BaseNavigationController.h"
 
 #define titleFont_Normal        [UIFont systemFontOfSize:16]
 #define titleFont_ExtraLarge    [UIFont systemFontOfSize:20]
@@ -60,28 +62,25 @@
     _tableView.tableFooterView = [UIView new];
     [self.view addSubview:_tableView];
     
-    UILabel *loginLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 43)];
-    loginLabel.backgroundColor = SSColor(239, 239, 239);
-    loginLabel.numberOfLines = 0;
-    loginLabel.textAlignment = NSTextAlignmentCenter;
-    loginLabel.userInteractionEnabled = YES;
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(login)];
-    [loginLabel addGestureRecognizer:tap];
-    NSMutableAttributedString *attributedStr = [[NSMutableAttributedString alloc]initWithString:@"Log in, your favorited news will always be saved in your account."];
-    [attributedStr addAttributes:@{NSFontAttributeName : [UIFont italicSystemFontOfSize:15],
-                                   NSForegroundColorAttributeName : kGrayColor,
-                                   NSUnderlineStyleAttributeName : [NSNumber numberWithInteger:NSUnderlineStyleSingle]
-                                   } range:NSMakeRange(0, 6)];
-    [attributedStr addAttributes:@{NSFontAttributeName : [UIFont systemFontOfSize:13],
-                                   NSForegroundColorAttributeName : kGrayColor,
-                                   NSUnderlineStyleAttributeName : [NSNumber numberWithInteger:NSUnderlineStyleNone],
-                                   } range:NSMakeRange(6, attributedStr.length - 6)];
-    loginLabel.attributedText = attributedStr;
-    _tableView.tableHeaderView = loginLabel;
-
-    
-    // 请求数据
-    [self requestDataWithIsFooter:NO];
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    if (appDelegate.model) {
+        // 请求数据
+        [self requestDataWithIsFooter:NO];
+    } else {
+        // 读取本地未登录收藏
+        NSString *htmlFilePath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/favorites.data"]];
+        NSMutableArray *data = [NSKeyedUnarchiver unarchiveObjectWithFile:htmlFilePath];
+        if ([data isKindOfClass:[NSMutableArray class]]) {
+            NSMutableArray *modelList = [NSMutableArray array];
+            NSMutableArray *detailModelList = [NSMutableArray array];
+            for (NSArray *modelArray in data) {
+                [modelList addObject:modelArray.firstObject];
+                [detailModelList addObject:[modelArray objectAtIndex:1]];
+            }
+            self.dataList = modelList;
+            self.detailList = detailModelList;
+        }
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -92,6 +91,29 @@
 #if DEBUG
     [iConsole info:@"Favor_Enter",nil];
 #endif
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    if (appDelegate.model) {
+        _tableView.tableHeaderView = nil;
+    } else if (_tableView.tableHeaderView == nil) {
+        UILabel *loginLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 43)];
+        loginLabel.backgroundColor = SSColor(239, 239, 239);
+        loginLabel.numberOfLines = 0;
+        loginLabel.textAlignment = NSTextAlignmentCenter;
+        loginLabel.userInteractionEnabled = YES;
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(login)];
+        [loginLabel addGestureRecognizer:tap];
+        NSMutableAttributedString *attributedStr = [[NSMutableAttributedString alloc]initWithString:@"Log in, your favorited news will always be saved in your account."];
+        [attributedStr addAttributes:@{NSFontAttributeName : [UIFont italicSystemFontOfSize:15],
+                                       NSForegroundColorAttributeName : kGrayColor,
+                                       NSUnderlineStyleAttributeName : [NSNumber numberWithInteger:NSUnderlineStyleSingle]
+                                       } range:NSMakeRange(0, 6)];
+        [attributedStr addAttributes:@{NSFontAttributeName : [UIFont systemFontOfSize:13],
+                                       NSForegroundColorAttributeName : kGrayColor,
+                                       NSUnderlineStyleAttributeName : [NSNumber numberWithInteger:NSUnderlineStyleNone],
+                                       } range:NSMakeRange(6, attributedStr.length - 6)];
+        loginLabel.attributedText = attributedStr;
+        _tableView.tableHeaderView = loginLabel;
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -151,40 +173,60 @@
 #if DEBUG
     [iConsole info:@"Favor_DelButton_Click",nil];
 #endif
-    __weak typeof(self) weakSelf = self;
-    NSMutableArray *collectIDs = [NSMutableArray array];
-    @autoreleasepool {
-        for (NewsModel *model in _selectedList) {
-            [collectIDs addObject:model.collect_id];
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    if (appDelegate.model) {
+        __weak typeof(self) weakSelf = self;
+        NSMutableArray *collectIDs = [NSMutableArray array];
+        @autoreleasepool {
+            for (NewsModel *model in _selectedList) {
+                [collectIDs addObject:model.collect_id];
+            }
         }
-    }
-    NSMutableDictionary *params = [NSMutableDictionary dictionary];
-    [params setObject:collectIDs forKey:@"ids"];
-    [[SSHttpRequest sharedInstance] DELETE:kHomeUrl_Collect params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
+        NSMutableDictionary *params = [NSMutableDictionary dictionary];
+        [params setObject:collectIDs forKey:@"ids"];
+        [[SSHttpRequest sharedInstance] DELETE:kHomeUrl_Collect params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
+            // 打点-删除成功-010505
+            [Flurry logEvent:@"Favor_DelButton_Click_Y"];
+#if DEBUG
+            [iConsole info:@"Favor_DelButton_Click_Y",nil];
+#endif
+            [weakSelf.dataList removeObjectsInArray:_selectedList];
+            NSString *htmlFilePath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/%@.data",appDelegate.model.user_id]];
+            NSMutableDictionary *dataDic = [NSKeyedUnarchiver unarchiveObjectWithFile:htmlFilePath];
+            if ([dataDic isKindOfClass:[NSMutableDictionary class]] && dataDic.count > 0) {
+                [dataDic removeObjectsForKeys:collectIDs];
+                [NSKeyedArchiver archiveRootObject:dataDic toFile:htmlFilePath];
+            }
+            if (_dataList.count == 0) {
+                weakSelf.showBlankView = YES;
+            }
+            [_tableView reloadData];
+        } failure:^(NSError *error) {
+            // 打点-删除失败-010506
+            [Flurry logEvent:@"Favor_DelButton_Click_N"];
+#if DEBUG
+            [iConsole info:@"Favor_DelButton_Click_N",nil];
+#endif
+        } isShowHUD:NO];
+    } else {
+        [self.dataList removeObjectsInArray:_selectedList];
+        [_detailList removeObjectsInArray:_selectedDetail];
+        NSString *htmlFilePath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/favorites.data"]];
+        NSMutableArray *dataList = [NSKeyedUnarchiver unarchiveObjectWithFile:htmlFilePath];
+        if ([dataList isKindOfClass:[NSMutableArray class]] && dataList.count > 0) {
+            [dataList removeObjectsAtIndexes:_indexSet];
+            [NSKeyedArchiver archiveRootObject:dataList toFile:htmlFilePath];
+        }
+        if (_dataList.count == 0) {
+            self.showBlankView = YES;
+        }
+        [_tableView reloadData];
         // 打点-删除成功-010505
         [Flurry logEvent:@"Favor_DelButton_Click_Y"];
 #if DEBUG
         [iConsole info:@"Favor_DelButton_Click_Y",nil];
 #endif
-        [weakSelf.dataList removeObjectsInArray:_selectedList];
-        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-        NSString *htmlFilePath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/%@.data",appDelegate.model.user_id]];
-        NSMutableDictionary *dataDic = [NSKeyedUnarchiver unarchiveObjectWithFile:htmlFilePath];
-        if ([dataDic isKindOfClass:[NSMutableDictionary class]] && dataDic.count > 0) {
-            [dataDic removeObjectsForKeys:collectIDs];
-            [NSKeyedArchiver archiveRootObject:dataDic toFile:htmlFilePath];
-        }
-        if (_dataList.count == 0) {
-            weakSelf.showBlankView = YES;
-        }
-        [_tableView reloadData];
-    } failure:^(NSError *error) {
-        // 打点-删除失败-010506
-        [Flurry logEvent:@"Favor_DelButton_Click_N"];
-#if DEBUG
-        [iConsole info:@"Favor_DelButton_Click_N",nil];
-#endif
-    } isShowHUD:NO];
+    }
 }
 
 /**
@@ -192,40 +234,57 @@
  *
  *  @param model NewsModel
  */
-- (void)deleteCollectNewsWithModel:(NewsModel *)model
+- (void)deleteCollectNewsWithModel:(NewsModel *)model Index:(NSInteger)index
 {
     // 打点-点击删除-010504
     [Flurry logEvent:@"Favor_DelButton_Click"];
 #if DEBUG
     [iConsole info:@"Favor_DelButton_Click",nil];
 #endif
-    __weak typeof(self) weakSelf = self;
-    NSMutableDictionary *params = [NSMutableDictionary dictionary];
-    [params setObject:@[model.collect_id] forKey:@"ids"];
-    [[SSHttpRequest sharedInstance] DELETE:kHomeUrl_Collect params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    if (appDelegate.model) {
+        __weak typeof(self) weakSelf = self;
+        NSMutableDictionary *params = [NSMutableDictionary dictionary];
+        [params setObject:@[model.collect_id] forKey:@"ids"];
+        [[SSHttpRequest sharedInstance] DELETE:kHomeUrl_Collect params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
+            // 打点-删除成功-010505
+            [Flurry logEvent:@"Favor_DelButton_Click_Y"];
+#if DEBUG
+            [iConsole info:@"Favor_DelButton_Click_Y",nil];
+#endif
+//            [weakSelf.dataList removeObjectsInArray:_selectedList];
+            NSString *filePath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/%@.data",appDelegate.model.user_id]];
+            NSMutableDictionary *dataDic = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
+            if ([dataDic isKindOfClass:[NSMutableDictionary class]] && dataDic.count > 0) {
+                [dataDic removeObjectForKey:model.collect_id];
+                [NSKeyedArchiver archiveRootObject:dataDic toFile:filePath];
+            }
+            if (_dataList.count == 0) {
+                weakSelf.showBlankView = YES;
+            }
+        } failure:^(NSError *error) {
+            // 打点-删除失败-010506
+            [Flurry logEvent:@"Favor_DelButton_Click_N"];
+#if DEBUG
+            [iConsole info:@"Favor_DelButton_Click_N",nil];
+#endif
+        } isShowHUD:NO];
+    } else {
+        NSString *htmlFilePath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/favorites.data"]];
+        NSMutableArray *dataList = [NSKeyedUnarchiver unarchiveObjectWithFile:htmlFilePath];
+        if ([dataList isKindOfClass:[NSMutableArray class]] && dataList.count > 0) {
+            [dataList removeObjectAtIndex:index];
+            [NSKeyedArchiver archiveRootObject:dataList toFile:htmlFilePath];
+        }
+        if (_dataList.count == 0) {
+            self.showBlankView = YES;
+        }
         // 打点-删除成功-010505
         [Flurry logEvent:@"Favor_DelButton_Click_Y"];
 #if DEBUG
         [iConsole info:@"Favor_DelButton_Click_Y",nil];
 #endif
-        [self.dataList removeObjectsInArray:_selectedList];
-        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-        NSString *filePath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/%@.data",appDelegate.model.user_id]];
-        NSMutableDictionary *dataDic = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
-        if ([dataDic isKindOfClass:[NSMutableDictionary class]] && dataDic.count > 0) {
-            [dataDic removeObjectForKey:model.collect_id];
-            [NSKeyedArchiver archiveRootObject:dataDic toFile:filePath];
-        }
-        if (_dataList.count == 0) {
-            weakSelf.showBlankView = YES;
-        }
-    } failure:^(NSError *error) {
-        // 打点-删除失败-010506
-        [Flurry logEvent:@"Favor_DelButton_Click_N"];
-#if DEBUG
-        [iConsole info:@"Favor_DelButton_Click_N",nil];
-#endif
-    } isShowHUD:NO];
+    }
 }
 
 #pragma mark - UITableViewDataSource
@@ -403,9 +462,14 @@
         NewsModel *model = _dataList[indexPath.row];
         FavoriteDetailViewController *favDetVC = [[FavoriteDetailViewController alloc] init];
         favDetVC.model = model;
+        favDetVC.detailModel = _detailList[indexPath.row];
         [self.navigationController pushViewController:favDetVC animated:YES];
     } else {
         [_selectedList addObject:_dataList[indexPath.row]];
+        if (_detailList) {
+            [_selectedDetail addObject:_detailList[indexPath.row]];
+            [_indexSet addIndex:indexPath.row];
+        }
     }
     if (_selectedList.count > 0) {
         [_editBtn setTitle:@"Delete" forState:UIControlStateSelected];
@@ -417,6 +481,10 @@
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [_selectedList removeObject:_dataList[indexPath.row]];
+    if (_detailList) {
+        [_selectedDetail removeObject:_detailList[indexPath.row]];
+        [_indexSet removeIndex:indexPath.row];
+    }
     if (_selectedList.count > 0) {
         [_editBtn setTitle:@"Delete" forState:UIControlStateSelected];
     } else {
@@ -496,8 +564,11 @@
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         if (_dataList.count > 0) {
             NewsModel *model = _dataList[indexPath.row];
-            [self deleteCollectNewsWithModel:model];
             [_dataList removeObjectAtIndex:indexPath.row];
+            if (_detailList) {
+                [_detailList removeObjectAtIndex:indexPath.row];
+            }
+            [self deleteCollectNewsWithModel:model Index:indexPath.row];
             [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
         }
     }
@@ -549,6 +620,8 @@
         self.isEdit = YES;
         [self.tableView setEditing:YES animated:YES];
         _selectedList = [NSMutableArray array];
+        _selectedDetail = [NSMutableArray array];
+        _indexSet = [NSMutableIndexSet indexSet];
         
         // 打点-点击编辑-010503
         [Flurry logEvent:@"Favor_EditButton_Click"];
@@ -562,7 +635,14 @@
 // 登录
 - (void)login
 {
-    NSLog(@"123");
+    // 打点-点击登录-010508
+    [Flurry logEvent:@"Menu_LoginButton_Click"];
+#if DEBUG
+    [iConsole info:@"Menu_LoginButton_Click",nil];
+#endif
+    BaseNavigationController *navCtrl = (BaseNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+    LoginViewController *loginVC = [[LoginViewController alloc] init];
+    [navCtrl pushViewController:loginVC animated:YES];
 }
 
 - (void)tableViewDidTriggerFooterRefresh

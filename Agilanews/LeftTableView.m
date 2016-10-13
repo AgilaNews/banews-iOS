@@ -191,16 +191,8 @@
             [iConsole info:@"Info_Icon_Click",nil];
 #endif
             // 点击Favorites
-            if (_appDelegate.model) {
-                // 直接进入收藏
-                FavoritesViewController *favoritesVC = [[FavoritesViewController alloc] init];
-                [navCtrl pushViewController:favoritesVC animated:YES];
-            } else {
-                // 登录后进入收藏
-                LoginViewController *loginVC = [[LoginViewController alloc] init];
-                loginVC.isFavorite = YES;
-                [navCtrl pushViewController:loginVC animated:YES];
-            }
+            FavoritesViewController *favoritesVC = [[FavoritesViewController alloc] init];
+            [navCtrl pushViewController:favoritesVC animated:YES];            
             break;
         }
         case 2:

@@ -69,9 +69,14 @@
      }];
 
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    NSString *htmlFilePath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/%@.data",appDelegate.model.user_id]];
-    NSMutableDictionary *dataDic = [NSKeyedUnarchiver unarchiveObjectWithFile:htmlFilePath];
-    NewsDetailModel *model = dataDic[_model.collect_id];
+    NewsDetailModel *model = nil;
+    if (appDelegate.model) {
+        NSString *htmlFilePath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/%@.data",appDelegate.model.user_id]];
+        NSMutableDictionary *dataDic = [NSKeyedUnarchiver unarchiveObjectWithFile:htmlFilePath];
+        model = dataDic[_model.collect_id];
+    } else {
+        model = _detailModel;
+    }
 
     if (model) {
         // css文件路径

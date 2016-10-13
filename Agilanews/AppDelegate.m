@@ -84,6 +84,13 @@
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         _isStart = YES;
     });
+//    NewsDetailViewController *newsDetailVC = [[NewsDetailViewController alloc] init];
+//    NewsModel *model = [[NewsModel alloc] init];
+//    model.news_id = @"nwIjRFUi2kA=";
+//    newsDetailVC.model = model;
+//    newsDetailVC.isPushEnter = YES;
+//    [(UINavigationController *)_window.rootViewController pushViewController:newsDetailVC animated:NO];
+
     return YES;
 }
 

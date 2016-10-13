@@ -425,52 +425,77 @@
  */
 - (void)collectNewsWithButton:(UIButton *)button
 {
-    NSMutableDictionary *params = [NSMutableDictionary dictionary];
-    [params setObject:_model.news_id forKey:@"news_id"];
-    [params setObject:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]] forKey:@"ctime"];
-    NSArray *paramsArray = [NSArray arrayWithObject:params];
-    [[SSHttpRequest sharedInstance] post:kHomeUrl_Collect params:paramsArray contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
-        NSArray *result = responseObj;
-        if (result) {
-            _collectID = [NSNumber numberWithInteger:[result.firstObject[@"collect_id"] integerValue]];
-            button.selected = YES;
-            [SVProgressHUD showSuccessWithStatus:@"Save the news and read it later by entering 'Favorites'"];
-            // 新闻详情本地缓存
-            AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-            NSString *htmlFilePath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/%@.data",appDelegate.model.user_id]];
-            NSMutableDictionary *dataDic = [NSKeyedUnarchiver unarchiveObjectWithFile:htmlFilePath];
-            if ([dataDic isKindOfClass:[NSMutableDictionary class]] && dataDic.count > 0) {
-                [dataDic setObject:_detailModel forKey:_collectID];
-            } else {
-                dataDic = [NSMutableDictionary dictionary];
-                [dataDic setObject:_detailModel forKey:_collectID];
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    if (appDelegate.model) {
+        NSMutableDictionary *params = [NSMutableDictionary dictionary];
+        [params setObject:_model.news_id forKey:@"news_id"];
+        [params setObject:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]] forKey:@"ctime"];
+        NSArray *paramsArray = [NSArray arrayWithObject:params];
+        [[SSHttpRequest sharedInstance] post:kHomeUrl_Collect params:paramsArray contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
+            NSArray *result = responseObj;
+            if (result) {
+                _collectID = [NSNumber numberWithInteger:[result.firstObject[@"collect_id"] integerValue]];
+                button.selected = YES;
+                [SVProgressHUD showSuccessWithStatus:@"Save the news and read it later by entering 'Favorites'"];
+                
+                NSString *htmlFilePath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/%@.data",appDelegate.model.user_id]];
+                NSMutableDictionary *dataDic = [NSKeyedUnarchiver unarchiveObjectWithFile:htmlFilePath];
+                if ([dataDic isKindOfClass:[NSMutableDictionary class]] && dataDic.count > 0) {
+                    [dataDic setObject:_detailModel forKey:_collectID];
+                } else {
+                    dataDic = [NSMutableDictionary dictionary];
+                    [dataDic setObject:_detailModel forKey:_collectID];
+                }
+                [NSKeyedArchiver archiveRootObject:dataDic toFile:htmlFilePath];
+                
+                // 打点-收藏成功-010215
+                NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
+                                               [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
+                                               _channelName, @"channel",
+                                               _model.news_id, @"article",
+                                               nil];
+                [Flurry logEvent:@"Article_Favorite_Click_Y" withParameters:articleParams];
+#if DEBUG
+                [iConsole info:[NSString stringWithFormat:@"Article_Favorite_Click_Y:%@",articleParams],nil];
+#endif
             }
-            [NSKeyedArchiver archiveRootObject:dataDic toFile:htmlFilePath];
-            
-            // 打点-收藏成功-010215
+        } failure:^(NSError *error) {
+            button.selected = NO;
+            // 打点-收藏失败-010216
             NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
                                            [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
                                            _channelName, @"channel",
                                            _model.news_id, @"article",
                                            nil];
-            [Flurry logEvent:@"Article_Favorite_Click_Y" withParameters:articleParams];
+            [Flurry logEvent:@"Article_Favorite_Click_N" withParameters:articleParams];
 #if DEBUG
-            [iConsole info:[NSString stringWithFormat:@"Article_Favorite_Click_Y:%@",articleParams],nil];
+            [iConsole info:[NSString stringWithFormat:@"Article_Favorite_Click_N:%@",articleParams],nil];
 #endif
+        } isShowHUD:YES];
+    } else if (_detailModel && _model) {
+        // 新闻详情本地缓存
+        NSString *htmlFilePath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/favorites.data"]];
+        NSMutableArray *dataList = [NSKeyedUnarchiver unarchiveObjectWithFile:htmlFilePath];
+        if ([dataList isKindOfClass:[NSMutableArray class]] && dataList.count > 0) {
+            [dataList addObject:[NSArray arrayWithObjects:_model, _detailModel, nil]];
+        } else {
+            dataList = [NSMutableArray array];
+            [dataList addObject:[NSArray arrayWithObjects:_model, _detailModel, nil]];
         }
-    } failure:^(NSError *error) {
-        button.selected = NO;
-        // 打点-收藏失败-010216
+        [NSKeyedArchiver archiveRootObject:dataList toFile:htmlFilePath];
+        button.selected = YES;
+        [SVProgressHUD showSuccessWithStatus:@"Save the news and read it later by entering 'Favorites'"];
+        // 打点-收藏成功-010215
         NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
                                        [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
                                        _channelName, @"channel",
                                        _model.news_id, @"article",
                                        nil];
-        [Flurry logEvent:@"Article_Favorite_Click_N" withParameters:articleParams];
+        [Flurry logEvent:@"Article_Favorite_Click_Y" withParameters:articleParams];
 #if DEBUG
-        [iConsole info:[NSString stringWithFormat:@"Article_Favorite_Click_N:%@",articleParams],nil];
+        [iConsole info:[NSString stringWithFormat:@"Article_Favorite_Click_Y:%@",articleParams],nil];
 #endif
-    } isShowHUD:YES];
+    }
 }
 
 /**
@@ -1405,19 +1430,10 @@
     UIButton *button = [_commentsView viewWithTag:301];
     // 点击收藏按钮
     if (button.selected) {
+#warning todo - 判断登录状态  删除本地还是帐号下收藏
         [self deleteCollectNewsWithButton:button];
     } else {
-        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-        if (appDelegate.model) {
-            // 收藏
-            [self collectNewsWithButton:button];
-        } else {
-            // 登录后收藏
-            LoginViewController *loginVC = [[LoginViewController alloc] init];
-            loginVC.isCollect = YES;
-            UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:loginVC];
-            [self.navigationController presentViewController:navCtrl animated:YES completion:nil];
-        }
+        [self collectNewsWithButton:button];
     }
 }
 
@@ -1524,21 +1540,13 @@
 #if DEBUG
             [iConsole info:[NSString stringWithFormat:@"Article_Favorite_Click:%@",articleParams],nil];
 #endif
+            
             // 点击收藏按钮
             if (button.selected) {
+#warning todo - 同touchFavorite
                 [self deleteCollectNewsWithButton:button];
             } else {
-                AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-                if (appDelegate.model) {
-                    // 收藏
-                    [self collectNewsWithButton:button];
-                } else {
-                    // 登录后收藏
-                    LoginViewController *loginVC = [[LoginViewController alloc] init];
-                    loginVC.isCollect = YES;
-                    UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:loginVC];
-                    [self.navigationController presentViewController:navCtrl animated:YES completion:nil];
-                }
+                [self collectNewsWithButton:button];
             }
             break;
         }

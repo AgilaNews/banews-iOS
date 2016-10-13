@@ -12,8 +12,11 @@
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *dataList;
+@property (nonatomic, strong) NSMutableArray *detailList;
+@property (nonatomic, strong) NSMutableIndexSet *indexSet;
 @property (nonatomic, strong) UIButton *editBtn;
 @property (nonatomic, strong) NSMutableArray *selectedList;
+@property (nonatomic, strong) NSMutableArray *selectedDetail;
 @property (nonatomic, assign) BOOL isEdit;
 @property (nonatomic, strong) NSIndexPath *indexPath;
 @property (nonatomic, assign) BOOL showBlankView;
