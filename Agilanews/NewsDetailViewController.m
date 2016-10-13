@@ -1459,7 +1459,6 @@
     UIButton *button = [_commentsView viewWithTag:301];
     // 点击收藏按钮
     if (button.selected) {
-#warning todo - 判断登录状态  删除本地还是帐号下收藏
         [self deleteCollectNewsWithButton:button];
     } else {
         [self collectNewsWithButton:button];
@@ -1572,7 +1571,6 @@
             
             // 点击收藏按钮
             if (button.selected) {
-#warning todo - 同touchFavorite
                 [self deleteCollectNewsWithButton:button];
             } else {
                 [self collectNewsWithButton:button];
