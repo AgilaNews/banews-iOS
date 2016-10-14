@@ -71,12 +71,13 @@ static CGFloat const ButtonHeight = 40;
         }
     } else {
         // 频道数组为空
-        NSArray *nameArray = @[@"Hot",@"World",@"Sports",@"Entertainment",@"Games",@"Lifestyle",@"Business",@"Sci&Tech",@"Opinion"];
+        NSArray *nameArray = @[@"Hot",@"National",@"Entertainment",@"NBA",@"Food",@"Sports",@"Photos",@"World",@"GIFs",@"Business",@"Lifestyle",@"Opinion",@"Sci&Tech",@"Games"];
+        NSArray *channelIDArray = @[@10001,@10010,@10004,@10013,@10015,@10003,@10011,@10002,@10012,@10007,@10006,@10009,@10008,@10005];
         NSMutableArray *models = [NSMutableArray array];
         for (int i = 0; i < nameArray.count; i++) {
             CategoriesModel *model = [[CategoriesModel alloc] init];
             model.name = nameArray[i];
-            model.channelID = [NSNumber numberWithInt:10001 + i];
+            model.channelID = channelIDArray[i];
             [titleArray addObject:model.name];
             [models addObject:model];
         }
