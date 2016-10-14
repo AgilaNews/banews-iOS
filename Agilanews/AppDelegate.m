@@ -427,6 +427,7 @@
     [[FIRMessaging messaging] subscribeToTopic:[NSString stringWithFormat:@"/topics/ios_v%@",version]];
     [[FIRMessaging messaging] unsubscribeFromTopic:@"/topics/ios_v1.1.5"];
     [[FIRMessaging messaging] unsubscribeFromTopic:@"/topics/ios_v1.1.6"];
+    [[FIRMessaging messaging] unsubscribeFromTopic:@"/topics/ios_v1.1.7"];
     if (refreshedToken.length) {
         DEF_PERSISTENT_SET_OBJECT(@"refreshToken", refreshedToken);
         [self uploadRefreshedToken:refreshedToken];
