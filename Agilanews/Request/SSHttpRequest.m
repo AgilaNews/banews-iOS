@@ -284,6 +284,17 @@ static SSHttpRequest *_manager = nil;
     // 客户端版本号
     NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     [baseParams setObject:[NSString stringWithFormat:@"v%@",version] forKey:@"client_version"];
+    // 设置IDFA（广告标识符）
+    NSString *IDFA = DEF_PERSISTENT_GET_OBJECT(@"IDFA");
+    if (!IDFA.length) {
+        KeychainItemWrapper *keychain = [[KeychainItemWrapper alloc] initWithIdentifier:@"IDFA" accessGroup:nil];
+        IDFA = [keychain objectForKey:(id)kSecValueData];
+        if (!IDFA.length) {
+            IDFA = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
+            [keychain setObject:IDFA forKey:(__bridge id)kSecValueData];
+        }
+        DEF_PERSISTENT_SET_OBJECT(@"IDFA", IDFA);
+    }
     // 设备ID
     if (DEF_PERSISTENT_GET_OBJECT(@"IDFA") != nil) {
         [baseParams setObject:DEF_PERSISTENT_GET_OBJECT(@"IDFA") forKey:@"idfv"];

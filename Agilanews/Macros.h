@@ -91,6 +91,7 @@
 #define KNOTIFICATION_TouchFavorite   @"KNOTIFICATION_TouchFavorite"  // 点击收藏通知
 #define KNOTIFICATION_FindNewChannel  @"KNOTIFICATION_FindNewChannel" // 发现新频道通知
 #define KNOTIFICATION_CleanNewChannel @"KNOTIFICATION_CleanNewChannel"// 删除新频道通知
+#define KNOTIFICATION_PushExit        @"KNOTIFICATION_PushExit"       // 从推送页面退出
 
 
 

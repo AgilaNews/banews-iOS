@@ -190,6 +190,9 @@
 #if DEBUG
     [iConsole info:[NSString stringWithFormat:@"Article_Exit:%@",articleParams],nil];
 #endif
+    if (_isPushEnter) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_PushExit object:nil];
+    }
 }
 
 - (void)dealloc

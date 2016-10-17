@@ -78,6 +78,10 @@
                                                  name:KNOTIFICATION_FontSize_Change
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(pushExit)
+                                                 name:KNOTIFICATION_PushExit
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(applicationWillEnterForeground)
                                                  name:UIApplicationWillEnterForegroundNotification
                                                object:nil];
@@ -353,11 +357,14 @@
         return;
     }
     if ([_model.channelID isEqualToNumber:@10011] || [_model.channelID isEqualToNumber:@10012]) {
+        // 点击图片频道和GIF频道
         return;
     }
     NewsModel *model = _dataList[indexPath.row];
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-
+    if (!model.news_id.length) {
+        return;
+    }
     // 打点-点击列表-010108
     NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
                                    [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
@@ -989,16 +996,36 @@
  */
 - (void)applicationWillEnterForeground
 {
-    NSNumber *backgroundTime = DEF_PERSISTENT_GET_OBJECT(@"BackgroundTime");
-    if ([[NSDate date] timeIntervalSince1970] - backgroundTime.longLongValue > 3600)
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    NSNumber *refreshNum = appDelegate.refreshTimeDic[_model.channelID];
+    _refreshTime = refreshNum.longLongValue;
+
+    if ([[NSDate date] timeIntervalSince1970] - _refreshTime > 3600)
     {
         _dataList = [NSMutableArray array];
         if ([self.tableView isDisplayedInScreen]) {
             _isShowBanner = NO;
-            [self.tableView.header beginRefreshing];
+// 修复下拉刷新位置卡住问题
+            [self requestDataWithChannelID:_model.channelID isLater:YES isShowHUD:NO isShowBanner:NO];
+//            [self.tableView.header beginRefreshing];
         }
     } else {
         [self.tableView reloadData];
+    }
+}
+
+// 从推送退出到列表页通知
+- (void)pushExit
+{
+    if ([self.tableView isDisplayedInScreen]) {
+        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        NSNumber *refreshNum = appDelegate.refreshTimeDic[_model.channelID];
+        _refreshTime = refreshNum.longLongValue;
+        if ([[NSDate date] timeIntervalSince1970] - _refreshTime > 3600) {
+            _dataList = [NSMutableArray array];
+            _isShowBanner = NO;
+            [self requestDataWithChannelID:_model.channelID isLater:YES isShowHUD:NO isShowBanner:NO];
+        }
     }
 }
 

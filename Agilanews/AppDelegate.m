@@ -18,6 +18,7 @@
 @end
 
 @implementation AppDelegate
+
 #pragma mark - APP生命周期
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
@@ -196,26 +197,29 @@
     // 激活AppsFlyer
     [[AppsFlyerTracker sharedTracker] trackAppLaunch];
     if (_isStart) {
-        NSString *newsFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/news.data"];
-        NSDictionary *newsData = [NSKeyedUnarchiver unarchiveObjectWithFile:newsFilePath];
-        NSNumber *checkNum = newsData.allKeys.firstObject;
-        NSString *scrollFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/scroll.data"];
-        NSMutableDictionary *scrollDic = [NSKeyedUnarchiver unarchiveObjectWithFile:scrollFilePath];
-        // 刷新页面
-        UINavigationController *navCtrl = (UINavigationController *)_window.rootViewController;
-        HomeViewController *homeVC = navCtrl.viewControllers.firstObject;
-        for (HomeTableViewController *homeTabVC in homeVC.segmentVC.subViewControllers) {
-            NSMutableArray *dataList = newsData[checkNum][homeTabVC.model.channelID];
-            if (dataList == nil) {
-                dataList = [NSMutableArray array];
+        NSNumber *backgroundTime = DEF_PERSISTENT_GET_OBJECT(@"BackgroundTime");
+        if ([[NSDate date] timeIntervalSince1970] - backgroundTime.longLongValue <= 3600) {
+            NSString *newsFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/news.data"];
+            NSDictionary *newsData = [NSKeyedUnarchiver unarchiveObjectWithFile:newsFilePath];
+            NSNumber *checkNum = newsData.allKeys.firstObject;
+            NSString *scrollFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/scroll.data"];
+            NSMutableDictionary *scrollDic = [NSKeyedUnarchiver unarchiveObjectWithFile:scrollFilePath];
+            // 刷新页面
+            UINavigationController *navCtrl = (UINavigationController *)_window.rootViewController;
+            HomeViewController *homeVC = navCtrl.viewControllers.firstObject;
+            for (HomeTableViewController *homeTabVC in homeVC.segmentVC.subViewControllers) {
+                NSMutableArray *dataList = newsData[checkNum][homeTabVC.model.channelID];
+                if (dataList == nil) {
+                    dataList = [NSMutableArray array];
+                }
+                // 列表页滚动位置还原
+                NSNumber *contentOffsetY = scrollDic[homeTabVC.model.channelID];
+                if (contentOffsetY.integerValue > 10) {
+                    [homeTabVC.tableView setContentOffset:CGPointMake(homeTabVC.tableView.contentOffset.x, contentOffsetY.floatValue) animated:NO];
+                }
+                homeTabVC.dataList = dataList;
+                [homeTabVC.tableView reloadData];
             }
-            // 列表页滚动位置还原
-            NSNumber *contentOffsetY = scrollDic[homeTabVC.model.channelID];
-            if (contentOffsetY.integerValue > 10) {
-                [homeTabVC.tableView setContentOffset:CGPointMake(homeTabVC.tableView.contentOffset.x, contentOffsetY.floatValue) animated:NO];
-            }
-            homeTabVC.dataList = dataList;
-            [homeTabVC.tableView reloadData];
         }
     }
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
