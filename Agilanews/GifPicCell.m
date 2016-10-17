@@ -456,7 +456,26 @@
 {
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"file://%@/",urlString]];
     AVPlayerItem *item = [AVPlayerItem playerItemWithURL:url];
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback withOptions:AVAudioSessionCategoryOptionMixWithOthers error:nil];
+
+//    AVAsset *asset = [AVAsset assetWithURL:url];
+//    NSArray *audioTracks = [asset tracksWithMediaType:AVMediaTypeVideo];
+//    NSMutableArray *allAudioParams = [NSMutableArray array];
+//    for (AVAssetTrack *track in audioTracks) {
+//        AVMutableAudioMixInputParameters *audioInputParams =
+//        [AVMutableAudioMixInputParameters audioMixInputParameters];
+//        [audioInputParams setVolume:0.0 atTime:kCMTimeZero];
+//        [audioInputParams setTrackID:[track trackID]];
+//        [allAudioParams addObject:audioInputParams];
+//    }
+//    AVMutableAudioMix *audioMix = [AVMutableAudioMix audioMix];
+//    [audioMix setInputParameters:allAudioParams];
+//    AVPlayerItem *item = [AVPlayerItem playerItemWithAsset:asset];
+//    [item setAudioMix:audioMix];
+    
     _player = [AVPlayer playerWithPlayerItem:item];
+    _player.volume = 0.0;
+    _player.muted = YES;
     _playerLayer = [AVPlayerLayer playerLayerWithPlayer:_player];
     _playerLayer.frame = self.titleImageView.bounds;
 //    [self addObserverToPlayerItem:item];
