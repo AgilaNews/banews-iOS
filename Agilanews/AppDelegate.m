@@ -317,13 +317,6 @@
             CategoriesModel *categoriesModel = [CategoriesModel mj_objectWithKeyValues:newDic];
             [categoryArray addObject:categoriesModel];
         }
-//        CategoriesModel *categoriesModel = [[CategoriesModel alloc] init];
-//        categoriesModel.name = @"qweqeee";
-//        categoriesModel.index = @2;
-//        categoriesModel.channelID = @10001;
-//        categoriesModel.isNew = YES;
-//        [categoryArray addObject:categoriesModel];
-
         if (isFirst) {
             // 首次安装无频道
             _categoriesArray = categoryArray;
