@@ -456,6 +456,7 @@
 {
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"file://%@/",urlString]];
     AVPlayerItem *item = [AVPlayerItem playerItemWithURL:url];
+    // 允许其他APP播放音乐
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback withOptions:AVAudioSessionCategoryOptionMixWithOthers error:nil];
 
 //    AVAsset *asset = [AVAsset assetWithURL:url];
