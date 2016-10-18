@@ -13,6 +13,8 @@
 		5F17B45D1DA8A5CD008EBD51 /* GoogleAuthUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F17B45C1DA8A5CD008EBD51 /* GoogleAuthUtilities.framework */; };
 		5F17B45F1DA8A5D6008EBD51 /* GoogleNetworkingUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F17B45E1DA8A5D6008EBD51 /* GoogleNetworkingUtilities.framework */; };
 		5F17B4871DAB78A0008EBD51 /* GuideChannelView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F17B4861DAB78A0008EBD51 /* GuideChannelView.m */; };
+		5F17B48E1DB5BEB5008EBD51 /* Assets.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5F17B4891DB5BEB5008EBD51 /* Assets.bundle */; };
+		5F17B4901DB5BEB5008EBD51 /* YTPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F17B48D1DB5BEB5008EBD51 /* YTPlayerView.m */; };
 		5F2E09FE1D86554900FEC0AC /* AppsFlyer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F2E09FD1D86554900FEC0AC /* AppsFlyer.framework */; };
 		5F2E0A001D86557A00FEC0AC /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F2E09FF1D86557A00FEC0AC /* iAd.framework */; };
 		5F2E0A1D1D87B47A00FEC0AC /* HZIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F2E0A161D87B47A00FEC0AC /* HZIndicatorView.m */; };
@@ -227,6 +229,10 @@
 		5F17B45E1DA8A5D6008EBD51 /* GoogleNetworkingUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleNetworkingUtilities.framework; sourceTree = "<group>"; };
 		5F17B4851DAB78A0008EBD51 /* GuideChannelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuideChannelView.h; sourceTree = "<group>"; };
 		5F17B4861DAB78A0008EBD51 /* GuideChannelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GuideChannelView.m; sourceTree = "<group>"; };
+		5F17B4891DB5BEB5008EBD51 /* Assets.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Assets.bundle; sourceTree = "<group>"; };
+		5F17B48B1DB5BEB5008EBD51 /* YouTubeiOSPlayerHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YouTubeiOSPlayerHelper.h; sourceTree = "<group>"; };
+		5F17B48C1DB5BEB5008EBD51 /* YTPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YTPlayerView.h; sourceTree = "<group>"; };
+		5F17B48D1DB5BEB5008EBD51 /* YTPlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YTPlayerView.m; sourceTree = "<group>"; };
 		5F2E09FD1D86554900FEC0AC /* AppsFlyer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AppsFlyer.framework; sourceTree = "<group>"; };
 		5F2E09FF1D86557A00FEC0AC /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
 		5F2E0A151D87B47A00FEC0AC /* HZIndicatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HZIndicatorView.h; sourceTree = "<group>"; };
@@ -657,6 +663,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5F17B4881DB5BEB5008EBD51 /* YouTubePlayer */ = {
+			isa = PBXGroup;
+			children = (
+				5F17B4891DB5BEB5008EBD51 /* Assets.bundle */,
+				5F17B48B1DB5BEB5008EBD51 /* YouTubeiOSPlayerHelper.h */,
+				5F17B48C1DB5BEB5008EBD51 /* YTPlayerView.h */,
+				5F17B48D1DB5BEB5008EBD51 /* YTPlayerView.m */,
+			);
+			path = YouTubePlayer;
+			sourceTree = "<group>";
+		};
 		5F2E0A141D87B47A00FEC0AC /* HZPhotoBrowser */ = {
 			isa = PBXGroup;
 			children = (
@@ -728,6 +745,7 @@
 		5F42BFE61D34E3BC00B89651 /* Tools */ = {
 			isa = PBXGroup;
 			children = (
+				5F17B4881DB5BEB5008EBD51 /* YouTubePlayer */,
 				5F767A681D9CE82E00822BAC /* MJExtension */,
 				5F767A611D9BBD4E00822BAC /* XWDragCellCollectionView */,
 				5F5C63761D8E5FED005D3578 /* KeychainItemWrapper */,
@@ -1436,6 +1454,7 @@
 				5FF4B7AC1D38F7B200CC6704 /* Info.plist in Resources */,
 				5F635CD11D3E3EDF006AAE3D /* ShareSDK.bundle in Resources */,
 				5FE7220E1D4EFCE30026BFC3 /* TwitterKitResources.bundle in Resources */,
+				5F17B48E1DB5BEB5008EBD51 /* Assets.bundle in Resources */,
 				5F571F8C1D5C1FFE00604CDD /* GooglePlus.bundle in Resources */,
 				5F42BFC01D34E2F000B89651 /* Assets.xcassets in Resources */,
 			);
@@ -1568,6 +1587,7 @@
 				5F42C0901D34E41D00B89651 /* UIImageView+WebCache.m in Sources */,
 				5FF4B7CF1D3A174900CC6704 /* MJRefreshComponent.m in Sources */,
 				5FF4B6F11D372A9300CC6704 /* BaseNavigationController.m in Sources */,
+				5F17B4901DB5BEB5008EBD51 /* YTPlayerView.m in Sources */,
 				5F767A891D9CE82E00822BAC /* NSString+MJExtension.m in Sources */,
 				5F767A641D9BBD4E00822BAC /* XWDragCellCollectionView.m in Sources */,
 				5FF4B78A1D38DEA400CC6704 /* NoPicCell.m in Sources */,

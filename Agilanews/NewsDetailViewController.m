@@ -127,26 +127,37 @@
     [self requestDataWithNewsID:_model.news_id ShowHUD:YES];
     
     // 注册通知
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginSuccess:) name:KNOTIFICATION_Login_Success object:nil];
-    // 注册键盘将要弹出通知
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(loginSuccess:)
+                                                 name:KNOTIFICATION_Login_Success
+                                               object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillShow:)
                                                  name:UIKeyboardWillShowNotification
                                                object:nil];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillHidden)
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(fontChange)
                                                  name:KNOTIFICATION_FontSize_Change
                                                object:nil];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(touchFavorite) name:KNOTIFICATION_TouchFavorite
                                                object:nil];
+    _playerView = [[YTPlayerView alloc] initWithFrame:CGRectMake(0, 64, kScreenWidth, 300)];
+    _playerView.backgroundColor = [UIColor greenColor];
+    [self.view addSubview:_playerView];
+    NSDictionary *playerVars = @{@"autohide" : @1,          // 参数设为1，则视频进度条和播放器控件将会在视频开始播放几秒钟后退出播放界面。
+                                                            // 仅在用户将鼠标移动到视频播放器上方或按键盘上的某个键时，进度条和控件才会重新显示。
+                                                            // 参数设为0，则视频进度条和视频播放器控件在视频播放全程和全屏状态下均会显示。
+                                 @"iv_load_policy" : @3,    // 将此值设为1会在默认情况下显示视频注释，而将其设为3则默认不显示。
+                                 @"playsinline" : @1,       // 以内嵌方式播放还是以全屏形式播放。  1:内嵌模式  0:全屏模式
+                                 @"loop" : @1,              // 是否循环播放。  0:不循环  1:循环
+                                 @"rel" : @0,               // 视频播放结束时，播放器是否应显示相关视频。  0:不显示  1:显示
+                                 @"showinfo" : @0};         // 播放器是否显示视频标题和上传者等信息。  0:不显示  1:显示
+    [self.playerView loadWithVideoId:@"M7lc1UVf-VE" playerVars:playerVars];
 }
 
 - (void)viewWillAppear:(BOOL)animated

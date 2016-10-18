@@ -40,5 +40,6 @@
 @property (nonatomic, assign) long long afterFailureRequsetTime;
 @property (nonatomic, assign) float webviewOffsetY;
 @property (nonatomic, assign) BOOL isPushEnter;
+@property (nonatomic, strong) YTPlayerView *playerView;
 
 @end
