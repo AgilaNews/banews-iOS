@@ -29,7 +29,8 @@ MJCodingImplementation
              @"collect_id":@"collect_id",
              @"commentCount":@"commentCount",
              @"share_url":@"share_url",
-             @"videos":@"VideoModel"
+             @"videos":@"VideoModel",
+             @"tag":@"tag"
              };
 }
 

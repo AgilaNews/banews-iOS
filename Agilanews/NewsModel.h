@@ -23,5 +23,6 @@
 @property (nonatomic, strong) NSNumber *collect_id; // 收藏ID
 @property (nonatomic, strong) NSString *share_url;  // 分享链接
 @property (nonatomic, strong) NSArray  *videos;     // 视频数组
+@property (nonatomic, strong) NSString *tag;        // 新闻标签
 
 @end
