@@ -68,8 +68,8 @@
     [self.tagLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(weakSelf.titleLabel.mas_left);
         make.bottom.mas_equalTo(-6);
-        make.width.mas_equalTo(tagLabelSize.width + 8);
-        make.height.mas_equalTo(tagLabelSize.height + 2);
+        make.width.mas_equalTo(tagLabelSize.width + 9);
+        make.height.mas_equalTo(tagLabelSize.height + 1);
     }];
     // 来源布局
     CGSize sourceLabelSize = [_model.source calculateSize:CGSizeMake(kScreenWidth - 22 - 9 - 108 - 60, 12) font:self.sourceLabel.font];
@@ -81,7 +81,7 @@
     }];
     // 时钟布局
     [self.timeView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(weakSelf.sourceLabel.mas_right).offset(20);
+        make.left.mas_equalTo(weakSelf.sourceLabel.mas_right).offset(15);
         make.centerY.mas_equalTo(weakSelf.sourceLabel.mas_centerY);
         make.width.mas_equalTo(11);
         make.height.mas_equalTo(11);
@@ -106,22 +106,22 @@
         make.width.mas_equalTo(titleLabelSize.width);
         make.height.mas_equalTo(titleLabelSize.height);
     }];
-    if (_model.tag.length > 0) {
+    if (_model.tag.length > 0 && _bgColor == [UIColor whiteColor]) {
         self.tagLabel.hidden = NO;
         // 标签布局
         CGSize tagLabelSize = [_model.tag calculateSize:CGSizeMake(100, 13) font:self.tagLabel.font];
         [self.tagLabel mas_updateConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(weakSelf.titleLabel.mas_left);
             make.bottom.mas_equalTo(-6);
-            make.width.mas_equalTo(tagLabelSize.width + 8);
-            make.height.mas_equalTo(tagLabelSize.height + 2);
+            make.width.mas_equalTo(tagLabelSize.width + 9);
+            make.height.mas_equalTo(tagLabelSize.height + 1);
         }];
         // 来源布局
-        CGSize sourceLabelSize = [_model.source calculateSize:CGSizeMake(kScreenWidth - 22 - 9 - 108 - 60 - 22 - tagLabelSize.width - 16, 12) font:self.sourceLabel.font];
+        CGSize sourceLabelSize = [_model.source calculateSize:CGSizeMake(kScreenWidth - 22 - 9 - 108 - 60, 12) font:self.sourceLabel.font];
         [self.sourceLabel mas_updateConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(weakSelf.tagLabel.mas_right).offset(8);
             make.bottom.mas_equalTo(-7);
-            make.width.mas_equalTo(sourceLabelSize.width);
+            make.width.mas_equalTo(MIN(sourceLabelSize.width, kScreenWidth - 22 - 9 - 108 - 50 - 22 - tagLabelSize.width - 16));
             make.height.mas_equalTo(sourceLabelSize.height);
         }];
     } else {
@@ -131,20 +131,19 @@
             make.left.mas_equalTo(weakSelf.titleLabel.mas_left);
             make.bottom.mas_equalTo(-6);
             make.width.mas_equalTo(0);
-            make.height.mas_equalTo(0);
         }];
         // 来源布局
-        CGSize sourceLabelSize = [_model.source calculateSize:CGSizeMake(kScreenWidth - 22 - 9 - 108 - 60 - 22, 12) font:self.sourceLabel.font];
+        CGSize sourceLabelSize = [_model.source calculateSize:CGSizeMake(kScreenWidth - 22 - 9 - 108 - 60, 12) font:self.sourceLabel.font];
         [self.sourceLabel mas_updateConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(weakSelf.tagLabel.mas_right);
             make.bottom.mas_equalTo(-7);
-            make.width.mas_equalTo(sourceLabelSize.width);
+            make.width.mas_equalTo(MIN(sourceLabelSize.width, kScreenWidth - 22 - 9 - 108 - 50 - 22));
             make.height.mas_equalTo(sourceLabelSize.height);
         }];
     }
     // 时钟布局
     [self.timeView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(weakSelf.sourceLabel.mas_right).offset(20);
+        make.left.mas_equalTo(weakSelf.sourceLabel.mas_right).offset(15);
         make.centerY.mas_equalTo(weakSelf.sourceLabel.mas_centerY);
     }];
     // 时间布局
@@ -272,7 +271,7 @@
         _tagLabel.textColor = kOrangeColor;
         _tagLabel.textAlignment = NSTextAlignmentCenter;
         _tagLabel.layer.borderColor = kOrangeColor.CGColor;
-        _tagLabel.layer.borderWidth = 1;
+        _tagLabel.layer.borderWidth = .5;
         _tagLabel.layer.cornerRadius = 2;
         _tagLabel.hidden = YES;
     }

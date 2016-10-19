@@ -85,8 +85,8 @@
     [self.tagLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(weakSelf.titleLabel.mas_left);
         make.bottom.mas_equalTo(-7.5);
-        make.width.mas_equalTo(tagLabelSize.width + 8);
-        make.height.mas_equalTo(tagLabelSize.height + 2);
+        make.width.mas_equalTo(tagLabelSize.width + 9);
+        make.height.mas_equalTo(tagLabelSize.height + 1);
     }];
     // 来源布局
     CGSize sourceLabelSize = [_model.source calculateSize:CGSizeMake(300, 12) font:self.sourceLabel.font];
@@ -98,7 +98,7 @@
     }];
     // 时钟布局
     [self.timeView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(weakSelf.sourceLabel.mas_right).offset(20);
+        make.left.mas_equalTo(weakSelf.sourceLabel.mas_right).offset(15);
         make.centerY.mas_equalTo(weakSelf.sourceLabel.mas_centerY);
         make.width.mas_equalTo(11);
         make.height.mas_equalTo(11);
@@ -146,8 +146,8 @@
         [self.tagLabel mas_updateConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(weakSelf.titleLabel.mas_left);
             make.bottom.mas_equalTo(-7.5);
-            make.width.mas_equalTo(tagLabelSize.width + 8);
-            make.height.mas_equalTo(tagLabelSize.height + 2);
+            make.width.mas_equalTo(tagLabelSize.width + 9);
+            make.height.mas_equalTo(tagLabelSize.height + 1);
         }];
         // 来源布局
         CGSize sourceLabelSize = [_model.source calculateSize:CGSizeMake(200, 12) font:self.sourceLabel.font];
@@ -164,7 +164,6 @@
             make.left.mas_equalTo(weakSelf.titleLabel.mas_left);
             make.bottom.mas_equalTo(-7.5);
             make.width.mas_equalTo(0);
-            make.height.mas_equalTo(0);
         }];
         // 来源布局
         CGSize sourceLabelSize = [_model.source calculateSize:CGSizeMake(200, 12) font:self.sourceLabel.font];
@@ -177,7 +176,7 @@
     }
     // 时钟布局
     [self.timeView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(weakSelf.sourceLabel.mas_right).offset(20);
+        make.left.mas_equalTo(weakSelf.sourceLabel.mas_right).offset(15);
         make.centerY.mas_equalTo(weakSelf.sourceLabel.mas_centerY);
     }];
     // 时间布局
@@ -338,7 +337,7 @@
         _tagLabel.textColor = kOrangeColor;
         _tagLabel.textAlignment = NSTextAlignmentCenter;
         _tagLabel.layer.borderColor = kOrangeColor.CGColor;
-        _tagLabel.layer.borderWidth = 1;
+        _tagLabel.layer.borderWidth = .5;
         _tagLabel.layer.cornerRadius = 2;
         _tagLabel.hidden = YES;
     }
