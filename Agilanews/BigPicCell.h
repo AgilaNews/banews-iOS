@@ -14,6 +14,7 @@
 @property (nonatomic, strong) NewsModel *model;
 @property (nonatomic, strong) UILabel *titleLabel;          // 标题
 @property (nonatomic, strong) UIImageView *titleImageView;  // 标题图片
+@property (nonatomic, strong) UILabel *tagLabel;            // 标签
 @property (nonatomic, strong) UILabel *sourceLabel;         // 来源
 @property (nonatomic, strong) UIImageView *timeView;        // 时钟
 @property (nonatomic, strong) UILabel *timeLabel;           // 发布时间

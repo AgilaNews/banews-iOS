@@ -41,6 +41,7 @@
 - (void)_initSubviews
 {
     [self.contentView addSubview:self.titleLabel];
+    [self.contentView addSubview:self.tagLabel];
     [self.contentView addSubview:self.sourceLabel];
     [self.contentView addSubview:self.timeView];
     [self.contentView addSubview:self.timeLabel];
@@ -54,10 +55,18 @@
         make.width.mas_equalTo(titleLabelSize.width);
         make.height.mas_equalTo(titleLabelSize.height);
     }];
+    // 标签布局
+    CGSize tagLabelSize = [_model.tag calculateSize:CGSizeMake(100, 13) font:self.tagLabel.font];
+    [self.tagLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(weakSelf.titleLabel.mas_left);
+        make.bottom.mas_equalTo(-7);
+        make.width.mas_equalTo(tagLabelSize.width + 8);
+        make.height.mas_equalTo(tagLabelSize.height + 2);
+    }];
     // 来源布局
     CGSize sourceLabelSize = [_model.source calculateSize:CGSizeMake(300, 12) font:self.sourceLabel.font];
     [self.sourceLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(weakSelf.titleLabel.mas_left);
+        make.left.mas_equalTo(weakSelf.tagLabel.mas_right);
         make.top.mas_equalTo(weakSelf.titleLabel.mas_bottom).offset(14);
         make.width.mas_equalTo(sourceLabelSize.width);
         make.height.mas_equalTo(sourceLabelSize.height + 1);
@@ -89,14 +98,42 @@
         make.width.mas_equalTo(titleLabelSize.width);
         make.height.mas_equalTo(titleLabelSize.height);
     }];
-    // 来源布局
-    CGSize sourceLabelSize = [_model.source calculateSize:CGSizeMake(300, 12) font:self.sourceLabel.font];
-    [self.sourceLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(weakSelf.titleLabel.mas_left);
-        make.top.mas_equalTo(weakSelf.titleLabel.mas_bottom).offset(14);
-        make.width.mas_equalTo(sourceLabelSize.width);
-        make.height.mas_equalTo(sourceLabelSize.height + 1);
-    }];
+    if (_model.tag.length > 0) {
+        self.tagLabel.hidden = NO;
+        // 标签布局
+        CGSize tagLabelSize = [_model.tag calculateSize:CGSizeMake(100, 13) font:self.tagLabel.font];
+        [self.tagLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.left.mas_equalTo(weakSelf.titleLabel.mas_left);
+            make.bottom.mas_equalTo(-7);
+            make.width.mas_equalTo(tagLabelSize.width + 8);
+            make.height.mas_equalTo(tagLabelSize.height + 2);
+        }];
+        // 来源布局
+        CGSize sourceLabelSize = [_model.source calculateSize:CGSizeMake(300 - tagLabelSize.width - 16, 12) font:self.sourceLabel.font];
+        [self.sourceLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.left.mas_equalTo(weakSelf.tagLabel.mas_right).offset(8);
+            make.top.mas_equalTo(weakSelf.titleLabel.mas_bottom).offset(14);
+            make.width.mas_equalTo(sourceLabelSize.width);
+            make.height.mas_equalTo(sourceLabelSize.height + 1);
+        }];
+    } else {
+        self.tagLabel.hidden = YES;
+        // 标签布局
+        [self.tagLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.left.mas_equalTo(weakSelf.titleLabel.mas_left);
+            make.bottom.mas_equalTo(-7);
+            make.width.mas_equalTo(0);
+            make.height.mas_equalTo(0);
+        }];
+        // 来源布局
+        CGSize sourceLabelSize = [_model.source calculateSize:CGSizeMake(300, 12) font:self.sourceLabel.font];
+        [self.sourceLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.left.mas_equalTo(weakSelf.tagLabel.mas_right);
+            make.top.mas_equalTo(weakSelf.titleLabel.mas_bottom).offset(14);
+            make.width.mas_equalTo(sourceLabelSize.width);
+            make.height.mas_equalTo(sourceLabelSize.height + 1);
+        }];
+    }
     // 时钟布局
     [self.timeView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(weakSelf.sourceLabel.mas_right).offset(20);
@@ -130,6 +167,7 @@
             _titleLabel.textColor = SSColor(68, 68, 68);
         }
     }
+    self.tagLabel.text = _model.tag;
     self.sourceLabel.text = _model.source;
     self.timeLabel.text = timeString;
 }
@@ -164,6 +202,22 @@
         _titleLabel.numberOfLines = 0;
     }
     return _titleLabel;
+}
+
+- (UILabel *)tagLabel
+{
+    if (_tagLabel == nil) {
+        _tagLabel = [[UILabel alloc] init];
+        _tagLabel.font = [UIFont systemFontOfSize:11];
+        _tagLabel.backgroundColor = _bgColor;
+        _tagLabel.textColor = kOrangeColor;
+        _tagLabel.textAlignment = NSTextAlignmentCenter;
+        _tagLabel.layer.borderColor = kOrangeColor.CGColor;
+        _tagLabel.layer.borderWidth = 1;
+        _tagLabel.layer.cornerRadius = 2;
+        _tagLabel.hidden = YES;
+    }
+    return _tagLabel;
 }
 
 - (UILabel *)sourceLabel

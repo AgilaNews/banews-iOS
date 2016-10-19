@@ -16,6 +16,7 @@
 @property (nonatomic, strong) UIImageView *imageViewOne;    // 图片1
 @property (nonatomic, strong) UIImageView *imageViewTwo;    // 图片2
 @property (nonatomic, strong) UIImageView *imageViewThree;  // 图片3
+@property (nonatomic, strong) UILabel *tagLabel;            // 标签
 @property (nonatomic, strong) UILabel *sourceLabel;         // 来源
 @property (nonatomic, strong) UIImageView *timeView;        // 时钟
 @property (nonatomic, strong) UILabel *timeLabel;           // 发布时间
