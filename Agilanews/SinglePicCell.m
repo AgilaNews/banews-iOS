@@ -67,7 +67,7 @@
     CGSize tagLabelSize = [_model.tag calculateSize:CGSizeMake(100, 13) font:self.tagLabel.font];
     [self.tagLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(weakSelf.titleLabel.mas_left);
-        make.bottom.mas_equalTo(-6.5);
+        make.bottom.mas_equalTo(-6);
         make.width.mas_equalTo(tagLabelSize.width + 8);
         make.height.mas_equalTo(tagLabelSize.height + 2);
     }];
@@ -112,7 +112,7 @@
         CGSize tagLabelSize = [_model.tag calculateSize:CGSizeMake(100, 13) font:self.tagLabel.font];
         [self.tagLabel mas_updateConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(weakSelf.titleLabel.mas_left);
-            make.bottom.mas_equalTo(-6.5);
+            make.bottom.mas_equalTo(-6);
             make.width.mas_equalTo(tagLabelSize.width + 8);
             make.height.mas_equalTo(tagLabelSize.height + 2);
         }];
@@ -120,6 +120,7 @@
         CGSize sourceLabelSize = [_model.source calculateSize:CGSizeMake(kScreenWidth - 22 - 9 - 108 - 60 - 22 - tagLabelSize.width - 16, 12) font:self.sourceLabel.font];
         [self.sourceLabel mas_updateConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(weakSelf.tagLabel.mas_right).offset(8);
+            make.bottom.mas_equalTo(-7);
             make.width.mas_equalTo(sourceLabelSize.width);
             make.height.mas_equalTo(sourceLabelSize.height);
         }];
@@ -128,7 +129,7 @@
         // 标签布局
         [self.tagLabel mas_updateConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(weakSelf.titleLabel.mas_left);
-            make.bottom.mas_equalTo(-6.5);
+            make.bottom.mas_equalTo(-6);
             make.width.mas_equalTo(0);
             make.height.mas_equalTo(0);
         }];
@@ -136,6 +137,7 @@
         CGSize sourceLabelSize = [_model.source calculateSize:CGSizeMake(kScreenWidth - 22 - 9 - 108 - 60 - 22, 12) font:self.sourceLabel.font];
         [self.sourceLabel mas_updateConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(weakSelf.tagLabel.mas_right);
+            make.bottom.mas_equalTo(-7);
             make.width.mas_equalTo(sourceLabelSize.width);
             make.height.mas_equalTo(sourceLabelSize.height);
         }];

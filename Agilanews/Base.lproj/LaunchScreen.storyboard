@@ -36,7 +36,7 @@
                                 <color key="textColor" red="1" green="0.53333333329999999" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="v1.1.8" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jt7-Ln-3HV" userLabel="v1.1.7">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="v1.2.0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jt7-Ln-3HV" userLabel="v1.2.0">
                                 <constraints>
                                     <constraint firstAttribute="height" constant="11" id="Bnr-CA-9M7"/>
                                 </constraints>
@@ -65,7 +65,6 @@
                             <constraint firstItem="956-ZV-e55" firstAttribute="centerY" secondItem="n6h-wM-t0e" secondAttribute="centerY" id="En6-kq-AqL"/>
                             <constraint firstItem="XWZ-9H-yn8" firstAttribute="top" secondItem="n6h-wM-t0e" secondAttribute="bottom" constant="40" id="KaD-qp-hhP"/>
                             <constraint firstAttribute="trailingMargin" relation="lessThanOrEqual" secondItem="956-ZV-e55" secondAttribute="trailing" constant="21" id="LZP-UW-87a"/>
-                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="jt7-Ln-3HV" secondAttribute="bottom" constant="15" id="LlN-bI-GeJ"/>
                             <constraint firstItem="XWZ-9H-yn8" firstAttribute="centerX" secondItem="BdJ-ct-fAz" secondAttribute="centerX" id="Nhh-mL-hKd"/>
                             <constraint firstItem="jt7-Ln-3HV" firstAttribute="top" secondItem="XWZ-9H-yn8" secondAttribute="bottom" constant="6" id="RhW-yB-CBn"/>
                             <constraint firstItem="n6h-wM-t0e" firstAttribute="leading" secondItem="eaX-Mt-gs7" secondAttribute="trailing" constant="2" id="UEf-rV-F5L"/>
@@ -75,6 +74,7 @@
                             <constraint firstAttribute="trailing" secondItem="BdJ-ct-fAz" secondAttribute="trailing" constant="30" id="hoV-rc-9Bz"/>
                             <constraint firstItem="n6h-wM-t0e" firstAttribute="centerX" secondItem="BdJ-ct-fAz" secondAttribute="centerX" id="lQn-B0-GCN"/>
                             <constraint firstItem="BdJ-ct-fAz" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="pZi-mF-8uJ"/>
+                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="jt7-Ln-3HV" secondAttribute="bottom" constant="15" id="xpp-rj-6p9"/>
                         </constraints>
                     </view>
                 </viewController>
