@@ -429,6 +429,7 @@
     [[FIRMessaging messaging] unsubscribeFromTopic:@"/topics/ios_v1.1.5"];
     [[FIRMessaging messaging] unsubscribeFromTopic:@"/topics/ios_v1.1.6"];
     [[FIRMessaging messaging] unsubscribeFromTopic:@"/topics/ios_v1.1.7"];
+    [[FIRMessaging messaging] unsubscribeFromTopic:@"/topics/ios_v1.1.8"];
     if (refreshedToken.length) {
         DEF_PERSISTENT_SET_OBJECT(@"refreshToken", refreshedToken);
         [self uploadRefreshedToken:refreshedToken];
