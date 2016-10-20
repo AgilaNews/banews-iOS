@@ -121,7 +121,7 @@
         [self.sourceLabel mas_updateConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(weakSelf.tagLabel.mas_right).offset(8);
             make.bottom.mas_equalTo(-7);
-            make.width.mas_equalTo(MIN(sourceLabelSize.width, kScreenWidth - 22 - 9 - 108 - 50 - 22 - tagLabelSize.width - 16));
+            make.width.mas_equalTo(MIN(sourceLabelSize.width, kScreenWidth - 22 - 9 - 108 - 60 - 22 - tagLabelSize.width - 16));
             make.height.mas_equalTo(sourceLabelSize.height);
         }];
     } else {
