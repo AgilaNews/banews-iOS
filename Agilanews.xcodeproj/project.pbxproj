@@ -13,6 +13,8 @@
 		5F17B45D1DA8A5CD008EBD51 /* GoogleAuthUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F17B45C1DA8A5CD008EBD51 /* GoogleAuthUtilities.framework */; };
 		5F17B45F1DA8A5D6008EBD51 /* GoogleNetworkingUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F17B45E1DA8A5D6008EBD51 /* GoogleNetworkingUtilities.framework */; };
 		5F17B4871DAB78A0008EBD51 /* GuideChannelView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F17B4861DAB78A0008EBD51 /* GuideChannelView.m */; };
+		5F17B4921DB861F5008EBD51 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F17B4911DB861F5008EBD51 /* CoreData.framework */; };
+		5F17B4BE1DB86883008EBD51 /* Agila.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5F17B4BC1DB86883008EBD51 /* Agila.xcdatamodeld */; };
 		5F2E09FE1D86554900FEC0AC /* AppsFlyer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F2E09FD1D86554900FEC0AC /* AppsFlyer.framework */; };
 		5F2E0A001D86557A00FEC0AC /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F2E09FF1D86557A00FEC0AC /* iAd.framework */; };
 		5F2E0A1D1D87B47A00FEC0AC /* HZIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F2E0A161D87B47A00FEC0AC /* HZIndicatorView.m */; };
@@ -227,6 +229,8 @@
 		5F17B45E1DA8A5D6008EBD51 /* GoogleNetworkingUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleNetworkingUtilities.framework; sourceTree = "<group>"; };
 		5F17B4851DAB78A0008EBD51 /* GuideChannelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuideChannelView.h; sourceTree = "<group>"; };
 		5F17B4861DAB78A0008EBD51 /* GuideChannelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GuideChannelView.m; sourceTree = "<group>"; };
+		5F17B4911DB861F5008EBD51 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		5F17B4BD1DB86883008EBD51 /* Agila.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Agila.xcdatamodel; sourceTree = "<group>"; };
 		5F2E09FD1D86554900FEC0AC /* AppsFlyer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AppsFlyer.framework; sourceTree = "<group>"; };
 		5F2E09FF1D86557A00FEC0AC /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
 		5F2E0A151D87B47A00FEC0AC /* HZIndicatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HZIndicatorView.h; sourceTree = "<group>"; };
@@ -603,6 +607,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5F17B4921DB861F5008EBD51 /* CoreData.framework in Frameworks */,
 				5F5C638E1D938DA9005D3578 /* UserNotifications.framework in Frameworks */,
 				5F42C0BC1D34ED8E00B89651 /* Security.framework in Frameworks */,
 				5F2E0A001D86557A00FEC0AC /* iAd.framework in Frameworks */,
@@ -708,6 +713,7 @@
 				5F42BFC11D34E2F000B89651 /* LaunchScreen.storyboard */,
 				5F42BFC41D34E2F000B89651 /* Info.plist */,
 				5F5C638F1D93DC12005D3578 /* GoogleService-Info.plist */,
+				5F17B4BC1DB86883008EBD51 /* Agila.xcdatamodeld */,
 				5F42BFB31D34E2F000B89651 /* Supporting Files */,
 			);
 			path = Agilanews;
@@ -841,6 +847,7 @@
 		5F42C0B41D34ED6300B89651 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5F17B4911DB861F5008EBD51 /* CoreData.framework */,
 				5F17B45E1DA8A5D6008EBD51 /* GoogleNetworkingUtilities.framework */,
 				5F17B45C1DA8A5CD008EBD51 /* GoogleAuthUtilities.framework */,
 				5F17B45A1DA8A5C1008EBD51 /* GoogleAppUtilities.framework */,
@@ -1530,6 +1537,7 @@
 				5FF4B7D81D3A174900CC6704 /* UIScrollView+MJRefresh.m in Sources */,
 				5FF4B7AF1D38F7B200CC6704 /* MASConstraintMaker.m in Sources */,
 				5F42C09E1D34E42A00B89651 /* SVProgressAnimatedView.m in Sources */,
+				5F17B4BE1DB86883008EBD51 /* Agila.xcdatamodeld in Sources */,
 				5F5AE9761D54364E00A5A8B7 /* GuideRefreshView.m in Sources */,
 				5FF4B7711D37BD2C00CC6704 /* NSTimer+UhouAdditions.m in Sources */,
 				5F767A811D9CE82E00822BAC /* MJFoundation.m in Sources */,
@@ -1917,6 +1925,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		5F17B4BC1DB86883008EBD51 /* Agila.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				5F17B4BD1DB86883008EBD51 /* Agila.xcdatamodel */,
+			);
+			currentVersion = 5F17B4BD1DB86883008EBD51 /* Agila.xcdatamodel */;
+			path = Agila.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 5F42BFA81D34E2F000B89651 /* Project object */;
 }

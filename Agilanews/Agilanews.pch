@@ -21,6 +21,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import <AdSupport/AdSupport.h>
 #import <AdSupport/ASIdentifierManager.h>
+#import <CoreData/CoreData.h>
 
 
 ////////////////////////////////////////

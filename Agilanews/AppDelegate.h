@@ -19,6 +19,7 @@
 #else
 @property (strong, nonatomic) UIWindow *window;
 #endif
+
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) NSMutableArray *categoriesArray;
 @property (strong, nonatomic) LoginModel *model;
@@ -27,6 +28,13 @@
 @property (strong, nonatomic) NSMutableArray *eventArray;           // 打点记录
 @property (strong, nonatomic) NSMutableDictionary *refreshTimeDic;  // 刷新时间
 @property (assign, nonatomic) BOOL isStart;
+
+@property (nonatomic, retain, readonly) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, retain, readonly) NSManagedObjectModel *managedObjectModel;
+@property (nonatomic, retain, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+
+- (void)saveContext;
+- (NSURL *)applicationDocumentsDirectory;
 
 @end
 
