@@ -289,8 +289,10 @@
     NSArray *favoritesArray = [NSArray array];
     if (dataList.count >= 10) {
         favoritesArray = [dataList subarrayWithRange:NSMakeRange(0, 10)];
+        [dataList removeObjectsInRange:NSMakeRange(0, 10)];
     } else {
         favoritesArray = [NSArray arrayWithArray:dataList];
+        [dataList removeAllObjects];
     }
     NSMutableArray *paramsArray = [NSMutableArray array];
     for (LocalFavorite *localFavorite in favoritesArray) {
