@@ -197,6 +197,10 @@
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"LocalFavorite"
                                               inManagedObjectContext:kManagedObjectContext];
     [request setEntity:entity];
+    // 降序排列
+    NSSortDescriptor *byCollectTime = [NSSortDescriptor sortDescriptorWithKey:@"collect_time" ascending:NO];
+    NSArray *sortDescriptors = [NSMutableArray arrayWithObjects:byCollectTime, nil];
+    [request setSortDescriptors:sortDescriptors];
     NSError *error = nil;
     NSArray *objectResults = [kManagedObjectContext executeFetchRequest:request error:&error];
     if (objectResults.count > 0) {
