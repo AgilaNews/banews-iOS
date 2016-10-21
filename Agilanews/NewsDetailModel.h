@@ -18,7 +18,7 @@
 @property (nonatomic, strong) NSArray *imgs;            // 图片
 @property (nonatomic, strong) NSString *news_id;        // 新闻ID
 @property (nonatomic, strong) NSNumber *likedCount;     // 点赞数
-@property (nonatomic, assign) NSNumber *public_time;    // 发布时间
+@property (nonatomic, strong) NSNumber *public_time;    // 发布时间
 @property (nonatomic, strong) NSArray *recommend_news;  // 推荐新闻
 @property (nonatomic, strong) NSString *title;          // 标题
 @property (nonatomic, strong) NSString *source;         // 来源
