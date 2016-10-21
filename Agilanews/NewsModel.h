@@ -20,7 +20,7 @@
 @property (nonatomic, strong) NSNumber *likedCount; // 点赞数
 @property (nonatomic, strong) NSNumber *tpl;        // 模版号
 @property (nonatomic, strong) NSNumber *commentCount; // 评论数
-@property (nonatomic, strong) NSNumber *collect_id; // 收藏ID
+@property (nonatomic, strong) NSString *collect_id; // 收藏ID
 @property (nonatomic, strong) NSString *share_url;  // 分享链接
 @property (nonatomic, strong) NSArray  *videos;     // 视频数组
 

@@ -72,6 +72,7 @@
 #import "KeychainItemWrapper.h"
 #import "XWDragCellCollectionView.h"
 #import <GoogleSignIn/GoogleSignIn.h>
+#import "CoreDataManager.h"
 
 
 ////////////////////////////////////////

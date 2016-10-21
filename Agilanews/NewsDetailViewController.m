@@ -435,23 +435,15 @@
         [params setObject:_model.news_id forKey:@"news_id"];
         [params setObject:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]] forKey:@"ctime"];
         NSArray *paramsArray = [NSArray arrayWithObject:params];
+        __weak typeof(self) weakSelf = self;
         [[SSHttpRequest sharedInstance] post:kHomeUrl_Collect params:paramsArray contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
             NSArray *result = responseObj;
             if (result) {
-                _collectID = [NSNumber numberWithInteger:[result.firstObject[@"collect_id"] integerValue]];
+                weakSelf.collectID = result.firstObject[@"collect_id"];
                 button.selected = YES;
                 [SVProgressHUD showSuccessWithStatus:@"Save the news and read it later by entering 'Favorites'"];
-                
-                NSString *htmlFilePath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/%@.data",appDelegate.model.user_id]];
-                NSMutableDictionary *dataDic = [NSKeyedUnarchiver unarchiveObjectWithFile:htmlFilePath];
-                if ([dataDic isKindOfClass:[NSMutableDictionary class]] && dataDic.count > 0) {
-                    [dataDic setObject:_detailModel forKey:_collectID];
-                } else {
-                    dataDic = [NSMutableDictionary dictionary];
-                    [dataDic setObject:_detailModel forKey:_collectID];
-                }
-                [NSKeyedArchiver archiveRootObject:dataDic toFile:htmlFilePath];
-                
+                [[CoreDataManager sharedInstance] addAccountFavoriteWithCollectID:weakSelf.collectID DetailModel:_detailModel];
+
                 // 打点-收藏成功-010215
                 NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
                                                [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
@@ -478,15 +470,8 @@
         } isShowHUD:YES];
     } else if (_detailModel && _model) {
         // 新闻详情本地缓存
-        NSString *htmlFilePath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/favorites.data"]];
-        NSMutableArray *dataList = [NSKeyedUnarchiver unarchiveObjectWithFile:htmlFilePath];
-        if ([dataList isKindOfClass:[NSMutableArray class]] && dataList.count > 0) {
-            [dataList addObject:[NSArray arrayWithObjects:_model, _detailModel, [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], nil]];
-        } else {
-            dataList = [NSMutableArray array];
-            [dataList addObject:[NSArray arrayWithObjects:_model, _detailModel, [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], nil]];
-        }
-        [NSKeyedArchiver archiveRootObject:dataList toFile:htmlFilePath];
+        NSString *time = [NSString stringWithFormat:@"%@",[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]]];
+        [[CoreDataManager sharedInstance] addLocalFavoriteWithNewsID:_model.news_id DetailModel:_detailModel CollectTime:time NewsModel:_model];
         button.selected = YES;
         [SVProgressHUD showSuccessWithStatus:@"Save the news and read it later by entering 'Favorites'"];
         // 打点-收藏成功-010215
@@ -519,17 +504,7 @@
             
         } isShowHUD:NO];
     } else {
-        NSString *htmlFilePath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/favorites.data"]];
-        NSMutableArray *dataList = [NSKeyedUnarchiver unarchiveObjectWithFile:htmlFilePath];
-        if ([dataList isKindOfClass:[NSMutableArray class]] && dataList.count > 0) {
-            for (NSArray *models in dataList) {
-                NewsModel *model = models.firstObject;
-                if ([model.news_id isEqualToString:_model.news_id]) {
-                    [dataList removeObject:models];
-                    [NSKeyedArchiver archiveRootObject:dataList toFile:htmlFilePath];
-                }
-            }
-        }
+        [[CoreDataManager sharedInstance] removeLocalFavoriteModelWithNewsIDs:[NSArray arrayWithObject:_model.news_id]];
         button.selected = NO;
     }
 }
@@ -1096,20 +1071,12 @@
                     [button setImage:[UIImage imageNamed:@"icon_article_collect_default"] forState:UIControlStateNormal];
                     [button setImage:[UIImage imageNamed:@"icon_article_collect_select"] forState:UIControlStateSelected];
                     [button setImage:[UIImage imageNamed:@"icon_article_collect_select"] forState:UIControlStateHighlighted];
-                    if (![_detailModel.collect_id isEqualToNumber:@0]) {
+                    if (![_detailModel.collect_id isEqualToString:@"0"]) {
                         button.selected = YES;
                         _collectID = _detailModel.collect_id;
                     } else {
-                        NSString *htmlFilePath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/favorites.data"]];
-                        NSMutableArray *dataList = [NSKeyedUnarchiver unarchiveObjectWithFile:htmlFilePath];
-                        if ([dataList isKindOfClass:[NSMutableArray class]] && dataList.count > 0) {
-                            for (NSArray *models in dataList) {
-                                NewsModel *model = models.firstObject;
-                                if ([model.news_id isEqualToString:_model.news_id]) {
-                                    button.selected = YES;
-                                    break;
-                                }
-                            }
+                        if ([[CoreDataManager sharedInstance] searchLocalFavoriteModelWithNewsID:_model.news_id]) {
+                            button.selected = YES;
                         }
                     }
                     break;
