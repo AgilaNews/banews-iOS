@@ -498,7 +498,7 @@
 - (void)deleteCollectNewsWithButton:(UIButton *)button
 {
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    if (appDelegate.model) {
+    if (appDelegate.model && _collectID) {
         NSMutableDictionary *params = [NSMutableDictionary dictionary];
         [params setObject:@[_collectID] forKey:@"ids"];
         [[SSHttpRequest sharedInstance] DELETE:kHomeUrl_Collect params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
