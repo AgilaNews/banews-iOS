@@ -284,7 +284,7 @@
             _blankView.backgroundColor = [UIColor whiteColor];
             _blankView.userInteractionEnabled = YES;
             [weakSelf.view addSubview:_blankView];
-            _failureView = [[UIImageView alloc] initWithFrame:CGRectMake((_blankView.width - 28) * .5, 164 / kScreenHeight * 568 + 64, 28, 26)];
+            _failureView = [[UIImageView alloc] initWithFrame:CGRectMake((_blankView.width - 28) * .5, 200 / kScreenHeight * 568 + 64, 28, 26)];
             _failureView.image = [UIImage imageNamed:@"icon_common_netoff"];
             [_blankView addSubview:_failureView];
             _blankLabel = [[UILabel alloc] initWithFrame:CGRectMake((kScreenWidth - 300) * .5, _failureView.bottom + 13, 300, 20)];
@@ -294,7 +294,7 @@
             _blankLabel.font = [UIFont systemFontOfSize:16];
             [_blankView addSubview:_blankLabel];
             UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:weakSelf action:@selector(requestData)];
-            [weakSelf.blankView addGestureRecognizer:tap];
+            [_blankView addGestureRecognizer:tap];
         }
         if ([AFNetworkReachabilityManager sharedManager].networkReachabilityStatus == AFNetworkReachabilityStatusNotReachable) {
             weakSelf.blankLabel.text = @"Network unavailable";
@@ -311,10 +311,13 @@
  */
 - (void)requestData
 {
-    if ([[NSDate date] timeIntervalSince1970] - _afterFailureRequsetTime >= 1) {
-        [self requestDataWithNewsID:_model.news_id ShowHUD:NO];
+    if (self.blankView) {
+        [self.blankView removeFromSuperview];
+        self.blankView = nil;
+        SVProgressHUD.defaultStyle = SVProgressHUDStyleCustom;
+        [SVProgressHUD show];
     }
-    _afterFailureRequsetTime = [[NSDate date] timeIntervalSince1970];
+    [self requestDataWithNewsID:_model.news_id ShowHUD:NO];
 }
 
 /**
