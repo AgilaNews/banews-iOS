@@ -581,8 +581,8 @@
 - (void)setDataList:(NSMutableArray *)dataList
 {
     _dataList = dataList;
-    
-    if (_dataList.count > 5) {
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    if (_dataList.count > 5 && appDelegate.model) {
         __weak typeof(self) weakSelf = self;
         [self.tableView addLegendFooterWithRefreshingBlock:^{
             [weakSelf tableViewDidTriggerFooterRefresh];
