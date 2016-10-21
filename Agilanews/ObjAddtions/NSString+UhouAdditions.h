@@ -128,6 +128,7 @@ typedef enum : NSUInteger {
 
 //md5加密
 + (NSString *)encryptPassword:(NSString *)str;
++ (NSString *)md5:(NSString *)inPutText;
 
 - (NSString *) stringFromMD5;
 
