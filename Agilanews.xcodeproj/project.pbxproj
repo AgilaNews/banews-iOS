@@ -1424,7 +1424,7 @@
 				TargetAttributes = {
 					5F42BFAF1D34E2F000B89651 = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = NV593L7ML4;
+						DevelopmentTeam = CA8M4AL9S7;
 						LastSwiftMigration = 0800;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
@@ -1781,6 +1781,7 @@
 				CODE_SIGN_ENTITLEMENTS = Agila.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: zhendong Wang (4PX74E3WFB)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: zhendong Wang (4PX74E3WFB)";
+				DEVELOPMENT_TEAM = CA8M4AL9S7;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Agilanews/Masonry/ShareSDK",
@@ -1810,7 +1811,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.banews.agila;
 				PRODUCT_NAME = Agila;
-				PROVISIONING_PROFILE = "e30e258b-1d08-441d-bca1-4af9c9baf228";
+				PROVISIONING_PROFILE = "617d1ffd-5d76-4ff6-b6e9-864c02bf0153";
+				PROVISIONING_PROFILE_SPECIFIER = iOS_Development;
 				SWIFT_OBJC_BRIDGING_HEADER = "Agila-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
@@ -1827,6 +1829,7 @@
 				CODE_SIGN_ENTITLEMENTS = Agila.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: zhendong Wang (CA8M4AL9S7)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: zhendong Wang (CA8M4AL9S7)";
+				DEVELOPMENT_TEAM = CA8M4AL9S7;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Agilanews/Masonry/ShareSDK",
@@ -1857,6 +1860,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.banews.agila;
 				PRODUCT_NAME = Agila;
 				PROVISIONING_PROFILE = "19aff322-757e-4984-b26e-c39039e620dc";
+				PROVISIONING_PROFILE_SPECIFIER = iOS_Distribution_Release;
 				SWIFT_OBJC_BRIDGING_HEADER = "Agila-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 				VALID_ARCHS = "arm64 armv7s armv7";
@@ -1914,6 +1918,7 @@
 				CODE_SIGN_ENTITLEMENTS = Agila.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: zhendong Wang (CA8M4AL9S7)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: zhendong Wang (CA8M4AL9S7)";
+				DEVELOPMENT_TEAM = CA8M4AL9S7;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Agilanews/Masonry/ShareSDK",
@@ -1943,7 +1948,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.banews.agila;
 				PRODUCT_NAME = Agila;
-				PROVISIONING_PROFILE = "ecd1a835-86f5-467d-ae87-7af9cc086716";
+				PROVISIONING_PROFILE = "4e635bc1-2af2-452a-823a-edcd205fbd05";
+				PROVISIONING_PROFILE_SPECIFIER = "iOS Distribution_AdHoc";
 				SWIFT_OBJC_BRIDGING_HEADER = "Agila-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 				VALID_ARCHS = "arm64 armv7s armv7";
