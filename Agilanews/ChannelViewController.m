@@ -194,7 +194,11 @@
                 NSMutableDictionary *eventDic = [NSMutableDictionary dictionary];
                 [eventDic setObject:@"050101" forKey:@"id"];
                 [eventDic setObject:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970] * 1000] forKey:@"time"];
-                [eventDic setObject:currentVersion forKey:@"version"];
+                if (currentVersion) {
+                    [eventDic setObject:currentVersion forKey:@"version"];
+                } else {
+                    [eventDic setObject:kChannelVersion forKey:@"version"];
+                }
                 NSMutableArray *channels = [NSMutableArray array];
                 for (CategoriesModel *model in _dataList) {
                     [channels addObject:model.channelID];
