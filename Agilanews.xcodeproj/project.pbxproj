@@ -18,9 +18,8 @@
 		5F17B4DB1DB87682008EBD51 /* CoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F17B4DA1DB87682008EBD51 /* CoreDataManager.m */; };
 		5F17B4E01DB8B430008EBD51 /* AccountFavorite+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F17B4DD1DB8B430008EBD51 /* AccountFavorite+CoreDataClass.m */; };
 		5F17B4E11DB8B430008EBD51 /* AccountFavorite+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F17B4DF1DB8B430008EBD51 /* AccountFavorite+CoreDataProperties.m */; };
-		5F17B4EC1DB8D13D008EBD51 /* LocalFavorite+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F17B4E91DB8D13D008EBD51 /* LocalFavorite+CoreDataClass.m */; };
-		5F17B4F01DB8E32B008EBD51 /* LocalFavorite+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F17B4EF1DB8E32B008EBD51 /* LocalFavorite+CoreDataProperties.m */; };
-		5F17B4F31DB8E701008EBD51 /* LocalFavorite+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F17B4F21DB8E701008EBD51 /* LocalFavorite+CoreDataProperties.m */; };
+		5F17B4FE1DB9E45C008EBD51 /* LocalFavorite+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F17B4FB1DB9E45C008EBD51 /* LocalFavorite+CoreDataClass.m */; };
+		5F17B4FF1DB9E45C008EBD51 /* LocalFavorite+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F17B4FD1DB9E45C008EBD51 /* LocalFavorite+CoreDataProperties.m */; };
 		5F2E09FE1D86554900FEC0AC /* AppsFlyer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F2E09FD1D86554900FEC0AC /* AppsFlyer.framework */; };
 		5F2E0A001D86557A00FEC0AC /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F2E09FF1D86557A00FEC0AC /* iAd.framework */; };
 		5F2E0A1D1D87B47A00FEC0AC /* HZIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F2E0A161D87B47A00FEC0AC /* HZIndicatorView.m */; };
@@ -243,11 +242,10 @@
 		5F17B4DD1DB8B430008EBD51 /* AccountFavorite+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AccountFavorite+CoreDataClass.m"; sourceTree = "<group>"; };
 		5F17B4DE1DB8B430008EBD51 /* AccountFavorite+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AccountFavorite+CoreDataProperties.h"; sourceTree = "<group>"; };
 		5F17B4DF1DB8B430008EBD51 /* AccountFavorite+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AccountFavorite+CoreDataProperties.m"; sourceTree = "<group>"; };
-		5F17B4E81DB8D13D008EBD51 /* LocalFavorite+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "LocalFavorite+CoreDataClass.h"; path = "../../LocalFavorite+CoreDataClass.h"; sourceTree = "<group>"; };
-		5F17B4E91DB8D13D008EBD51 /* LocalFavorite+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "LocalFavorite+CoreDataClass.m"; path = "../../LocalFavorite+CoreDataClass.m"; sourceTree = "<group>"; };
-		5F17B4EF1DB8E32B008EBD51 /* LocalFavorite+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "LocalFavorite+CoreDataProperties.m"; path = "../../LocalFavorite+CoreDataProperties.m"; sourceTree = "<group>"; };
-		5F17B4F11DB8E701008EBD51 /* LocalFavorite+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "LocalFavorite+CoreDataProperties.h"; sourceTree = SOURCE_ROOT; };
-		5F17B4F21DB8E701008EBD51 /* LocalFavorite+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "LocalFavorite+CoreDataProperties.m"; sourceTree = SOURCE_ROOT; };
+		5F17B4FA1DB9E45B008EBD51 /* LocalFavorite+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "LocalFavorite+CoreDataClass.h"; sourceTree = "<group>"; };
+		5F17B4FB1DB9E45C008EBD51 /* LocalFavorite+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "LocalFavorite+CoreDataClass.m"; sourceTree = "<group>"; };
+		5F17B4FC1DB9E45C008EBD51 /* LocalFavorite+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "LocalFavorite+CoreDataProperties.h"; sourceTree = "<group>"; };
+		5F17B4FD1DB9E45C008EBD51 /* LocalFavorite+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "LocalFavorite+CoreDataProperties.m"; sourceTree = "<group>"; };
 		5F2E09FD1D86554900FEC0AC /* AppsFlyer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AppsFlyer.framework; sourceTree = "<group>"; };
 		5F2E09FF1D86557A00FEC0AC /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
 		5F2E0A151D87B47A00FEC0AC /* HZIndicatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HZIndicatorView.h; sourceTree = "<group>"; };
@@ -682,10 +680,10 @@
 		5F17B4D21DB87574008EBD51 /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
-				5F17B4E81DB8D13D008EBD51 /* LocalFavorite+CoreDataClass.h */,
-				5F17B4E91DB8D13D008EBD51 /* LocalFavorite+CoreDataClass.m */,
-				5F17B4F11DB8E701008EBD51 /* LocalFavorite+CoreDataProperties.h */,
-				5F17B4F21DB8E701008EBD51 /* LocalFavorite+CoreDataProperties.m */,
+				5F17B4FA1DB9E45B008EBD51 /* LocalFavorite+CoreDataClass.h */,
+				5F17B4FB1DB9E45C008EBD51 /* LocalFavorite+CoreDataClass.m */,
+				5F17B4FC1DB9E45C008EBD51 /* LocalFavorite+CoreDataProperties.h */,
+				5F17B4FD1DB9E45C008EBD51 /* LocalFavorite+CoreDataProperties.m */,
 				5F17B4DC1DB8B430008EBD51 /* AccountFavorite+CoreDataClass.h */,
 				5F17B4DD1DB8B430008EBD51 /* AccountFavorite+CoreDataClass.m */,
 				5F17B4DE1DB8B430008EBD51 /* AccountFavorite+CoreDataProperties.h */,
@@ -1554,6 +1552,7 @@
 				5F8E264E1D7428E100B48130 /* BigPicCell.m in Sources */,
 				5FF4B7731D37BD2C00CC6704 /* UIApplication+ActivityViewController.m in Sources */,
 				5F42C0A01D34E42A00B89651 /* SVProgressHUD.m in Sources */,
+				5F17B4FE1DB9E45C008EBD51 /* LocalFavorite+CoreDataClass.m in Sources */,
 				5F42C08E1D34E41D00B89651 /* UIImage+WebP.m in Sources */,
 				5FF4B6EE1D3645DE00CC6704 /* CategoriesModel.m in Sources */,
 				5F571F751D589BEF00604CDD /* NetType.m in Sources */,
@@ -1616,9 +1615,8 @@
 				5FF4B7CF1D3A174900CC6704 /* MJRefreshComponent.m in Sources */,
 				5FF4B6F11D372A9300CC6704 /* BaseNavigationController.m in Sources */,
 				5F767A891D9CE82E00822BAC /* NSString+MJExtension.m in Sources */,
+				5F17B4FF1DB9E45C008EBD51 /* LocalFavorite+CoreDataProperties.m in Sources */,
 				5F767A641D9BBD4E00822BAC /* XWDragCellCollectionView.m in Sources */,
-				5F17B4F31DB8E701008EBD51 /* LocalFavorite+CoreDataProperties.m in Sources */,
-				5F17B4F01DB8E32B008EBD51 /* LocalFavorite+CoreDataProperties.m in Sources */,
 				5FF4B78A1D38DEA400CC6704 /* NoPicCell.m in Sources */,
 				5F6462711D45F64A008EEDEC /* FavoritesViewController.m in Sources */,
 				5FF4B7D61D3A174900CC6704 /* MJRefreshLegendHeader.m in Sources */,
@@ -1643,7 +1641,6 @@
 				5FF4B6F41D372B5500CC6704 /* UINavigationBar+Awesome.m in Sources */,
 				5FE722201D506CD70026BFC3 /* FeedbackTextField.m in Sources */,
 				5F767A881D9CE82E00822BAC /* NSObject+MJProperty.m in Sources */,
-				5F17B4EC1DB8D13D008EBD51 /* LocalFavorite+CoreDataClass.m in Sources */,
 				5F767A861D9CE82E00822BAC /* NSObject+MJCoding.m in Sources */,
 				5FF4B78D1D38DEC000CC6704 /* OnlyPicCell.m in Sources */,
 				5F42C0A11D34E42A00B89651 /* SVRadialGradientLayer.m in Sources */,

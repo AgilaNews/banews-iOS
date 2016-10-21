@@ -2,7 +2,7 @@
 //  LocalFavorite+CoreDataProperties.h
 //  Agilanews
 //
-//  Created by 张思思 on 16/10/20.
+//  Created by 张思思 on 16/10/21.
 //  Copyright © 2016年 banews. All rights reserved.
 //
 
@@ -15,8 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSFetchRequest<LocalFavorite *> *)fetchRequest;
 
-@property (nullable, nonatomic, retain) NSObject *detail_model;
 @property (nullable, nonatomic, copy) NSString *collect_time;
+@property (nullable, nonatomic, retain) NSObject *detail_model;
 @property (nullable, nonatomic, copy) NSString *news_id;
 @property (nullable, nonatomic, retain) NSObject *news_model;
 

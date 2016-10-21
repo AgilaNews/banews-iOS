@@ -2,7 +2,7 @@
 //  LocalFavorite+CoreDataProperties.m
 //  Agilanews
 //
-//  Created by 张思思 on 16/10/20.
+//  Created by 张思思 on 16/10/21.
 //  Copyright © 2016年 banews. All rights reserved.
 //
 
@@ -14,8 +14,8 @@
 	return [[NSFetchRequest alloc] initWithEntityName:@"LocalFavorite"];
 }
 
-@dynamic detail_model;
 @dynamic collect_time;
+@dynamic detail_model;
 @dynamic news_id;
 @dynamic news_model;
 
