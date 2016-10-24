@@ -534,24 +534,26 @@
     [params setObject:_commentTextView.textView.text forKey:@"comment_detail"];
     [[SSHttpRequest sharedInstance] post:kHomeUrl_Comment params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
         CommentModel *model = [CommentModel mj_objectWithKeyValues:responseObj[@"comment"]];
-        [weakSelf.commentArray insertObject:model atIndex:0];
-        _commentsLabel.hidden = NO;
-        _detailModel.commentCount = [NSNumber numberWithInteger:_detailModel.commentCount.integerValue + 1];
-        int width;
-        if (_detailModel.commentCount.integerValue < 10) {
-            width = 12;
-        } else if (_detailModel.commentCount.integerValue < 100) {
-            width = 16;
-        } else if (_detailModel.commentCount.integerValue < 1000) {
-            width = 22;
-        } else {
-            width = 28;
-        }
-        _commentsLabel.width = width;
-        if (_detailModel.commentCount.integerValue < 1000) {
-            _commentsLabel.text = _detailModel.commentCount.stringValue;
-        } else {
-            _commentsLabel.text = @"999+";
+        if (model) {
+            [weakSelf.commentArray insertObject:model atIndex:0];
+            _commentsLabel.hidden = NO;
+            _detailModel.commentCount = [NSNumber numberWithInteger:_detailModel.commentCount.integerValue + 1];
+            int width;
+            if (_detailModel.commentCount.integerValue < 10) {
+                width = 12;
+            } else if (_detailModel.commentCount.integerValue < 100) {
+                width = 16;
+            } else if (_detailModel.commentCount.integerValue < 1000) {
+                width = 22;
+            } else {
+                width = 28;
+            }
+            _commentsLabel.width = width;
+            if (_detailModel.commentCount.integerValue < 1000) {
+                _commentsLabel.text = _detailModel.commentCount.stringValue;
+            } else {
+                _commentsLabel.text = @"999+";
+            }
         }
         [_tableView reloadData];
         [_commentTextView.textView resignFirstResponder];
