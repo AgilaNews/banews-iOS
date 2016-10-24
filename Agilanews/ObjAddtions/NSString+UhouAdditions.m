@@ -63,18 +63,18 @@
 - (CGSize)calculateSize:(CGSize)size font:(UIFont *)font {
     CGSize expectedLabelSize = CGSizeZero;
     
-    if ([UIDevice currentDevice].systemVersion.floatValue >= 7.0) {
+//    if ([UIDevice currentDevice].systemVersion.floatValue >= 7.0) {
         NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
         paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
         NSDictionary *attributes = @{NSFontAttributeName:font, NSParagraphStyleAttributeName:paragraphStyle};
         
         expectedLabelSize = [self boundingRectWithSize:size options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil].size;
-    }
-    else {
-        expectedLabelSize = [self sizeWithFont:font
-                             constrainedToSize:size
-                                 lineBreakMode:NSLineBreakByWordWrapping];
-    }
+//    }
+//    else {
+//        expectedLabelSize = [self sizeWithFont:font
+//                             constrainedToSize:size
+//                                 lineBreakMode:NSLineBreakByWordWrapping];
+//    }
     
     return CGSizeMake(ceil(expectedLabelSize.width), ceil(expectedLabelSize.height));
 }
