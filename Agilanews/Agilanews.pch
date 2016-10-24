@@ -23,7 +23,6 @@
 #import <AdSupport/ASIdentifierManager.h>
 #import <CoreData/CoreData.h>
 
-
 ////////////////////////////////////////
 #import "Macros.h"
 #import "Interface.h"

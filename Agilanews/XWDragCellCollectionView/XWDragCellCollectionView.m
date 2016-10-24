@@ -105,7 +105,15 @@ typedef NS_ENUM(NSUInteger, XWDragCellCollectionViewScrollDirection) {
         }
     }
     UICollectionViewCell *cell = [self cellForItemAtIndexPath:_originalIndexPath];
-    UIView *tempMoveCell = [cell snapshotViewAfterScreenUpdates:NO];
+    UIView *tempMoveCell = nil;
+    NSString *deviceModel = [NetType getCurrentDeviceModel];
+    if ([deviceModel isEqualToString:@"iPhone7"] || [deviceModel isEqualToString:@"iPhone7Plus"]) {
+//        if ([deviceModel isEqualToString:@"iPhoneSimulator"]) {
+        UIImage *image = [self imageFromView:cell];
+        tempMoveCell = [[UIImageView alloc] initWithImage:image];
+    } else {
+        tempMoveCell = [cell snapshotViewAfterScreenUpdates:NO];
+    }
     cell.hidden = YES;
     _tempMoveCell = tempMoveCell;
     _tempMoveCell.frame = cell.frame;
@@ -121,6 +129,14 @@ typedef NS_ENUM(NSUInteger, XWDragCellCollectionViewScrollDirection) {
     if ([self.delegate respondsToSelector:@selector(dragCellCollectionView:cellWillBeginMoveAtIndexPath:)]) {
         [self.delegate dragCellCollectionView:self cellWillBeginMoveAtIndexPath:_originalIndexPath];
     }
+}
+- (UIImage *)imageFromView:(UIView *)snapView {
+    UIGraphicsBeginImageContext(snapView.frame.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    [snapView.layer renderInContext:context];
+    UIImage *targetImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return targetImage;
 }
 /**
  *  手势拖动

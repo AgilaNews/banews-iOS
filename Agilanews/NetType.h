@@ -7,9 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#include <sys/types.h>
+#include <sys/sysctl.h>
 
 @interface NetType : NSObject
 
 + (NSString *)getNetType;
+
++ (NSString *)getCurrentDeviceModel;
 
 @end
