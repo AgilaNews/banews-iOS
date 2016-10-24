@@ -13,7 +13,7 @@
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *dataList;
 @property (nonatomic, strong) NSMutableArray *detailList;
-@property (nonatomic, strong) NSMutableIndexSet *indexSet;
+@property (nonatomic, strong) NSMutableArray *needRemoveNews;
 @property (nonatomic, strong) UIButton *editBtn;
 @property (nonatomic, strong) NSMutableArray *selectedList;
 @property (nonatomic, strong) NSMutableArray *selectedDetail;

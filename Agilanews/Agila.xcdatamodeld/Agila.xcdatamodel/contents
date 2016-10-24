@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11232" systemVersion="15G31" minimumToolsVersion="Automatic" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
+    <entity name="AccountFavorite" representedClassName=".AccountFavorite" syncable="YES">
+        <attribute name="collect_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="detail_model" optional="YES" attributeType="Transformable" syncable="YES"/>
+    </entity>
+    <entity name="LocalFavorite" representedClassName="LocalFavorite" syncable="YES">
+        <attribute name="collect_time" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="detail_model" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="news_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="news_model" optional="YES" attributeType="Transformable" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="AccountFavorite" positionX="-63" positionY="-18" width="128" height="75"/>
+        <element name="LocalFavorite" positionX="124" positionY="-18" width="128" height="103"/>
+    </elements>
+</model>

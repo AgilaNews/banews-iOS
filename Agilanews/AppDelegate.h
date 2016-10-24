@@ -19,6 +19,7 @@
 #else
 @property (strong, nonatomic) UIWindow *window;
 #endif
+
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) NSMutableArray *categoriesArray;
 @property (strong, nonatomic) LoginModel *model;

@@ -295,7 +295,7 @@
             _blankView.backgroundColor = [UIColor whiteColor];
             _blankView.userInteractionEnabled = YES;
             [weakSelf.view addSubview:_blankView];
-            _failureView = [[UIImageView alloc] initWithFrame:CGRectMake((_blankView.width - 28) * .5, 164 / kScreenHeight * 568 + 64, 28, 26)];
+            _failureView = [[UIImageView alloc] initWithFrame:CGRectMake((_blankView.width - 28) * .5, 200 / kScreenHeight * 568 + 64, 28, 26)];
             _failureView.image = [UIImage imageNamed:@"icon_common_netoff"];
             [_blankView addSubview:_failureView];
             _blankLabel = [[UILabel alloc] initWithFrame:CGRectMake((kScreenWidth - 300) * .5, _failureView.bottom + 13, 300, 20)];
@@ -305,7 +305,7 @@
             _blankLabel.font = [UIFont systemFontOfSize:16];
             [_blankView addSubview:_blankLabel];
             UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:weakSelf action:@selector(requestData)];
-            [weakSelf.blankView addGestureRecognizer:tap];
+            [_blankView addGestureRecognizer:tap];
         }
         if ([AFNetworkReachabilityManager sharedManager].networkReachabilityStatus == AFNetworkReachabilityStatusNotReachable) {
             weakSelf.blankLabel.text = @"Network unavailable";
@@ -322,10 +322,13 @@
  */
 - (void)requestData
 {
-    if ([[NSDate date] timeIntervalSince1970] - _afterFailureRequsetTime >= 1) {
-        [self requestDataWithNewsID:_model.news_id ShowHUD:NO];
+    if (self.blankView) {
+        [self.blankView removeFromSuperview];
+        self.blankView = nil;
+        SVProgressHUD.defaultStyle = SVProgressHUDStyleCustom;
+        [SVProgressHUD show];
     }
-    _afterFailureRequsetTime = [[NSDate date] timeIntervalSince1970];
+    [self requestDataWithNewsID:_model.news_id ShowHUD:NO];
 }
 
 /**
@@ -446,23 +449,15 @@
         [params setObject:_model.news_id forKey:@"news_id"];
         [params setObject:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]] forKey:@"ctime"];
         NSArray *paramsArray = [NSArray arrayWithObject:params];
+        __weak typeof(self) weakSelf = self;
         [[SSHttpRequest sharedInstance] post:kHomeUrl_Collect params:paramsArray contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
             NSArray *result = responseObj;
             if (result) {
-                _collectID = [NSNumber numberWithInteger:[result.firstObject[@"collect_id"] integerValue]];
+                weakSelf.collectID = result.firstObject[@"collect_id"];
                 button.selected = YES;
                 [SVProgressHUD showSuccessWithStatus:@"Save the news and read it later by entering 'Favorites'"];
-                
-                NSString *htmlFilePath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/%@.data",appDelegate.model.user_id]];
-                NSMutableDictionary *dataDic = [NSKeyedUnarchiver unarchiveObjectWithFile:htmlFilePath];
-                if ([dataDic isKindOfClass:[NSMutableDictionary class]] && dataDic.count > 0) {
-                    [dataDic setObject:_detailModel forKey:_collectID];
-                } else {
-                    dataDic = [NSMutableDictionary dictionary];
-                    [dataDic setObject:_detailModel forKey:_collectID];
-                }
-                [NSKeyedArchiver archiveRootObject:dataDic toFile:htmlFilePath];
-                
+                [[CoreDataManager sharedInstance] addAccountFavoriteWithCollectID:weakSelf.collectID DetailModel:_detailModel];
+
                 // 打点-收藏成功-010215
                 NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
                                                [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
@@ -489,15 +484,8 @@
         } isShowHUD:YES];
     } else if (_detailModel && _model) {
         // 新闻详情本地缓存
-        NSString *htmlFilePath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/favorites.data"]];
-        NSMutableArray *dataList = [NSKeyedUnarchiver unarchiveObjectWithFile:htmlFilePath];
-        if ([dataList isKindOfClass:[NSMutableArray class]] && dataList.count > 0) {
-            [dataList addObject:[NSArray arrayWithObjects:_model, _detailModel, [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], nil]];
-        } else {
-            dataList = [NSMutableArray array];
-            [dataList addObject:[NSArray arrayWithObjects:_model, _detailModel, [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], nil]];
-        }
-        [NSKeyedArchiver archiveRootObject:dataList toFile:htmlFilePath];
+        NSString *time = [NSString stringWithFormat:@"%@",[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]]];
+        [[CoreDataManager sharedInstance] addLocalFavoriteWithNewsID:_model.news_id DetailModel:_detailModel CollectTime:time NewsModel:_model];
         button.selected = YES;
         [SVProgressHUD showSuccessWithStatus:@"Save the news and read it later by entering 'Favorites'"];
         // 打点-收藏成功-010215
@@ -521,7 +509,7 @@
 - (void)deleteCollectNewsWithButton:(UIButton *)button
 {
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    if (appDelegate.model) {
+    if (appDelegate.model && _collectID) {
         NSMutableDictionary *params = [NSMutableDictionary dictionary];
         [params setObject:@[_collectID] forKey:@"ids"];
         [[SSHttpRequest sharedInstance] DELETE:kHomeUrl_Collect params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
@@ -530,19 +518,7 @@
             
         } isShowHUD:NO];
     } else {
-        NSString *htmlFilePath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/favorites.data"]];
-        NSMutableArray *dataList = [NSKeyedUnarchiver unarchiveObjectWithFile:htmlFilePath];
-        if ([dataList isKindOfClass:[NSMutableArray class]] && dataList.count > 0) {
-            NSArray *removeModel = nil;
-            for (NSArray *models in dataList) {
-                NewsModel *model = models.firstObject;
-                if ([model.news_id isEqualToString:_model.news_id]) {
-                    removeModel = models;
-                }
-            }
-            [dataList removeObject:removeModel];
-            [NSKeyedArchiver archiveRootObject:dataList toFile:htmlFilePath];
-        }
+        [[CoreDataManager sharedInstance] removeLocalFavoriteModelWithNewsIDs:[NSArray arrayWithObject:_model.news_id]];
         button.selected = NO;
     }
 }
@@ -1109,20 +1085,12 @@
                     [button setImage:[UIImage imageNamed:@"icon_article_collect_default"] forState:UIControlStateNormal];
                     [button setImage:[UIImage imageNamed:@"icon_article_collect_select"] forState:UIControlStateSelected];
                     [button setImage:[UIImage imageNamed:@"icon_article_collect_select"] forState:UIControlStateHighlighted];
-                    if (![_detailModel.collect_id isEqualToNumber:@0]) {
+                    if (![_detailModel.collect_id isEqualToString:@"0"]) {
                         button.selected = YES;
                         _collectID = _detailModel.collect_id;
                     } else {
-                        NSString *htmlFilePath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/favorites.data"]];
-                        NSMutableArray *dataList = [NSKeyedUnarchiver unarchiveObjectWithFile:htmlFilePath];
-                        if ([dataList isKindOfClass:[NSMutableArray class]] && dataList.count > 0) {
-                            for (NSArray *models in dataList) {
-                                NewsModel *model = models.firstObject;
-                                if ([model.news_id isEqualToString:_model.news_id]) {
-                                    button.selected = YES;
-                                    break;
-                                }
-                            }
+                        if ([[CoreDataManager sharedInstance] searchLocalFavoriteModelWithNewsID:_model.news_id]) {
+                            button.selected = YES;
                         }
                     }
                     break;

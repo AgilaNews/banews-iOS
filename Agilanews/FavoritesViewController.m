@@ -16,6 +16,7 @@
 #import "AppDelegate.h"
 #import "LoginViewController.h"
 #import "BaseNavigationController.h"
+#import "LocalFavorite+CoreDataClass.h"
 
 #define titleFont_Normal        [UIFont systemFontOfSize:16]
 #define titleFont_ExtraLarge    [UIFont systemFontOfSize:20]
@@ -63,21 +64,23 @@
     [self.view addSubview:_tableView];
     
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    NSString *htmlFilePath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/favorites.data"]];
-    NSMutableArray *data = [NSKeyedUnarchiver unarchiveObjectWithFile:htmlFilePath];
+    NSArray *data = [[CoreDataManager sharedInstance] getLocalFavoriteModelList];
+
     if (appDelegate.model) {
         if (data.count <= 0) {
             // 请求数据
             [self requestDataWithIsFooter:NO];
         }
     } else {
-        if ([data isKindOfClass:[NSMutableArray class]] && data.count > 0) {
+        if ([data isKindOfClass:[NSArray class]] && data.count > 0) {
             // 读取本地未登录收藏
             NSMutableArray *modelList = [NSMutableArray array];
             NSMutableArray *detailModelList = [NSMutableArray array];
-            for (NSArray *modelArray in data) {
-                [modelList addObject:modelArray.firstObject];
-                [detailModelList addObject:[modelArray objectAtIndex:1]];
+            for (LocalFavorite *localFavorite in data) {
+                NewsModel *model = (NewsModel *)localFavorite.news_model;
+                NewsDetailModel *detailModel = (NewsDetailModel *)localFavorite.detail_model;
+                [modelList addObject:model];
+                [detailModelList addObject:detailModel];
             }
             self.dataList = modelList;
             self.detailList = detailModelList;
@@ -98,12 +101,12 @@
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     if (appDelegate.model) {
         _tableView.tableHeaderView = nil;
-        NSString *favoritesFilePath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/favorites.data"]];
-        NSMutableArray *dataList = [NSKeyedUnarchiver unarchiveObjectWithFile:favoritesFilePath];
-        if ([dataList isKindOfClass:[NSMutableArray class]] && dataList.count > 0) {
+        NSArray *dataList = [[CoreDataManager sharedInstance] getLocalFavoriteModelList];
+        
+        if ([dataList isKindOfClass:[NSArray class]] && dataList.count > 0) {
             // 同步本地收藏
             [SVProgressHUD show];
-            [self uploadFavoritesWithDataList:dataList];
+            [self uploadFavoritesWithDataList:[dataList mutableCopy]];
         }
     } else if (_tableView.tableHeaderView == nil) {
         UILabel *loginLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 43)];
@@ -203,12 +206,7 @@
             [iConsole info:@"Favor_DelButton_Click_Y",nil];
 #endif
             [weakSelf.dataList removeObjectsInArray:_selectedList];
-            NSString *htmlFilePath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/%@.data",appDelegate.model.user_id]];
-            NSMutableDictionary *dataDic = [NSKeyedUnarchiver unarchiveObjectWithFile:htmlFilePath];
-            if ([dataDic isKindOfClass:[NSMutableDictionary class]] && dataDic.count > 0) {
-                [dataDic removeObjectsForKeys:collectIDs];
-                [NSKeyedArchiver archiveRootObject:dataDic toFile:htmlFilePath];
-            }
+            [[CoreDataManager sharedInstance] removeAccountFavoriteModelWithCollectIDs:collectIDs];
             if (_dataList.count == 0) {
                 weakSelf.showBlankView = YES;
             }
@@ -223,11 +221,9 @@
     } else {
         [self.dataList removeObjectsInArray:_selectedList];
         [_detailList removeObjectsInArray:_selectedDetail];
-        NSString *htmlFilePath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/favorites.data"]];
-        NSMutableArray *dataList = [NSKeyedUnarchiver unarchiveObjectWithFile:htmlFilePath];
-        if ([dataList isKindOfClass:[NSMutableArray class]] && dataList.count > 0) {
-            [dataList removeObjectsAtIndexes:_indexSet];
-            [NSKeyedArchiver archiveRootObject:dataList toFile:htmlFilePath];
+
+        if (_needRemoveNews.count > 0) {
+            [[CoreDataManager sharedInstance] removeLocalFavoriteModelWithNewsIDs:_needRemoveNews];
         }
         if (_dataList.count == 0) {
             self.showBlankView = YES;
@@ -246,7 +242,7 @@
  *
  *  @param model NewsModel
  */
-- (void)deleteCollectNewsWithModel:(NewsModel *)model Index:(NSInteger)index
+- (void)deleteCollectNewsWithModel:(NewsModel *)model
 {
     // 打点-点击删除-010504
     [Flurry logEvent:@"Favor_DelButton_Click"];
@@ -264,13 +260,7 @@
 #if DEBUG
             [iConsole info:@"Favor_DelButton_Click_Y",nil];
 #endif
-//            [weakSelf.dataList removeObjectsInArray:_selectedList];
-            NSString *filePath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/%@.data",appDelegate.model.user_id]];
-            NSMutableDictionary *dataDic = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
-            if ([dataDic isKindOfClass:[NSMutableDictionary class]] && dataDic.count > 0) {
-                [dataDic removeObjectForKey:model.collect_id];
-                [NSKeyedArchiver archiveRootObject:dataDic toFile:filePath];
-            }
+            [[CoreDataManager sharedInstance] removeAccountFavoriteModelWithCollectIDs:[NSArray arrayWithObject:model.collect_id]];
             if (_dataList.count == 0) {
                 weakSelf.showBlankView = YES;
             }
@@ -282,12 +272,7 @@
 #endif
         } isShowHUD:NO];
     } else {
-        NSString *htmlFilePath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/favorites.data"]];
-        NSMutableArray *dataList = [NSKeyedUnarchiver unarchiveObjectWithFile:htmlFilePath];
-        if ([dataList isKindOfClass:[NSMutableArray class]] && dataList.count > 0) {
-            [dataList removeObjectAtIndex:index];
-            [NSKeyedArchiver archiveRootObject:dataList toFile:htmlFilePath];
-        }
+        [[CoreDataManager sharedInstance] removeLocalFavoriteModelWithNewsIDs:[NSArray arrayWithObject:model.news_id]];
         if (_dataList.count == 0) {
             self.showBlankView = YES;
         }
@@ -304,28 +289,38 @@
     NSArray *favoritesArray = [NSArray array];
     if (dataList.count >= 10) {
         favoritesArray = [dataList subarrayWithRange:NSMakeRange(0, 10)];
+        [dataList removeObjectsInRange:NSMakeRange(0, 10)];
     } else {
         favoritesArray = [NSArray arrayWithArray:dataList];
+        [dataList removeAllObjects];
     }
     NSMutableArray *paramsArray = [NSMutableArray array];
-    for (NSArray *models in favoritesArray) {
+    for (LocalFavorite *localFavorite in favoritesArray) {
         NSMutableDictionary *params = [NSMutableDictionary dictionary];
-        NewsModel *model = models.firstObject;
+        NewsModel *model = (NewsModel *)localFavorite.news_model;
         [params setObject:model.news_id forKey:@"news_id"];
-        [params setObject:[models objectAtIndex:2] forKey:@"ctime"];
+        [params setObject:localFavorite.collect_time forKey:@"ctime"];
         [paramsArray addObject:params];
     }
     __weak typeof(self) weakSelf = self;
     [[SSHttpRequest sharedInstance] post:kHomeUrl_Collect params:paramsArray contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
         if (dataList.count >= 10) {
-            [dataList removeObjectsInRange:NSMakeRange(0, 10)];
+            NSMutableArray *newsIDs = [NSMutableArray array];
+            for (LocalFavorite *localFavorite in dataList) {
+                NewsModel *model = (NewsModel *)localFavorite.news_model;
+                [newsIDs addObject:model.news_id];
+            }
+            [[CoreDataManager sharedInstance] removeLocalFavoriteModelWithNewsIDs:newsIDs];
             [weakSelf uploadFavoritesWithDataList:dataList];
         } else {
-            [dataList removeAllObjects];
+            NSMutableArray *newsIDs = [NSMutableArray array];
+            for (LocalFavorite *localFavorite in dataList) {
+                NewsModel *model = (NewsModel *)localFavorite.news_model;
+                [newsIDs addObject:model.news_id];
+            }
+            [[CoreDataManager sharedInstance] removeLocalFavoriteModelWithNewsIDs:newsIDs];
             [weakSelf requestDataWithIsFooter:NO];
         }
-        NSString *favoritesFilePath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/favorites.data"]];
-        [NSKeyedArchiver archiveRootObject:dataList toFile:favoritesFilePath];
     } failure:^(NSError *error) {
         [weakSelf requestDataWithIsFooter:NO];
     } isShowHUD:NO];
@@ -496,6 +491,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NewsModel *model = _dataList[indexPath.row];
     if (!_tableView.editing) {
         // 打点-点击列表文章-010502
         [Flurry logEvent:@"Favor_List_Click"];
@@ -503,7 +499,6 @@
         [iConsole info:@"Favor_List_Click",nil];
 #endif
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
-        NewsModel *model = _dataList[indexPath.row];
         FavoriteDetailViewController *favDetVC = [[FavoriteDetailViewController alloc] init];
         favDetVC.model = model;
         favDetVC.detailModel = _detailList[indexPath.row];
@@ -512,7 +507,7 @@
         [_selectedList addObject:_dataList[indexPath.row]];
         if (_detailList) {
             [_selectedDetail addObject:_detailList[indexPath.row]];
-            [_indexSet addIndex:indexPath.row];
+            [_needRemoveNews addObject:model.news_id];
         }
     }
     if (_selectedList.count > 0) {
@@ -527,7 +522,8 @@
     [_selectedList removeObject:_dataList[indexPath.row]];
     if (_detailList) {
         [_selectedDetail removeObject:_detailList[indexPath.row]];
-        [_indexSet removeIndex:indexPath.row];
+        NewsModel *model = _dataList[indexPath.row];
+        [_needRemoveNews removeObject:model.news_id];
     }
     if (_selectedList.count > 0) {
         [_editBtn setTitle:@"Delete" forState:UIControlStateSelected];
@@ -612,7 +608,7 @@
             if (_detailList) {
                 [_detailList removeObjectAtIndex:indexPath.row];
             }
-            [self deleteCollectNewsWithModel:model Index:indexPath.row];
+            [self deleteCollectNewsWithModel:model];
             [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
         }
     }
@@ -665,7 +661,7 @@
         [self.tableView setEditing:YES animated:YES];
         _selectedList = [NSMutableArray array];
         _selectedDetail = [NSMutableArray array];
-        _indexSet = [NSMutableIndexSet indexSet];
+        _needRemoveNews = [NSMutableArray array];
         
         // 打点-点击编辑-010503
         [Flurry logEvent:@"Favor_EditButton_Click"];

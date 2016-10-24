@@ -71,13 +71,10 @@
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     NewsDetailModel *model = nil;
     if (appDelegate.model) {
-        NSString *htmlFilePath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/%@.data",appDelegate.model.user_id]];
-        NSMutableDictionary *dataDic = [NSKeyedUnarchiver unarchiveObjectWithFile:htmlFilePath];
-        model = dataDic[_model.collect_id];
+        model = [[CoreDataManager sharedInstance] searchAccountFavoriteModelWithCollectID:_model.collect_id];
     } else {
         model = _detailModel;
     }
-
     if (model) {
         // css文件路径
         NSString *cssFilePath = [[NSBundle mainBundle] pathForResource:@"webView" ofType:@"css"];

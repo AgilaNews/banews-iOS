@@ -15,6 +15,13 @@
 		5F17B4871DAB78A0008EBD51 /* GuideChannelView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F17B4861DAB78A0008EBD51 /* GuideChannelView.m */; };
 		5F17B48E1DB5BEB5008EBD51 /* Assets.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5F17B4891DB5BEB5008EBD51 /* Assets.bundle */; };
 		5F17B4901DB5BEB5008EBD51 /* YTPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F17B48D1DB5BEB5008EBD51 /* YTPlayerView.m */; };
+		5F17B4921DB861F5008EBD51 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F17B4911DB861F5008EBD51 /* CoreData.framework */; };
+		5F17B4BE1DB86883008EBD51 /* Agila.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5F17B4BC1DB86883008EBD51 /* Agila.xcdatamodeld */; };
+		5F17B4DB1DB87682008EBD51 /* CoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F17B4DA1DB87682008EBD51 /* CoreDataManager.m */; };
+		5F17B4E01DB8B430008EBD51 /* AccountFavorite+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F17B4DD1DB8B430008EBD51 /* AccountFavorite+CoreDataClass.m */; };
+		5F17B4E11DB8B430008EBD51 /* AccountFavorite+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F17B4DF1DB8B430008EBD51 /* AccountFavorite+CoreDataProperties.m */; };
+		5F17B4FE1DB9E45C008EBD51 /* LocalFavorite+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F17B4FB1DB9E45C008EBD51 /* LocalFavorite+CoreDataClass.m */; };
+		5F17B4FF1DB9E45C008EBD51 /* LocalFavorite+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F17B4FD1DB9E45C008EBD51 /* LocalFavorite+CoreDataProperties.m */; };
 		5F2E09FE1D86554900FEC0AC /* AppsFlyer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F2E09FD1D86554900FEC0AC /* AppsFlyer.framework */; };
 		5F2E0A001D86557A00FEC0AC /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F2E09FF1D86557A00FEC0AC /* iAd.framework */; };
 		5F2E0A1D1D87B47A00FEC0AC /* HZIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F2E0A161D87B47A00FEC0AC /* HZIndicatorView.m */; };
@@ -233,6 +240,18 @@
 		5F17B48B1DB5BEB5008EBD51 /* YouTubeiOSPlayerHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YouTubeiOSPlayerHelper.h; sourceTree = "<group>"; };
 		5F17B48C1DB5BEB5008EBD51 /* YTPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YTPlayerView.h; sourceTree = "<group>"; };
 		5F17B48D1DB5BEB5008EBD51 /* YTPlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YTPlayerView.m; sourceTree = "<group>"; };
+		5F17B4911DB861F5008EBD51 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		5F17B4BD1DB86883008EBD51 /* Agila.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Agila.xcdatamodel; sourceTree = "<group>"; };
+		5F17B4D91DB87682008EBD51 /* CoreDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreDataManager.h; sourceTree = "<group>"; };
+		5F17B4DA1DB87682008EBD51 /* CoreDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataManager.m; sourceTree = "<group>"; };
+		5F17B4DC1DB8B430008EBD51 /* AccountFavorite+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AccountFavorite+CoreDataClass.h"; sourceTree = "<group>"; };
+		5F17B4DD1DB8B430008EBD51 /* AccountFavorite+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AccountFavorite+CoreDataClass.m"; sourceTree = "<group>"; };
+		5F17B4DE1DB8B430008EBD51 /* AccountFavorite+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AccountFavorite+CoreDataProperties.h"; sourceTree = "<group>"; };
+		5F17B4DF1DB8B430008EBD51 /* AccountFavorite+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AccountFavorite+CoreDataProperties.m"; sourceTree = "<group>"; };
+		5F17B4FA1DB9E45B008EBD51 /* LocalFavorite+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "LocalFavorite+CoreDataClass.h"; sourceTree = "<group>"; };
+		5F17B4FB1DB9E45C008EBD51 /* LocalFavorite+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "LocalFavorite+CoreDataClass.m"; sourceTree = "<group>"; };
+		5F17B4FC1DB9E45C008EBD51 /* LocalFavorite+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "LocalFavorite+CoreDataProperties.h"; sourceTree = "<group>"; };
+		5F17B4FD1DB9E45C008EBD51 /* LocalFavorite+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "LocalFavorite+CoreDataProperties.m"; sourceTree = "<group>"; };
 		5F2E09FD1D86554900FEC0AC /* AppsFlyer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AppsFlyer.framework; sourceTree = "<group>"; };
 		5F2E09FF1D86557A00FEC0AC /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
 		5F2E0A151D87B47A00FEC0AC /* HZIndicatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HZIndicatorView.h; sourceTree = "<group>"; };
@@ -609,6 +628,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5F17B4921DB861F5008EBD51 /* CoreData.framework in Frameworks */,
 				5F5C638E1D938DA9005D3578 /* UserNotifications.framework in Frameworks */,
 				5F42C0BC1D34ED8E00B89651 /* Security.framework in Frameworks */,
 				5F2E0A001D86557A00FEC0AC /* iAd.framework in Frameworks */,
@@ -674,6 +694,21 @@
 			path = YouTubePlayer;
 			sourceTree = "<group>";
 		};
+		5F17B4D21DB87574008EBD51 /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				5F17B4FA1DB9E45B008EBD51 /* LocalFavorite+CoreDataClass.h */,
+				5F17B4FB1DB9E45C008EBD51 /* LocalFavorite+CoreDataClass.m */,
+				5F17B4FC1DB9E45C008EBD51 /* LocalFavorite+CoreDataProperties.h */,
+				5F17B4FD1DB9E45C008EBD51 /* LocalFavorite+CoreDataProperties.m */,
+				5F17B4DC1DB8B430008EBD51 /* AccountFavorite+CoreDataClass.h */,
+				5F17B4DD1DB8B430008EBD51 /* AccountFavorite+CoreDataClass.m */,
+				5F17B4DE1DB8B430008EBD51 /* AccountFavorite+CoreDataProperties.h */,
+				5F17B4DF1DB8B430008EBD51 /* AccountFavorite+CoreDataProperties.m */,
+			);
+			path = CoreData;
+			sourceTree = "<group>";
+		};
 		5F2E0A141D87B47A00FEC0AC /* HZPhotoBrowser */ = {
 			isa = PBXGroup;
 			children = (
@@ -725,6 +760,8 @@
 				5F42BFC11D34E2F000B89651 /* LaunchScreen.storyboard */,
 				5F42BFC41D34E2F000B89651 /* Info.plist */,
 				5F5C638F1D93DC12005D3578 /* GoogleService-Info.plist */,
+				5F17B4BC1DB86883008EBD51 /* Agila.xcdatamodeld */,
+				5F17B4D21DB87574008EBD51 /* CoreData */,
 				5F42BFB31D34E2F000B89651 /* Supporting Files */,
 			);
 			path = Agilanews;
@@ -859,6 +896,7 @@
 		5F42C0B41D34ED6300B89651 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5F17B4911DB861F5008EBD51 /* CoreData.framework */,
 				5F17B45E1DA8A5D6008EBD51 /* GoogleNetworkingUtilities.framework */,
 				5F17B45C1DA8A5CD008EBD51 /* GoogleAuthUtilities.framework */,
 				5F17B45A1DA8A5C1008EBD51 /* GoogleAppUtilities.framework */,
@@ -1162,6 +1200,8 @@
 				5F571F741D589BEF00604CDD /* NetType.m */,
 				5F571FD91D62DE0500604CDD /* FJSWaveProgress.h */,
 				5F571FDA1D62DE0500604CDD /* FJSWaveProgress.m */,
+				5F17B4D91DB87682008EBD51 /* CoreDataManager.h */,
+				5F17B4DA1DB87682008EBD51 /* CoreDataManager.m */,
 			);
 			name = Base;
 			sourceTree = "<group>";
@@ -1402,7 +1442,8 @@
 				TargetAttributes = {
 					5F42BFAF1D34E2F000B89651 = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = NV593L7ML4;
+						DevelopmentTeam = CA8M4AL9S7;
+						LastSwiftMigration = 0800;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -1488,6 +1529,7 @@
 				5F42BFFA1D34E3D500B89651 /* AFURLSessionManager.m in Sources */,
 				5F635EDB1D4344E2006AAE3D /* SettingsViewController.m in Sources */,
 				5FF4B7761D37BD2C00CC6704 /* UIDevice+UhouAdditions.m in Sources */,
+				5F17B4E01DB8B430008EBD51 /* AccountFavorite+CoreDataClass.m in Sources */,
 				5F767A841D9CE82E00822BAC /* MJPropertyType.m in Sources */,
 				5F767A5D1D9A44C900822BAC /* RefreshCell.m in Sources */,
 				5FF4B7D91D3A174900CC6704 /* UIView+MJExtension.m in Sources */,
@@ -1529,6 +1571,7 @@
 				5F8E264E1D7428E100B48130 /* BigPicCell.m in Sources */,
 				5FF4B7731D37BD2C00CC6704 /* UIApplication+ActivityViewController.m in Sources */,
 				5F42C0A01D34E42A00B89651 /* SVProgressHUD.m in Sources */,
+				5F17B4FE1DB9E45C008EBD51 /* LocalFavorite+CoreDataClass.m in Sources */,
 				5F42C08E1D34E41D00B89651 /* UIImage+WebP.m in Sources */,
 				5FF4B6EE1D3645DE00CC6704 /* CategoriesModel.m in Sources */,
 				5F571F751D589BEF00604CDD /* NetType.m in Sources */,
@@ -1543,12 +1586,14 @@
 				5F5C63791D8E5FED005D3578 /* KeychainItemWrapper.m in Sources */,
 				5FF4B7D31D3A174900CC6704 /* MJRefreshGifHeader.m in Sources */,
 				5FF4B76B1D37BD2C00CC6704 /* NSArray+UhouAdditions.m in Sources */,
+				5F17B4E11DB8B430008EBD51 /* AccountFavorite+CoreDataProperties.m in Sources */,
 				5FF4B7751D37BD2C00CC6704 /* UIButton+UhouAdditions.m in Sources */,
 				5F6462771D4715DB008EEDEC /* RecommendedView.m in Sources */,
 				5FF4B72B1D37400D00CC6704 /* HomeTableViewController.m in Sources */,
 				5FF4B7D81D3A174900CC6704 /* UIScrollView+MJRefresh.m in Sources */,
 				5FF4B7AF1D38F7B200CC6704 /* MASConstraintMaker.m in Sources */,
 				5F42C09E1D34E42A00B89651 /* SVProgressAnimatedView.m in Sources */,
+				5F17B4BE1DB86883008EBD51 /* Agila.xcdatamodeld in Sources */,
 				5F5AE9761D54364E00A5A8B7 /* GuideRefreshView.m in Sources */,
 				5FF4B7711D37BD2C00CC6704 /* NSTimer+UhouAdditions.m in Sources */,
 				5F767A811D9CE82E00822BAC /* MJFoundation.m in Sources */,
@@ -1582,6 +1627,7 @@
 				5FD55E681D4EFB0D00B0E17D /* FavoriteDetailViewController.m in Sources */,
 				5FF4B76D1D37BD2C00CC6704 /* NSMutableArray+UhouAdditions.m in Sources */,
 				5FF4B7AD1D38F7B200CC6704 /* MASCompositeConstraint.m in Sources */,
+				5F17B4DB1DB87682008EBD51 /* CoreDataManager.m in Sources */,
 				5F42C08B1D34E41D00B89651 /* UIButton+WebCache.m in Sources */,
 				5F42C0A81D34E43A00B89651 /* SSHttpRequest.m in Sources */,
 				5F42C0901D34E41D00B89651 /* UIImageView+WebCache.m in Sources */,
@@ -1589,6 +1635,7 @@
 				5FF4B6F11D372A9300CC6704 /* BaseNavigationController.m in Sources */,
 				5F17B4901DB5BEB5008EBD51 /* YTPlayerView.m in Sources */,
 				5F767A891D9CE82E00822BAC /* NSString+MJExtension.m in Sources */,
+				5F17B4FF1DB9E45C008EBD51 /* LocalFavorite+CoreDataProperties.m in Sources */,
 				5F767A641D9BBD4E00822BAC /* XWDragCellCollectionView.m in Sources */,
 				5FF4B78A1D38DEA400CC6704 /* NoPicCell.m in Sources */,
 				5F6462711D45F64A008EEDEC /* FavoritesViewController.m in Sources */,
@@ -1750,9 +1797,11 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Agila.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: zhendong Wang (4PX74E3WFB)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: zhendong Wang (4PX74E3WFB)";
+				DEVELOPMENT_TEAM = CA8M4AL9S7;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Agilanews/Masonry/ShareSDK",
@@ -1783,6 +1832,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.banews.agila;
 				PRODUCT_NAME = Agila;
 				PROVISIONING_PROFILE = "617d1ffd-5d76-4ff6-b6e9-864c02bf0153";
+				PROVISIONING_PROFILE_SPECIFIER = iOS_Development;
+				SWIFT_OBJC_BRIDGING_HEADER = "Agila-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 				VALID_ARCHS = "arm64 armv7s armv7";
 			};
 			name = Debug;
@@ -1792,9 +1845,11 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Agila.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: zhendong Wang (CA8M4AL9S7)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: zhendong Wang (CA8M4AL9S7)";
+				DEVELOPMENT_TEAM = CA8M4AL9S7;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Agilanews/Masonry/ShareSDK",
@@ -1825,6 +1880,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.banews.agila;
 				PRODUCT_NAME = Agila;
 				PROVISIONING_PROFILE = "19aff322-757e-4984-b26e-c39039e620dc";
+				PROVISIONING_PROFILE_SPECIFIER = iOS_Distribution_Release;
+				SWIFT_OBJC_BRIDGING_HEADER = "Agila-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 				VALID_ARCHS = "arm64 armv7s armv7";
 			};
 			name = Release;
@@ -1876,9 +1934,11 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Agila.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: zhendong Wang (CA8M4AL9S7)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: zhendong Wang (CA8M4AL9S7)";
+				DEVELOPMENT_TEAM = CA8M4AL9S7;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Agilanews/Masonry/ShareSDK",
@@ -1909,6 +1969,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.banews.agila;
 				PRODUCT_NAME = Agila;
 				PROVISIONING_PROFILE = "4e635bc1-2af2-452a-823a-edcd205fbd05";
+				PROVISIONING_PROFILE_SPECIFIER = "iOS Distribution_AdHoc";
+				SWIFT_OBJC_BRIDGING_HEADER = "Agila-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 				VALID_ARCHS = "arm64 armv7s armv7";
 			};
 			name = AdHoc;
@@ -1937,6 +2000,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		5F17B4BC1DB86883008EBD51 /* Agila.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				5F17B4BD1DB86883008EBD51 /* Agila.xcdatamodel */,
+			);
+			currentVersion = 5F17B4BD1DB86883008EBD51 /* Agila.xcdatamodel */;
+			path = Agila.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 5F42BFA81D34E2F000B89651 /* Project object */;
 }

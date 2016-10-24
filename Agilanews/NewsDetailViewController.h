@@ -24,7 +24,7 @@
 @property (nonatomic, assign) float webViewHeight;          // webView高度
 @property (nonatomic, strong) NewsDetailModel *detailModel; // 新闻详情model
 @property (nonatomic, strong) NSMutableArray *commentArray; // 评论数组
-@property (nonatomic, strong) NSNumber *collectID;          // 收藏新闻ID
+@property (nonatomic, strong) NSString *collectID;          // 收藏新闻ID
 @property (nonatomic, strong) CommentTextView *commentTextView; // 评论输入框
 @property (nonatomic, strong) UIView *noCommentView;        // 无评论视图
 @property (nonatomic, strong) NSURLSessionDataTask *task;
@@ -37,7 +37,6 @@
 @property (nonatomic, strong) UIView *blankView;
 @property (nonatomic, strong) UILabel *blankLabel;
 @property (nonatomic, strong) UIImageView *failureView;
-@property (nonatomic, assign) long long afterFailureRequsetTime;
 @property (nonatomic, assign) float webviewOffsetY;
 @property (nonatomic, assign) BOOL isPushEnter;
 @property (nonatomic, strong) YTPlayerView *playerView;

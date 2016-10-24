@@ -20,7 +20,7 @@ static SSHttpRequest *_manager = nil;
     dispatch_once(&onceToken, ^{
         _manager = [SSHttpRequest manager];
         // 申明返回的结果是text/html类型
-//        _manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+        //        _manager.responseSerializer = [AFHTTPResponseSerializer serializer];
         _manager.responseSerializer = [AFJSONResponseSerializer serializer];
         _manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript",@"application/javascript", @"text/html", @"text/plain", @"application/ph", nil];
         // 设置安全性
