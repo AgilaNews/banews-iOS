@@ -679,37 +679,26 @@
                         case NEWS_ManyPic:
                         {
                             return 12 + 68 + 12;
-                            break;
                         }
                         case NEWS_SinglePic:
                         {
                             return 12 + 68 + 12;
-                            break;
                         }
                         case NEWS_NoPic:
                         {
                             CGSize titleLabelSize = [model.title calculateSize:CGSizeMake(kScreenWidth - 22, 60) font:titleFont];
                             return 11 + titleLabelSize.height + 15 + 11 + 11;
-                            break;
                         }
                         case NEWS_BigPic:
                         {
                             return 12 + 68 + 12;
-                            break;
                         }
-                            //        case NEWS_OnlyPic:
-                            //        {
-                            //
-                            //        }
-                            //            break;
-                            //        case NEWS_GifPic:
-                            //        {
-                            //
-                            //        }
-                            //            break;
+                        case NEWS_HaveVideo:
+                        {
+                            return 12 + 68 + 12;
+                        }
                         default:
                             return 50;
-                            break;
                     }
                     break;
                 }
@@ -774,7 +763,6 @@
                     }
                     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
                     return cell;
-                    break;
                 }
                 default:
                 {
@@ -792,7 +780,6 @@
                             ((SinglePicCell *)cell).model = model;
                             [cell setNeedsLayout];
                             return cell;
-                            break;
                         }
                         case NEWS_SinglePic:
                         {
@@ -803,9 +790,9 @@
                                 cell = [[SinglePicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:kWhiteBgColor];
                             }
                             ((SinglePicCell *)cell).model = model;
+                            ((SinglePicCell *)cell).isHaveVideo = NO;
                             [cell setNeedsLayout];
                             return cell;
-                            break;
                         }
                         case NEWS_NoPic:
                         {
@@ -818,7 +805,6 @@
                             ((NoPicCell *)cell).model = model;
                             [cell setNeedsLayout];
                             return cell;
-                            break;
                         }
                         case NEWS_BigPic:
                         {
@@ -831,7 +817,19 @@
                             ((SinglePicCell *)cell).model = model;
                             [cell setNeedsLayout];
                             return cell;
-                            break;
+                        }
+                        case NEWS_HaveVideo:
+                        {
+                            // 单图cell
+                            static NSString *cellID = @"SinglePicCellID";
+                            cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+                            if (cell == nil) {
+                                cell = [[SinglePicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:kWhiteBgColor];
+                            }
+                            ((SinglePicCell *)cell).model = model;
+                            ((SinglePicCell *)cell).isHaveVideo = YES;
+                            [cell setNeedsLayout];
+                            return cell;
                         }
                     }
                 }

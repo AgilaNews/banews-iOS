@@ -75,7 +75,8 @@
 #define NEWS_NoPic      5   // 无图模板
 #define NEWS_OnlyPic    6   // 纯图模板
 #define NEWS_GifPic     7   // gif图模板
-
+#define NEWS_HaveVideo  11  // 含视频模板
+#define NEWS_OnlyVideo  12  // 纯视频模板
 
 // 通知
 #define KNOTIFICATION_Categories      @"KNOTIFICATION_Categories"     // 频道刷新通知

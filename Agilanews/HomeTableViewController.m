@@ -220,9 +220,12 @@
             ImageModel *imageModel = model.imgs.firstObject;
             return 12 + titleLabelSize.height + 10 + imageModel.height.integerValue / 2.0 + 12 + 18 + 12;
         }
+        case NEWS_HaveVideo:
+        {
+            return 12 + 68 + 12;
+        }
         default:
             return 50;
-            break;
     }
 }
 
@@ -264,6 +267,7 @@
                     cell = [[SinglePicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
                 }
                 cell.model = model;
+                cell.isHaveVideo = NO;
                 [cell setNeedsLayout];
                 return cell;
             }
@@ -318,6 +322,19 @@
                 }
                 cell.model = model;
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                [cell setNeedsLayout];
+                return cell;
+            }
+            case NEWS_HaveVideo:
+            {
+                // 单图cell
+                static NSString *cellID = @"SinglePicCellID";
+                SinglePicCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+                if (cell == nil) {
+                    cell = [[SinglePicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
+                }
+                cell.model = model;
+                cell.isHaveVideo = YES;
                 [cell setNeedsLayout];
                 return cell;
             }

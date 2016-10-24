@@ -376,6 +376,11 @@
             return 12 + 68 + 12;
             break;
         }
+        case NEWS_HaveVideo:
+        {
+            return 12 + 68 + 12;
+            break;
+        }
             //        case NEWS_OnlyPic:
             //        {
             //
@@ -419,6 +424,7 @@
                 cell = [[SinglePicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
             }
             cell.model = model;
+            cell.isHaveVideo = NO;
             [cell setNeedsLayout];
             return cell;
             break;
@@ -445,6 +451,20 @@
                 cell = [[SinglePicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
             }
             cell.model = model;
+            [cell setNeedsLayout];
+            return cell;
+            break;
+        }
+        case NEWS_HaveVideo:
+        {
+            // 单图带视频cell
+            static NSString *cellID = @"SinglePicCellID";
+            SinglePicCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+            if (cell == nil) {
+                cell = [[SinglePicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
+            }
+            cell.model = model;
+            cell.isHaveVideo = YES;
             [cell setNeedsLayout];
             return cell;
             break;

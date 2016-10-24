@@ -46,7 +46,7 @@
     _window = [[iConsoleWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     _window.backgroundColor = SSColor(0, 0, 0);
     [iConsole sharedConsole].delegate = self;
-    [iConsole sharedConsole].logSubmissionEmail = @"1164063991@qq.com";
+//    [iConsole sharedConsole].logSubmissionEmail = @"1164063991@qq.com";
 #else
     _window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     _window.backgroundColor = SSColor(255, 255, 255);

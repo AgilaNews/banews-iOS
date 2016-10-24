@@ -47,6 +47,7 @@
     [self.contentView addSubview:self.timeView];
     [self.contentView addSubview:self.timeLabel];
     [self.contentView addSubview:self.titleImageView];
+    [self.contentView addSubview:self.haveVideoView];
     __weak typeof(self) weakSelf = self;
     // 标题布局
     CGSize titleLabelSize = [_model.title calculateSize:CGSizeMake(kScreenWidth - 22 - 108 - 9, 60) font:self.titleLabel.font];
@@ -92,6 +93,13 @@
         make.centerY.mas_equalTo(weakSelf.sourceLabel.mas_centerY);
         make.width.mas_equalTo(80);
         make.height.mas_equalTo(13);
+    }];
+    // 播放按钮
+    [self.haveVideoView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.mas_equalTo(weakSelf.titleImageView.mas_centerX);
+        make.centerY.mas_equalTo(weakSelf.titleImageView.mas_centerY);
+        make.width.mas_equalTo(27);
+        make.height.mas_equalTo(27);
     }];
 }
 
@@ -180,6 +188,11 @@
             make.right.mas_equalTo(weakSelf.contentView.mas_right).offset(-11);
         }];
     }
+    // 播放按钮
+    [self.haveVideoView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.centerX.mas_equalTo(weakSelf.titleImageView.mas_centerX);
+        make.centerY.mas_equalTo(weakSelf.titleImageView.mas_centerY);
+    }];
     
     [super updateConstraints];
 
@@ -216,6 +229,11 @@
             _titleImageView.image = image;
         }
     }];
+    if (self.isHaveVideo) {
+        self.haveVideoView.hidden = NO;
+    } else {
+        self.haveVideoView.hidden = YES;
+    }
 }
 
 - (UILabel *)titleLabel
@@ -309,6 +327,17 @@
         _timeLabel.textColor = kGrayColor;
     }
     return _timeLabel;
+}
+
+- (UIImageView *)haveVideoView
+{
+    if (_haveVideoView == nil) {
+        _haveVideoView = [[UIImageView alloc] init];
+        _haveVideoView.contentMode = UIViewContentModeScaleAspectFit;
+        _haveVideoView.image = [UIImage imageNamed:@"play_small"];
+        _haveVideoView.hidden = YES;
+    }
+    return _haveVideoView;
 }
 
 - (void)fontChange
