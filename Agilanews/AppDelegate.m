@@ -917,8 +917,12 @@
                                       annotation:options[UIApplicationOpenURLOptionsAnnotationKey]];
 }
 
+// 全屏播放支持横屏
 - (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
-    if ([NSStringFromClass([[[window subviews] lastObject] class]) isEqualToString:@"UITransitionView"]) {
+    //    if ([NSStringFromClass([[[window subviews] lastObject] class]) isEqualToString:@"UITransitionView"]) {
+    //        return UIInterfaceOrientationMaskAll;
+    //    }
+    if ([NSStringFromClass([window.subviews.firstObject.subviews.firstObject class]) isEqualToString:@"AVPlayerView"]) {
         return UIInterfaceOrientationMaskAll;
     }
     return UIInterfaceOrientationMaskPortrait;

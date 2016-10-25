@@ -8,6 +8,7 @@
 
 #import "NewsDetailViewController.h"
 #import "ImageModel.h"
+#import "VideoModel.h"
 #import "ManyPicCell.h"
 #import "SinglePicCell.h"
 #import "NoPicCell.h"
@@ -17,6 +18,8 @@
 #import "CommentTextField.h"
 #import "LoginViewController.h"
 #import "GuideFavoritesView.h"
+#import "DetailPlayerViewController.h"
+#import "BaseNavigationController.h"
 
 #define titleFont_Normal        [UIFont systemFontOfSize:16]
 #define titleFont_ExtraLarge    [UIFont systemFontOfSize:20]
@@ -89,37 +92,54 @@
     [_bridge registerHandler:@"ObjcCallback" handler:^(id data, WVJBResponseCallback responseCallback)
      {
          [weakSelf createImageFolderAtPath];
-         NSString *urlString = data[@"url"];
-         NSNumber *callbackId = data[@"id"];
-         urlString = [urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-         NSString *md5String = [NSString encryptPassword:urlString];
-         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-         NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:[NSString stringWithFormat:@"ImageFolder/%@.jpg", md5String]];
-         NSFileManager *fileManager = [NSFileManager defaultManager];
-         if ([fileManager fileExistsAtPath:filePath]) {
-             NSString *imagePath = [NSString stringWithFormat:@"file://%@/",filePath];
-             responseCallback(@{
-                                @"path": imagePath,
-                                @"id": callbackId
-                                });
+         NSString *type = data[@"type"];
+         if ([type isEqualToString:@"video"]) {
+             // 视频
+             NSString *videoid = data[@"videoid"];
+             DetailPlayerViewController *detailPlayerVC = [[DetailPlayerViewController alloc] init];
+             NSNumber *index = data[@"index"];
+             VideoModel *model = weakSelf.detailModel.youtube_videos[index.intValue];
+             detailPlayerVC.width = model.width;
+             detailPlayerVC.height = model.height;
+             detailPlayerVC.pattern = model.pattern;
+             detailPlayerVC.videoid = videoid;
+             [[UIApplication sharedApplication] setStatusBarHidden:YES];
+             detailPlayerVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+             [weakSelf presentViewController:detailPlayerVC animated:YES completion:nil];
          } else {
-             SDWebImageDownloader *downloader = [SDWebImageDownloader sharedDownloader];
-             [downloader downloadImageWithURL:[NSURL URLWithString:urlString]
-                                      options:0
-                                     progress:^(NSInteger receivedSize, NSInteger expectedSize) {
-                                         // progression tracking code
-                                     }
-                                    completed:^(UIImage *image, NSData *data, NSError *error, BOOL finished) {
-                                        if (image && finished) {
-                                            if ([data writeToFile:filePath atomically:YES]) {
-                                                NSString *imagePath = [NSString stringWithFormat:@"file://%@/",filePath];
-                                                responseCallback(@{
-                                                                   @"path": imagePath,
-                                                                   @"id": callbackId
-                                                                   });
+             // 图片
+             NSString *urlString = data[@"url"];
+             NSNumber *callbackId = data[@"id"];
+             urlString = [urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+             NSString *md5String = [NSString encryptPassword:urlString];
+             NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+             NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:[NSString stringWithFormat:@"ImageFolder/%@.jpg", md5String]];
+             NSFileManager *fileManager = [NSFileManager defaultManager];
+             if ([fileManager fileExistsAtPath:filePath]) {
+                 NSString *imagePath = [NSString stringWithFormat:@"file://%@/",filePath];
+                 responseCallback(@{
+                                    @"path": imagePath,
+                                    @"id": callbackId
+                                    });
+             } else {
+                 SDWebImageDownloader *downloader = [SDWebImageDownloader sharedDownloader];
+                 [downloader downloadImageWithURL:[NSURL URLWithString:urlString]
+                                          options:0
+                                         progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+                                             // progression tracking code
+                                         }
+                                        completed:^(UIImage *image, NSData *data, NSError *error, BOOL finished) {
+                                            if (image && finished) {
+                                                if ([data writeToFile:filePath atomically:YES]) {
+                                                    NSString *imagePath = [NSString stringWithFormat:@"file://%@/",filePath];
+                                                    responseCallback(@{
+                                                                       @"path": imagePath,
+                                                                       @"id": callbackId
+                                                                       });
+                                                }
                                             }
-                                        }
-                                    }];
+                                        }];
+             }
          }
      }];
 
@@ -144,20 +164,9 @@
                                                  name:KNOTIFICATION_FontSize_Change
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(touchFavorite) name:KNOTIFICATION_TouchFavorite
+                                             selector:@selector(touchFavorite)
+                                                 name:KNOTIFICATION_TouchFavorite
                                                object:nil];
-//    _playerView = [[YTPlayerView alloc] initWithFrame:CGRectMake(0, 64, kScreenWidth, 300)];
-//    _playerView.backgroundColor = [UIColor greenColor];
-//    [self.view addSubview:_playerView];
-//    NSDictionary *playerVars = @{@"autohide" : @1,          // 参数设为1，则视频进度条和播放器控件将会在视频开始播放几秒钟后退出播放界面。
-//                                                            // 仅在用户将鼠标移动到视频播放器上方或按键盘上的某个键时，进度条和控件才会重新显示。
-//                                                            // 参数设为0，则视频进度条和视频播放器控件在视频播放全程和全屏状态下均会显示。
-//                                 @"iv_load_policy" : @3,    // 将此值设为1会在默认情况下显示视频注释，而将其设为3则默认不显示。
-//                                 @"playsinline" : @1,       // 以内嵌方式播放还是以全屏形式播放。  1:内嵌模式  0:全屏模式
-//                                 @"loop" : @1,              // 是否循环播放。  0:不循环  1:循环
-//                                 @"rel" : @0,               // 视频播放结束时，播放器是否应显示相关视频。  0:不显示  1:显示
-//                                 @"showinfo" : @0};         // 播放器是否显示视频标题和上传者等信息。  0:不显示  1:显示
-//    [self.playerView loadWithVideoId:@"M7lc1UVf-VE" playerVars:playerVars];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -252,7 +261,6 @@
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setObject:newsID forKey:@"news_id"];
 //    [params setObject:@"1l+ULtd4zog=" forKey:@"news_id"];
-
     _task = [[SSHttpRequest sharedInstance] get:kHomeUrl_NewsDetail params:params contentType:UrlencodedType serverType:NetServer_Home success:^(id responseObj) {
         if (_blankView) {
             [_blankView removeFromSuperview];
@@ -278,9 +286,20 @@
                     weakSelf.detailModel.body = [weakSelf.detailModel.body stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"<!--IMG%d-->",i] withString:imageUrl];
                 } else {
                     ImageModel *imageModel = weakSelf.detailModel.imgs[i];
-                    //                NSString *imageUrl = [NSString stringWithFormat:@"<img src=\"%@\"/>",imageModel.src];
-                    NSString *imageUrl = [NSString stringWithFormat:@"<img src=\"\" data-src=\"%@\" height=\"%fpx\" width=\"%fpx\" class=\"ready-to-load\"/>",imageModel.src, imageModel.height.integerValue / 2.0, imageModel.width.integerValue / 2.0];
+                    NSString *imageUrl = [NSString stringWithFormat:@"<img src=\"\" data-src=\"%@\" height=\"%fpx\" width=\"%fpx\" img-type=\"image\" class=\"ready-to-load\"/>",imageModel.src, imageModel.height.integerValue / 2.0, imageModel.width.integerValue / 2.0];
                     weakSelf.detailModel.body = [weakSelf.detailModel.body stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"<!--IMG%d-->",i] withString:imageUrl];
+                }
+            }
+            for (int i = 0; i < weakSelf.detailModel.youtube_videos.count; i++) {
+                if ([DEF_PERSISTENT_GET_OBJECT(SS_textOnlyMode) isEqualToNumber:@1]) {
+                    NSString *imageFilePath = [[NSBundle mainBundle] pathForResource:@"textonly" ofType:@"png"];
+                    NSString *imageUrl = [NSString stringWithFormat:@"<img src=file:///%@/>",imageFilePath];
+                    weakSelf.detailModel.body = [weakSelf.detailModel.body stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"<!--YOUTUBE%d-->",i] withString:imageUrl];
+                } else {
+                    VideoModel *videoModel = weakSelf.detailModel.youtube_videos[i];
+                    NSString *imageUrl = [NSString stringWithFormat:@"<img src=\"\" data-src=\"%@\" height=\"%fpx\" width=\"%fpx\" img-type=\"video\" videoid=\"%@\" index=\"%d\" class=\"ready-to-load\"/>", videoModel.video_pattern, videoModel.height.integerValue / 2.0, videoModel.width.integerValue / 2.0, videoModel.youtube_id, i];
+                    imageUrl = [imageUrl stringByReplacingOccurrencesOfString:@"{w}" withString:[NSString stringWithFormat:@"%ld",videoModel.width.integerValue / 2]];
+                    weakSelf.detailModel.body = [weakSelf.detailModel.body stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"<!--YOUTUBE%d-->",i] withString:imageUrl];
                 }
             }
         }

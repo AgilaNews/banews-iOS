@@ -8,7 +8,7 @@
 //        }
 //    }
 //};
-
+//
 //function log(message)
 //{
 //    alert(message);
@@ -41,7 +41,7 @@ var elems = null;
 /*与OC交互的所有JS方法都要放在此处注册*/
 setupWebViewJavascriptBridge(function(bridge) {
     if (elems != null) {
-    return;
+        return;
     }
     elems = document.getElementsByClassName("ready-to-load");
     for (var i = 0; i < elems.length; i++) {
@@ -50,7 +50,19 @@ setupWebViewJavascriptBridge(function(bridge) {
         if (url == null || url == undefined || url == '') {
             continue;
         }
-        bridge.callHandler('ObjcCallback', {url: url, id: i},
+        var type = elem.getAttribute("img-type");
+        if (type == 'video') {
+            elem.onclick = function() {
+                var type = this.getAttribute("img-type");
+                var videoid = this.getAttribute("videoid");
+                var index = this.getAttribute("index");
+                if(videoid == null || videoid == undefined || videoid == '') {
+                    return;
+                }
+                bridge.callHandler('ObjcCallback', {type:type, index:index, videoid:videoid});
+            }
+        }
+        bridge.callHandler('ObjcCallback', {url:url, id:i},
         function(response) {
             var local_index = response.id;
             if (local_index < elems.length && local_index >= 0) {

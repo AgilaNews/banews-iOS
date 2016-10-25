@@ -39,6 +39,5 @@
 @property (nonatomic, strong) UIImageView *failureView;
 @property (nonatomic, assign) float webviewOffsetY;
 @property (nonatomic, assign) BOOL isPushEnter;
-@property (nonatomic, strong) YTPlayerView *playerView;
 
 @end

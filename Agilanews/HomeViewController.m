@@ -78,6 +78,9 @@ static CGFloat const ButtonHeight = 40;
             CategoriesModel *model = [[CategoriesModel alloc] init];
             model.name = nameArray[i];
             model.channelID = channelIDArray[i];
+            if (i == 0) {
+                model.fixed = YES;
+            }
             [titleArray addObject:model.name];
             [models addObject:model];
         }

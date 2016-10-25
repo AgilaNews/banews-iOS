@@ -10,6 +10,7 @@
 #import "ImageModel.h"
 #import "NewsModel.h"
 #import "CommentModel.h"
+#import "VideoModel.h"
 
 @implementation NewsDetailModel
 
@@ -31,7 +32,8 @@ MJCodingImplementation
              @"title":@"title",
              @"source":@"source",
              @"source":@"source",
-             @"share_url":@"share_url"
+             @"share_url":@"share_url",
+             @"youtube_videos":@"VideoModel"
              };
 }
 

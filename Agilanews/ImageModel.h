@@ -10,10 +10,10 @@
 
 @interface ImageModel : NSObject
 
-@property (nonatomic, copy) NSNumber *height;   // 图片的高
-@property (nonatomic, copy) NSNumber *width;    // 图片的宽
-@property (nonatomic, copy) NSString *name;     //
-@property (nonatomic, copy) NSString *pattern;  // 图片url
-@property (nonatomic, copy) NSString *src;      // 默认url
+@property (nonatomic, strong) NSNumber *height;   // 图片的高
+@property (nonatomic, strong) NSNumber *width;    // 图片的宽
+@property (nonatomic, strong) NSString *name;     //
+@property (nonatomic, strong) NSString *pattern;  // 图片url
+@property (nonatomic, strong) NSString *src;      // 默认url
 
 @end
