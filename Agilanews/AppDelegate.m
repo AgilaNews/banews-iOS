@@ -418,14 +418,16 @@
     SSLog(@"InstanceID token: %@", refreshedToken);
     // Connect to FCM since connection may have failed when attempted before having a token.
     [self connectToFcm];
-    // 注册topics
-    [[FIRMessaging messaging] subscribeToTopic:@"/topics/notification"];
-    NSString * version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-    [[FIRMessaging messaging] subscribeToTopic:[NSString stringWithFormat:@"/topics/ios_v%@",version]];
+    // 取消注册topics
     [[FIRMessaging messaging] unsubscribeFromTopic:@"/topics/ios_v1.1.5"];
     [[FIRMessaging messaging] unsubscribeFromTopic:@"/topics/ios_v1.1.6"];
     [[FIRMessaging messaging] unsubscribeFromTopic:@"/topics/ios_v1.1.7"];
     [[FIRMessaging messaging] unsubscribeFromTopic:@"/topics/ios_v1.1.8"];
+    [[FIRMessaging messaging] unsubscribeFromTopic:@"/topics/ios_v1.1.9"];
+    // 注册topics
+    [[FIRMessaging messaging] subscribeToTopic:@"/topics/notification"];
+    NSString * version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    [[FIRMessaging messaging] subscribeToTopic:[NSString stringWithFormat:@"/topics/ios_v%@",version]];
     if (refreshedToken.length) {
         DEF_PERSISTENT_SET_OBJECT(@"refreshToken", refreshedToken);
         [self uploadRefreshedToken:refreshedToken];
