@@ -53,11 +53,6 @@
     animation.duration = 0.25;
     animation.cumulative = YES;
     animation.repeatCount = HUGE_VALF;
-//    CGRect imageRrect = CGRectMake(0, 0,_loading.width, _loading.height);
-//    UIGraphicsBeginImageContext(imageRrect.size);
-//    [_loading.image drawInRect:CGRectMake(1 , 1, _loading.width - 2, _loading.height - 2)];
-//    _loading.image = UIGraphicsGetImageFromCurrentImageContext();
-//    UIGraphicsEndImageContext();
     [_loading.layer addAnimation:animation forKey:nil];
 }
 

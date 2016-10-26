@@ -7,10 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "LoadingView.h"
 
-@interface DetailPlayerViewController : UIViewController
+@interface DetailPlayerViewController : UIViewController<YTPlayerViewDelegate>
 
 @property (nonatomic, strong) YTPlayerView *playerView;
+@property (nonatomic, strong) UIImageView *holderView;
+@property (nonatomic, strong) LoadingView *loadingView;
 @property (nonatomic, strong) NSNumber *width;
 @property (nonatomic, strong) NSNumber *height;
 @property (nonatomic, strong) NSString *videoid;
