@@ -15,6 +15,8 @@
 #define titleFont_Large         [UIFont systemFontOfSize:18]
 #define titleFont_Small         [UIFont systemFontOfSize:14]
 
+#define imageHeight 162 * kScreenWidth / 320.0
+
 @implementation BigPicCell
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier bgColor:(UIColor *)bgColor
@@ -61,7 +63,7 @@
         make.left.mas_equalTo(weakSelf.titleLabel.mas_left);
         make.top.mas_equalTo(weakSelf.titleLabel.mas_bottom).offset(10);
         make.width.mas_equalTo(kScreenWidth - 22);
-        make.height.mas_equalTo(162);
+        make.height.mas_equalTo(imageHeight);
     }];
     // 标签布局
     CGSize tagLabelSize = [_model.tag calculateSize:CGSizeMake(100, 13) font:self.tagLabel.font];
@@ -111,7 +113,7 @@
         make.left.mas_equalTo(weakSelf.titleLabel.mas_left);
         make.top.mas_equalTo(weakSelf.titleLabel.mas_bottom).offset(10);
         make.width.mas_equalTo(kScreenWidth - 22);
-        make.height.mas_equalTo(162);
+        make.height.mas_equalTo(imageHeight);
     }];
     if (_model.tag.length > 0) {
         self.tagLabel.hidden = NO;
@@ -194,7 +196,7 @@
     ImageModel *imageModel = _model.imgs.firstObject;
     float width = kScreenWidth - 22;
     NSString *imageUrl = [imageModel.pattern stringByReplacingOccurrencesOfString:@"{w}" withString:[NSString stringWithFormat:@"%d",((int)width * 2)]];
-    imageUrl = [imageUrl stringByReplacingOccurrencesOfString:@"{h}" withString:[NSString stringWithFormat:@"%d",162 * 2]];
+    imageUrl = [imageUrl stringByReplacingOccurrencesOfString:@"{h}" withString:[NSString stringWithFormat:@"%d",(int)(imageHeight * 2)]];
     imageUrl = [imageUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     [self.titleImageView sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:[UIImage imageNamed:@"holderImage"] options:SDWebImageRetryFailed completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         if (!image) {

@@ -29,6 +29,8 @@
 #define titleFont_Large         [UIFont systemFontOfSize:18]
 #define titleFont_Small         [UIFont systemFontOfSize:14]
 
+#define imageHeight 162 * kScreenWidth / 320.0
+
 @import SafariServices;
 @interface HomeTableViewController ()
 
@@ -206,7 +208,7 @@
         case NEWS_BigPic:
         {
             CGSize titleLabelSize = [model.title calculateSize:CGSizeMake(kScreenWidth - 22, 40) font:titleFont];
-            return 12 + titleLabelSize.height + 162 + 20 + 11 + 11;
+            return 12 + titleLabelSize.height + imageHeight + 20 + 11 + 11;
         }
         case NEWS_OnlyPic:
         {
