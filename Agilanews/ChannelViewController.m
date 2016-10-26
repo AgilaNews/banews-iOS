@@ -197,7 +197,7 @@
                 if (currentVersion) {
                     [eventDic setObject:currentVersion forKey:@"version"];
                 } else {
-                    [eventDic setObject:kChannelVersion forKey:@"version"];
+                    [eventDic setObject:@"" forKey:@"version"];
                 }
                 NSMutableArray *channels = [NSMutableArray array];
                 for (CategoriesModel *model in _dataList) {

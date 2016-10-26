@@ -98,8 +98,5 @@
 // 刷新成功提示banner
 #define DEF_banner(num) [NSString stringWithFormat:@"Found %ld stories for you",num]
 
-// 默认频道版本号
-#define kChannelVersion  @4
-
 
 #endif /* Macros_pch */
