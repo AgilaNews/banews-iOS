@@ -1174,6 +1174,7 @@
         _likeButton.hidden = YES;
         [_likeButton setAdjustsImageWhenHighlighted:NO];
         [_likeButton setTitleColor:SSColor(102, 102, 102) forState:UIControlStateNormal];
+        [_likeButton setTitleColor:kOrangeColor forState:UIControlStateSelected];
         [_likeButton setBackgroundColor:kWhiteBgColor forState:UIControlStateNormal];
         [_likeButton setImage:[UIImage imageNamed:@"icon_article_like_default"] forState:UIControlStateNormal];
         [_likeButton setImage:[UIImage imageNamed:@"icon_article_like_select"] forState:UIControlStateSelected];

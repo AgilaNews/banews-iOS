@@ -262,10 +262,11 @@
         _likeButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _likeButton.imageView.backgroundColor = [UIColor whiteColor];
         _likeButton.titleLabel.backgroundColor = [UIColor whiteColor];
-        _likeButton.titleLabel.font = [UIFont systemFontOfSize:12];
+        _likeButton.titleLabel.font = [UIFont systemFontOfSize:13];
         _likeButton.adjustsImageWhenHighlighted = NO;
         _likeButton.hidden = YES;
         [_likeButton setTitleColor:SSColor(102, 102, 102) forState:UIControlStateNormal];
+        [_likeButton setTitleColor:kOrangeColor forState:UIControlStateSelected];
         [_likeButton setBackgroundColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_likeButton setImage:[UIImage imageNamed:@"icon_like_d"] forState:UIControlStateNormal];
         [_likeButton setImage:[UIImage imageNamed:@"icon_like_s"] forState:UIControlStateSelected];

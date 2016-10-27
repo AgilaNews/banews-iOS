@@ -38,7 +38,6 @@
          [weakSelf createImageFolderAtPath];
          NSString *type = data[@"type"];
          if ([type isEqualToString:@"video"]) {
-             [_webView stopLoading];
              // 视频
              NSString *videoid = data[@"videoid"];
              DetailPlayerViewController *detailPlayerVC = [[DetailPlayerViewController alloc] init];
