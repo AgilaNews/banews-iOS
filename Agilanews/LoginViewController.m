@@ -97,6 +97,7 @@
 #if DEBUG
             [iConsole info:@"Login_Facebook_Click",nil];
 #endif
+            [SVProgressHUD show];
             [ShareSDK getUserInfo:SSDKPlatformTypeFacebook onStateChanged:^(SSDKResponseState state, SSDKUser *user, NSError *error) {
                 if (state == SSDKResponseStateSuccess) {
                     // 打点-登陆Facebook成功-010605
@@ -111,11 +112,12 @@
 #if DEBUG
                     [iConsole info:@"Login_Facebook_Click_N",nil];
 #endif
+                    [SVProgressHUD dismiss];
                     SSLog(@"%@",error);
                 }
             }];
-        }
             break;
+        }
         case Twitter:
         {
             // 打点-点击twitter-010603
@@ -123,6 +125,7 @@
 #if DEBUG
             [iConsole info:@"Login_Twitter_Click",nil];
 #endif
+            [SVProgressHUD show];
             [ShareSDK getUserInfo:SSDKPlatformTypeTwitter onStateChanged:^(SSDKResponseState state, SSDKUser *user, NSError *error) {
                 if (state == SSDKResponseStateSuccess) {
                     // 打点-登陆twitter成功-010606
@@ -137,11 +140,12 @@
 #if DEBUG
                     [iConsole info:@"Login_Twitter_Click_N",nil];
 #endif
+                    [SVProgressHUD dismiss];
                     SSLog(@"%@",error);
                 }
             }];
-        }
             break;
+        }
         case GooglePuls:
         {
             // 打点-点击Google＋-010604
@@ -150,26 +154,8 @@
             [iConsole info:@"Login_Google_Click",nil];
 #endif
             [[GIDSignIn sharedInstance] signIn];
-//            [ShareSDK getUserInfo:SSDKPlatformTypeGooglePlus onStateChanged:^(SSDKResponseState state, SSDKUser *user, NSError *error) {
-//                if (state == SSDKResponseStateSuccess) {
-//                    // 打点-登陆Google＋成功-010607
-//                    [Flurry logEvent:@"Login_Google_Click_Y"];
-//#if DEBUG
-//                    [iConsole info:@"Login_Google_Click_Y",nil];
-//#endif
-//                    [self loginWithUserData:user LoginType:GooglePuls];
-//                } else {
-//                    // 打点-登陆Google＋失败-010610
-//                    [Flurry logEvent:@"Login_Google_Click_N"];
-//#if DEBUG
-//                    [iConsole info:@"Login_Google_Click_N",nil];
-//#endif
-//                    SSLog(@"%@",error);
-//                }
-//            }];
-        }
             break;
-            
+        }
         default:
             break;
     }
@@ -193,11 +179,10 @@
         case GooglePuls:
         {
             [params setValue:@"googleplus" forKey:@"source"];
-//            NSString *email = user.rawData[@"emails"][0][@"value"];
             NSString *email = user.rawData[@"email"];
             [params setValue:email forKey:@"email"];
-        }
             break;
+        }
         default:
             break;
     }

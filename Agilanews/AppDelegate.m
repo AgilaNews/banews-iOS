@@ -914,6 +914,9 @@
             openURL:(NSURL *)url
             options:(NSDictionary *)options
 {
+    if ([[Twitter sharedInstance] application:app openURL:url options:options]) {
+        return YES;
+    }
     return [[GIDSignIn sharedInstance] handleURL:url
                                sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
                                       annotation:options[UIApplicationOpenURLOptionsAnnotationKey]];
