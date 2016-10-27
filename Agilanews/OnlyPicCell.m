@@ -125,6 +125,7 @@
     }
     self.likeButton.hidden = NO;
     
+    self.titleImageView.contentMode = UIViewContentModeCenter;
     NSNumber *textOnlyMode = DEF_PERSISTENT_GET_OBJECT(SS_textOnlyMode);
     if ([textOnlyMode integerValue] == 1) {
         self.titleImageView.image = [UIImage imageNamed:@"holderImage"];
@@ -135,6 +136,7 @@
         if (!image) {
             _titleImageView.image = [UIImage imageNamed:@"holderImage"];
         } else {
+            _titleImageView.contentMode = UIViewContentModeScaleAspectFit;
             _titleImageView.image = image;
         }
     }];
@@ -178,7 +180,7 @@
     if (_titleImageView == nil) {
         _titleImageView = [[UIImageView alloc] init];
         _titleImageView.backgroundColor = SSColor(235, 235, 235);
-        _titleImageView.contentMode = UIViewContentModeScaleAspectFit;
+        _titleImageView.contentMode = UIViewContentModeCenter;
         _titleImageView.clipsToBounds = YES;
         _titleImageView.image = [UIImage imageNamed:@"holderImage"];
         _titleImageView.userInteractionEnabled = YES;

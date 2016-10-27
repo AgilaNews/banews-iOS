@@ -13,7 +13,7 @@
 #import "AppDelegate.h"
 #import "CommentTextView.h"
 
-@interface NewsDetailViewController : BaseViewController <UIWebViewDelegate, UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, UITextViewDelegate, FBSDKSharingDelegate, UIWebViewDelegate>
+@interface NewsDetailViewController : BaseViewController <UIWebViewDelegate, UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, UITextViewDelegate, FBSDKSharingDelegate>
 
 @property (nonatomic, strong) NewsModel *model;
 @property (nonatomic, strong) UIWebView *webView;

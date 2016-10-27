@@ -23,13 +23,15 @@
     _playerView = [[YTPlayerView alloc] initWithFrame:CGRectMake(0, (kScreenHeight - height) * .5, kScreenWidth, height)];
     _playerView.webView.backgroundColor = [UIColor clearColor];
     [self.view addSubview:_playerView];
-    NSDictionary *playerVars = @{@"autohide" : @1,          // 参数设为1，则视频进度条和播放器控件将会在视频开始播放几秒钟后退出播放界面。
+    NSDictionary *playerVars = @{@"autohide" : @2,          // 参数设为1，则视频进度条和播放器控件将会在视频开始播放几秒钟后退出播放界面。
                                  // 仅在用户将鼠标移动到视频播放器上方或按键盘上的某个键时，进度条和控件才会重新显示。
                                  // 参数设为0，则视频进度条和视频播放器控件在视频播放全程和全屏状态下均会显示。
                                  @"iv_load_policy" : @3,    // 将此值设为1会在默认情况下显示视频注释，而将其设为3则默认不显示。
                                  @"playsinline" : @1,       // 以内嵌方式播放还是以全屏形式播放。  1:内嵌模式  0:全屏模式
                                  @"loop" : @1,              // 是否循环播放。  0:不循环  1:循环
                                  @"rel" : @0,               // 视频播放结束时，播放器是否应显示相关视频。  0:不显示  1:显示
+                                 @"autoplay" : @1,          // 自动播放
+                                 @"modestbranding" : @1,    // 将参数值设为1可以阻止YouTube徽标显示在控件栏中。
                                  @"showinfo" : @0};         // 播放器是否显示视频标题和上传者等信息。  0:不显示  1:显示
     [self.playerView loadWithVideoId:_videoid playerVars:playerVars];
     self.playerView.delegate = self;
@@ -71,6 +73,7 @@
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self.loadingView stopAnimation];
         _holderView.hidden = YES;
+        [self.playerView playVideo];
     });
 }
 

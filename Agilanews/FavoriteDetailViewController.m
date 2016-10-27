@@ -10,6 +10,8 @@
 #import "AppDelegate.h"
 #import "NewsDetailModel.h"
 #import "ImageModel.h"
+#import "VideoModel.h"
+#import "DetailPlayerViewController.h"
 
 @interface FavoriteDetailViewController ()
 
@@ -34,37 +36,55 @@
     [_bridge registerHandler:@"ObjcCallback" handler:^(id data, WVJBResponseCallback responseCallback)
      {
          [weakSelf createImageFolderAtPath];
-         NSString *urlString = data[@"url"];
-         NSNumber *callbackId = data[@"id"];
-         urlString = [urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-         NSString *md5String = [NSString encryptPassword:urlString];
-         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-         NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:[NSString stringWithFormat:@"ImageFolder/%@.jpg", md5String]];
-         NSFileManager *fileManager = [NSFileManager defaultManager];
-         if ([fileManager fileExistsAtPath:filePath]) {
-             NSString *imagePath = [NSString stringWithFormat:@"file://%@/",filePath];
-             responseCallback(@{
-                                @"path": imagePath,
-                                @"id": callbackId
-                                });
+         NSString *type = data[@"type"];
+         if ([type isEqualToString:@"video"]) {
+             [_webView stopLoading];
+             // 视频
+             NSString *videoid = data[@"videoid"];
+             DetailPlayerViewController *detailPlayerVC = [[DetailPlayerViewController alloc] init];
+             NSNumber *index = data[@"index"];
+             VideoModel *model = _detailModel.youtube_videos[index.intValue];
+             detailPlayerVC.width = model.width;
+             detailPlayerVC.height = model.height;
+             detailPlayerVC.pattern = model.pattern;
+             detailPlayerVC.videoid = videoid;
+             [[UIApplication sharedApplication] setStatusBarHidden:YES];
+             detailPlayerVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+             [weakSelf presentViewController:detailPlayerVC animated:YES completion:nil];
          } else {
-             SDWebImageDownloader *downloader = [SDWebImageDownloader sharedDownloader];
-             [downloader downloadImageWithURL:[NSURL URLWithString:urlString]
-                                      options:0
-                                     progress:^(NSInteger receivedSize, NSInteger expectedSize) {
-                                         // progression tracking code
-                                     }
-                                    completed:^(UIImage *image, NSData *data, NSError *error, BOOL finished) {
-                                        if (image && finished) {
-                                            if ([data writeToFile:filePath atomically:YES]) {
-                                                NSString *imagePath = [NSString stringWithFormat:@"file://%@/",filePath];
-                                                responseCallback(@{
-                                                                   @"path": imagePath,
-                                                                   @"id": callbackId
-                                                                   });
+             // 图片
+             NSString *urlString = data[@"url"];
+             NSNumber *callbackId = data[@"id"];
+             urlString = [urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+             NSString *md5String = [NSString encryptPassword:urlString];
+             NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+             NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:[NSString stringWithFormat:@"ImageFolder/%@.jpg", md5String]];
+             NSFileManager *fileManager = [NSFileManager defaultManager];
+             if ([fileManager fileExistsAtPath:filePath]) {
+                 NSString *imagePath = [NSString stringWithFormat:@"file://%@/",filePath];
+                 responseCallback(@{
+                                    @"path": imagePath,
+                                    @"id": callbackId
+                                    });
+             } else {
+                 SDWebImageDownloader *downloader = [SDWebImageDownloader sharedDownloader];
+                 [downloader downloadImageWithURL:[NSURL URLWithString:urlString]
+                                          options:0
+                                         progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+                                             // progression tracking code
+                                         }
+                                        completed:^(UIImage *image, NSData *data, NSError *error, BOOL finished) {
+                                            if (image && finished) {
+                                                if ([data writeToFile:filePath atomically:YES]) {
+                                                    NSString *imagePath = [NSString stringWithFormat:@"file://%@/",filePath];
+                                                    responseCallback(@{
+                                                                       @"path": imagePath,
+                                                                       @"id": callbackId
+                                                                       });
+                                                }
                                             }
-                                        }
-                                    }];
+                                        }];
+             }
          }
      }];
 
@@ -76,6 +96,7 @@
         model = _detailModel;
     }
     if (model) {
+        _detailModel = model;
         // css文件路径
         NSString *cssFilePath = [[NSBundle mainBundle] pathForResource:@"webView" ofType:@"css"];
         NSString *jsFilePath = [[NSBundle mainBundle] pathForResource:@"webView" ofType:@"js"];
@@ -95,6 +116,18 @@
                     ImageModel *imageModel = model.imgs[i];
                     NSString *imageUrl = [NSString stringWithFormat:@"<img src=\"\" data-src=\"%@\" height=\"%fpx\" width=\"%fpx\" class=\"ready-to-load\"/>",imageModel.src, imageModel.height.integerValue / 2.0, imageModel.width.integerValue / 2.0];
                     model.body = [model.body stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"<!--IMG%d-->",i] withString:imageUrl];
+                }
+            }
+            for (int i = 0; i < weakSelf.detailModel.youtube_videos.count; i++) {
+                if ([DEF_PERSISTENT_GET_OBJECT(SS_textOnlyMode) isEqualToNumber:@1]) {
+                    NSString *imageFilePath = [[NSBundle mainBundle] pathForResource:@"textonly" ofType:@"png"];
+                    NSString *imageUrl = [NSString stringWithFormat:@"<img src=file:///%@/>",imageFilePath];
+                    weakSelf.detailModel.body = [weakSelf.detailModel.body stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"<!--YOUTUBE%d-->",i] withString:imageUrl];
+                } else {
+                    VideoModel *videoModel = weakSelf.detailModel.youtube_videos[i];
+                    NSString *imageUrl = [NSString stringWithFormat:@"<img src=\"\" data-src=\"%@\" height=\"%fpx\" width=\"%fpx\" img-type=\"video\" videoid=\"%@\" index=\"%d\" class=\"ready-to-load\"/>", videoModel.video_pattern, videoModel.height.integerValue / 2.0, videoModel.width.integerValue / 2.0, videoModel.youtube_id, i];
+                    imageUrl = [imageUrl stringByReplacingOccurrencesOfString:@"{w}" withString:[NSString stringWithFormat:@"%ld",videoModel.width.integerValue / 2]];
+                    weakSelf.detailModel.body = [weakSelf.detailModel.body stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"<!--YOUTUBE%d-->",i] withString:imageUrl];
                 }
             }
         }
@@ -127,6 +160,7 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    _webView.delegate = nil;
 }
 
 #pragma mark - Network
@@ -144,6 +178,7 @@
     {
         [SVProgressHUD dismiss];
         NewsDetailModel *detailModel = [NewsDetailModel mj_objectWithKeyValues:responseObj];
+        _detailModel = detailModel;
         // css文件路径
         NSString *cssFilePath = [[NSBundle mainBundle] pathForResource:@"webView" ofType:@"css"];
         NSString *jsFilePath = [[NSBundle mainBundle] pathForResource:@"webView" ofType:@"js"];
@@ -163,6 +198,18 @@
                     ImageModel *imageModel = detailModel.imgs[i];
                     NSString *imageUrl = [NSString stringWithFormat:@"<img src=\"\" data-src=\"%@\" height=\"%fpx\" width=\"%fpx\" class=\"ready-to-load\"/>",imageModel.src, imageModel.height.integerValue / 2.0, imageModel.width.integerValue / 2.0];
                     detailModel.body = [detailModel.body stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"<!--IMG%d-->",i] withString:imageUrl];
+                }
+            }
+            for (int i = 0; i < detailModel.youtube_videos.count; i++) {
+                if ([DEF_PERSISTENT_GET_OBJECT(SS_textOnlyMode) isEqualToNumber:@1]) {
+                    NSString *imageFilePath = [[NSBundle mainBundle] pathForResource:@"textonly" ofType:@"png"];
+                    NSString *imageUrl = [NSString stringWithFormat:@"<img src=file:///%@/>",imageFilePath];
+                    detailModel.body = [detailModel.body stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"<!--YOUTUBE%d-->",i] withString:imageUrl];
+                } else {
+                    VideoModel *videoModel = detailModel.youtube_videos[i];
+                    NSString *imageUrl = [NSString stringWithFormat:@"<img src=\"\" data-src=\"%@\" height=\"%fpx\" width=\"%fpx\" img-type=\"video\" videoid=\"%@\" index=\"%d\" class=\"ready-to-load\"/>", videoModel.video_pattern, videoModel.height.integerValue / 2.0, videoModel.width.integerValue / 2.0, videoModel.youtube_id, i];
+                    imageUrl = [imageUrl stringByReplacingOccurrencesOfString:@"{w}" withString:[NSString stringWithFormat:@"%ld",videoModel.width.integerValue / 2]];
+                    detailModel.body = [detailModel.body stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"<!--YOUTUBE%d-->",i] withString:imageUrl];
                 }
             }
         }
