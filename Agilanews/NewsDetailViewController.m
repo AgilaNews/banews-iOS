@@ -563,11 +563,13 @@
  */
 - (void)postComment
 {
+    _commentTextView.sendButton.enabled = NO;
     __weak typeof(self) weakSelf = self;
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setObject:_model.news_id forKey:@"news_id"];
     [params setObject:_commentTextView.textView.text forKey:@"comment_detail"];
     [[SSHttpRequest sharedInstance] post:kHomeUrl_Comment params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
+        _commentTextView.sendButton.enabled = YES;
         CommentModel *model = [CommentModel mj_objectWithKeyValues:responseObj[@"comment"]];
         if (model) {
             [weakSelf.commentArray insertObject:model atIndex:0];
@@ -612,6 +614,7 @@
         [iConsole info:[NSString stringWithFormat:@"Article_Comments_Send_Y:%@",articleParams],nil];
 #endif
     } failure:^(NSError *error) {
+        _commentTextView.sendButton.enabled = YES;
         // 打点-评论失败-010211
         NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
                                        [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
