@@ -16,6 +16,7 @@
 #import "BigPicCell.h"
 #import "OnlyPicCell.h"
 #import "GifPicCell.h"
+#import "OnlyVideoCell.h"
 #import "RefreshCell.h"
 #import "AppDelegate.h"
 #import "BannerView.h"
@@ -23,6 +24,7 @@
 #import "HomeViewController.h"
 #import "ImageModel.h"
 #import "LoginViewController.h"
+#import "VideoDetailViewController.h"
 
 #define titleFont_Normal        [UIFont systemFontOfSize:16]
 #define titleFont_ExtraLarge    [UIFont systemFontOfSize:20]
@@ -30,6 +32,7 @@
 #define titleFont_Small         [UIFont systemFontOfSize:14]
 
 #define imageHeight 162 * kScreenWidth / 320.0
+#define videoHeight 180 * kScreenWidth / 320.0
 
 @import SafariServices;
 @interface HomeTableViewController ()
@@ -97,8 +100,12 @@
     self.tableView.showsHorizontalScrollIndicator = NO;
     self.tableView.sectionHeaderHeight = 0;
     self.tableView.sectionFooterHeight = 0;
+    if ([_model.channelID isEqualToNumber:@30001]) {
+        self.tableView.separatorInset = UIEdgeInsetsMake(0, -11, 0, 0);
+    } else {
+        self.tableView.separatorInset = UIEdgeInsetsMake(0, 11, 0, 11);
+    }
     self.tableView.separatorColor = SSColor(232, 232, 232);
-    self.tableView.separatorInset = UIEdgeInsetsMake(0, 11, 0, 11);
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     self.showRefreshHeader = YES;
     self.showRefreshFooter = YES;
@@ -226,6 +233,10 @@
         {
             return 12 + 68 + 12;
         }
+        case NEWS_OnlyVideo:
+        {
+            return videoHeight + 42;
+        }
         default:
             return 50;
     }
@@ -340,6 +351,19 @@
                 [cell setNeedsLayout];
                 return cell;
             }
+            case NEWS_OnlyVideo:
+            {
+                // 视频cell
+                static NSString *cellID = @"OnlyVideoCell";
+                OnlyVideoCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+                if (cell == nil) {
+                    cell = [[OnlyVideoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
+                }
+                cell.model = model;
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                [cell setNeedsLayout];
+                return cell;
+            }
             default:
                 break;
         }
@@ -425,6 +449,13 @@
         [appDelegate.eventArray addObject:eventDic];
     } isShowHUD:NO];
     
+    if ([_model.channelID isEqualToNumber:@30001]) {
+        VideoDetailViewController *videoDetailVC = [[VideoDetailViewController alloc] init];
+        //        videoDetailVC.model = model;
+        //        videoDetailVC.channelName = _model.name;
+        [self.navigationController pushViewController:videoDetailVC animated:YES];
+        return;
+    }
     [appDelegate.checkDic setObject:@1 forKey:model.news_id];
     NewsDetailViewController *newsDetailVC = [[NewsDetailViewController alloc] init];
     newsDetailVC.model = model;
@@ -560,6 +591,38 @@
     [[SSHttpRequest sharedInstance] get:kHomeUrl_NewsList params:params contentType:UrlencodedType serverType:NetServer_Home success:^(id responseObj) {
         [SVProgressHUD dismiss];
         NSMutableArray *models = [NSMutableArray array];
+        if ([_model.channelID isEqualToNumber:@30001]) {
+            responseObj = @{@"123123123":
+                                    @[
+                                    @{@"videos":@[@{@"youtube_id":@"kGGNNSmGDpU"}],
+                                      @"news_id":@"123123",
+                                      @"tpl": @12},
+                                    @{@"videos":@[@{@"youtube_id":@"Zw-IkbUJ2r4"}],
+                                      @"news_id":@"123123",
+                                      @"tpl": @12},
+                                    @{@"videos":@[@{@"youtube_id":@"zsilMuEze-E"}],
+                                      @"news_id":@"123123",
+                                      @"tpl": @12},
+                                    @{@"videos":@[@{@"youtube_id":@"uRxofVOgtRk"}],
+                                      @"news_id":@"123123",
+                                      @"tpl": @12},
+                                    @{@"videos":@[@{@"youtube_id":@"h_EyhYwEZYI"}],
+                                      @"news_id":@"123123",
+                                      @"tpl": @12},
+                                    @{@"videos":@[@{@"youtube_id":@"KaWTBu-eH6M"}],
+                                      @"news_id":@"123123",
+                                      @"tpl": @12},
+                                    @{@"videos":@[@{@"youtube_id":@"KZXA6HQJafQ"}],
+                                      @"news_id":@"123123",
+                                      @"tpl": @12},
+                                    @{@"videos":@[@{@"youtube_id":@"3TXdUlL80Q8"}],
+                                      @"news_id":@"123123",
+                                      @"tpl": @12},
+                                    @{@"videos":@[@{@"youtube_id":@"PdIHRmFFZNU"}],
+                                      @"news_id":@"123123",
+                                      @"tpl": @12}
+                                    ]};
+        }
         for (NSDictionary *dic in [responseObj valueForKey:[responseObj allKeys].firstObject])
         {
             @autoreleasepool {

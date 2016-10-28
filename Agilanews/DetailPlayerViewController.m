@@ -7,6 +7,7 @@
 //
 
 #import "DetailPlayerViewController.h"
+#import "HomeViewController.h"
 
 @interface DetailPlayerViewController ()
 
@@ -74,9 +75,36 @@
         [self.loadingView stopAnimation];
         _holderView.hidden = YES;
         [self.playerView playVideo];
+        
+        // 服务器打点-详情页播放视频-020206
+        NSMutableDictionary *eventDic = [NSMutableDictionary dictionary];
+        [eventDic setObject:@"020206" forKey:@"id"];
+        [eventDic setObject:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970] * 1000] forKey:@"time"];
+        [eventDic setObject:_model.news_id forKey:@"news_id"];
+        [eventDic setObject:_videoid forKey:@"video_id"];
+        [eventDic setObject:[NetType getNetType] forKey:@"net"];
+        if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
+            [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) forKey:@"lng"];
+            [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) forKey:@"lat"];
+        } else {
+            [eventDic setObject:@"" forKey:@"lng"];
+            [eventDic setObject:@"" forKey:@"lat"];
+        }
+        NSDictionary *sessionDic = [NSDictionary dictionaryWithObjectsAndKeys:
+                                    DEF_PERSISTENT_GET_OBJECT(@"UUID"), @"id",
+                                    [NSArray arrayWithObject:eventDic], @"events",
+                                    nil];
+        NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObject:[NSArray arrayWithObject:sessionDic] forKey:@"sessions"];
+        [[SSHttpRequest sharedInstance] post:@"" params:params contentType:JsonType serverType:NetServer_Log success:^(id responseObj) {
+            // 打点成功
+        } failure:^(NSError *error) {
+            // 打点失败
+            [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
+            AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+            [appDelegate.eventArray addObject:eventDic];
+        } isShowHUD:NO];
     });
 }
-
 - (void)playerView:(nonnull YTPlayerView *)playerView didChangeToState:(YTPlayerState)state
 {
     switch (state) {
@@ -88,6 +116,25 @@
             break;
         default:
             break;
+    }
+}
+- (void)playerView:(YTPlayerView *)playerView receivedError:(YTPlayerError)error
+{
+    if (error) {
+        // 打点-播放失败-010227
+        UINavigationController *navCtrl = (UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+        HomeViewController *homeVC = navCtrl.viewControllers.firstObject;
+        NSString *channelName = homeVC.segmentVC.titleArray[homeVC.segmentVC.selectIndex - 10000];
+        NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
+                                       [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
+                                       channelName, @"channel",
+                                       _model.news_id, @"article",
+                                       [NetType getNetType], @"network",
+                                       nil];
+        [Flurry logEvent:@"Article_Play_Failure" withParameters:articleParams];
+#if DEBUG
+        [iConsole info:[NSString stringWithFormat:@"Article_Play_Failure:%@",articleParams],nil];
+#endif
     }
 }
 

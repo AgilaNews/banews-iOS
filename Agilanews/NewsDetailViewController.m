@@ -20,6 +20,7 @@
 #import "GuideFavoritesView.h"
 #import "DetailPlayerViewController.h"
 #import "BaseNavigationController.h"
+#import "HomeViewController.h"
 
 #define titleFont_Normal        [UIFont systemFontOfSize:16]
 #define titleFont_ExtraLarge    [UIFont systemFontOfSize:20]
@@ -94,6 +95,20 @@
          [weakSelf createImageFolderAtPath];
          NSString *type = data[@"type"];
          if ([type isEqualToString:@"video"]) {
+             // 打点-点击播放-010226
+             UINavigationController *navCtrl = (UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+             HomeViewController *homeVC = navCtrl.viewControllers.firstObject;
+             NSString *channelName = homeVC.segmentVC.titleArray[homeVC.segmentVC.selectIndex - 10000];
+             NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
+                                            [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
+                                            channelName, @"channel",
+                                            _model.news_id, @"article",
+                                            [NetType getNetType], @"network",
+                                            nil];
+             [Flurry logEvent:@"Article_Play_Click" withParameters:articleParams];
+#if DEBUG
+             [iConsole info:[NSString stringWithFormat:@"Article_Play_Click:%@",articleParams],nil];
+#endif
              // 视频
              NSString *videoid = data[@"videoid"];
              DetailPlayerViewController *detailPlayerVC = [[DetailPlayerViewController alloc] init];
@@ -103,6 +118,7 @@
              detailPlayerVC.height = model.height;
              detailPlayerVC.pattern = model.pattern;
              detailPlayerVC.videoid = videoid;
+             detailPlayerVC.model = _model;
              [[UIApplication sharedApplication] setStatusBarHidden:YES];
              detailPlayerVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
              [weakSelf presentViewController:detailPlayerVC animated:YES completion:nil];

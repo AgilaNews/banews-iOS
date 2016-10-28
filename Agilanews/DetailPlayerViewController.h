@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "LoadingView.h"
+#import "NewsModel.h"
 
 @interface DetailPlayerViewController : UIViewController<YTPlayerViewDelegate>
 
@@ -18,5 +19,6 @@
 @property (nonatomic, strong) NSNumber *height;
 @property (nonatomic, strong) NSString *videoid;
 @property (nonatomic, strong) NSString *pattern;
+@property (nonatomic, strong) NewsModel *model;
 
 @end
