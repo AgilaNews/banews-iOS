@@ -7,6 +7,7 @@
 //
 
 #import "VideoDetailViewController.h"
+#import "PopTransitionAnimate.h"
 
 @interface VideoDetailViewController ()
 
@@ -17,11 +18,15 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.isBackButton = YES;
+    _toView = [[UIApplication sharedApplication].keyWindow snapshotViewAfterScreenUpdates:NO];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    self.navigationController.delegate = self;
+
     if ([UIDevice currentDevice].systemVersion.floatValue >= 10.0) {
         [self.navigationController.navigationBar setBarTintColor:[UIColor clearColor]];
         UIView *barBgView = self.navigationController.navigationBar.subviews.firstObject;
@@ -36,21 +41,16 @@
     }
 }
 
-- (void)viewWillDisappear:(BOOL)animated
+#pragma mark - UINavigationControllerDelegate
+- (id<UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController animationControllerForOperation:(UINavigationControllerOperation)operation fromViewController:(UIViewController *)fromVC toViewController:(UIViewController *)toVC
 {
-    [super viewWillDisappear:animated];
-    if ([UIDevice currentDevice].systemVersion.floatValue >= 10.0) {
-        [self.navigationController.navigationBar setBarTintColor:kOrangeColor];
-        UIView *barBgView = self.navigationController.navigationBar.subviews.firstObject;
-        for (UIView *subview in barBgView.subviews) {
-            if([subview isKindOfClass:[UIVisualEffectView class]]) {
-                subview.backgroundColor = kOrangeColor;
-                [subview removeAllSubviews];
-            }
-        }
-    } else {
-        [self.navigationController.navigationBar lt_setBackgroundColor:kOrangeColor];
-    }}
+    if (operation == UINavigationControllerOperationPop) {
+        PopTransitionAnimate *popTransition = [[PopTransitionAnimate alloc] initWithToView:_toView];
+        return popTransition;
+    }else{
+        return nil;
+    }
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

@@ -25,6 +25,7 @@
 #import "ImageModel.h"
 #import "LoginViewController.h"
 #import "VideoDetailViewController.h"
+#import "PushTransitionAnimate.h"
 
 #define titleFont_Normal        [UIFont systemFontOfSize:16]
 #define titleFont_ExtraLarge    [UIFont systemFontOfSize:20]
@@ -149,6 +150,24 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    self.navigationController.delegate = self;
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    if ([UIDevice currentDevice].systemVersion.floatValue >= 10.0) {
+        [self.navigationController.navigationBar setBarTintColor:kOrangeColor];
+        UIView *barBgView = self.navigationController.navigationBar.subviews.firstObject;
+        for (UIView *subview in barBgView.subviews) {
+            if([subview isKindOfClass:[UIVisualEffectView class]]) {
+                subview.backgroundColor = kOrangeColor;
+                [subview removeAllSubviews];
+            }
+        }
+    } else {
+        [self.navigationController.navigationBar lt_setBackgroundColor:kOrangeColor];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -1126,6 +1145,18 @@
         
         AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
         [appDelegate.refreshTimeDic setObject:[NSNumber numberWithLongLong:refreshTime] forKey:_model.channelID];
+    }
+}
+
+#pragma mark - UINavigationControllerDelegate
+- (id<UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController animationControllerForOperation:(UINavigationControllerOperation)operation fromViewController:(UIViewController *)fromVC toViewController:(UIViewController *)toVC
+{
+    // && [_model.channelID isEqualToNumber:@30001]
+    if(operation == UINavigationControllerOperationPush) {
+        PushTransitionAnimate *pushTransition = [[PushTransitionAnimate alloc] init];
+        return pushTransition;
+    } else {
+        return nil;
     }
 }
 

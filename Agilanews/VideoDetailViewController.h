@@ -8,6 +8,8 @@
 
 #import "BaseViewController.h"
 
-@interface VideoDetailViewController : BaseViewController
+@interface VideoDetailViewController : BaseViewController<UINavigationControllerDelegate>
+
+@property (nonatomic, strong) UIView *toView;
 
 @end

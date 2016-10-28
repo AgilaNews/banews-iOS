@@ -72,6 +72,8 @@
 		5F5342B41DBDF30E005D78F1 /* OnlyVideoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5342B31DBDF30E005D78F1 /* OnlyVideoCell.m */; };
 		5F5342B71DBF3CD8005D78F1 /* DetailPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5342B61DBF3CD8005D78F1 /* DetailPlayerViewController.m */; };
 		5F5342BA1DC21C7E005D78F1 /* VideoDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5342B91DC21C7E005D78F1 /* VideoDetailViewController.m */; };
+		5F5342BE1DC32862005D78F1 /* PushTransitionAnimate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5342BD1DC32862005D78F1 /* PushTransitionAnimate.m */; };
+		5F5342C11DC32870005D78F1 /* PopTransitionAnimate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5342C01DC32870005D78F1 /* PopTransitionAnimate.m */; };
 		5F571F691D58269600604CDD /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F571F681D58269600604CDD /* Crashlytics.framework */; };
 		5F571F701D58742B00604CDD /* FlurryEmpty.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F571F6C1D58742B00604CDD /* FlurryEmpty.m */; };
 		5F571F711D58742B00604CDD /* libFlurry_7.6.6.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F571F6E1D58742B00604CDD /* libFlurry_7.6.6.a */; };
@@ -352,6 +354,10 @@
 		5F5342B61DBF3CD8005D78F1 /* DetailPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailPlayerViewController.m; sourceTree = "<group>"; };
 		5F5342B81DC21C7E005D78F1 /* VideoDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoDetailViewController.h; sourceTree = "<group>"; };
 		5F5342B91DC21C7E005D78F1 /* VideoDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoDetailViewController.m; sourceTree = "<group>"; };
+		5F5342BC1DC32862005D78F1 /* PushTransitionAnimate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PushTransitionAnimate.h; sourceTree = "<group>"; };
+		5F5342BD1DC32862005D78F1 /* PushTransitionAnimate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PushTransitionAnimate.m; sourceTree = "<group>"; };
+		5F5342BF1DC32870005D78F1 /* PopTransitionAnimate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopTransitionAnimate.h; sourceTree = "<group>"; };
+		5F5342C01DC32870005D78F1 /* PopTransitionAnimate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopTransitionAnimate.m; sourceTree = "<group>"; };
 		5F571F681D58269600604CDD /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		5F571F6B1D58742B00604CDD /* Flurry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Flurry.h; sourceTree = "<group>"; };
 		5F571F6C1D58742B00604CDD /* FlurryEmpty.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlurryEmpty.m; sourceTree = "<group>"; };
@@ -956,6 +962,17 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		5F5342BB1DC32832005D78F1 /* CustomTransition */ = {
+			isa = PBXGroup;
+			children = (
+				5F5342BC1DC32862005D78F1 /* PushTransitionAnimate.h */,
+				5F5342BD1DC32862005D78F1 /* PushTransitionAnimate.m */,
+				5F5342BF1DC32870005D78F1 /* PopTransitionAnimate.h */,
+				5F5342C01DC32870005D78F1 /* PopTransitionAnimate.m */,
+			);
+			name = CustomTransition;
+			sourceTree = "<group>";
+		};
 		5F571F6A1D58742B00604CDD /* Flurry */ = {
 			isa = PBXGroup;
 			children = (
@@ -1193,6 +1210,7 @@
 		5FF4B6E71D36458900CC6704 /* Base */ = {
 			isa = PBXGroup;
 			children = (
+				5F5342BB1DC32832005D78F1 /* CustomTransition */,
 				5FF4B7031D373E2200CC6704 /* EaseRefreshTableViewController.h */,
 				5FF4B7041D373E2200CC6704 /* EaseRefreshTableViewController.m */,
 				5FF4B6E81D3645A100CC6704 /* BaseModel.h */,
@@ -1589,6 +1607,7 @@
 				5F42C0A01D34E42A00B89651 /* SVProgressHUD.m in Sources */,
 				5F17B4FE1DB9E45C008EBD51 /* LocalFavorite+CoreDataClass.m in Sources */,
 				5F42C08E1D34E41D00B89651 /* UIImage+WebP.m in Sources */,
+				5F5342BE1DC32862005D78F1 /* PushTransitionAnimate.m in Sources */,
 				5FF4B6EE1D3645DE00CC6704 /* CategoriesModel.m in Sources */,
 				5F571F751D589BEF00604CDD /* NetType.m in Sources */,
 				5F767A851D9CE82E00822BAC /* NSObject+MJClass.m in Sources */,
@@ -1630,6 +1649,7 @@
 				5F42BFF71D34E3D500B89651 /* AFSecurityPolicy.m in Sources */,
 				5FF4B7B21D38F7B200CC6704 /* MASViewConstraint.m in Sources */,
 				5F42C0861D34E41D00B89651 /* SDWebImageDecoder.m in Sources */,
+				5F5342C11DC32870005D78F1 /* PopTransitionAnimate.m in Sources */,
 				5F8D85AA1D76A99700FF4019 /* WebViewJavascriptBridge.m in Sources */,
 				5FF4B6E31D362F0000CC6704 /* base64.m in Sources */,
 				5F767A831D9CE82E00822BAC /* MJPropertyKey.m in Sources */,
