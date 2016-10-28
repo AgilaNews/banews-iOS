@@ -71,6 +71,7 @@
 		5F42C0C01D34EFEE00B89651 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F42C0BF1D34EFEE00B89651 /* UIKit.framework */; };
 		5F5342B41DBDF30E005D78F1 /* OnlyVideoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5342B31DBDF30E005D78F1 /* OnlyVideoCell.m */; };
 		5F5342B71DBF3CD8005D78F1 /* DetailPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5342B61DBF3CD8005D78F1 /* DetailPlayerViewController.m */; };
+		5F5342BA1DC21C7E005D78F1 /* VideoDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5342B91DC21C7E005D78F1 /* VideoDetailViewController.m */; };
 		5F571F691D58269600604CDD /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F571F681D58269600604CDD /* Crashlytics.framework */; };
 		5F571F701D58742B00604CDD /* FlurryEmpty.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F571F6C1D58742B00604CDD /* FlurryEmpty.m */; };
 		5F571F711D58742B00604CDD /* libFlurry_7.6.6.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F571F6E1D58742B00604CDD /* libFlurry_7.6.6.a */; };
@@ -349,6 +350,8 @@
 		5F5342B31DBDF30E005D78F1 /* OnlyVideoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnlyVideoCell.m; sourceTree = "<group>"; };
 		5F5342B51DBF3CD8005D78F1 /* DetailPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailPlayerViewController.h; sourceTree = "<group>"; };
 		5F5342B61DBF3CD8005D78F1 /* DetailPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailPlayerViewController.m; sourceTree = "<group>"; };
+		5F5342B81DC21C7E005D78F1 /* VideoDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoDetailViewController.h; sourceTree = "<group>"; };
+		5F5342B91DC21C7E005D78F1 /* VideoDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoDetailViewController.m; sourceTree = "<group>"; };
 		5F571F681D58269600604CDD /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		5F571F6B1D58742B00604CDD /* Flurry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Flurry.h; sourceTree = "<group>"; };
 		5F571F6C1D58742B00604CDD /* FlurryEmpty.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlurryEmpty.m; sourceTree = "<group>"; };
@@ -1252,6 +1255,8 @@
 				5F635CB31D3E12C3006AAE3D /* NewsDetailViewController.m */,
 				5F5342B51DBF3CD8005D78F1 /* DetailPlayerViewController.h */,
 				5F5342B61DBF3CD8005D78F1 /* DetailPlayerViewController.m */,
+				5F5342B81DC21C7E005D78F1 /* VideoDetailViewController.h */,
+				5F5342B91DC21C7E005D78F1 /* VideoDetailViewController.m */,
 				5F635ED71D41EB51006AAE3D /* webView.css */,
 				5F571FE31D64057500604CDD /* webView.js */,
 				5FE722211D50B5B70026BFC3 /* textonly.png */,
@@ -1633,6 +1638,7 @@
 				5FF4B7D21D3A174900CC6704 /* MJRefreshGifFooter.m in Sources */,
 				5F42C08F1D34E41D00B89651 /* UIImageView+HighlightedWebCache.m in Sources */,
 				5F635CB11D3DD4C3006AAE3D /* LeftView.m in Sources */,
+				5F5342BA1DC21C7E005D78F1 /* VideoDetailViewController.m in Sources */,
 				5FF4B7871D38DE9300CC6704 /* SinglePicCell.m in Sources */,
 				5FF4B7D11D3A174900CC6704 /* MJRefreshFooter.m in Sources */,
 				5FF4B77C1D37BD2C00CC6704 /* UITextField+UhouAdditions.m in Sources */,
