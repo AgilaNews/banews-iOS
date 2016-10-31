@@ -280,6 +280,14 @@
     }
 }
 
+- (void)playerView:(YTPlayerView *)playerView receivedError:(YTPlayerError)error
+{
+    if (error) {
+        self.isPlay = NO;
+    }
+}
+
+
 #pragma mark - setter/getter
 - (void)setIsPlay:(BOOL)isPlay
 {
@@ -321,7 +329,6 @@
         _titleImageView.backgroundColor = SSColor(235, 235, 235);
         _titleImageView.contentMode = UIViewContentModeScaleAspectFit;
         _titleImageView.clipsToBounds = YES;
-        _titleImageView.image = [UIImage imageNamed:@"holderImage"];
     }
     return _titleImageView;
 }

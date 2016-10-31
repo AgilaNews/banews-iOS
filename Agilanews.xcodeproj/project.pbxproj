@@ -74,6 +74,7 @@
 		5F5342BA1DC21C7E005D78F1 /* VideoDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5342B91DC21C7E005D78F1 /* VideoDetailViewController.m */; };
 		5F5342BE1DC32862005D78F1 /* PushTransitionAnimate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5342BD1DC32862005D78F1 /* PushTransitionAnimate.m */; };
 		5F5342C11DC32870005D78F1 /* PopTransitionAnimate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5342C01DC32870005D78F1 /* PopTransitionAnimate.m */; };
+		5F5342CA1DC717C3005D78F1 /* VideoDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5342C91DC717C3005D78F1 /* VideoDetailCell.m */; };
 		5F571F691D58269600604CDD /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F571F681D58269600604CDD /* Crashlytics.framework */; };
 		5F571F701D58742B00604CDD /* FlurryEmpty.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F571F6C1D58742B00604CDD /* FlurryEmpty.m */; };
 		5F571F711D58742B00604CDD /* libFlurry_7.6.6.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F571F6E1D58742B00604CDD /* libFlurry_7.6.6.a */; };
@@ -358,6 +359,8 @@
 		5F5342BD1DC32862005D78F1 /* PushTransitionAnimate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PushTransitionAnimate.m; sourceTree = "<group>"; };
 		5F5342BF1DC32870005D78F1 /* PopTransitionAnimate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopTransitionAnimate.h; sourceTree = "<group>"; };
 		5F5342C01DC32870005D78F1 /* PopTransitionAnimate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopTransitionAnimate.m; sourceTree = "<group>"; };
+		5F5342C81DC717C3005D78F1 /* VideoDetailCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoDetailCell.h; sourceTree = "<group>"; };
+		5F5342C91DC717C3005D78F1 /* VideoDetailCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoDetailCell.m; sourceTree = "<group>"; };
 		5F571F681D58269600604CDD /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		5F571F6B1D58742B00604CDD /* Flurry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Flurry.h; sourceTree = "<group>"; };
 		5F571F6C1D58742B00604CDD /* FlurryEmpty.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlurryEmpty.m; sourceTree = "<group>"; };
@@ -1314,6 +1317,8 @@
 				5F5AE9701D5353B400A5A8B7 /* BannerView.m */,
 				5F5C63911D950AB4005D3578 /* LoadingView.h */,
 				5F5C63921D950AB4005D3578 /* LoadingView.m */,
+				5F5342C81DC717C3005D78F1 /* VideoDetailCell.h */,
+				5F5342C91DC717C3005D78F1 /* VideoDetailCell.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1611,6 +1616,7 @@
 				5FF4B6EE1D3645DE00CC6704 /* CategoriesModel.m in Sources */,
 				5F571F751D589BEF00604CDD /* NetType.m in Sources */,
 				5F767A851D9CE82E00822BAC /* NSObject+MJClass.m in Sources */,
+				5F5342CA1DC717C3005D78F1 /* VideoDetailCell.m in Sources */,
 				5F64627D1D4855F7008EEDEC /* CommentTextField.m in Sources */,
 				5F17B4871DAB78A0008EBD51 /* GuideChannelView.m in Sources */,
 				5F42C0891D34E41D00B89651 /* SDWebImageManager.m in Sources */,

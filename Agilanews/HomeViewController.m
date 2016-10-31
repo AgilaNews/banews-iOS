@@ -101,6 +101,14 @@ static CGFloat const ButtonHeight = 40;
     [_segmentVC addParentController:self navView:_navView];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    if (self.view.top == 44) {
+        self.view.frame = CGRectMake(self.view.left, self.view.top + 20, self.view.width, self.view.height - 20);
+    }
+}
+
 - (void)dealloc
 {
     // 移除通知

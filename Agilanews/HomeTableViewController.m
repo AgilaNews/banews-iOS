@@ -91,6 +91,10 @@
                                              selector:@selector(applicationWillEnterForeground)
                                                  name:UIApplicationWillEnterForegroundNotification
                                                object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(recoverVideo:)
+                                                 name:KNOTIFICATION_RecoverVideo
+                                               object:nil];
     
     // 创建表视图
     self.tableView.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight);
@@ -470,8 +474,12 @@
     
     if ([_model.channelID isEqualToNumber:@30001]) {
         VideoDetailViewController *videoDetailVC = [[VideoDetailViewController alloc] init];
-        //        videoDetailVC.model = model;
-        //        videoDetailVC.channelName = _model.name;
+        videoDetailVC.model = model;
+        videoDetailVC.channelName = _model.name;
+        OnlyVideoCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+        videoDetailVC.playerView = cell.playerView;
+        videoDetailVC.indexPath = indexPath;
+        videoDetailVC.fromCell = cell;
         [self.navigationController pushViewController:videoDetailVC animated:YES];
         return;
     }
@@ -1145,6 +1153,25 @@
         
         AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
         [appDelegate.refreshTimeDic setObject:[NSNumber numberWithLongLong:refreshTime] forKey:_model.channelID];
+    }
+}
+
+
+/**
+    视频从详情回位
+ */
+- (void)recoverVideo:(NSNotification *)notif
+{
+    if (![_model.channelID isEqualToNumber:@30001]) {
+        return;
+    }
+    NSDictionary *dic = notif.object;
+    YTPlayerView *playerView = dic[@"playerView"];
+    NSIndexPath *indexPath = dic[@"index"];
+    OnlyVideoCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    if (cell.isMove) {
+        [cell.contentView addSubview:playerView];
+        cell.isMove = NO;
     }
 }
 

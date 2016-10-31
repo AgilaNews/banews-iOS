@@ -37,13 +37,16 @@
     [contView addSubview:toVC.view];
     [contView addSubview:_toView];
     [contView addSubview:fromVC.view];
+    toVC.view.right = kScreenWidth / 2;
     _toView.right = kScreenWidth / 2;
     fromVC.view.left = 0;
     
+    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationNone];
     // 添加动画
     [UIView animateWithDuration:[self transitionDuration:transitionContext] animations:^{
         fromVC.view.left = kScreenWidth;
         _toView.left = 0;
+        toVC.view.left = 0;
     } completion:^(BOOL finished) {
         [_toView removeFromSuperview];
         [transitionContext completeTransition:YES];

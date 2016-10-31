@@ -26,6 +26,7 @@
 @property (nonatomic, strong) UILabel *commentLabel;
 @property (nonatomic, strong) UIButton *shareButton;        // 分享按钮
 @property (nonatomic, assign) BOOL isPlay;
+@property (nonatomic, assign) BOOL isMove;
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier bgColor:(UIColor *)bgColor;
 
