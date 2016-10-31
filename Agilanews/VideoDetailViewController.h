@@ -25,6 +25,7 @@
 @property (nonatomic, strong) UILabel *blankLabel;
 @property (nonatomic, strong) UIImageView *failureView;
 @property (nonatomic, strong) NSURLSessionDataTask *task;
+@property (nonatomic, assign) BOOL isContentOpen;
 
 
 @end

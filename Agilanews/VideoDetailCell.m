@@ -70,7 +70,7 @@
     }];
     [self.openButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.mas_equalTo(4);
-        make.top.mas_equalTo(weakSelf.contentLabel.mas_top).offset(-5);
+        make.top.mas_equalTo(weakSelf.contentLabel.mas_top).offset(-6);
         make.width.mas_equalTo(40);
         make.height.mas_equalTo(40);
     }];
@@ -128,7 +128,7 @@
     }];
     [self.openButton mas_updateConstraints:^(MASConstraintMaker *make) {
         make.right.mas_equalTo(4);
-        make.top.mas_equalTo(weakSelf.contentLabel.mas_top).offset(-5);
+        make.top.mas_equalTo(weakSelf.contentLabel.mas_top).offset(-6);
         make.width.mas_equalTo(40);
         make.height.mas_equalTo(40);
     }];
@@ -214,7 +214,6 @@
         [_openButton setImage:[UIImage imageNamed:@"icon_arrowdown"] forState:UIControlStateNormal];
         UIImage *closeImage = [UIImage imageWithCGImage:[UIImage imageNamed:@"icon_arrowdown"].CGImage scale:2 orientation:UIImageOrientationDown];
         [_openButton setImage:closeImage forState:UIControlStateSelected];
-        [_openButton addTarget:self action:@selector(openAction:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _openButton;
 }
@@ -269,13 +268,6 @@
         [_likeButton setTitle:@"" forState:UIControlStateNormal];
     }
     return _likeButton;
-}
-
-#pragma mark - 按钮点击事件
-- (void)openAction:(UIButton *)button
-{
-    button.selected = !button.selected;
-    [self setNeedsLayout];
 }
 
 - (void)awakeFromNib {

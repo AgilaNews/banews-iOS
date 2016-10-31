@@ -73,6 +73,10 @@
     [self.view addSubview:_tableView];
     
     _detailModel = [[NewsDetailModel alloc] init];
+    _detailModel.title = @"Park Shin Hye shy ratings con-ventions.";
+    _detailModel.source = @"buzzfeed";
+    _detailModel.body = @"Network not connected, ignoring upload request, PH to sit as observer in Morocco climate talks, Raphael Banal, Gelo Alolino go 1-2 in regular PBA Draft, Iceland PM announces resignation after vote drubbing";
+    _detailModel.likedCount = @10;
     // 请求新闻详情
 //    [self requestDataWithNewsID:_model.news_id ShowHUD:YES];
 }
@@ -251,6 +255,25 @@
     cell.likeButton.selected = !button.selected;
 }
 
+
+/**
+ 展开按钮点击事件
+
+ @param button 展开按钮
+ */
+- (void)openAction:(UIButton *)button
+{
+    if (!button.selected) {
+        _isContentOpen = YES;
+    } else {
+        _isContentOpen = NO;
+    }
+    button.selected = !button.selected;
+    VideoDetailCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+    [cell setNeedsLayout];
+    [self.tableView reloadData];
+}
+
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -299,7 +322,16 @@
 {
     switch (indexPath.section) {
         case 0:
-            return 300;
+        {
+            CGSize titleLabelSize = [_model.title calculateSize:CGSizeMake(kScreenWidth - 22, 60) font:[UIFont boldSystemFontOfSize:21]];
+            CGSize contentLabelSize = CGSizeZero;
+            if (_isContentOpen) {
+                contentLabelSize = [_detailModel.body calculateSize:CGSizeMake(kScreenWidth - 22 - 20, 1500) font:[UIFont systemFontOfSize:12]];
+            } else {
+                contentLabelSize = [_detailModel.body calculateSize:CGSizeMake(kScreenWidth - 22 - 20, 30) font:[UIFont systemFontOfSize:12]];
+            }
+            return 16 + titleLabelSize.height + 13 + 12 + 14 + contentLabelSize.height + 30 + 34 + 25;
+        }
         case 1:
             switch (indexPath.row) {
                 case 0:
@@ -392,11 +424,8 @@
             if (cell == nil) {
                 cell = [[VideoDetailCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:kWhiteBgColor];
                 [((VideoDetailCell *)cell).likeButton addTarget:self action:@selector(likeAction:) forControlEvents:UIControlEventTouchUpInside];
+                [((VideoDetailCell *)cell).openButton addTarget:self action:@selector(openAction:) forControlEvents:UIControlEventTouchUpInside];
             }
-            _detailModel.title = @"Park Shin Hye shy ratings con-ventions.";
-            _detailModel.source = @"buzzfeed";
-            _detailModel.body = @"Network not connected, ignoring upload request, PH to sit as observer in Morocco climate talks, Raphael Banal, Gelo Alolino go 1-2 in regular PBA Draft, Iceland PM announces resignation after vote drubbing";
-            _detailModel.likedCount = @10;
             ((VideoDetailCell *)cell).model = _detailModel;
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
             return cell;
