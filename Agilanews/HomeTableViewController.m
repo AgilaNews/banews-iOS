@@ -381,7 +381,7 @@
                 OnlyVideoCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
                 if (cell == nil) {
                     cell = [[OnlyVideoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
-                    [cell.shareButton addTarget:self action:@selector(shareAction:) forControlEvents:UIControlEventTouchUpInside];
+                    [cell.shareButton addTarget:self action:@selector(shareToFacebook:) forControlEvents:UIControlEventTouchUpInside];
                 }
                 cell.model = model;
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -877,6 +877,49 @@
         [appDelegate.likedDic setValue:@1 forKey:newsModel.news_id];
     }
     [((OnlyPicCell *)cell) setNeedsLayout];
+}
+
+- (void)shareToFacebook:(UIButton *)button
+{
+    id cell = button.superview;
+    do {
+        if ([cell isKindOfClass:[UITableViewCell class]]) {
+            break;
+        }
+        cell = ((UIView *)cell).superview;
+    } while (cell != nil);
+    NewsModel *newsModel = ((OnlyPicCell *)cell).model;
+
+    __weak typeof(self) weakSelf = self;
+    // 打点-分享至facebook-010219
+    NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
+                                   [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
+                                   _model.name, @"channel",
+                                   newsModel.news_id, @"article",
+                                   nil];
+    [Flurry logEvent:@"Home_List_Share_FacebookClick" withParameters:articleParams];
+#if DEBUG
+    [iConsole info:[NSString stringWithFormat:@"Home_List_Share_FacebookClick:%@",articleParams],nil];
+#endif
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    if (appDelegate.model) {
+        FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
+        NSString *shareString = newsModel.share_url;
+        shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"facebook"];
+        content.contentURL = [NSURL URLWithString:shareString];
+        content.contentTitle = newsModel.title;
+        ImageModel *imageModel = newsModel.imgs.firstObject;
+        content.imageURL = [NSURL URLWithString:imageModel.src];
+        [FBSDKShareDialog showFromViewController:weakSelf
+                                     withContent:content
+                                        delegate:weakSelf];
+    } else {
+        // 登录后分享
+        LoginViewController *loginVC = [[LoginViewController alloc] init];
+        loginVC.isShareFacebook = YES;
+        UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:loginVC];
+        [weakSelf.navigationController presentViewController:navCtrl animated:YES completion:nil];
+    }
 }
 
  /**
