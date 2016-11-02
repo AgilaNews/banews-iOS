@@ -56,7 +56,8 @@
     BaseNavigationController *navCtrl = [[BaseNavigationController alloc] initWithRootViewController:homeVC];
     // 设置根控制器
     _window.rootViewController = navCtrl;
-    
+    // 加载JSPatch
+    [self loadJSPatch];
     // 读取用户登录信息/配置信息
     [self loadUserData];
     // 监听网络状态
@@ -712,6 +713,19 @@
             _refreshTimeDic = [NSMutableDictionary dictionaryWithDictionary:[NSKeyedUnarchiver unarchiveObjectWithFile:refreshFilePath]];
         }
     });
+}
+
+
+/**
+ 加载JSPatch
+ */
+- (void)loadJSPatch
+{
+    [JPEngine startEngine];
+    // 执行本地js文件
+    NSString *sourcePath = [[NSBundle mainBundle] pathForResource:@"sample" ofType:@"js"];
+    NSString *script = [NSString stringWithContentsOfFile:sourcePath encoding:NSUTF8StringEncoding error:nil];
+    [JPEngine evaluateScript:script];
 }
 
 /**

@@ -625,38 +625,38 @@
     [[SSHttpRequest sharedInstance] get:kHomeUrl_NewsList params:params contentType:UrlencodedType serverType:type success:^(id responseObj) {
         [SVProgressHUD dismiss];
         NSMutableArray *models = [NSMutableArray array];
-//        if ([_model.channelID isEqualToNumber:@30001]) {
-//            responseObj = @{@"123123123":
-//                                    @[
-//                                    @{@"videos":@[@{@"youtube_id":@"kGGNNSmGDpU"}],
-//                                      @"news_id":@"123123",
-//                                      @"tpl": @12},
-//                                    @{@"videos":@[@{@"youtube_id":@"Zw-IkbUJ2r4"}],
-//                                      @"news_id":@"123123",
-//                                      @"tpl": @12},
-//                                    @{@"videos":@[@{@"youtube_id":@"zsilMuEze-E"}],
-//                                      @"news_id":@"123123",
-//                                      @"tpl": @12},
-//                                    @{@"videos":@[@{@"youtube_id":@"uRxofVOgtRk"}],
-//                                      @"news_id":@"123123",
-//                                      @"tpl": @12},
-//                                    @{@"videos":@[@{@"youtube_id":@"h_EyhYwEZYI"}],
-//                                      @"news_id":@"123123",
-//                                      @"tpl": @12},
-//                                    @{@"videos":@[@{@"youtube_id":@"KaWTBu-eH6M"}],
-//                                      @"news_id":@"123123",
-//                                      @"tpl": @12},
-//                                    @{@"videos":@[@{@"youtube_id":@"KZXA6HQJafQ"}],
-//                                      @"news_id":@"123123",
-//                                      @"tpl": @12},
-//                                    @{@"videos":@[@{@"youtube_id":@"3TXdUlL80Q8"}],
-//                                      @"news_id":@"123123",
-//                                      @"tpl": @12},
-//                                    @{@"videos":@[@{@"youtube_id":@"PdIHRmFFZNU"}],
-//                                      @"news_id":@"123123",
-//                                      @"tpl": @12}
-//                                    ]};
-//        }
+        if ([_model.channelID isEqualToNumber:@30001]) {
+            responseObj = @{@"123123123":
+                                    @[
+                                    @{@"videos":@[@{@"youtube_id":@"kGGNNSmGDpU"}],
+                                      @"news_id":@"123123",
+                                      @"tpl": @12},
+                                    @{@"videos":@[@{@"youtube_id":@"Zw-IkbUJ2r4"}],
+                                      @"news_id":@"123123",
+                                      @"tpl": @12},
+                                    @{@"videos":@[@{@"youtube_id":@"zsilMuEze-E"}],
+                                      @"news_id":@"123123",
+                                      @"tpl": @12},
+                                    @{@"videos":@[@{@"youtube_id":@"uRxofVOgtRk"}],
+                                      @"news_id":@"123123",
+                                      @"tpl": @12},
+                                    @{@"videos":@[@{@"youtube_id":@"h_EyhYwEZYI"}],
+                                      @"news_id":@"123123",
+                                      @"tpl": @12},
+                                    @{@"videos":@[@{@"youtube_id":@"KaWTBu-eH6M"}],
+                                      @"news_id":@"123123",
+                                      @"tpl": @12},
+                                    @{@"videos":@[@{@"youtube_id":@"KZXA6HQJafQ"}],
+                                      @"news_id":@"123123",
+                                      @"tpl": @12},
+                                    @{@"videos":@[@{@"youtube_id":@"3TXdUlL80Q8"}],
+                                      @"news_id":@"123123",
+                                      @"tpl": @12},
+                                    @{@"videos":@[@{@"youtube_id":@"PdIHRmFFZNU"}],
+                                      @"news_id":@"123123",
+                                      @"tpl": @12}
+                                    ]};
+        }
         for (NSDictionary *dic in [responseObj valueForKey:[responseObj allKeys].firstObject])
         {
             @autoreleasepool {
