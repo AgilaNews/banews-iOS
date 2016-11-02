@@ -68,6 +68,11 @@ static SSHttpRequest *_manager = nil;
                 }
                 break;
             }
+            case NetServer_Video:
+            {
+                _urlString = [NSString stringWithFormat:@"%@%@",kVideoUrl,url];
+                break;
+            }
             case NetServer_Log:
             {
                 if (DEF_PERSISTENT_GET_OBJECT(Server_Log) != nil) {

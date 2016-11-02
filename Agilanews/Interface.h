@@ -22,18 +22,21 @@ typedef enum {
     NetServer_Mon,          /* 反馈接口 */
     NetServer_Referrer,     /* 推荐接口 */
     NetServer_Check,        /* 检查版本接口 */
+    NetServer_Video,
 } NetServerType;
 
 #if DEBUG
-#define kHomeUrl        @"http://api.agilanews.info/v1"
+#define kHomeUrl        @"http://api.agilanews.info/v2"
 #define kLogUrl         @"http://log.agilanews.info"
 #define kMonUrl         @"http://mon.agilanews.info"
 #define kReferrerUrl    @"http://api.agilanews.info/referrer"
+#define kVideoUrl       @"http://api.agilanews.info/v3"
 #else
-#define kHomeUrl        @"http://api.agilanews.today/v1"
+#define kHomeUrl        @"http://api.agilanews.today/v2"
 #define kLogUrl         @"http://log.agilanews.today"
 #define kMonUrl         @"http://mon.agilanews.today"
 #define kReferrerUrl    @"http://api.agilanews.today/referrer"
+#define kVideoUrl       @"http://api.agilanews.today/v3"
 #endif
 
 // 新闻列表刷新接口

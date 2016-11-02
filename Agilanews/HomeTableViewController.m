@@ -616,41 +616,47 @@
     if (later == NO) {
         [params setObject:@"older" forKey:@"dir"];
     }
-    [[SSHttpRequest sharedInstance] get:kHomeUrl_NewsList params:params contentType:UrlencodedType serverType:NetServer_Home success:^(id responseObj) {
+    NetServerType type;
+    if ([_model.channelID isEqualToNumber:@30001]) {
+        type = NetServer_Video;
+    } else {
+        type = NetServer_Home;
+    }
+    [[SSHttpRequest sharedInstance] get:kHomeUrl_NewsList params:params contentType:UrlencodedType serverType:type success:^(id responseObj) {
         [SVProgressHUD dismiss];
         NSMutableArray *models = [NSMutableArray array];
-        if ([_model.channelID isEqualToNumber:@30001]) {
-            responseObj = @{@"123123123":
-                                    @[
-                                    @{@"videos":@[@{@"youtube_id":@"kGGNNSmGDpU"}],
-                                      @"news_id":@"123123",
-                                      @"tpl": @12},
-                                    @{@"videos":@[@{@"youtube_id":@"Zw-IkbUJ2r4"}],
-                                      @"news_id":@"123123",
-                                      @"tpl": @12},
-                                    @{@"videos":@[@{@"youtube_id":@"zsilMuEze-E"}],
-                                      @"news_id":@"123123",
-                                      @"tpl": @12},
-                                    @{@"videos":@[@{@"youtube_id":@"uRxofVOgtRk"}],
-                                      @"news_id":@"123123",
-                                      @"tpl": @12},
-                                    @{@"videos":@[@{@"youtube_id":@"h_EyhYwEZYI"}],
-                                      @"news_id":@"123123",
-                                      @"tpl": @12},
-                                    @{@"videos":@[@{@"youtube_id":@"KaWTBu-eH6M"}],
-                                      @"news_id":@"123123",
-                                      @"tpl": @12},
-                                    @{@"videos":@[@{@"youtube_id":@"KZXA6HQJafQ"}],
-                                      @"news_id":@"123123",
-                                      @"tpl": @12},
-                                    @{@"videos":@[@{@"youtube_id":@"3TXdUlL80Q8"}],
-                                      @"news_id":@"123123",
-                                      @"tpl": @12},
-                                    @{@"videos":@[@{@"youtube_id":@"PdIHRmFFZNU"}],
-                                      @"news_id":@"123123",
-                                      @"tpl": @12}
-                                    ]};
-        }
+//        if ([_model.channelID isEqualToNumber:@30001]) {
+//            responseObj = @{@"123123123":
+//                                    @[
+//                                    @{@"videos":@[@{@"youtube_id":@"kGGNNSmGDpU"}],
+//                                      @"news_id":@"123123",
+//                                      @"tpl": @12},
+//                                    @{@"videos":@[@{@"youtube_id":@"Zw-IkbUJ2r4"}],
+//                                      @"news_id":@"123123",
+//                                      @"tpl": @12},
+//                                    @{@"videos":@[@{@"youtube_id":@"zsilMuEze-E"}],
+//                                      @"news_id":@"123123",
+//                                      @"tpl": @12},
+//                                    @{@"videos":@[@{@"youtube_id":@"uRxofVOgtRk"}],
+//                                      @"news_id":@"123123",
+//                                      @"tpl": @12},
+//                                    @{@"videos":@[@{@"youtube_id":@"h_EyhYwEZYI"}],
+//                                      @"news_id":@"123123",
+//                                      @"tpl": @12},
+//                                    @{@"videos":@[@{@"youtube_id":@"KaWTBu-eH6M"}],
+//                                      @"news_id":@"123123",
+//                                      @"tpl": @12},
+//                                    @{@"videos":@[@{@"youtube_id":@"KZXA6HQJafQ"}],
+//                                      @"news_id":@"123123",
+//                                      @"tpl": @12},
+//                                    @{@"videos":@[@{@"youtube_id":@"3TXdUlL80Q8"}],
+//                                      @"news_id":@"123123",
+//                                      @"tpl": @12},
+//                                    @{@"videos":@[@{@"youtube_id":@"PdIHRmFFZNU"}],
+//                                      @"news_id":@"123123",
+//                                      @"tpl": @12}
+//                                    ]};
+//        }
         for (NSDictionary *dic in [responseObj valueForKey:[responseObj allKeys].firstObject])
         {
             @autoreleasepool {
@@ -1158,9 +1164,8 @@
         _dataList = [NSMutableArray array];
         if ([self.tableView isDisplayedInScreen]) {
             _isShowBanner = NO;
-// 修复下拉刷新位置卡住问题
+            // 修复下拉刷新位置卡住问题
             [self requestDataWithChannelID:_model.channelID isLater:YES isShowHUD:NO isShowBanner:NO];
-//            [self.tableView.header beginRefreshing];
         }
     } else {
         [self.tableView reloadData];
@@ -1170,6 +1175,7 @@
 // 从推送退出到列表页通知
 - (void)pushExit
 {
+#warning mark - 白列表bug
     if ([self.tableView isDisplayedInScreen]) {
         AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
         NSNumber *refreshNum = appDelegate.refreshTimeDic[_model.channelID];
