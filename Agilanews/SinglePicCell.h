@@ -18,6 +18,9 @@
 @property (nonatomic, strong) UILabel *sourceLabel;         // 来源
 @property (nonatomic, strong) UIImageView *timeView;        // 时钟
 @property (nonatomic, strong) UILabel *timeLabel;           // 发布时间
+@property (nonatomic, strong) UIImageView *commentView;     // 评论
+@property (nonatomic, strong) UILabel *commentLabel;        // 评论数
+
 @property (nonatomic, strong) UIColor *bgColor;
 @property (nonatomic, assign) BOOL isHaveVideo;
 @property (nonatomic, strong) UIImageView *haveVideoView;

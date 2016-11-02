@@ -47,6 +47,8 @@
     [self.contentView addSubview:self.sourceLabel];
     [self.contentView addSubview:self.timeView];
     [self.contentView addSubview:self.timeLabel];
+    [self.contentView addSubview:self.commentView];
+    [self.contentView addSubview:self.commentLabel];
     [self.contentView addSubview:self.titleImageView];
     
     __weak typeof(self) weakSelf = self;
@@ -93,6 +95,20 @@
         make.left.mas_equalTo(weakSelf.timeView.mas_right).offset(6);
         make.centerY.mas_equalTo(weakSelf.sourceLabel.mas_centerY);
         make.width.mas_equalTo(80);
+        make.height.mas_equalTo(13);
+    }];
+    // 评论布局
+    [self.commentView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(weakSelf.timeLabel.mas_right).offset(15);
+        make.centerY.mas_equalTo(weakSelf.sourceLabel.mas_centerY);
+        make.width.mas_equalTo(12);
+        make.height.mas_equalTo(11);
+    }];
+    // 评论数布局
+    [self.commentLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(weakSelf.commentView.mas_right).offset(5);
+        make.centerY.mas_equalTo(weakSelf.sourceLabel.mas_centerY);
+        make.width.mas_equalTo(50);
         make.height.mas_equalTo(13);
     }];
 }
@@ -167,6 +183,28 @@
         make.left.mas_equalTo(weakSelf.timeView.mas_right).offset(5);
         make.centerY.mas_equalTo(weakSelf.sourceLabel.mas_centerY);
     }];
+    // 评论布局
+    if (_model.commentCount.integerValue > 0) {
+        [self.commentView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.left.mas_equalTo(weakSelf.timeLabel.mas_right).offset(15);
+            make.centerY.mas_equalTo(weakSelf.sourceLabel.mas_centerY);
+            make.width.mas_equalTo(12);
+            make.height.mas_equalTo(11);
+        }];
+        CGSize commentViewSize = [timeString calculateSize:CGSizeMake(80, 13) font:self.commentLabel.font];
+        [self.commentLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.left.mas_equalTo(weakSelf.commentView.mas_right).offset(5);
+            make.centerY.mas_equalTo(weakSelf.sourceLabel.mas_centerY);
+            make.width.mas_equalTo(commentViewSize.width);
+            make.height.mas_equalTo(commentViewSize.height);
+        }];
+        self.commentView.hidden = NO;
+        self.commentLabel.hidden = NO;
+        self.commentLabel.text = _model.commentCount.stringValue;
+    } else {
+        self.commentView.hidden = YES;
+        self.commentLabel.hidden = YES;
+    }
     
     [super updateConstraints];
     
@@ -298,6 +336,29 @@
         _timeLabel.textColor = kGrayColor;
     }
     return _timeLabel;
+}
+
+- (UIImageView *)commentView
+{
+    if (_commentView == nil) {
+        _commentView = [[UIImageView alloc] init];
+        _commentView.contentMode = UIViewContentModeScaleAspectFit;
+        _commentView.image = [UIImage imageNamed:@"comment"];
+        _commentView.hidden = YES;
+    }
+    return _commentView;
+}
+
+- (UILabel *)commentLabel
+{
+    if (_commentLabel == nil) {
+        _commentLabel = [[UILabel alloc] init];
+        _commentLabel.backgroundColor = _bgColor;
+        _commentLabel.font = [UIFont systemFontOfSize:12];
+        _commentLabel.textColor = kGrayColor;
+        _commentLabel.hidden = YES;
+    }
+    return _commentLabel;
 }
 
 - (void)fontChange

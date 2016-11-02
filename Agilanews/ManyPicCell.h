@@ -11,6 +11,7 @@
 
 @interface ManyPicCell : UITableViewCell
 
+@property (nonatomic, strong) UIColor *bgColor;
 @property (nonatomic, strong) NewsModel *model;
 @property (nonatomic, strong) UILabel *titleLabel;          // 标题
 @property (nonatomic, strong) UIImageView *imageViewOne;    // 图片1
@@ -20,7 +21,8 @@
 @property (nonatomic, strong) UILabel *sourceLabel;         // 来源
 @property (nonatomic, strong) UIImageView *timeView;        // 时钟
 @property (nonatomic, strong) UILabel *timeLabel;           // 发布时间
-@property (nonatomic, strong) UIColor *bgColor;
+@property (nonatomic, strong) UIImageView *commentView;     // 评论
+@property (nonatomic, strong) UILabel *commentLabel;        // 评论数
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier bgColor:(UIColor *)bgColor;
 
