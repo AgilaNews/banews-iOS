@@ -23,7 +23,8 @@ MJCodingImplementation
              @"name":@"name",
              @"pattern":@"pattern",
              @"video_pattern":@"video_pattern",
-             @"youtube_id":@"youtube_id"
+             @"youtube_id":@"youtube_id",
+             @"content":@"description"
              };
 }
 

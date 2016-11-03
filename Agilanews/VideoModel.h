@@ -19,5 +19,6 @@
 @property (nonatomic, strong) NSString *pattern;        // 视频占位图
 @property (nonatomic, strong) NSString *video_pattern;  // 缓存占位图
 @property (nonatomic, strong) NSString *youtube_id;     // 视频id
+@property (nonatomic, strong) NSString *content;        // 视频描述
 
 @end

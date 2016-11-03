@@ -72,13 +72,6 @@
     _tableView.separatorColor = SSColor(235, 235, 235);
     [self.view addSubview:_tableView];
     
-    _detailModel = [[NewsDetailModel alloc] init];
-    _detailModel.title = @"Park Shin Hye shy ratings con-ventions.";
-    _detailModel.source = @"buzzfeed";
-    _detailModel.body = @"Network not connected, ignoring upload request, PH to sit as observer in Morocco climate talks, Raphael Banal, Gelo Alolino go 1-2 in regular PBA Draft, Iceland PM announces resignation after vote drubbing";
-    _detailModel.likedCount = @10;
-    // 请求新闻详情
-//    [self requestDataWithNewsID:_model.news_id ShowHUD:YES];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -112,6 +105,7 @@
                                     @"rel" : @0,               // 视频播放结束时，播放器是否应显示相关视频。  0:不显示  1:显示
                                     @"autoplay" : @1,          // 自动播放
                                     @"modestbranding" : @1,    // 将参数值设为1可以阻止YouTube徽标显示在控件栏中。
+                                    @"origin" : @"http://www.youtube.com",
                                     @"showinfo" : @0};         // 播放器是否显示视频标题和上传者等信息。  0:不显示  1:显示
         VideoModel *model = _model.videos.firstObject;
         [self.playerView loadWithVideoId:model.youtube_id playerVars:playerVars];
@@ -133,72 +127,6 @@
 
 #pragma mark - Network
 /**
- *  请求新闻详情
- *
- *  @param newID 新闻ID
- */
-- (void)requestDataWithNewsID:(NSString *)newsID ShowHUD:(BOOL)showHUD
-{
-    if (showHUD) {
-        SVProgressHUD.defaultStyle = SVProgressHUDStyleCustom;
-        [SVProgressHUD show];
-    }
-    __weak typeof(self) weakSelf = self;
-    NSMutableDictionary *params = [NSMutableDictionary dictionary];
-    [params setObject:newsID forKey:@"news_id"];
-    _task = [[SSHttpRequest sharedInstance] get:kHomeUrl_NewsDetail params:params contentType:UrlencodedType serverType:NetServer_Home success:^(id responseObj) {
-        if (_blankView) {
-            [_blankView removeFromSuperview];
-            [_blankLabel removeFromSuperview];
-            _blankView = nil;
-            _blankLabel = nil;
-        }
-        weakSelf.detailModel = [NewsDetailModel mj_objectWithKeyValues:responseObj];
-        
-    } failure:^(NSError *error) {
-        [SVProgressHUD dismiss];
-        if (!_blankView) {
-            _blankView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, weakSelf.view.width, weakSelf.view.height)];
-            _blankView.backgroundColor = [UIColor whiteColor];
-            _blankView.userInteractionEnabled = YES;
-            [weakSelf.tableView addSubview:_blankView];
-            _failureView = [[UIImageView alloc] initWithFrame:CGRectMake((_blankView.width - 28) * .5, 90 / kScreenHeight * 568, 28, 26)];
-            _failureView.image = [UIImage imageNamed:@"icon_common_netoff"];
-            [_blankView addSubview:_failureView];
-            _blankLabel = [[UILabel alloc] initWithFrame:CGRectMake((kScreenWidth - 300) * .5, _failureView.bottom + 13, 300, 20)];
-            _blankLabel.backgroundColor = [UIColor whiteColor];
-            _blankLabel.textAlignment = NSTextAlignmentCenter;
-            _blankLabel.textColor = SSColor(177, 177, 177);
-            _blankLabel.font = [UIFont systemFontOfSize:16];
-            [_blankView addSubview:_blankLabel];
-            UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:weakSelf action:@selector(requestData)];
-            [_blankView addGestureRecognizer:tap];
-        }
-        if ([AFNetworkReachabilityManager sharedManager].networkReachabilityStatus == AFNetworkReachabilityStatusNotReachable) {
-            weakSelf.blankLabel.text = @"Network unavailable";
-            weakSelf.failureView.image = [UIImage imageNamed:@"icon_common_netoff"];
-        } else {
-            weakSelf.blankLabel.text = @"Sorry,please try again";
-            weakSelf.failureView.image = [UIImage imageNamed:@"icon_common_failed"];
-        }
-    } isShowHUD:NO];
-}
-
-/**
- *  失败页面请求网络
- */
-- (void)requestData
-{
-    if (self.blankView) {
-        [self.blankView removeFromSuperview];
-        self.blankView = nil;
-        SVProgressHUD.defaultStyle = SVProgressHUDStyleCustom;
-        [SVProgressHUD show];
-    }
-    [self requestDataWithNewsID:_model.news_id ShowHUD:NO];
-}
-
-/**
  *  点赞按钮网络请求
  *
  *  @param appDelegate
@@ -210,7 +138,7 @@
     [params setObject:_model.news_id forKey:@"news_id"];
     [[SSHttpRequest sharedInstance] post:kHomeUrl_Like params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
         [appDelegate.likedDic setValue:@1 forKey:_model.news_id];
-        _detailModel.likedCount = responseObj[@"liked"];
+        _model.likedCount = responseObj[@"liked"];
         [button setTitle:[NSString stringWithFormat:@"%@",responseObj[@"liked"]] forState:UIControlStateNormal];
         button.selected = YES;
     } failure:^(NSError *error) {
@@ -239,13 +167,13 @@
 #endif
     if (button.selected) {
         if (button.titleLabel.text.intValue > 1) {
-            _detailModel.likedCount = [NSNumber numberWithInteger:_detailModel.likedCount.integerValue - 1];
+            _model.likedCount = [NSNumber numberWithInteger:_model.likedCount.integerValue - 1];
         } else {
             [button setTitle:@"" forState:UIControlStateNormal];
-            _detailModel.likedCount = @0;
+            _model.likedCount = @0;
         }
     } else {
-        _detailModel.likedCount = [NSNumber numberWithInteger:_detailModel.likedCount.integerValue + 1];
+        _model.likedCount = [NSNumber numberWithInteger:_model.likedCount.integerValue + 1];
         AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
         if (appDelegate.likedDic[_model.news_id] == nil) {
             [self likedNewsWithAppDelegate:appDelegate button:button];
@@ -284,8 +212,8 @@
 {
     switch (section) {
         case 1:
-            return MIN(_detailModel.recommend_news.count + 1, 4);
-            break;
+//            return MIN(_detailModel.recommend_news.count + 1, 4);
+            return 2;
         case 2:
 //            if (_commentArray.count > 0) {
 //                return _commentArray.count + 1;
@@ -294,7 +222,6 @@
 //            }
         default:
             return 1;
-            break;
     }
 }
 
@@ -325,10 +252,11 @@
         {
             CGSize titleLabelSize = [_model.title calculateSize:CGSizeMake(kScreenWidth - 22, 60) font:[UIFont boldSystemFontOfSize:21]];
             CGSize contentLabelSize = CGSizeZero;
+            VideoModel *model = _model.videos.firstObject;
             if (_isContentOpen) {
-                contentLabelSize = [_detailModel.body calculateSize:CGSizeMake(kScreenWidth - 22 - 20, 1500) font:[UIFont systemFontOfSize:12]];
+                contentLabelSize = [model.content calculateSize:CGSizeMake(kScreenWidth - 22 - 20, 1500) font:[UIFont systemFontOfSize:12]];
             } else {
-                contentLabelSize = [_detailModel.body calculateSize:CGSizeMake(kScreenWidth - 22 - 20, 30) font:[UIFont systemFontOfSize:12]];
+                contentLabelSize = [model.content calculateSize:CGSizeMake(kScreenWidth - 22 - 20, 30) font:[UIFont systemFontOfSize:12]];
             }
             return 16 + titleLabelSize.height + 13 + 12 + 14 + contentLabelSize.height + 30 + 34 + 25;
         }
@@ -338,7 +266,7 @@
                     return 30;
                 default:
                 {
-                    NewsModel *model = _detailModel.recommend_news[indexPath.row - 1];
+                    NewsModel *model = nil;
                     UIFont *titleFont = nil;
                     switch ([DEF_PERSISTENT_GET_OBJECT(SS_FontSize) integerValue]) {
                         case 0:
@@ -426,7 +354,7 @@
                 [((VideoDetailCell *)cell).likeButton addTarget:self action:@selector(likeAction:) forControlEvents:UIControlEventTouchUpInside];
                 [((VideoDetailCell *)cell).openButton addTarget:self action:@selector(openAction:) forControlEvents:UIControlEventTouchUpInside];
             }
-            ((VideoDetailCell *)cell).model = _detailModel;
+            ((VideoDetailCell *)cell).model = _model;
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
             return cell;
         }
@@ -450,7 +378,7 @@
                 }
                 default:
                 {
-                    NewsModel *model = _detailModel.recommend_news[indexPath.row - 1];
+                    NewsModel *model = nil;
                     switch ([model.tpl integerValue])
                     {
                         case NEWS_ManyPic:
@@ -563,6 +491,11 @@
         default:
             break;
     }
+    static NSString *cellID = @"newsListCellID";
+    cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+    }
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     cell.backgroundColor = kWhiteBgColor;
     [cell setNeedsLayout];
@@ -636,11 +569,11 @@
         AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
         if (appDelegate.model) {
             FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
-            NSString *shareString = _detailModel.share_url;
+            NSString *shareString = _model.share_url;
             shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"facebook"];
             content.contentURL = [NSURL URLWithString:shareString];
-            content.contentTitle = _detailModel.title;
-            ImageModel *imageModel = _detailModel.imgs.firstObject;
+            content.contentTitle = _model.title;
+            ImageModel *imageModel = _model.imgs.firstObject;
             content.imageURL = [NSURL URLWithString:imageModel.src];
             [FBSDKShareDialog showFromViewController:weakSelf
                                          withContent:content
@@ -668,10 +601,10 @@
 #endif
         AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
         if (appDelegate.model) {
-            NSString *shareString = _detailModel.share_url;
+            NSString *shareString = _model.share_url;
             shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"twitter"];
             TWTRComposer *composer = [[TWTRComposer alloc] init];
-            [composer setText:_detailModel.title];
+            [composer setText:_model.title];
             [composer setURL:[NSURL URLWithString:shareString]];
             @try {
                 [composer showFromViewController:weakSelf completion:^(TWTRComposerResult result) {
@@ -710,7 +643,7 @@
 #endif
         AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
         if (appDelegate.model) {
-            NSString *shareString = _detailModel.share_url;
+            NSString *shareString = _model.share_url;
             shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"googleplus"];
             NSURLComponents* urlComponents = [[NSURLComponents alloc]
                                               initWithString:@"https://plus.google.com/share"];

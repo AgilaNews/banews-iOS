@@ -30,7 +30,8 @@ MJCodingImplementation
              @"commentCount":@"commentCount",
              @"share_url":@"share_url",
              @"videos":@"VideoModel",
-             @"tag":@"tag"
+             @"tag":@"tag",
+             @"views":@"views"
              };
 }
 

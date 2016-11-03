@@ -33,6 +33,7 @@
                                  @"rel" : @0,               // 视频播放结束时，播放器是否应显示相关视频。  0:不显示  1:显示
                                  @"autoplay" : @1,          // 自动播放
                                  @"modestbranding" : @1,    // 将参数值设为1可以阻止YouTube徽标显示在控件栏中。
+                                 @"origin" : @"http://www.youtube.com",
                                  @"showinfo" : @0};         // 播放器是否显示视频标题和上传者等信息。  0:不显示  1:显示
     [self.playerView loadWithVideoId:_videoid playerVars:playerVars];
     self.playerView.delegate = self;

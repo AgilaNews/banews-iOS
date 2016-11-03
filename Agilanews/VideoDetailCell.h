@@ -7,12 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "NewsDetailModel.h"
+#import "NewsModel.h"
 
 @interface VideoDetailCell : UITableViewCell
 
 @property (nonatomic, strong) UIColor *bgColor;
-@property (nonatomic, strong) NewsDetailModel *model;
+@property (nonatomic, strong) NewsModel *model;
 @property (nonatomic, strong) UILabel *titleLabel;          // 标题
 @property (nonatomic, strong) UILabel *sourceLabel;         // 来源
 @property (nonatomic, strong) UIImageView *watchView;       // 观看量视图

@@ -33,6 +33,7 @@
                         @"rel" : @0,               // 视频播放结束时，播放器是否应显示相关视频。  0:不显示  1:显示
                         @"autoplay" : @1,          // 自动播放
                         @"modestbranding" : @1,    // 将参数值设为1可以阻止YouTube徽标显示在控件栏中。
+                        @"origin" : @"http://www.youtube.com",
                         @"showinfo" : @0};         // 播放器是否显示视频标题和上传者等信息。  0:不显示  1:显示
         // 初始化子视图
         [self _initSubviews];
@@ -155,11 +156,7 @@
 {
     [super layoutSubviews];
     
-    _model.title = @"How to evaluate Shinkai's work,\"your name.\" What you have seen the most stunning...";
     VideoModel *model = _model.videos.firstObject;
-    model.duration = @200;
-    _model.commentCount = @123789;
-    
     __weak typeof(self) weakSelf = self;
     // 视频布局
     [self.playerView mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -189,7 +186,28 @@
         make.height.mas_equalTo(titleLabelSize.height);
     }];
     // 时长布局
-    CGSize durationLabelSize = [model.duration.stringValue calculateSize:CGSizeMake(60, 20) font:self.durationLabel.font];
+    NSInteger hour;
+    NSInteger minute = model.duration.integerValue / 60;
+    NSInteger second = model.duration.integerValue % 60;
+    NSString *dateString = nil;
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    NSString *durationString = nil;
+    if (minute > 60) {
+        hour = minute / 60;
+        minute = minute - hour * 60;
+        dateString = [NSString stringWithFormat:@"%ld:%ld:%ld",hour,minute,second];
+        [dateFormat setDateFormat:@"h:m:s"];
+        NSDate *date = [dateFormat dateFromString:dateString];
+        [dateFormat setDateFormat:@"hh:mm:ss"];
+        durationString = [dateFormat stringFromDate:date];
+    } else {
+        dateString = [NSString stringWithFormat:@"%ld:%ld",minute,second];
+        [dateFormat setDateFormat:@"m:s"];
+        NSDate *date = [dateFormat dateFromString:dateString];
+        [dateFormat setDateFormat:@"mm:ss"];
+        durationString = [dateFormat stringFromDate:date];
+    }
+    CGSize durationLabelSize = [durationString calculateSize:CGSizeMake(60, 20) font:self.durationLabel.font];
     [self.durationLabel mas_updateConstraints:^(MASConstraintMaker *make) {
         make.right.mas_equalTo(-5);
         make.bottom.mas_equalTo(-5 - 42);
@@ -207,7 +225,7 @@
         make.left.mas_equalTo(11);
     }];
     // 观看量布局
-    CGSize watchLabelSize = [model.duration.stringValue calculateSize:CGSizeMake(100, 14) font:self.watchLabel.font];
+    CGSize watchLabelSize = [_model.views.stringValue calculateSize:CGSizeMake(100, 14) font:self.watchLabel.font];
     [self.watchLabel mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(weakSelf.watchView.mas_right).offset(5);
         make.centerY.mas_equalTo(weakSelf.watchView.mas_centerY);
@@ -236,12 +254,33 @@
     [super updateConstraints];
 
     self.titleLabel.text = _model.title;
-    NSInteger hour = model.duration.integerValue / 60;
-    NSInteger minute = model.duration.integerValue % 60;
-    self.durationLabel.text = [NSString stringWithFormat:@"%ld:%ld",hour,minute];
-    self.watchLabel.text = model.duration.stringValue;
-    self.commentLabel.text = _model.commentCount.stringValue;
+    self.durationLabel.text = durationString;
+    self.watchLabel.text = _model.views.stringValue;
+    if (_model.commentCount.integerValue > 0) {
+        self.commentLabel.text = _model.commentCount.stringValue;
+    } else {
+        self.commentLabel.text = @"";
+    }
     self.isPlay = NO;
+    
+    NSNumber *textOnlyMode = DEF_PERSISTENT_GET_OBJECT(SS_textOnlyMode);
+    if ([textOnlyMode integerValue] == 1) {
+        self.titleImageView.contentMode = UIViewContentModeCenter;
+        self.titleImageView.image = [UIImage imageNamed:@"holderImage"];
+        return;
+    }
+    self.titleImageView.contentMode = UIViewContentModeScaleAspectFit;
+    ImageModel *imageModel = _model.imgs.firstObject;
+    NSString *imageUrl = [imageModel.pattern stringByReplacingOccurrencesOfString:@"{w}" withString:[NSString stringWithFormat:@"%d",((int)kScreenWidth * 2)]];
+    imageUrl = [imageUrl stringByReplacingOccurrencesOfString:@"{h}" withString:[NSString stringWithFormat:@"%d",(int)(videoHeight * 2)]];
+    imageUrl = [imageUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    [self.titleImageView sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:[UIImage imageNamed:@"holderImage"] options:SDWebImageRetryFailed completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        if (!image) {
+            _titleImageView.image = [UIImage imageNamed:@"holderImage"];
+        } else {
+            _titleImageView.image = image;
+        }
+    }];
 }
 
 #pragma makr - tapAction

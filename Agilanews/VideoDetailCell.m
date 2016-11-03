@@ -8,6 +8,7 @@
 
 #import "VideoDetailCell.h"
 #import "AppDelegate.h"
+#import "VideoModel.h"
 
 @implementation VideoDetailCell
 
@@ -61,12 +62,11 @@
         make.width.mas_equalTo(watchLabelSize.width);
         make.height.mas_equalTo(watchLabelSize.height);
     }];
-    CGSize contentLabelSize = [_model.body calculateSize:CGSizeMake(kScreenWidth - 22 - 20, 30) font:self.contentLabel.font];
     [self.contentLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(weakSelf.titleLabel.mas_left);
         make.top.mas_equalTo(weakSelf.sourceLabel.mas_bottom).offset(14);
-        make.width.mas_equalTo(contentLabelSize.width);
-        make.height.mas_equalTo(contentLabelSize.height);
+        make.width.mas_equalTo(30);
+        make.height.mas_equalTo(30);
     }];
     [self.openButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.mas_equalTo(4);
@@ -107,18 +107,19 @@
         make.width.mas_equalTo(11);
         make.height.mas_equalTo(11);
     }];
-    CGSize watchLabelSize = [_model.source calculateSize:CGSizeMake(100, 13) font:self.watchLabel.font];
+    CGSize watchLabelSize = [_model.views.stringValue calculateSize:CGSizeMake(100, 13) font:self.watchLabel.font];
     [self.watchLabel mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(weakSelf.watchView.mas_right).offset(5);
         make.centerY.mas_equalTo(weakSelf.sourceLabel.mas_centerY);
         make.width.mas_equalTo(watchLabelSize.width);
         make.height.mas_equalTo(watchLabelSize.height);
     }];
+    VideoModel *model = _model.videos.firstObject;
     CGSize contentLabelSize = CGSizeZero;
     if (self.openButton.selected) {
-        contentLabelSize = [_model.body calculateSize:CGSizeMake(kScreenWidth - 22 - 20, 1500) font:self.contentLabel.font];
+        contentLabelSize = [model.content calculateSize:CGSizeMake(kScreenWidth - 22 - 20, 1500) font:self.contentLabel.font];
     } else {
-        contentLabelSize = [_model.body calculateSize:CGSizeMake(kScreenWidth - 22 - 20, 30) font:self.contentLabel.font];
+        contentLabelSize = [model.content calculateSize:CGSizeMake(kScreenWidth - 22 - 20, 30) font:self.contentLabel.font];
     }
     [self.contentLabel mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(weakSelf.titleLabel.mas_left);
@@ -142,8 +143,8 @@
 
     self.titleLabel.text = _model.title;
     self.sourceLabel.text = _model.source;
-    self.watchLabel.text = _model.source;
-    self.contentLabel.text = _model.body;
+    self.watchLabel.text = _model.views.stringValue;
+    self.contentLabel.text = model.content;
 }
 
 #pragma mark - setter/getter

@@ -24,5 +24,6 @@
 @property (nonatomic, strong) NSString *share_url;  // 分享链接
 @property (nonatomic, strong) NSArray  *videos;     // 视频数组
 @property (nonatomic, strong) NSString *tag;        // 新闻标签
+@property (nonatomic, strong) NSNumber *views;      // 观看量
 
 @end
