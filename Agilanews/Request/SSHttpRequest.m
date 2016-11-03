@@ -141,10 +141,17 @@ static SSHttpRequest *_manager = nil;
     // 网络运营商
     CTTelephonyNetworkInfo *networInfo = [[CTTelephonyNetworkInfo alloc] init];
     CTCarrier *carrier = [networInfo subscriberCellularProvider];
-    if ([carrier carrierName] == nil) {
-        [params setObject:@"" forKey:@"isp"];
+    NSString *carrierName = [carrier carrierName];
+    if (carrierName.length > 0) {
+        carrierName = (NSString *)
+        CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
+                                                                  (CFStringRef)carrierName,
+                                                                  NULL,
+                                                                  (CFStringRef)@"!*'();:@&=+$,/?%#[]",
+                                                                  kCFStringEncodingUTF8));
+        [params setObject:carrierName forKey:@"isp"];
     } else {
-        [params setObject:[carrier carrierName] forKey:@"isp"];
+        [params setObject:@"" forKey:@"isp"];
     }
     // 网络情况
     [params setObject:[NetType getNetType] forKey:@"net"];
@@ -281,10 +288,17 @@ static SSHttpRequest *_manager = nil;
     // 网络运营商
     CTTelephonyNetworkInfo *networInfo = [[CTTelephonyNetworkInfo alloc] init];
     CTCarrier *carrier = [networInfo subscriberCellularProvider];
-    if ([carrier carrierName] == nil) {
-        [baseParams setObject:@"" forKey:@"isp"];
+    NSString *carrierName = [carrier carrierName];
+    if (carrierName.length > 0) {
+        carrierName = (NSString *)
+        CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
+                                                                  (CFStringRef)carrierName,
+                                                                  NULL,
+                                                                  (CFStringRef)@"!*'();:@&=+$,/?%#[]",
+                                                                  kCFStringEncodingUTF8));
+        [params setObject:carrierName forKey:@"isp"];
     } else {
-        [baseParams setObject:[carrier carrierName] forKey:@"isp"];
+        [params setObject:@"" forKey:@"isp"];
     }
     // 网络情况
     [baseParams setObject:[NetType getNetType] forKey:@"net"];
@@ -577,10 +591,17 @@ static SSHttpRequest *_manager = nil;
     // 网络运营商
     CTTelephonyNetworkInfo *networInfo = [[CTTelephonyNetworkInfo alloc] init];
     CTCarrier *carrier = [networInfo subscriberCellularProvider];
-    if ([carrier carrierName] == nil) {
-        [params setObject:@"" forKey:@"isp"];
+    NSString *carrierName = [carrier carrierName];
+    if (carrierName.length > 0) {
+        carrierName = (NSString *)
+        CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
+                                                                  (CFStringRef)carrierName,
+                                                                  NULL,
+                                                                  (CFStringRef)@"!*'();:@&=+$,/?%#[]",
+                                                                  kCFStringEncodingUTF8));
+        [params setObject:carrierName forKey:@"isp"];
     } else {
-        [params setObject:[carrier carrierName] forKey:@"isp"];
+        [params setObject:@"" forKey:@"isp"];
     }
     // 网络情况
     [params setObject:[NetType getNetType] forKey:@"net"];
