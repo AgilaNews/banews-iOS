@@ -481,6 +481,7 @@
         videoDetailVC.playerView = cell.playerView;
         videoDetailVC.indexPath = indexPath;
         videoDetailVC.fromCell = cell;
+        cell.isPlay = YES;
         [self.navigationController pushViewController:videoDetailVC animated:YES];
         return;
     }
@@ -1189,6 +1190,7 @@
     OnlyVideoCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
     if (cell.isMove) {
         [cell.contentView addSubview:playerView];
+        [cell.contentView bringSubviewToFront:cell.titleImageView];
         cell.isMove = NO;
     }
 }

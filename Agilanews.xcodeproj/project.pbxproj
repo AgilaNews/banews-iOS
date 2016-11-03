@@ -154,6 +154,7 @@
 		5F767A871D9CE82E00822BAC /* NSObject+MJKeyValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F767A7A1D9CE82E00822BAC /* NSObject+MJKeyValue.m */; };
 		5F767A881D9CE82E00822BAC /* NSObject+MJProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F767A7C1D9CE82E00822BAC /* NSObject+MJProperty.m */; };
 		5F767A891D9CE82E00822BAC /* NSString+MJExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F767A7E1D9CE82E00822BAC /* NSString+MJExtension.m */; };
+		5F7CD8231DCB352F00879BC5 /* SingleVideoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F7CD8221DCB352F00879BC5 /* SingleVideoCell.m */; };
 		5F8D85AA1D76A99700FF4019 /* WebViewJavascriptBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F8D85A31D76A99700FF4019 /* WebViewJavascriptBridge.m */; };
 		5F8D85AB1D76A99700FF4019 /* WebViewJavascriptBridge_JS.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F8D85A51D76A99700FF4019 /* WebViewJavascriptBridge_JS.m */; };
 		5F8D85AC1D76A99700FF4019 /* WebViewJavascriptBridgeBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F8D85A71D76A99700FF4019 /* WebViewJavascriptBridgeBase.m */; };
@@ -489,6 +490,8 @@
 		5F767A7C1D9CE82E00822BAC /* NSObject+MJProperty.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+MJProperty.m"; sourceTree = "<group>"; };
 		5F767A7D1D9CE82E00822BAC /* NSString+MJExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MJExtension.h"; sourceTree = "<group>"; };
 		5F767A7E1D9CE82E00822BAC /* NSString+MJExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MJExtension.m"; sourceTree = "<group>"; };
+		5F7CD8211DCB352F00879BC5 /* SingleVideoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SingleVideoCell.h; sourceTree = "<group>"; };
+		5F7CD8221DCB352F00879BC5 /* SingleVideoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SingleVideoCell.m; sourceTree = "<group>"; };
 		5F8D85A21D76A99700FF4019 /* WebViewJavascriptBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewJavascriptBridge.h; sourceTree = "<group>"; };
 		5F8D85A31D76A99700FF4019 /* WebViewJavascriptBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewJavascriptBridge.m; sourceTree = "<group>"; };
 		5F8D85A41D76A99700FF4019 /* WebViewJavascriptBridge_JS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewJavascriptBridge_JS.h; sourceTree = "<group>"; };
@@ -1303,6 +1306,8 @@
 				5FF4B78F1D38DEE400CC6704 /* GifPicCell.m */,
 				5F5342B21DBDF30E005D78F1 /* OnlyVideoCell.h */,
 				5F5342B31DBDF30E005D78F1 /* OnlyVideoCell.m */,
+				5F7CD8211DCB352F00879BC5 /* SingleVideoCell.h */,
+				5F7CD8221DCB352F00879BC5 /* SingleVideoCell.m */,
 				5F767A5B1D9A44C800822BAC /* RefreshCell.h */,
 				5F767A5C1D9A44C800822BAC /* RefreshCell.m */,
 				5F6462751D4715DB008EEDEC /* RecommendedView.h */,
@@ -1695,6 +1700,7 @@
 				5FF4B7771D37BD2C00CC6704 /* UIFont+UhouAdditions.m in Sources */,
 				5F635CA41D3CCC50006AAE3D /* UIView+UIScreenDisplaying.m in Sources */,
 				5FF4B72E1D37982200CC6704 /* NewsModel.m in Sources */,
+				5F7CD8231DCB352F00879BC5 /* SingleVideoCell.m in Sources */,
 				5FF4B77A1D37BD2C00CC6704 /* UILabel+UhouAdditions.m in Sources */,
 				5FE722181D4F5F3F0026BFC3 /* FeedbackViewController.m in Sources */,
 				5FF4B7901D38DEE400CC6704 /* GifPicCell.m in Sources */,
@@ -1845,6 +1851,7 @@
 				CODE_SIGN_ENTITLEMENTS = Agila.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: zhendong Wang (4PX74E3WFB)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: zhendong Wang (4PX74E3WFB)";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = CA8M4AL9S7;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

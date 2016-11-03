@@ -17,6 +17,7 @@
 #import "SinglePicCell.h"
 #import "NoPicCell.h"
 #import "VideoDetailCell.h"
+#import "SingleVideoCell.h"
 
 #define titleFont_Normal        [UIFont systemFontOfSize:16]
 #define titleFont_ExtraLarge    [UIFont systemFontOfSize:20]
@@ -72,6 +73,8 @@
     _tableView.separatorColor = SSColor(235, 235, 235);
     [self.view addSubview:_tableView];
     
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    [self recommendWithNewsID:_model.news_id AppDelegate:appDelegate];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -126,6 +129,31 @@
 }
 
 #pragma mark - Network
+/**
+ 新闻推荐网络请求
+
+ @param newsID      新闻ID
+ @param appDelegate
+ */
+- (void)recommendWithNewsID:(NSString *)newsID AppDelegate:(AppDelegate *)appDelegate
+{
+    __weak typeof(self) weakSelf = self;
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    [params setObject:newsID forKey:@"news_id"];
+    [[SSHttpRequest sharedInstance] get:kHomeUrl_Recommend params:params contentType:JsonType serverType:NetServer_Video success:^(id responseObj) {
+        [appDelegate.likedDic setValue:@1 forKey:newsID];
+        NSArray *recommends = responseObj[@"recommend_news"];
+        _recommend_news = [NSMutableArray array];
+        for (NSDictionary *dic in recommends) {
+            NewsModel *model = [NewsModel mj_objectWithKeyValues:dic];
+            [_recommend_news addObject:model];
+        }
+        [weakSelf.tableView reloadData];
+    } failure:^(NSError *error) {
+        
+    } isShowHUD:NO];
+}
+
 /**
  *  点赞按钮网络请求
  *
@@ -183,7 +211,6 @@
     cell.likeButton.selected = !button.selected;
 }
 
-
 /**
  展开按钮点击事件
 
@@ -212,8 +239,11 @@
 {
     switch (section) {
         case 1:
-//            return MIN(_detailModel.recommend_news.count + 1, 4);
-            return 2;
+            if (_recommend_news.count > 0) {
+                return _recommend_news.count + 1;
+            } else {
+                return 1;
+            }
         case 2:
 //            if (_commentArray.count > 0) {
 //                return _commentArray.count + 1;
@@ -261,12 +291,13 @@
             return 16 + titleLabelSize.height + 13 + 12 + 14 + contentLabelSize.height + 30 + 34 + 25;
         }
         case 1:
+        {
             switch (indexPath.row) {
                 case 0:
                     return 30;
                 default:
                 {
-                    NewsModel *model = nil;
+                    NewsModel *model = _recommend_news[indexPath.row - 1];
                     UIFont *titleFont = nil;
                     switch ([DEF_PERSISTENT_GET_OBJECT(SS_FontSize) integerValue]) {
                         case 0:
@@ -308,13 +339,16 @@
                         {
                             return 12 + 68 + 12;
                         }
+                            case NEWS_OnlyVideo:
+                        {
+                            return 12 + 68 + 12;
+                        }
                         default:
                             return 50;
                     }
-                    break;
                 }
             }
-            break;
+        }
         case 2:
             switch (indexPath.row) {
                 case 0:
@@ -378,7 +412,7 @@
                 }
                 default:
                 {
-                    NewsModel *model = nil;
+                    NewsModel *model = _recommend_news[indexPath.row - 1];
                     switch ([model.tpl integerValue])
                     {
                         case NEWS_ManyPic:
@@ -440,6 +474,19 @@
                             }
                             ((SinglePicCell *)cell).model = model;
                             ((SinglePicCell *)cell).isHaveVideo = YES;
+                            [cell setNeedsLayout];
+                            return cell;
+                        }
+                        case NEWS_OnlyVideo:
+                        {
+                            // 视频cell
+                            static NSString *cellID = @"SingleVideoCell";
+                            SingleVideoCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+                            if (cell == nil) {
+                                cell = [[SingleVideoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:kWhiteBgColor];
+                            }
+                            cell.model = model;
+                            cell.selectionStyle = UITableViewCellSelectionStyleNone;
                             [cell setNeedsLayout];
                             return cell;
                         }

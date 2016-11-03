@@ -57,10 +57,10 @@
 {
     [self.contentView addSubview:self.playerView];
     [self.contentView addSubview:self.titleImageView];
-    [self.contentView addSubview:self.shadowView];
-    [self.contentView addSubview:self.titleLabel];
-    [self.contentView addSubview:self.durationLabel];
-    [self.contentView addSubview:self.playButton];
+    [self.titleImageView addSubview:self.shadowView];
+    [self.titleImageView addSubview:self.titleLabel];
+    [self.titleImageView addSubview:self.durationLabel];
+    [self.titleImageView addSubview:self.playButton];
     [self.contentView addSubview:self.watchView];
     [self.contentView addSubview:self.watchLabel];
     [self.contentView addSubview:self.commentView];
@@ -99,10 +99,10 @@
     }];
     // 时长布局
     VideoModel *model = _model.videos.firstObject;
-    CGSize durationLabelSize = [model.duration.stringValue calculateSize:CGSizeMake(60, 20) font:self.durationLabel.font];
+    CGSize durationLabelSize = [model.duration.stringValue calculateSize:CGSizeMake(80, 20) font:self.durationLabel.font];
     [self.durationLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.mas_equalTo(-5);
-        make.bottom.mas_equalTo(-5 - 42);
+        make.bottom.mas_equalTo(-5);
         make.width.mas_equalTo(durationLabelSize.width + 10);
         make.height.mas_equalTo(durationLabelSize.height + 6);
     }];
@@ -121,7 +121,7 @@
         make.height.mas_equalTo(11);
     }];
     // 观看量布局
-    CGSize watchLabelSize = [model.duration.stringValue calculateSize:CGSizeMake(100, 14) font:self.watchLabel.font];
+    CGSize watchLabelSize = [_model.views.stringValue calculateSize:CGSizeMake(100, 14) font:self.watchLabel.font];
     [self.watchLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(weakSelf.watchView.mas_right).offset(5);
         make.centerY.mas_equalTo(weakSelf.watchView.mas_centerY);
@@ -207,10 +207,10 @@
         [dateFormat setDateFormat:@"mm:ss"];
         durationString = [dateFormat stringFromDate:date];
     }
-    CGSize durationLabelSize = [durationString calculateSize:CGSizeMake(60, 20) font:self.durationLabel.font];
+    CGSize durationLabelSize = [durationString calculateSize:CGSizeMake(80, 20) font:self.durationLabel.font];
     [self.durationLabel mas_updateConstraints:^(MASConstraintMaker *make) {
         make.right.mas_equalTo(-5);
-        make.bottom.mas_equalTo(-5 - 42);
+        make.bottom.mas_equalTo(-5);
         make.width.mas_equalTo(durationLabelSize.width + 14);
         make.height.mas_equalTo(durationLabelSize.height + 6);
     }];
@@ -261,7 +261,6 @@
     } else {
         self.commentLabel.text = @"";
     }
-    self.isPlay = NO;
     
     NSNumber *textOnlyMode = DEF_PERSISTENT_GET_OBJECT(SS_textOnlyMode);
     if ([textOnlyMode integerValue] == 1) {
@@ -328,6 +327,14 @@
 
 
 #pragma mark - setter/getter
+- (void)setModel:(NewsModel *)model
+{
+    if (_model != model) {
+        _model = model;
+        self.isPlay = NO;
+    }
+}
+
 - (void)setIsPlay:(BOOL)isPlay
 {
     if (_isPlay != isPlay) {
@@ -365,6 +372,7 @@
 {
     if (_titleImageView == nil) {
         _titleImageView = [[UIImageView alloc] init];
+        _titleImageView.userInteractionEnabled = YES;
         _titleImageView.backgroundColor = SSColor(235, 235, 235);
         _titleImageView.contentMode = UIViewContentModeScaleAspectFit;
         _titleImageView.clipsToBounds = YES;
@@ -460,7 +468,7 @@
         _watchLabel = [[UILabel alloc] init];
         _watchLabel.backgroundColor = [UIColor whiteColor];
         _watchLabel.font = [UIFont systemFontOfSize:13];
-        _watchLabel.textColor = kBlackColor;
+        _watchLabel.textColor = kGrayColor;
     }
     return _watchLabel;
 }
@@ -469,9 +477,8 @@
 {
     if (_commentView == nil) {
         _commentView = [[UIImageView alloc] init];
-        _commentView.backgroundColor = [UIColor whiteColor];
         _commentView.contentMode = UIViewContentModeScaleAspectFit;
-        _commentView.image = [UIImage imageNamed:@"icon_video_comment"];
+        _commentView.image = [UIImage imageNamed:@"comment"];
     }
     return _commentView;
 }
@@ -480,7 +487,7 @@
 {
     if (_commentLabel == nil) {
         _commentLabel = [[UILabel alloc] init];
-        _commentLabel.backgroundColor = [UIColor whiteColor];
+        _commentLabel.backgroundColor = _bgColor;
         _commentLabel.font = [UIFont systemFontOfSize:12];
         _commentLabel.textColor = kGrayColor;
     }

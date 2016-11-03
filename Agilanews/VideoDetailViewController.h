@@ -19,6 +19,8 @@
 @property (nonatomic, strong) NSIndexPath *indexPath;
 @property (nonatomic, strong) OnlyVideoCell *fromCell;
 @property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) NSMutableArray *recommend_news;
+@property (nonatomic, strong) NSMutableArray *commentArray; // 评论数组
 @property (nonatomic, strong) UIView *noCommentView;        // 无评论视图
 @property (nonatomic, strong) UIView *blankView;
 @property (nonatomic, strong) UILabel *blankLabel;

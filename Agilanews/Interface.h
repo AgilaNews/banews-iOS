@@ -61,5 +61,7 @@ typedef enum {
 #define kHomeUrl_Referrer   @"/login/referrer"
 // 频道下发接口
 #define kHomeUrl_Channel   @"/channel"
+// 新闻推荐接口
+#define kHomeUrl_Recommend   @"/news/recommend"
 
 #endif /* Interface_h */
