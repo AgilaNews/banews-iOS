@@ -253,10 +253,8 @@
     NSString *imageUrl = [imageModel.pattern stringByReplacingOccurrencesOfString:@"{w}" withString:[NSString stringWithFormat:@"%d",(108 * 2)]];
     imageUrl = [imageUrl stringByReplacingOccurrencesOfString:@"{h}" withString:[NSString stringWithFormat:@"%d",68 * 2]];
     imageUrl = [imageUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    [self.titleImageView sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:[UIImage imageNamed:@"holderImage"] options:SDWebImageRetryFailed completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-        if (!image) {
-            _titleImageView.image = [UIImage imageNamed:@"holderImage"];
-        } else {
+    [self.titleImageView sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:nil options:SDWebImageRetryFailed completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        if (image) {
             _titleImageView.image = image;
         }
     }];
@@ -301,7 +299,6 @@
         _titleImageView.backgroundColor = SSColor(235, 235, 235);
         _titleImageView.contentMode = UIViewContentModeScaleAspectFit;
         _titleImageView.clipsToBounds = YES;
-        _titleImageView.image = [UIImage imageNamed:@"holderImage"];
     }
     return _titleImageView;
 }

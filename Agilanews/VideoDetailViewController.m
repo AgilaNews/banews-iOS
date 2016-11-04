@@ -12,7 +12,6 @@
 #import "LoginViewController.h"
 #import "ImageModel.h"
 #import "VideoModel.h"
-#import "RecommendedView.h"
 #import "CommentCell.h"
 #import "SinglePicCell.h"
 #import "NoPicCell.h"
@@ -404,8 +403,8 @@
                         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
                     }
                     if (cell.contentView.subviews.count <= 0) {
-                        RecommendedView *recommendedView = [[RecommendedView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 30) titleImage:[UIImage imageNamed:@"icon_article_recommend_small"] titleText:@"Recommended for you"];
-                        [cell.contentView addSubview:recommendedView];
+                        _recommendedView = [[RecommendedView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 30) titleImage:[UIImage imageNamed:@"icon_article_recommend_small"] titleText:@"Recommended for you"];
+                        [cell.contentView addSubview:_recommendedView];
                     }
                     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
                     return cell;
@@ -507,8 +506,8 @@
                         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
                     }
                     if (cell.contentView.subviews.count <= 0) {
-                        RecommendedView *recommendedView = [[RecommendedView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 30) titleImage:[UIImage imageNamed:@"icon_article_comments_small"] titleText:@"Comments"];
-                        [cell.contentView addSubview:recommendedView];
+                        _commentsView = [[RecommendedView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 30) titleImage:[UIImage imageNamed:@"icon_article_comments_small"] titleText:@"Comments"];
+                        [cell.contentView addSubview:_commentsView];
                     }
                     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
                     return cell;

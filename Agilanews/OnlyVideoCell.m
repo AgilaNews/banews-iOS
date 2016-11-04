@@ -10,10 +10,10 @@
 #import "ImageModel.h"
 #import "VideoModel.h"
 
-#define titleFont_Normal        [UIFont systemFontOfSize:14]
-#define titleFont_ExtraLarge    [UIFont systemFontOfSize:18]
-#define titleFont_Large         [UIFont systemFontOfSize:16]
-#define titleFont_Small         [UIFont systemFontOfSize:12]
+#define titleFont_Normal        [UIFont systemFontOfSize:15]
+#define titleFont_ExtraLarge    [UIFont systemFontOfSize:19]
+#define titleFont_Large         [UIFont systemFontOfSize:17]
+#define titleFont_Small         [UIFont systemFontOfSize:13]
 #define videoHeight 180 * kScreenWidth / 320.0
 
 @implementation OnlyVideoCell
@@ -101,17 +101,17 @@
     VideoModel *model = _model.videos.firstObject;
     CGSize durationLabelSize = [model.duration.stringValue calculateSize:CGSizeMake(80, 20) font:self.durationLabel.font];
     [self.durationLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.mas_equalTo(-5);
+        make.right.mas_equalTo(-6);
         make.bottom.mas_equalTo(-5);
-        make.width.mas_equalTo(durationLabelSize.width + 10);
-        make.height.mas_equalTo(durationLabelSize.height + 6);
+        make.width.mas_equalTo(durationLabelSize.width + 6);
+        make.height.mas_equalTo(durationLabelSize.height);
     }];
     // 播放按钮布局
     [self.playButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.mas_equalTo(weakSelf.titleImageView.mas_centerX);
         make.centerY.mas_equalTo(weakSelf.titleImageView.mas_centerY);
-        make.width.mas_equalTo(40);
-        make.height.mas_equalTo(40);
+        make.width.mas_equalTo(45);
+        make.height.mas_equalTo(45);
     }];
     // 观看视图布局
     [self.watchView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -209,10 +209,10 @@
     }
     CGSize durationLabelSize = [durationString calculateSize:CGSizeMake(80, 20) font:self.durationLabel.font];
     [self.durationLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.right.mas_equalTo(-5);
+        make.right.mas_equalTo(-6);
         make.bottom.mas_equalTo(-5);
-        make.width.mas_equalTo(durationLabelSize.width + 14);
-        make.height.mas_equalTo(durationLabelSize.height + 6);
+        make.width.mas_equalTo(durationLabelSize.width + 6);
+        make.height.mas_equalTo(durationLabelSize.height);
     }];
     // 播放按钮布局
     [self.playButton mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -238,13 +238,22 @@
         make.centerY.mas_equalTo(weakSelf.watchView.mas_centerY);
     }];
     // 评论数布局
-    CGSize commentLabelSize = [_model.commentCount.stringValue calculateSize:CGSizeMake(100, 13) font:self.commentLabel.font];
-    [self.commentLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.right.mas_equalTo(weakSelf.shareButton.mas_left).offset(-27);
-        make.centerY.mas_equalTo(weakSelf.watchView.mas_centerY);
-        make.width.mas_equalTo(commentLabelSize.width);
-        make.height.mas_equalTo(commentLabelSize.height);
-    }];
+    if (_model.commentCount.integerValue > 0) {
+        CGSize commentLabelSize = [_model.commentCount.stringValue calculateSize:CGSizeMake(100, 13) font:self.commentLabel.font];
+        [self.commentLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.right.mas_equalTo(weakSelf.shareButton.mas_left).offset(-27);
+            make.centerY.mas_equalTo(weakSelf.watchView.mas_centerY);
+            make.width.mas_equalTo(commentLabelSize.width);
+            make.height.mas_equalTo(commentLabelSize.height);
+        }];
+    } else {
+        [self.commentLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.right.mas_equalTo(weakSelf.shareButton.mas_left).offset(-27);
+            make.centerY.mas_equalTo(weakSelf.watchView.mas_centerY);
+            make.width.mas_equalTo(0);
+            make.height.mas_equalTo(0);
+        }];
+    }
     // 评论视图布局
     [self.commentView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.right.mas_equalTo(weakSelf.commentLabel.mas_left).offset(-6);
@@ -468,7 +477,7 @@
         _watchLabel = [[UILabel alloc] init];
         _watchLabel.backgroundColor = [UIColor whiteColor];
         _watchLabel.font = [UIFont systemFontOfSize:13];
-        _watchLabel.textColor = kGrayColor;
+        _watchLabel.textColor = kBlackColor;
     }
     return _watchLabel;
 }
@@ -478,7 +487,7 @@
     if (_commentView == nil) {
         _commentView = [[UIImageView alloc] init];
         _commentView.contentMode = UIViewContentModeScaleAspectFit;
-        _commentView.image = [UIImage imageNamed:@"comment"];
+        _commentView.image = [UIImage imageNamed:@"icon_video_comment"];
     }
     return _commentView;
 }
