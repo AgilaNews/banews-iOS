@@ -796,7 +796,7 @@
                         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
                     }
                     if (cell.contentView.subviews.count <= 0) {
-                        RecommendedView *recommendedView = [[RecommendedView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 30) titleImage:[UIImage imageNamed:@"icon_article_recommend_small"] titleText:@"Recommended for you"];
+                        RecommendedView *recommendedView = [[RecommendedView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 30) titleImage:[UIImage imageNamed:@"icon_article_recommend_small"] titleText:@"Recommended for you" HaveLoading:NO];
                         [cell.contentView addSubview:recommendedView];
                     }
                     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
@@ -886,7 +886,7 @@
                         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
                     }
                     if (cell.contentView.subviews.count <= 0) {
-                        RecommendedView *recommendedView = [[RecommendedView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 30) titleImage:[UIImage imageNamed:@"icon_article_comments_small"] titleText:@"Comments"];
+                        RecommendedView *recommendedView = [[RecommendedView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 30) titleImage:[UIImage imageNamed:@"icon_article_comments_small"] titleText:@"Comments" HaveLoading:NO];
                         [cell.contentView addSubview:recommendedView];
                     }
                     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
@@ -1188,7 +1188,7 @@
         _likeButton.layer.masksToBounds = YES;
         _likeButton.layer.borderWidth = 1;
         _likeButton.layer.borderColor = SSColor(235, 235, 235).CGColor;
-        _likeButton.titleLabel.font = [UIFont systemFontOfSize:13];
+        _likeButton.titleLabel.font = [UIFont systemFontOfSize:14];
         _likeButton.imageEdgeInsets = UIEdgeInsetsMake(0, -5, 0, 0);
         _likeButton.hidden = YES;
         [_likeButton setAdjustsImageWhenHighlighted:NO];

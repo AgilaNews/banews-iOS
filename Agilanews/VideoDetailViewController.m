@@ -72,8 +72,11 @@
     _tableView.separatorColor = SSColor(235, 235, 235);
     [self.view addSubview:_tableView];
     
+    // 新闻推荐网络请求
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    [self recommendWithNewsID:_model.news_id AppDelegate:appDelegate];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self recommendWithNewsID:_model.news_id AppDelegate:appDelegate];
+    });
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -136,10 +139,12 @@
  */
 - (void)recommendWithNewsID:(NSString *)newsID AppDelegate:(AppDelegate *)appDelegate
 {
+    [_recommendedView startAnimation];
     __weak typeof(self) weakSelf = self;
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setObject:newsID forKey:@"news_id"];
     [[SSHttpRequest sharedInstance] get:kHomeUrl_Recommend params:params contentType:JsonType serverType:NetServer_Video success:^(id responseObj) {
+        [_recommendedView stopAnimation];
         [appDelegate.likedDic setValue:@1 forKey:newsID];
         NSArray *recommends = responseObj[@"recommend_news"];
         _recommend_news = [NSMutableArray array];
@@ -147,9 +152,10 @@
             NewsModel *model = [NewsModel mj_objectWithKeyValues:dic];
             [_recommend_news addObject:model];
         }
-        [weakSelf.tableView reloadData];
+        [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
     } failure:^(NSError *error) {
-        
+        [_recommendedView stopAnimation];
+        _recommendedView.retryLabel.hidden = NO;
     } isShowHUD:NO];
 }
 
@@ -279,7 +285,7 @@
     switch (indexPath.section) {
         case 0:
         {
-            CGSize titleLabelSize = [_model.title calculateSize:CGSizeMake(kScreenWidth - 22, 60) font:[UIFont boldSystemFontOfSize:21]];
+            CGSize titleLabelSize = [_model.title calculateSize:CGSizeMake(kScreenWidth - 22, 80) font:[UIFont boldSystemFontOfSize:21]];
             CGSize contentLabelSize = CGSizeZero;
             VideoModel *model = _model.videos.firstObject;
             if (_isContentOpen) {
@@ -287,7 +293,7 @@
             } else {
                 contentLabelSize = [model.content calculateSize:CGSizeMake(kScreenWidth - 22 - 20, 30) font:[UIFont systemFontOfSize:12]];
             }
-            return 16 + titleLabelSize.height + 13 + 12 + 14 + contentLabelSize.height + 30 + 34 + 25;
+            return 11 + titleLabelSize.height + 6 + 12 + 12 + contentLabelSize.height + 30 + 34 + 28;
         }
         case 1:
         {
@@ -403,7 +409,7 @@
                         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
                     }
                     if (cell.contentView.subviews.count <= 0) {
-                        _recommendedView = [[RecommendedView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 30) titleImage:[UIImage imageNamed:@"icon_article_recommend_small"] titleText:@"Recommended for you"];
+                        _recommendedView = [[RecommendedView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 30) titleImage:[UIImage imageNamed:@"icon_article_recommend_small"] titleText:@"Recommended for you" HaveLoading:YES];
                         [cell.contentView addSubview:_recommendedView];
                     }
                     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
@@ -506,7 +512,7 @@
                         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
                     }
                     if (cell.contentView.subviews.count <= 0) {
-                        _commentsView = [[RecommendedView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 30) titleImage:[UIImage imageNamed:@"icon_article_comments_small"] titleText:@"Comments"];
+                        _commentsView = [[RecommendedView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 30) titleImage:[UIImage imageNamed:@"icon_article_comments_small"] titleText:@"Comments" HaveLoading:YES];
                         [cell.contentView addSubview:_commentsView];
                     }
                     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];

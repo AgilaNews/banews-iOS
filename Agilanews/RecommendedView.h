@@ -10,6 +10,11 @@
 
 @interface RecommendedView : UIView
 
-- (instancetype)initWithFrame:(CGRect)frame titleImage:(UIImage *)image titleText:(NSString *)title;
+@property (nonatomic, strong) UILabel *retryLabel;
+@property (nonatomic, strong) UIImageView *loadingView;
+
+- (instancetype)initWithFrame:(CGRect)frame titleImage:(UIImage *)image titleText:(NSString *)title HaveLoading:(BOOL)isLoading;
+- (void)startAnimation;
+- (void)stopAnimation;
 
 @end

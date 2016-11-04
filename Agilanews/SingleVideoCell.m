@@ -164,8 +164,8 @@
     }
     CGSize durationLabelSize = [durationString calculateSize:CGSizeMake(80, 20) font:self.durationLabel.font];
     [self.durationLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.width.mas_equalTo(durationLabelSize.width + 6);
-        make.height.mas_equalTo(durationLabelSize.height + 4);
+        make.width.mas_equalTo(durationLabelSize.width + 4);
+        make.height.mas_equalTo(durationLabelSize.height);
     }];
     // 标签布局
     if (_model.tag.length > 0 && _bgColor == [UIColor whiteColor]) {
@@ -349,7 +349,7 @@
         _watchView = [[UIImageView alloc] init];
         _watchView.backgroundColor = _bgColor;
         _watchView.contentMode = UIViewContentModeScaleAspectFit;
-        _watchView.image = [UIImage imageNamed:@"icon_video"];
+        _watchView.image = [UIImage imageNamed:@"icon_video_recommendplay"];
     }
     return _watchView;
 }

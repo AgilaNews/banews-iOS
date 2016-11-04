@@ -35,17 +35,17 @@
     [self addSubview:self.likeButton];
     
     __weak typeof(self) weakSelf = self;
-    CGSize titleLabelSize = [_model.title calculateSize:CGSizeMake(kScreenWidth - 22, 60) font:self.titleLabel.font];
+    CGSize titleLabelSize = [_model.title calculateSize:CGSizeMake(kScreenWidth - 22, 80) font:self.titleLabel.font];
     [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(11);
-        make.top.mas_equalTo(16);
+        make.top.mas_equalTo(11);
         make.width.mas_equalTo(titleLabelSize.width);
         make.height.mas_equalTo(titleLabelSize.height);
     }];
     CGSize sourceLabelSize = [_model.source calculateSize:CGSizeMake(kScreenWidth - 22 - 50 - 100, 13) font:self.sourceLabel.font];
     [self.sourceLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(weakSelf.titleLabel.mas_left);
-        make.top.mas_equalTo(weakSelf.titleLabel.mas_bottom).offset(12);
+        make.top.mas_equalTo(weakSelf.titleLabel.mas_bottom).offset(6);
         make.width.mas_equalTo(sourceLabelSize.width);
         make.height.mas_equalTo(sourceLabelSize.height);
     }];
@@ -64,7 +64,7 @@
     }];
     [self.contentLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(weakSelf.titleLabel.mas_left);
-        make.top.mas_equalTo(weakSelf.sourceLabel.mas_bottom).offset(14);
+        make.top.mas_equalTo(weakSelf.sourceLabel.mas_bottom).offset(10);
         make.width.mas_equalTo(30);
         make.height.mas_equalTo(30);
     }];
@@ -87,17 +87,17 @@
     [super layoutSubviews];
     
     __weak typeof(self) weakSelf = self;
-    CGSize titleLabelSize = [_model.title calculateSize:CGSizeMake(kScreenWidth - 22, 60) font:self.titleLabel.font];
+    CGSize titleLabelSize = [_model.title calculateSize:CGSizeMake(kScreenWidth - 22, 80) font:self.titleLabel.font];
     [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(11);
-        make.top.mas_equalTo(16);
+        make.top.mas_equalTo(11);
         make.width.mas_equalTo(titleLabelSize.width);
         make.height.mas_equalTo(titleLabelSize.height);
     }];
     CGSize sourceLabelSize = [_model.source calculateSize:CGSizeMake(kScreenWidth - 22 - 50 - 100, 13) font:self.sourceLabel.font];
     [self.sourceLabel mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(weakSelf.titleLabel.mas_left);
-        make.top.mas_equalTo(weakSelf.titleLabel.mas_bottom).offset(12);
+        make.top.mas_equalTo(weakSelf.titleLabel.mas_bottom).offset(6);
         make.width.mas_equalTo(sourceLabelSize.width);
         make.height.mas_equalTo(sourceLabelSize.height);
     }];
@@ -123,7 +123,7 @@
     }
     [self.contentLabel mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(weakSelf.titleLabel.mas_left);
-        make.top.mas_equalTo(weakSelf.sourceLabel.mas_bottom).offset(14);
+        make.top.mas_equalTo(weakSelf.sourceLabel.mas_bottom).offset(10);
         make.width.mas_equalTo(contentLabelSize.width);
         make.height.mas_equalTo(contentLabelSize.height);
     }];
@@ -155,7 +155,7 @@
         _titleLabel.backgroundColor = kWhiteBgColor;
         _titleLabel.textColor = kBlackColor;
         _titleLabel.numberOfLines = 0;
-        _titleLabel.font = [UIFont boldSystemFontOfSize:21];
+        _titleLabel.font = [UIFont boldSystemFontOfSize:20];
     }
     return _titleLabel;
 }
@@ -230,7 +230,7 @@
         _likeButton.layer.masksToBounds = YES;
         _likeButton.layer.borderWidth = 1;
         _likeButton.layer.borderColor = SSColor(235, 235, 235).CGColor;
-        _likeButton.titleLabel.font = [UIFont systemFontOfSize:13];
+        _likeButton.titleLabel.font = [UIFont systemFontOfSize:14];
         _likeButton.imageEdgeInsets = UIEdgeInsetsMake(0, -5, 0, 0);
         [_likeButton setAdjustsImageWhenHighlighted:NO];
         [_likeButton setTitleColor:SSColor(102, 102, 102) forState:UIControlStateNormal];
