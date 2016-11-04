@@ -1187,11 +1187,15 @@
     NSDictionary *dic = notif.object;
     YTPlayerView *playerView = dic[@"playerView"];
     NSIndexPath *indexPath = dic[@"index"];
+    NSNumber *isPlay = dic[@"stop"];
     OnlyVideoCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
     if (cell.isMove) {
         [cell.contentView addSubview:playerView];
         [cell.contentView bringSubviewToFront:cell.titleImageView];
         cell.isMove = NO;
+        if ([isPlay isEqualToNumber:@1]) {
+            cell.isPlay = NO;
+        }
     }
 }
 

@@ -400,7 +400,6 @@
     __weak typeof(self) weakSelf = self;
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setObject:_model.news_id forKey:@"news_id"];
-//    [params setObject:@"loder" forKey:@"prefer"];
     [params setObject:@"later" forKey:@"prefer"];
     CommentModel *commentModel = _commentArray.lastObject;
     [params setObject:commentModel.commentID forKey:@"last_id"];

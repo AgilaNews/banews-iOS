@@ -60,8 +60,10 @@ typedef enum {
 // 安装上传接口
 #define kHomeUrl_Referrer   @"/login/referrer"
 // 频道下发接口
-#define kHomeUrl_Channel   @"/channel"
+#define kHomeUrl_Channel    @"/channel"
 // 新闻推荐接口
-#define kHomeUrl_Recommend   @"/news/recommend"
+#define kHomeUrl_Recommend  @"/news/recommend"
+// 新闻推荐接口
+#define kHomeUrl_VideoRecommend   @"/comment"
 
 #endif /* Interface_h */
