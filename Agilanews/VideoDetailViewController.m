@@ -80,6 +80,8 @@
         [self recommendWithNewsID:_model.news_id AppDelegate:appDelegate];
         // 评论网络请求
         [self requsetCommentsListWithNewsID:_model.news_id];
+        // 详情网络请求
+#warning todo - 详情网络请求
     });
 }
 
