@@ -503,7 +503,7 @@
 - (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NewsModel *model = _dataList[indexPath.row];
-    if (model.tpl.integerValue == NEWS_OnlyVideo) {
+    if (model.tpl.integerValue == NEWS_OnlyVideo && [cell isKindOfClass:[OnlyVideoCell class]]) {
         ((OnlyVideoCell *)cell).isPlay = NO;
     }
 }

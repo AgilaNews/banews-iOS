@@ -15,6 +15,7 @@
 @interface VideoDetailViewController : BaseViewController<UINavigationControllerDelegate, FBSDKSharingDelegate, YTPlayerViewDelegate, UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, UITextViewDelegate>
 
 @property (nonatomic, strong) UIView *toView;
+@property (nonatomic, strong) UIPercentDrivenInteractiveTransition *interactiveTransition;
 @property (nonatomic, strong) NSDictionary *playerVars;
 @property (nonatomic, strong) NewsModel *model;
 @property (nonatomic, strong) NewsDetailModel *detailModel; // 新闻详情model

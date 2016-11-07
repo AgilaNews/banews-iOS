@@ -31,7 +31,7 @@
         
         if (isLoading) {
             NSString *text = @"Retry";
-            CGSize textSize = [text calculateSize:CGSizeMake(100, 30) font:[UIFont systemFontOfSize:12]];
+            CGSize textSize = [text calculateSize:CGSizeMake(100, 30) font:[UIFont italicSystemFontOfSize:12]];
             _retryLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.width - 15 - textSize.width, (30 - textSize.height) * .5, textSize.width, textSize.height)];
             _retryLabel.backgroundColor = kWhiteBgColor;
             _retryLabel.textAlignment = NSTextAlignmentRight;

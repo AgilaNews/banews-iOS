@@ -68,6 +68,9 @@
     negativeSpacer.width = -10;
     self.navigationItem.rightBarButtonItems = @[negativeSpacer, shareItem];
     
+    UIPanGestureRecognizer *gestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
+    [self.view addGestureRecognizer:gestureRecognizer];
+    
     [self.view addSubview:_playerView];
     self.playerView.delegate = self;
     
@@ -156,6 +159,44 @@
     UIImage *targetImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return targetImage;
+}
+
+- (void)handlePan:(UIPanGestureRecognizer *)gestureRecognizer {
+    /*调用UIPercentDrivenInteractiveTransition的updateInteractiveTransition:方法可以控制转场动画进行到哪了，
+     当用户的下拉手势完成时，调用finishInteractiveTransition或者cancelInteractiveTransition，UIKit会自动执行剩下的一半动画，
+     或者让动画回到最开始的状态。*/
+    if([gestureRecognizer translationInView:self.view].x >= 0)
+    {
+        //手势滑动的比例
+        CGFloat per = [gestureRecognizer translationInView:self.view].x / (self.view.bounds.size.width);
+        per = MIN(1.0,(MAX(0.0, per)));
+        if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
+            self.interactiveTransition = [UIPercentDrivenInteractiveTransition new];
+            [self.navigationController popViewControllerAnimated:YES];
+        } else if (gestureRecognizer.state == UIGestureRecognizerStateChanged) {
+            if([gestureRecognizer translationInView:self.view].x == 0) {
+                [self.interactiveTransition updateInteractiveTransition:0.01];
+            } else {
+                [self.interactiveTransition updateInteractiveTransition:per];
+            }
+        }else if (gestureRecognizer.state == UIGestureRecognizerStateEnded || gestureRecognizer.state == UIGestureRecognizerStateCancelled){
+            if([gestureRecognizer translationInView:self.view].x == 0)
+            {
+                [self.interactiveTransition cancelInteractiveTransition];
+                self.interactiveTransition = nil;
+            } else if (per > 0.5) {
+                [self.interactiveTransition finishInteractiveTransition];
+            } else {
+                [self.interactiveTransition cancelInteractiveTransition];
+            }
+            self.interactiveTransition = nil;
+        }
+    } else if (gestureRecognizer.state == UIGestureRecognizerStateChanged) {
+        [self.interactiveTransition updateInteractiveTransition:0.01];
+        [self.interactiveTransition cancelInteractiveTransition];
+    } else if ((gestureRecognizer.state == UIGestureRecognizerStateEnded || gestureRecognizer.state == UIGestureRecognizerStateCancelled)) {
+        self.interactiveTransition = nil;
+    }
 }
 
 #pragma mark - Network
