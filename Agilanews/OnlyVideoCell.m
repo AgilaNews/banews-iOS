@@ -34,6 +34,7 @@
                         @"autoplay" : @1,          // 自动播放
                         @"modestbranding" : @1,    // 将参数值设为1可以阻止YouTube徽标显示在控件栏中。
                         @"origin" : @"http://www.youtube.com",
+                        @"enablejsapi" : @1,
                         @"showinfo" : @0};         // 播放器是否显示视频标题和上传者等信息。  0:不显示  1:显示
         // 初始化子视图
         [self _initSubviews];
@@ -304,6 +305,7 @@
 #pragma mark - YTPlayerViewDelegate
 - (void)playerViewDidBecomeReady:(YTPlayerView *)playerView
 {
+    self.titleImageView.hidden = YES;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self.playerView playVideo];
     });
@@ -334,7 +336,6 @@
     }
 }
 
-
 #pragma mark - setter/getter
 - (void)setModel:(NewsModel *)model
 {
@@ -353,9 +354,6 @@
             self.titleLabel.hidden = YES;
             self.durationLabel.hidden = YES;
             self.playButton.hidden = YES;
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                self.titleImageView.hidden = YES;
-            });
         } else {
             [self.playerView stopVideo];
             self.shadowView.hidden = NO;

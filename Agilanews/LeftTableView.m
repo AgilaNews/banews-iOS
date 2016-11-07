@@ -167,9 +167,16 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    LeftView *leftView = (LeftView *)self.superview;
-    leftView.isShow = NO;
-    BaseNavigationController *navCtrl = (BaseNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+    if ([self.superview isKindOfClass:[LeftView class]]) {
+        LeftView *leftView = (LeftView *)self.superview;
+        leftView.isShow = NO;
+    }
+    BaseNavigationController *navCtrl = nil;
+    if ([[UIApplication sharedApplication].keyWindow.rootViewController isKindOfClass:[BaseNavigationController class]]) {
+        navCtrl = (BaseNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+    } else {
+        return;
+    }
     switch (indexPath.section) {
         case 0:
         {

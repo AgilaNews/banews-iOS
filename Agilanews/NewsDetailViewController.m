@@ -572,6 +572,7 @@
         CommentModel *model = [CommentModel mj_objectWithKeyValues:responseObj[@"comment"]];
         if (model) {
             [weakSelf.commentArray insertObject:model atIndex:0];
+            weakSelf.commentArray = weakSelf.commentArray;
             _commentsLabel.hidden = NO;
             _detailModel.commentCount = [NSNumber numberWithInteger:_detailModel.commentCount.integerValue + 1];
             int width;

@@ -51,6 +51,24 @@
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.isBackButton = YES;
     
+    // 注册通知
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(loginSuccess:)
+                                                 name:KNOTIFICATION_Login_Success
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHidden)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(touchFavorite)
+                                                 name:KNOTIFICATION_TouchFavorite
+                                               object:nil];
+    
     NSString *deviceModel = [NetType getCurrentDeviceModel];
     if ([deviceModel isEqualToString:@"iPhone7"] || [deviceModel isEqualToString:@"iPhone7Plus"]) {
         UIImage *image = [self imageFromView:[UIApplication sharedApplication].keyWindow];
@@ -131,6 +149,11 @@
                         @"showinfo" : @0};         // 播放器是否显示视频标题和上传者等信息。  0:不显示  1:显示
         VideoModel *model = _model.videos.firstObject;
         [self.playerView loadWithVideoId:model.youtube_id playerVars:_playerVars];
+        if (_holderImage) {
+            _holderView = [[UIImageView alloc] initWithImage:_holderImage];
+            _holderView.frame = _playerView.bounds;
+            [self.playerView addSubview:_holderView];
+        }
     }
 }
 
@@ -402,6 +425,7 @@
         CommentModel *model = [CommentModel mj_objectWithKeyValues:responseObj[@"comment"]];
         if (model) {
             [weakSelf.commentArray insertObject:model atIndex:0];
+            weakSelf.commentArray = weakSelf.commentArray;
             _commentsLabel.hidden = NO;
             _model.commentCount = [NSNumber numberWithInteger:_model.commentCount.integerValue + 1];
             int width;
@@ -1353,6 +1377,123 @@
     }
 }
 
+#pragma mark - Notification
+/**
+ *  键盘弹出后执行的操作
+ *
+ *  @param notif 键盘通知
+ */
+- (void)keyboardWillShow:(NSNotification *)notif
+{
+    // 获取到键盘的高度
+    float keyboardHeight = [[[notif userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size.height;
+    // 登录界面随键盘上弹
+    [UIView animateWithDuration:0.2 animations:^{
+        _commentTextView.bgView.bottom = kScreenHeight - keyboardHeight;
+    }];
+}
+- (void)keyboardWillHidden
+{
+    [UIView animateWithDuration:0.2 animations:^{
+        _commentTextView.bgView.bottom = kScreenHeight;
+    }];
+}
+
+/**
+ *  点击收藏/评论后登录成功
+ */
+- (void)loginSuccess:(NSNotification *)notif
+{
+    if ([notif.object[@"isCollect"] isEqualToNumber:@1]) {
+        // 收藏
+        UIButton *button = [_commentsView viewWithTag:301];
+        [self collectNewsWithButton:button];
+    } else if ([notif.object[@"isComment"] isEqualToNumber:@1]) {
+        // 评论
+        _commentTextView = [[CommentTextView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
+        _commentTextView.news_id = _model.news_id;
+        UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+        [keyWindow addSubview:_commentTextView];
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
+        _commentTextView.textView.delegate = self;
+        [_commentTextView.cancelButton addTarget:self action:@selector(cancelAction) forControlEvents:UIControlEventTouchUpInside];
+        [_commentTextView.sendButton addTarget:self action:@selector(sendAction) forControlEvents:UIControlEventTouchUpInside];
+    } else if ([notif.object[@"isShareFacebook"] isEqualToNumber:@1]) {
+        // 分享Facebook
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
+            NSString *shareString = _detailModel.share_url;
+            shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"facebook"];
+            content.contentURL = [NSURL URLWithString:shareString];
+            content.contentTitle = _detailModel.title;
+            ImageModel *imageModel = _detailModel.imgs.firstObject;
+            content.imageURL = [NSURL URLWithString:imageModel.src];
+            [FBSDKShareDialog showFromViewController:self
+                                         withContent:content
+                                            delegate:self];
+        });
+    } else if ([notif.object[@"isShareTwitter"] isEqualToNumber:@1]) {
+        // 分享Twitter
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            NSString *shareString = _detailModel.share_url;
+            shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"twitter"];
+            TWTRComposer *composer = [[TWTRComposer alloc] init];
+            [composer setText:_detailModel.title];
+            [composer setURL:[NSURL URLWithString:shareString]];
+            @try {
+                [composer showFromViewController:self completion:^(TWTRComposerResult result) {
+                    if (result == TWTRComposerResultCancelled) {
+                        // 取消分享
+                        SSLog(@"Tweet composition cancelled");
+                    } else {
+                        // 分享成功
+                        SSLog(@"Sending Tweet!");
+                    }
+                }];
+            }
+            @catch (NSException *exception) {
+                SSLog(@"%s\n%@", __FUNCTION__, exception);
+            }
+        });
+    } else if ([notif.object[@"isShareGoogle"] isEqualToNumber:@1]) {
+        // 分享Google
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            NSString *shareString = _detailModel.share_url;
+            shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"googleplus"];
+            NSURLComponents* urlComponents = [[NSURLComponents alloc]
+                                              initWithString:@"https://plus.google.com/share"];
+            urlComponents.queryItems = @[[[NSURLQueryItem alloc]
+                                          initWithName:@"url"
+                                          value:[[NSURL URLWithString:shareString] absoluteString]]];
+            NSURL* url = [urlComponents URL];
+            if ([SFSafariViewController class]) {
+                // Open the URL in SFSafariViewController (iOS 9+)
+                SFSafariViewController* controller = [[SFSafariViewController alloc]
+                                                      initWithURL:url];
+                //            controller.delegate = self;
+                [self presentViewController:controller animated:YES completion:nil];
+            } else {
+                // Open the URL in the device's browser
+                [[UIApplication sharedApplication] openURL:url];
+            }
+        });
+    }
+}
+
+/**
+ *  收藏通知
+ */
+- (void)touchFavorite
+{
+    UIButton *button = [_commentsView viewWithTag:301];
+    // 点击收藏按钮
+    if (button.selected) {
+        [self deleteCollectNewsWithButton:button];
+    } else {
+        [self collectNewsWithButton:button];
+    }
+}
+
 #pragma mark - setter/getter
 - (UIView *)noCommentView
 {
@@ -1479,11 +1620,11 @@
 #pragma mark - YTPlayerViewDelegate
 - (void)playerViewDidBecomeReady:(YTPlayerView *)playerView
 {
+    [_holderView removeFromSuperview];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self.playerView playVideo];
     });
 }
-
 
 #pragma mark - UINavigationControllerDelegate
 - (id<UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController animationControllerForOperation:(UINavigationControllerOperation)operation fromViewController:(UIViewController *)fromVC toViewController:(UIViewController *)toVC

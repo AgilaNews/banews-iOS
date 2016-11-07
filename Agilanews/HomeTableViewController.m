@@ -479,9 +479,11 @@
         videoDetailVC.channelName = _model.name;
         OnlyVideoCell *cell = [tableView cellForRowAtIndexPath:indexPath];
         videoDetailVC.playerView = cell.playerView;
+        videoDetailVC.holderImage = cell.titleImageView.image;
         videoDetailVC.indexPath = indexPath;
         videoDetailVC.fromCell = cell;
         cell.isPlay = YES;
+        cell.titleImageView.hidden = YES;
         [self.navigationController pushViewController:videoDetailVC animated:YES];
         return;
     }
