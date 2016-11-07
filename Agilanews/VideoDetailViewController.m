@@ -457,6 +457,93 @@
     } isShowHUD:YES];
 }
 
+/**
+ *  收藏新闻网络请求
+ *
+ *  @param button 收藏按钮
+ */
+- (void)collectNewsWithButton:(UIButton *)button
+{
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    if (appDelegate.model) {
+        NSMutableDictionary *params = [NSMutableDictionary dictionary];
+        [params setObject:_model.news_id forKey:@"news_id"];
+        [params setObject:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]] forKey:@"ctime"];
+        NSArray *paramsArray = [NSArray arrayWithObject:params];
+        __weak typeof(self) weakSelf = self;
+        [[SSHttpRequest sharedInstance] post:kHomeUrl_Collect params:paramsArray contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
+            NSArray *result = responseObj;
+            if (result) {
+                weakSelf.collectID = result.firstObject[@"collect_id"];
+                button.selected = YES;
+                [SVProgressHUD showSuccessWithStatus:@"Save the news and read it later by entering 'Favorites'"];
+                [[CoreDataManager sharedInstance] addAccountFavoriteWithCollectID:weakSelf.collectID DetailModel:_detailModel];
+                
+                // 打点-收藏成功-010215
+                NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
+                                               [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
+                                               _channelName, @"channel",
+                                               _model.news_id, @"article",
+                                               nil];
+                [Flurry logEvent:@"Article_Favorite_Click_Y" withParameters:articleParams];
+#if DEBUG
+                [iConsole info:[NSString stringWithFormat:@"Article_Favorite_Click_Y:%@",articleParams],nil];
+#endif
+            }
+        } failure:^(NSError *error) {
+            button.selected = NO;
+            // 打点-收藏失败-010216
+            NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
+                                           [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
+                                           _channelName, @"channel",
+                                           _model.news_id, @"article",
+                                           nil];
+            [Flurry logEvent:@"Article_Favorite_Click_N" withParameters:articleParams];
+#if DEBUG
+            [iConsole info:[NSString stringWithFormat:@"Article_Favorite_Click_N:%@",articleParams],nil];
+#endif
+        } isShowHUD:YES];
+    } else if (_detailModel && _model) {
+        // 新闻详情本地缓存
+        NSString *time = [NSString stringWithFormat:@"%@",[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]]];
+        [[CoreDataManager sharedInstance] addLocalFavoriteWithNewsID:_model.news_id DetailModel:_detailModel CollectTime:time NewsModel:_model];
+        button.selected = YES;
+        [SVProgressHUD showSuccessWithStatus:@"Save the news and read it later by entering 'Favorites'"];
+        // 打点-收藏成功-010215
+        NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
+                                       [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
+                                       _channelName, @"channel",
+                                       _model.news_id, @"article",
+                                       nil];
+        [Flurry logEvent:@"Article_Favorite_Click_Y" withParameters:articleParams];
+#if DEBUG
+        [iConsole info:[NSString stringWithFormat:@"Article_Favorite_Click_Y:%@",articleParams],nil];
+#endif
+    }
+}
+
+/**
+ *  删除收藏网络请求
+ *
+ *  @param button 收藏按钮
+ */
+- (void)deleteCollectNewsWithButton:(UIButton *)button
+{
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    if (appDelegate.model && _collectID) {
+        NSMutableDictionary *params = [NSMutableDictionary dictionary];
+        [params setObject:@[_collectID] forKey:@"ids"];
+        [[SSHttpRequest sharedInstance] DELETE:kHomeUrl_Collect params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
+            button.selected = NO;
+        } failure:^(NSError *error) {
+            
+        } isShowHUD:NO];
+    } else {
+        [[CoreDataManager sharedInstance] removeLocalFavoriteModelWithNewsIDs:[NSArray arrayWithObject:_model.news_id]];
+        button.selected = NO;
+    }
+}
+
 #pragma mark - 按钮点击事件
 /**
  *  点赞按钮点击事件
@@ -613,12 +700,11 @@
 #if DEBUG
             [iConsole info:[NSString stringWithFormat:@"Article_Favorite_Click:%@",articleParams],nil];
 #endif
-            
             // 点击收藏按钮
             if (button.selected) {
-//                [self deleteCollectNewsWithButton:button];
+                [self deleteCollectNewsWithButton:button];
             } else {
-//                [self collectNewsWithButton:button];
+                [self collectNewsWithButton:button];
             }
             break;
         }
@@ -1342,9 +1428,9 @@
                     [button setImage:[UIImage imageNamed:@"icon_article_collect_default"] forState:UIControlStateNormal];
                     [button setImage:[UIImage imageNamed:@"icon_article_collect_select"] forState:UIControlStateSelected];
                     [button setImage:[UIImage imageNamed:@"icon_article_collect_select"] forState:UIControlStateHighlighted];
-//                    if ([[CoreDataManager sharedInstance] searchLocalFavoriteModelWithNewsID:_model.news_id]) {
-//                        button.selected = YES;
-//                    }
+                    if ([[CoreDataManager sharedInstance] searchLocalFavoriteModelWithNewsID:_model.news_id]) {
+                        button.selected = YES;
+                    }
                     break;
                 case 2:
                     [button setImage:[UIImage imageNamed:@"facebook"] forState:UIControlStateNormal];

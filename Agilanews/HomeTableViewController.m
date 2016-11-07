@@ -870,6 +870,12 @@
     [((OnlyPicCell *)cell) setNeedsLayout];
 }
 
+
+/**
+ 分享到Facebook
+
+ @param button 
+ */
 - (void)shareToFacebook:(UIButton *)button
 {
     id cell = button.superview;

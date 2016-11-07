@@ -8,20 +8,25 @@
 
 #import "FavoritesViewController.h"
 #import "NewsModel.h"
+#import "ImageModel.h"
 #import "ManyPicCell.h"
 #import "SinglePicCell.h"
 #import "NoPicCell.h"
 #import "BigPicCell.h"
+#import "OnlyVideoCell.h"
 #import "FavoriteDetailViewController.h"
 #import "AppDelegate.h"
 #import "LoginViewController.h"
 #import "BaseNavigationController.h"
 #import "LocalFavorite+CoreDataClass.h"
+#import "VideoDetailViewController.h"
+#import "PushTransitionAnimate.h"
 
 #define titleFont_Normal        [UIFont systemFontOfSize:16]
 #define titleFont_ExtraLarge    [UIFont systemFontOfSize:20]
 #define titleFont_Large         [UIFont systemFontOfSize:18]
 #define titleFont_Small         [UIFont systemFontOfSize:14]
+#define videoHeight 180 * kScreenWidth / 320.0
 
 @interface FavoritesViewController ()
 
@@ -63,6 +68,11 @@
     _tableView.tableFooterView = [UIView new];
     [self.view addSubview:_tableView];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(recoverVideo:)
+                                                 name:KNOTIFICATION_RecoverVideo
+                                               object:nil];
+    
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     NSArray *data = [[CoreDataManager sharedInstance] getLocalFavoriteModelList];
 
@@ -93,6 +103,8 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    self.navigationController.delegate = self;
+
     // 打点-页面进入-010501
     [Flurry logEvent:@"Favor_Enter"];
 #if DEBUG
@@ -127,6 +139,23 @@
                                        } range:NSMakeRange(6, attributedStr.length - 6)];
         loginLabel.attributedText = attributedStr;
         _tableView.tableHeaderView = loginLabel;
+    }
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    if ([UIDevice currentDevice].systemVersion.floatValue >= 10.0) {
+        [self.navigationController.navigationBar setBarTintColor:kOrangeColor];
+        UIView *barBgView = self.navigationController.navigationBar.subviews.firstObject;
+        for (UIView *subview in barBgView.subviews) {
+            if([subview isKindOfClass:[UIVisualEffectView class]]) {
+                subview.backgroundColor = kOrangeColor;
+                [subview removeAllSubviews];
+            }
+        }
+    } else {
+        [self.navigationController.navigationBar lt_setBackgroundColor:kOrangeColor];
     }
 }
 
@@ -326,6 +355,29 @@
     } isShowHUD:NO];
 }
 
+/**
+ 视频从详情回位
+ */
+- (void)recoverVideo:(NSNotification *)notif
+{
+    NSDictionary *dic = notif.object;
+    YTPlayerView *playerView = dic[@"playerView"];
+    NSIndexPath *indexPath = dic[@"index"];
+    NSNumber *isPlay = dic[@"stop"];
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    if ([cell isKindOfClass:[OnlyVideoCell class]]) {
+        OnlyVideoCell *videoCell = (OnlyVideoCell *)cell;
+        if (videoCell.isMove) {
+            [videoCell.contentView addSubview:playerView];
+            [videoCell.contentView bringSubviewToFront:videoCell.titleImageView];
+            videoCell.isMove = NO;
+            if ([isPlay isEqualToNumber:@1]) {
+                videoCell.isPlay = NO;
+            }
+        }
+    }
+}
+
 #pragma mark - UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -381,16 +433,10 @@
             return 12 + 68 + 12;
             break;
         }
-            //        case NEWS_OnlyPic:
-            //        {
-            //
-            //        }
-            //            break;
-            //        case NEWS_GifPic:
-            //        {
-            //
-            //        }
-            //            break;
+        case NEWS_OnlyVideo:
+        {
+            return videoHeight + 42;
+        }
         default:
             return 50;
             break;
@@ -413,7 +459,6 @@
             cell.model = model;
             [cell setNeedsLayout];
             return cell;
-            break;
         }
         case NEWS_SinglePic:
         {
@@ -427,7 +472,6 @@
             cell.isHaveVideo = NO;
             [cell setNeedsLayout];
             return cell;
-            break;
         }
         case NEWS_NoPic:
         {
@@ -440,7 +484,6 @@
             cell.model = model;
             [cell setNeedsLayout];
             return cell;
-            break;
         }
         case NEWS_BigPic:
         {
@@ -453,7 +496,6 @@
             cell.model = model;
             [cell setNeedsLayout];
             return cell;
-            break;
         }
         case NEWS_HaveVideo:
         {
@@ -467,36 +509,21 @@
             cell.isHaveVideo = YES;
             [cell setNeedsLayout];
             return cell;
-            break;
         }
-            //        case NEWS_OnlyPic:
-            //        {
-            //            // 纯图cell
-            //            NSLog(@"纯图cell");
-            //            static NSString *cellID = @"OnlyPicCellID";
-            //            OnlyPicCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
-            //            if (cell == nil) {
-            //                cell = [[OnlyPicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
-            //            }
-            //            cell.model = model;
-            //            [cell setNeedsLayout];
-            //            return cell;
-            //        }
-            //            break;
-            //        case NEWS_GifPic:
-            //        {
-            //            // gif图cell
-            //            NSLog(@"gif图cell");
-            //            static NSString *cellID = @"GifPicCellID";
-            //            GifPicCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
-            //            if (cell == nil) {
-            //                cell = [[GifPicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
-            //            }
-            //            cell.model = model;
-            //            [cell setNeedsLayout];
-            //            return cell;
-            //        }
-            //            break;
+        case NEWS_OnlyVideo:
+        {
+            // 视频cell
+            static NSString *cellID = @"OnlyVideoCell";
+            OnlyVideoCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+            if (cell == nil) {
+                cell = [[OnlyVideoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
+                [cell.shareButton addTarget:self action:@selector(shareToFacebook:) forControlEvents:UIControlEventTouchUpInside];
+            }
+            cell.model = model;
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            [cell setNeedsLayout];
+            return cell;
+        }
         default:
             break;
     }
@@ -519,6 +546,18 @@
         [iConsole info:@"Favor_List_Click",nil];
 #endif
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
+        if (model.tpl.integerValue == NEWS_OnlyVideo) {
+            VideoDetailViewController *videoDetailVC = [[VideoDetailViewController alloc] init];
+            videoDetailVC.model = model;
+            videoDetailVC.channelName = @"Video";
+            OnlyVideoCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+            videoDetailVC.playerView = cell.playerView;
+            videoDetailVC.indexPath = indexPath;
+            videoDetailVC.fromCell = cell;
+            cell.isPlay = YES;
+            [self.navigationController pushViewController:videoDetailVC animated:YES];
+            return;
+        }
         FavoriteDetailViewController *favDetVC = [[FavoriteDetailViewController alloc] init];
         favDetVC.model = model;
         favDetVC.detailModel = _detailList[indexPath.row];
@@ -568,6 +607,77 @@
     if (!_isEdit) {
         [_editBtn setTitle:@"Edit" forState:UIControlStateNormal];
     }
+}
+
+/**
+ cell不显示在tableView中
+ 
+ @param tableView
+ @param cell
+ @param indexPath
+ */
+- (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NewsModel *model = _dataList[indexPath.row];
+    if (model.tpl.integerValue == NEWS_OnlyVideo && [cell isKindOfClass:[OnlyVideoCell class]]) {
+        ((OnlyVideoCell *)cell).isPlay = NO;
+    }
+}
+
+- (void)shareToFacebook:(UIButton *)button
+{
+    id cell = button.superview;
+    do {
+        if ([cell isKindOfClass:[UITableViewCell class]]) {
+            break;
+        }
+        cell = ((UIView *)cell).superview;
+    } while (cell != nil);
+    NewsModel *newsModel = ((OnlyVideoCell *)cell).model;
+    
+    __weak typeof(self) weakSelf = self;
+    // 打点-分享至facebook-010219
+    NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
+                                   [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
+                                   newsModel.news_id, @"article",
+                                   nil];
+    [Flurry logEvent:@"Home_List_Share_FacebookClick" withParameters:articleParams];
+#if DEBUG
+    [iConsole info:[NSString stringWithFormat:@"Home_List_Share_FacebookClick:%@",articleParams],nil];
+#endif
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    if (appDelegate.model) {
+        FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
+        NSString *shareString = newsModel.share_url;
+        shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"facebook"];
+        content.contentURL = [NSURL URLWithString:shareString];
+        content.contentTitle = newsModel.title;
+        ImageModel *imageModel = newsModel.imgs.firstObject;
+        content.imageURL = [NSURL URLWithString:imageModel.src];
+        [FBSDKShareDialog showFromViewController:weakSelf
+                                     withContent:content
+                                        delegate:weakSelf];
+    } else {
+        // 登录后分享
+        LoginViewController *loginVC = [[LoginViewController alloc] init];
+        loginVC.isShareFacebook = YES;
+        UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:loginVC];
+        [weakSelf.navigationController presentViewController:navCtrl animated:YES completion:nil];
+    }
+}
+
+#pragma mark - FBSDKSharingDelegate
+- (void)sharer:(id<FBSDKSharing>)sharer didCompleteWithResults:(NSDictionary *)results
+{
+    SSLog(@"分享成功");
+}
+- (void)sharer:(id<FBSDKSharing>)sharer didFailWithError:(NSError *)error
+{
+    SSLog(@"分享失败");
+}
+- (void)sharerDidCancel:(id<FBSDKSharing>)sharer
+{
+    SSLog(@"取消分享");
 }
 
 #pragma mark - setter/getter
@@ -708,6 +818,18 @@
 - (void)tableViewDidTriggerFooterRefresh
 {
     [self requestDataWithIsFooter:YES];
+}
+
+#pragma mark - UINavigationControllerDelegate
+- (id<UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController animationControllerForOperation:(UINavigationControllerOperation)operation fromViewController:(UIViewController *)fromVC toViewController:(UIViewController *)toVC
+{
+    // && [_model.channelID isEqualToNumber:@30001]
+    if(operation == UINavigationControllerOperationPush) {
+        PushTransitionAnimate *pushTransition = [[PushTransitionAnimate alloc] init];
+        return pushTransition;
+    } else {
+        return nil;
+    }
 }
 
 - (void)didReceiveMemoryWarning {
