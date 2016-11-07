@@ -473,7 +473,7 @@
         [appDelegate.eventArray addObject:eventDic];
     } isShowHUD:NO];
     
-    if ([_model.channelID isEqualToNumber:@30001]) {
+    if ([_model.channelID isEqualToNumber:@30001] || model.tpl.integerValue == NEWS_OnlyVideo) {
         VideoDetailViewController *videoDetailVC = [[VideoDetailViewController alloc] init];
         videoDetailVC.model = model;
         videoDetailVC.channelName = _model.name;
@@ -490,6 +490,22 @@
     newsDetailVC.model = model;
     newsDetailVC.channelName = _model.name;
     [self.navigationController pushViewController:newsDetailVC animated:YES];
+}
+
+
+/**
+ cell不显示在tableView中
+
+ @param tableView
+ @param cell
+ @param indexPath
+ */
+- (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NewsModel *model = _dataList[indexPath.row];
+    if (model.tpl.integerValue == NEWS_OnlyVideo) {
+        ((OnlyVideoCell *)cell).isPlay = NO;
+    }
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
@@ -1181,20 +1197,22 @@
  */
 - (void)recoverVideo:(NSNotification *)notif
 {
-    if (![_model.channelID isEqualToNumber:@30001]) {
-        return;
-    }
-    NSDictionary *dic = notif.object;
-    YTPlayerView *playerView = dic[@"playerView"];
-    NSIndexPath *indexPath = dic[@"index"];
-    NSNumber *isPlay = dic[@"stop"];
-    OnlyVideoCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-    if (cell.isMove) {
-        [cell.contentView addSubview:playerView];
-        [cell.contentView bringSubviewToFront:cell.titleImageView];
-        cell.isMove = NO;
-        if ([isPlay isEqualToNumber:@1]) {
-            cell.isPlay = NO;
+    if ([_model.channelID isEqualToNumber:@30001] || [_model.channelID isEqualToNumber:@10001]) {
+        NSDictionary *dic = notif.object;
+        YTPlayerView *playerView = dic[@"playerView"];
+        NSIndexPath *indexPath = dic[@"index"];
+        NSNumber *isPlay = dic[@"stop"];
+        UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+        if ([cell isKindOfClass:[OnlyVideoCell class]]) {
+            OnlyVideoCell *videoCell = (OnlyVideoCell *)cell;
+            if (videoCell.isMove) {
+                [videoCell.contentView addSubview:playerView];
+                [videoCell.contentView bringSubviewToFront:videoCell.titleImageView];
+                videoCell.isMove = NO;
+                if ([isPlay isEqualToNumber:@1]) {
+                    videoCell.isPlay = NO;
+                }
+            }
         }
     }
 }

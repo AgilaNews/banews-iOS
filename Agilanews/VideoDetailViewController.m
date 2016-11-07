@@ -50,7 +50,14 @@
     }
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.isBackButton = YES;
-    _toView = [[UIApplication sharedApplication].keyWindow snapshotViewAfterScreenUpdates:NO];
+    
+    NSString *deviceModel = [NetType getCurrentDeviceModel];
+    if ([deviceModel isEqualToString:@"iPhone7"] || [deviceModel isEqualToString:@"iPhone7Plus"]) {
+        UIImage *image = [self imageFromView:[UIApplication sharedApplication].keyWindow];
+        _toView = [[UIImageView alloc] initWithImage:image];
+    } else {
+        _toView = [[UIApplication sharedApplication].keyWindow snapshotViewAfterScreenUpdates:NO];
+    }
     
     UIButton *shareBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     shareBtn.frame = CGRectMake(0, 0, 40, 40);
@@ -140,6 +147,15 @@
         [task cancel];
     }
     [_tasks removeAllObjects];
+}
+
+- (UIImage *)imageFromView:(UIView *)snapView {
+    UIGraphicsBeginImageContext(snapView.frame.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    [snapView.layer renderInContext:context];
+    UIImage *targetImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return targetImage;
 }
 
 #pragma mark - Network

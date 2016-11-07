@@ -20,11 +20,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Agilanews/VideoDetailViewController.m"
-            timestampString = "500179507.186809"
+            timestampString = "500184253.40769"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "554"
-            endingLineNumber = "554"
+            startingLineNumber = "579"
+            endingLineNumber = "579"
             landmarkName = "-buttonAction:"
             landmarkType = "7">
          </BreakpointContent>

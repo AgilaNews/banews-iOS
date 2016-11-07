@@ -23,7 +23,15 @@
     // 获取动画的源控制器和目标控制器
 //    UIViewController *fromVC = (UIViewController *)[transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
     UIViewController *toVC = (UIViewController *)[transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
-    UIView *fromView = [[UIApplication sharedApplication].keyWindow snapshotViewAfterScreenUpdates:NO];
+    NSString *deviceModel = [NetType getCurrentDeviceModel];
+    UIView *fromView = nil;
+    if ([deviceModel isEqualToString:@"iPhone7"] || [deviceModel isEqualToString:@"iPhone7Plus"]) {
+        //        if ([deviceModel isEqualToString:@"iPhoneSimulator"]) {
+        UIImage *image = [self imageFromView:[UIApplication sharedApplication].keyWindow];
+        fromView = [[UIImageView alloc] initWithImage:image];
+    } else {
+        fromView = [[UIApplication sharedApplication].keyWindow snapshotViewAfterScreenUpdates:NO];
+    }
     
     //获取容器视图
     UIView *contView = [transitionContext containerView];
@@ -39,6 +47,15 @@
         [fromView removeFromSuperview];
         [transitionContext completeTransition:YES];
     }];
+}
+
+- (UIImage *)imageFromView:(UIView *)snapView {
+    UIGraphicsBeginImageContext(snapView.frame.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    [snapView.layer renderInContext:context];
+    UIImage *targetImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return targetImage;
 }
 
 @end
