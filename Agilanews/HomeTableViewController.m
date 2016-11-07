@@ -504,7 +504,13 @@
  */
 - (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (indexPath.row >= _dataList.count) {
+        return;
+    }
     NewsModel *model = _dataList[indexPath.row];
+    if ([model isKindOfClass:[NSString class]]) {
+        return;
+    }
     if (model.tpl.integerValue == NEWS_OnlyVideo && [cell isKindOfClass:[OnlyVideoCell class]]) {
         ((OnlyVideoCell *)cell).isPlay = NO;
     }
