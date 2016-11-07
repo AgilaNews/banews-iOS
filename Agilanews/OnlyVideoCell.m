@@ -85,8 +85,8 @@
     }];
     // 遮罩布局
     [self.shadowView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(weakSelf.titleImageView.left);
-        make.top.mas_equalTo(weakSelf.titleImageView.top);
+        make.left.mas_equalTo(0);
+        make.top.mas_equalTo(0);
         make.width.mas_equalTo(kScreenWidth);
         make.height.mas_equalTo(42);
     }];
@@ -99,13 +99,11 @@
         make.height.mas_equalTo(titleLabelSize.height);
     }];
     // 时长布局
-    VideoModel *model = _model.videos.firstObject;
-    CGSize durationLabelSize = [model.duration.stringValue calculateSize:CGSizeMake(80, 20) font:self.durationLabel.font];
     [self.durationLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.mas_equalTo(-6);
         make.bottom.mas_equalTo(-5);
-        make.width.mas_equalTo(durationLabelSize.width + 6);
-        make.height.mas_equalTo(durationLabelSize.height);
+        make.width.mas_equalTo(0);
+        make.height.mas_equalTo(0);
     }];
     // 播放按钮布局
     [self.playButton mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -122,12 +120,11 @@
         make.height.mas_equalTo(11);
     }];
     // 观看量布局
-    CGSize watchLabelSize = [_model.views.stringValue calculateSize:CGSizeMake(100, 14) font:self.watchLabel.font];
     [self.watchLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(weakSelf.watchView.mas_right).offset(5);
         make.centerY.mas_equalTo(weakSelf.watchView.mas_centerY);
-        make.width.mas_equalTo(watchLabelSize.width);
-        make.height.mas_equalTo(watchLabelSize.height);
+        make.width.mas_equalTo(0);
+        make.height.mas_equalTo(0);
     }];
     // 分享按钮布局
     [self.shareButton mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -137,12 +134,11 @@
         make.height.mas_equalTo(40);
     }];
     // 评论数布局
-    CGSize commentLabelSize = [_model.commentCount.stringValue calculateSize:CGSizeMake(100, 13) font:self.commentLabel.font];
     [self.commentLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.mas_equalTo(weakSelf.shareButton.mas_left).offset(-27);
         make.centerY.mas_equalTo(weakSelf.watchView.mas_centerY);
-        make.width.mas_equalTo(commentLabelSize.width);
-        make.height.mas_equalTo(commentLabelSize.height);
+        make.width.mas_equalTo(0);
+        make.height.mas_equalTo(0);
     }];
     // 评论视图布局
     [self.commentView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -175,8 +171,10 @@
     }];
     // 遮罩布局
     [self.shadowView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(weakSelf.titleImageView.left);
-        make.top.mas_equalTo(weakSelf.titleImageView.top);
+        make.left.mas_equalTo(0);
+        make.top.mas_equalTo(0);
+        make.width.mas_equalTo(kScreenWidth);
+        make.height.mas_equalTo(42);
     }];
     // 标题布局
     CGSize titleLabelSize = [_model.title calculateSize:CGSizeMake(kScreenWidth - 22, 40) font:self.titleLabel.font];
@@ -219,11 +217,15 @@
     [self.playButton mas_updateConstraints:^(MASConstraintMaker *make) {
         make.centerX.mas_equalTo(weakSelf.titleImageView.mas_centerX);
         make.centerY.mas_equalTo(weakSelf.titleImageView.mas_centerY);
+        make.width.mas_equalTo(45);
+        make.height.mas_equalTo(45);
     }];
     // 观看视图布局
     [self.watchView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(weakSelf.titleImageView.mas_bottom).offset(15.5);
         make.left.mas_equalTo(11);
+        make.width.mas_equalTo(11);
+        make.height.mas_equalTo(11);
     }];
     // 观看量布局
     CGSize watchLabelSize = [_model.views.stringValue calculateSize:CGSizeMake(100, 14) font:self.watchLabel.font];
@@ -237,6 +239,8 @@
     [self.shareButton mas_updateConstraints:^(MASConstraintMaker *make) {
         make.right.mas_equalTo(0);
         make.centerY.mas_equalTo(weakSelf.watchView.mas_centerY);
+        make.width.mas_equalTo(40);
+        make.height.mas_equalTo(40);
     }];
     // 评论数布局
     if (_model.commentCount.integerValue > 0) {
@@ -259,6 +263,8 @@
     [self.commentView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.right.mas_equalTo(weakSelf.commentLabel.mas_left).offset(-6);
         make.centerY.mas_equalTo(weakSelf.watchView.mas_centerY);
+        make.width.mas_equalTo(18);
+        make.height.mas_equalTo(18);
     }];
     
     [super updateConstraints];
