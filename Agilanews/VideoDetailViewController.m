@@ -74,6 +74,7 @@
     [self.view addSubview:_tableView];
     [self.view addSubview:self.commentsView];
     
+    _tasks = [NSMutableArray array];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
         // 新闻推荐网络请求
@@ -81,7 +82,7 @@
         // 评论网络请求
         [self requsetCommentsListWithNewsID:_model.news_id];
         // 详情网络请求
-#warning todo - 详情网络请求
+        [self requsetDetailWithNewsID:_model.news_id];
     });
 }
 
@@ -135,6 +136,10 @@
 - (void)dealloc
 {
     self.playerView.delegate = nil;
+    for (NSURLSessionDataTask *task in _tasks) {
+        [task cancel];
+    }
+    [_tasks removeAllObjects];
 }
 
 #pragma mark - Network
@@ -150,7 +155,7 @@
     __weak typeof(self) weakSelf = self;
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setObject:newsID forKey:@"news_id"];
-    [[SSHttpRequest sharedInstance] get:kHomeUrl_Recommend params:params contentType:JsonType serverType:NetServer_Video success:^(id responseObj) {
+    NSURLSessionDataTask *task = [[SSHttpRequest sharedInstance] get:kHomeUrl_Recommend params:params contentType:JsonType serverType:NetServer_Video success:^(id responseObj) {
         [_recommendedView stopAnimation];
         [appDelegate.likedDic setValue:@1 forKey:newsID];
         NSArray *recommends = responseObj[@"recommend_news"];
@@ -164,6 +169,7 @@
         [_recommendedView stopAnimation];
         _recommendedView.retryLabel.hidden = NO;
     } isShowHUD:NO];
+    [_tasks addObject:task];
 }
 
 /**
@@ -177,7 +183,7 @@
     [params setObject:newsID forKey:@"news_id"];
     [params setObject:@"later" forKey:@"prefer"];
     [params setObject:@3 forKey:@"pn"];
-    [[SSHttpRequest sharedInstance] get:kHomeUrl_VideoRecommend params:params contentType:UrlencodedType serverType:NetServer_Video success:^(id responseObj) {
+    NSURLSessionDataTask *task = [[SSHttpRequest sharedInstance] get:kHomeUrl_VideoRecommend params:params contentType:UrlencodedType serverType:NetServer_Video success:^(id responseObj) {
         [_recommentsView stopAnimation];
         NSArray *array = responseObj;
         NSMutableArray *models = [NSMutableArray array];
@@ -187,12 +193,37 @@
                 [models addObject:model];
             }
         }
-        weakSelf.commentArray = models;
-        [weakSelf.tableView reloadData];
+        weakSelf.commentArray = [NSMutableArray arrayWithArray:models];
+        [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationFade];
     } failure:^(NSError *error) {
         [_recommentsView stopAnimation];
         _recommentsView.retryLabel.hidden = NO;
     } isShowHUD:NO];
+    [_tasks addObject:task];
+}
+
+
+/**
+ 新闻详情网络请求
+
+ @param newsID
+ */
+- (void)requsetDetailWithNewsID:(NSString *)newsID
+{
+    __weak typeof(self) weakSelf = self;
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    [params setObject:newsID forKey:@"news_id"];
+    NSURLSessionDataTask *task = [[SSHttpRequest sharedInstance] get:kHomeUrl_NewsDetail params:params contentType:UrlencodedType serverType:NetServer_Video success:^(id responseObj) {
+        weakSelf.detailModel = [NewsDetailModel mj_objectWithKeyValues:responseObj];
+        if (![_detailModel.collect_id isEqualToString:@"0"]) {
+            UIButton *button = [weakSelf.commentsView viewWithTag:301];
+            button.selected = YES;
+            _collectID = _detailModel.collect_id;
+        }
+    } failure:^(NSError *error) {
+        
+    } isShowHUD:NO];
+    [_tasks addObject:task];
 }
 
 /**
@@ -232,7 +263,7 @@
     [params setObject:@"later" forKey:@"prefer"];
     CommentModel *commentModel = _commentArray.lastObject;
     [params setObject:commentModel.commentID forKey:@"last_id"];
-    [[SSHttpRequest sharedInstance] get:kHomeUrl_VideoRecommend params:params contentType:UrlencodedType serverType:NetServer_Video success:^(id responseObj) {
+    NSURLSessionDataTask *task = [[SSHttpRequest sharedInstance] get:kHomeUrl_VideoRecommend params:params contentType:UrlencodedType serverType:NetServer_Video success:^(id responseObj) {
         [_tableView.footer endRefreshing];
         NSArray *array = responseObj;
         if (array.count > 0) {
@@ -275,6 +306,7 @@
 #endif
         }
     } isShowHUD:NO];
+    [_tasks addObject:task];
 }
 
 /**
@@ -1123,6 +1155,11 @@
                     [appDelegate.eventArray addObject:eventDic];
                 } isShowHUD:NO];
                 
+                // 取消网络请求
+                for (NSURLSessionDataTask *task in _tasks) {
+                    [task cancel];
+                }
+                [_tasks removeAllObjects];
                 _model = model;
                 _recommend_news = [NSMutableArray array];
                 _commentArray = [NSMutableArray array];
@@ -1132,6 +1169,18 @@
                 [self recommendWithNewsID:model.news_id AppDelegate:appDelegate];
                 // 评论网络请求
                 [self requsetCommentsListWithNewsID:model.news_id];
+            } else if (_recommendedView.retryLabel.hidden == NO){
+                AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+                // 新闻推荐网络请求
+                [self recommendWithNewsID:_model.news_id AppDelegate:appDelegate];
+            }
+            break;
+        }
+        case 2:
+        {
+            if (indexPath.row == 0 && _recommentsView.retryLabel.hidden == NO) {
+                // 评论网络请求
+                [self requsetCommentsListWithNewsID:_model.news_id];
             }
             break;
         }
@@ -1236,13 +1285,8 @@
                     [button setImage:[UIImage imageNamed:@"icon_article_collect_default"] forState:UIControlStateNormal];
                     [button setImage:[UIImage imageNamed:@"icon_article_collect_select"] forState:UIControlStateSelected];
                     [button setImage:[UIImage imageNamed:@"icon_article_collect_select"] forState:UIControlStateHighlighted];
-//                    if (![_detailModel.collect_id isEqualToString:@"0"]) {
+//                    if ([[CoreDataManager sharedInstance] searchLocalFavoriteModelWithNewsID:_model.news_id]) {
 //                        button.selected = YES;
-//                        _collectID = _detailModel.collect_id;
-//                    } else {
-//                        if ([[CoreDataManager sharedInstance] searchLocalFavoriteModelWithNewsID:_model.news_id]) {
-//                            button.selected = YES;
-//                        }
 //                    }
                     break;
                 case 2:
@@ -1264,25 +1308,25 @@
                 _commentsLabel.textColor = [UIColor whiteColor];
                 _commentsLabel.hidden = YES;
                 [_commentsView addSubview:_commentsLabel];
-//                if (_detailModel.commentCount.integerValue > 0) {
-//                    _commentsLabel.hidden = NO;
-//                    int width;
-//                    if (_detailModel.commentCount.integerValue < 10) {
-//                        width = 12;
-//                    } else if (_detailModel.commentCount.integerValue < 100) {
-//                        width = 16;
-//                    } else if (_detailModel.commentCount.integerValue < 1000) {
-//                        width = 22;
-//                    } else {
-//                        width = 28;
-//                    }
-//                    _commentsLabel.width = width;
-//                    if (_detailModel.commentCount.integerValue < 1000) {
-//                        _commentsLabel.text = _detailModel.commentCount.stringValue;
-//                    } else {
-//                        _commentsLabel.text = @"999+";
-//                    }
-//                }
+                if (_model.commentCount.integerValue > 0) {
+                    _commentsLabel.hidden = NO;
+                    int width;
+                    if (_model.commentCount.integerValue < 10) {
+                        width = 12;
+                    } else if (_model.commentCount.integerValue < 100) {
+                        width = 16;
+                    } else if (_model.commentCount.integerValue < 1000) {
+                        width = 22;
+                    } else {
+                        width = 28;
+                    }
+                    _commentsLabel.width = width;
+                    if (_model.commentCount.integerValue < 1000) {
+                        _commentsLabel.text = _model.commentCount.stringValue;
+                    } else {
+                        _commentsLabel.text = @"999+";
+                    }
+                }
             }
         }
     }

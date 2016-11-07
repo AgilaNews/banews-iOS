@@ -17,6 +17,7 @@
 @property (nonatomic, strong) UIView *toView;
 @property (nonatomic, strong) NSDictionary *playerVars;
 @property (nonatomic, strong) NewsModel *model;
+@property (nonatomic, strong) NewsDetailModel *detailModel; // 新闻详情model
 @property (nonatomic, strong) NSString *channelName;    // 频道名
 @property (nonatomic, strong) YTPlayerView *playerView;
 @property (nonatomic, strong) NSIndexPath *indexPath;
@@ -30,11 +31,12 @@
 @property (nonatomic, strong) NSMutableArray *commentArray; // 评论数组
 @property (nonatomic, strong) RecommendedView *recommentsView;
 @property (nonatomic, strong) UIView *noCommentView;        // 无评论视图
+@property (nonatomic, strong) NSString *collectID;          // 收藏新闻ID
 @property (nonatomic, assign) NSInteger pullupCount;    // 上拉加载次数
 @property (nonatomic, strong) UIView *blankView;
 @property (nonatomic, strong) UILabel *blankLabel;
 @property (nonatomic, strong) UIImageView *failureView;
-@property (nonatomic, strong) NSURLSessionDataTask *task;
+@property (nonatomic, strong) NSMutableArray *tasks;
 @property (nonatomic, assign) BOOL isContentOpen;
 @property (nonatomic, assign) BOOL isOther;
 
