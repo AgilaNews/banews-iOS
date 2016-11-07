@@ -20,4 +20,6 @@
 
 + (NSString *)getRecommendedNewsStringWhitTimeStamp:(long long)timeStamp;
 
++ (NSString *)getViewsStringWithNumber:(NSNumber *)number;
+
 @end

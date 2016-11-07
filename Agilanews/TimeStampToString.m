@@ -246,4 +246,19 @@
     return yearTimeStamp;
 }
 
++ (NSString *)getViewsStringWithNumber:(NSNumber *)number
+{
+    if (number.integerValue >= 1000) {
+        NSString *views = [NSString stringWithFormat:@"%.1fk",number.integerValue / 1000.0];
+        NSInteger integer = views.floatValue * 10;
+        if (integer % 10 == 0) {
+            return [NSString stringWithFormat:@"%.0fk",number.integerValue / 1000.0];
+        } else {
+            return [NSString stringWithFormat:@"%.1fk",number.integerValue / 1000.0];
+        }
+    } else {
+        return number.stringValue;
+    }
+}
+
 @end

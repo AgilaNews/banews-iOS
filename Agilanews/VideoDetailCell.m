@@ -107,7 +107,8 @@
         make.width.mas_equalTo(11);
         make.height.mas_equalTo(11);
     }];
-    CGSize watchLabelSize = [_model.views.stringValue calculateSize:CGSizeMake(100, 13) font:self.watchLabel.font];
+    NSString *views = [TimeStampToString getViewsStringWithNumber:_model.views];
+    CGSize watchLabelSize = [views calculateSize:CGSizeMake(100, 13) font:self.watchLabel.font];
     [self.watchLabel mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(weakSelf.watchView.mas_right).offset(5);
         make.centerY.mas_equalTo(weakSelf.sourceLabel.mas_centerY);
@@ -143,7 +144,7 @@
 
     self.titleLabel.text = _model.title;
     self.sourceLabel.text = _model.source;
-    self.watchLabel.text = _model.views.stringValue;
+    self.watchLabel.text = views;
     self.contentLabel.text = model.content;
 }
 
