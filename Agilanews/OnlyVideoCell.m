@@ -282,7 +282,7 @@
     NSNumber *textOnlyMode = DEF_PERSISTENT_GET_OBJECT(SS_textOnlyMode);
     if ([textOnlyMode integerValue] == 1) {
         self.titleImageView.contentMode = UIViewContentModeCenter;
-        self.titleImageView.image = [UIImage imageNamed:@"holderImage"];
+        self.titleImageView.image = nil;
         return;
     }
     self.titleImageView.contentMode = UIViewContentModeScaleAspectFit;
@@ -290,10 +290,8 @@
     NSString *imageUrl = [imageModel.pattern stringByReplacingOccurrencesOfString:@"{w}" withString:[NSString stringWithFormat:@"%d",((int)kScreenWidth * 2)]];
     imageUrl = [imageUrl stringByReplacingOccurrencesOfString:@"{h}" withString:[NSString stringWithFormat:@"%d",(int)(videoHeight * 2)]];
     imageUrl = [imageUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    [self.titleImageView sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:[UIImage imageNamed:@"holderImage"] options:SDWebImageRetryFailed completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-        if (!image) {
-            _titleImageView.image = [UIImage imageNamed:@"holderImage"];
-        } else {
+    [self.titleImageView sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:nil options:SDWebImageRetryFailed completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        if (image) {
             _titleImageView.image = image;
         }
     }];
