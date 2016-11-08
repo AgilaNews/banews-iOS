@@ -1174,7 +1174,6 @@
 // 从推送退出到列表页通知
 - (void)pushExit
 {
-#warning mark - 白列表bug
     if ([self.tableView isDisplayedInScreen]) {
         AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
         NSNumber *refreshNum = appDelegate.refreshTimeDic[_model.channelID];

@@ -494,6 +494,7 @@
                 cell = [[SinglePicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
             }
             cell.model = model;
+            cell.isHaveVideo = NO;
             [cell setNeedsLayout];
             return cell;
         }
@@ -525,15 +526,32 @@
             return cell;
         }
         default:
-            break;
+        {
+            ImageModel *imageModel = model.imgs.firstObject;
+            if (imageModel.pattern) {
+                // 单图cell
+                static NSString *cellID = @"SinglePicCellID";
+                SinglePicCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+                if (cell == nil) {
+                    cell = [[SinglePicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
+                }
+                cell.model = model;
+                cell.isHaveVideo = NO;
+                [cell setNeedsLayout];
+                return cell;
+            } else {
+                // 无图cell
+                static NSString *cellID = @"NoPicCellID";
+                NoPicCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+                if (cell == nil) {
+                    cell = [[NoPicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
+                }
+                cell.model = model;
+                [cell setNeedsLayout];
+                return cell;
+            }
+        }
     }
-    static NSString *cellID = @"newsListCellID";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
-    }
-    [cell setNeedsLayout];
-    return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

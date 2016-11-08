@@ -150,13 +150,13 @@
     if (minute > 60) {
         hour = minute / 60;
         minute = minute - hour * 60;
-        dateString = [NSString stringWithFormat:@"%ld:%ld:%ld",hour,minute,second];
+        dateString = [NSString stringWithFormat:@"%ld:%ld:%ld",(long)hour,(long)minute,(long)second];
         [dateFormat setDateFormat:@"h:m:s"];
         NSDate *date = [dateFormat dateFromString:dateString];
         [dateFormat setDateFormat:@"hh:mm:ss"];
         durationString = [dateFormat stringFromDate:date];
     } else {
-        dateString = [NSString stringWithFormat:@"%ld:%ld",minute,second];
+        dateString = [NSString stringWithFormat:@"%ld:%ld",(long)minute,(long)second];
         [dateFormat setDateFormat:@"m:s"];
         NSDate *date = [dateFormat dateFromString:dateString];
         [dateFormat setDateFormat:@"mm:ss"];

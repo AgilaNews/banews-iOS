@@ -367,7 +367,7 @@ typedef NS_ENUM(NSUInteger, XWDragCellCollectionViewScrollDirection) {
  *  重写hitTest事件，判断是否应该相应自己的滑动手势，还是系统的滑动手势
  */
 
-- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event{
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
     _longPressGesture.enabled = [self indexPathForItemAtPoint:point];
     return [super hitTest:point withEvent:event];
 }
