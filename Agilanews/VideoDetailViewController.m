@@ -1621,9 +1621,34 @@
 - (void)playerViewDidBecomeReady:(YTPlayerView *)playerView
 {
     [_holderView removeFromSuperview];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self.playerView playVideo];
-    });
+    __weak typeof(self) weakSelf = self;
+    AFNetworkReachabilityManager *manager = [AFNetworkReachabilityManager sharedManager];
+    if (manager.networkReachabilityStatus == AFNetworkReachabilityStatusReachableViaWiFi) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self.playerView playVideo];
+        });
+    } else {
+        NSString *message = @"You are playing video using traffic, whether to continue playing?";
+        UIAlertController *playingAlert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *stopAction = [UIAlertAction actionWithTitle:@"Stop" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            //            // 打点-点击无图模式提醒对话框No选项-010011
+            //            [Flurry logEvent:@"LowDataTips_No_Click"];
+            //#if DEBUG
+            //            [iConsole info:@"LowDataTips_No_Click",nil];
+            //#endif
+        }];
+        UIAlertAction *continueAction = [UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+            //            // 打点-点击无图模式提醒对话框中YES选项-010010
+            //            [Flurry logEvent:@"LowDataTips_YES_Click"];
+            //#if DEBUG
+            //            [iConsole info:@"LowDataTips_YES_Click",nil];
+            //#endif
+            [weakSelf.playerView playVideo];
+        }];
+        [playingAlert addAction:stopAction];
+        [playingAlert addAction:continueAction];
+        [self.navigationController presentViewController:playingAlert animated:YES completion:nil];
+    }
 }
 
 #pragma mark - UINavigationControllerDelegate

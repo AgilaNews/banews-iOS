@@ -280,6 +280,10 @@
             return cell;
         }
         NewsModel *model = _dataList[indexPath.row];
+        if (model == nil) {
+            model = [[NewsModel alloc] init];
+            model.tpl = @100;
+        }
         switch ([model.tpl integerValue])
         {
             case NEWS_ManyPic:

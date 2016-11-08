@@ -544,7 +544,11 @@ forHTTPHeaderField:(NSString *)field
         if ([change[NSKeyValueChangeNewKey] isEqual:[NSNull null]]) {
             [self.mutableObservedChangedKeyPaths removeObject:keyPath];
         } else {
-            [self.mutableObservedChangedKeyPaths addObject:keyPath];
+            @try {
+                [self.mutableObservedChangedKeyPaths addObject:keyPath];
+            } @catch (NSException *exception) {
+                SSLog(@"%@",exception);
+            }
         }
     }
 }

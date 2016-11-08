@@ -301,9 +301,37 @@
 - (void)tapAction
 {
     VideoModel *model = _model.videos.firstObject;
-    if (model.youtube_id) {
-        [self.playerView loadWithVideoId:model.youtube_id playerVars:_playerVars];
-        self.isPlay = YES;
+    __weak typeof(self) weakSelf = self;
+    AFNetworkReachabilityManager *manager = [AFNetworkReachabilityManager sharedManager];
+    if (manager.networkReachabilityStatus == AFNetworkReachabilityStatusReachableViaWiFi) {
+        if (model.youtube_id) {
+            [self.playerView loadWithVideoId:model.youtube_id playerVars:_playerVars];
+            self.isPlay = YES;
+        }
+    } else {
+        NSString *message = @"You are playing video using traffic, whether to continue playing?";
+        UIAlertController *playingAlert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *stopAction = [UIAlertAction actionWithTitle:@"Stop" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//            // 打点-点击无图模式提醒对话框No选项-010011
+//            [Flurry logEvent:@"LowDataTips_No_Click"];
+//#if DEBUG
+//            [iConsole info:@"LowDataTips_No_Click",nil];
+//#endif
+        }];
+        UIAlertAction *continueAction = [UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+//            // 打点-点击无图模式提醒对话框中YES选项-010010
+//            [Flurry logEvent:@"LowDataTips_YES_Click"];
+//#if DEBUG
+//            [iConsole info:@"LowDataTips_YES_Click",nil];
+//#endif
+            if (model.youtube_id) {
+                [weakSelf.playerView loadWithVideoId:model.youtube_id playerVars:_playerVars];
+                weakSelf.isPlay = YES;
+            }
+        }];
+        [playingAlert addAction:stopAction];
+        [playingAlert addAction:continueAction];
+        [self.window.rootViewController presentViewController:playingAlert animated:YES completion:nil];
     }
 }
 
