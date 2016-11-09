@@ -16,6 +16,7 @@
 @property (nonatomic, strong) YTPlayerView *playerView;     // 播放视图
 @property (nonatomic, strong) NSDictionary *playerVars;     // 播放参数
 @property (nonatomic, strong) UIImageView *titleImageView;  // 图片视图
+@property (nonatomic, strong) UIView *holderView;           // 占位图
 @property (nonatomic, strong) UIImageView *shadowView;      // 遮罩视图
 @property (nonatomic, strong) UILabel *titleLabel;          // 标题
 @property (nonatomic, strong) UILabel *durationLabel;       // 时长标签

@@ -149,11 +149,9 @@
                         @"showinfo" : @0};         // 播放器是否显示视频标题和上传者等信息。  0:不显示  1:显示
         VideoModel *model = _model.videos.firstObject;
         [self.playerView loadWithVideoId:model.youtube_id playerVars:_playerVars];
-        if (_holderImage) {
-            _holderView = [[UIImageView alloc] initWithImage:_holderImage];
-            _holderView.frame = _playerView.bounds;
-            [self.playerView addSubview:_holderView];
-        }
+        _holderView = [[UIView alloc] initWithFrame:_playerView.bounds];
+        _holderView.backgroundColor = [UIColor blackColor];
+        [self.playerView addSubview:_holderView];
     }
 }
 
@@ -1272,6 +1270,9 @@
                 NewsModel *model = _recommend_news[indexPath.row - 1];
                 VideoModel *videoModel = model.videos.firstObject;
                 [self.playerView loadWithVideoId:videoModel.youtube_id playerVars:_playerVars];
+                _holderView = [[UIView alloc] initWithFrame:_playerView.bounds];
+                _holderView.backgroundColor = [UIColor blackColor];
+                [self.playerView addSubview:_holderView];
                 _isOther = YES;
                 if (model.news_id.length <= 0) {
                     return;

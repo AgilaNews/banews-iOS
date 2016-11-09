@@ -483,7 +483,6 @@
         videoDetailVC.channelName = _model.name;
         OnlyVideoCell *cell = [tableView cellForRowAtIndexPath:indexPath];
         videoDetailVC.playerView = cell.playerView;
-        videoDetailVC.holderImage = cell.titleImageView.image;
         videoDetailVC.indexPath = indexPath;
         videoDetailVC.fromCell = cell;
         cell.isPlay = YES;

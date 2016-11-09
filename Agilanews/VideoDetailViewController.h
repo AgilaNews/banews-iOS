@@ -21,8 +21,7 @@
 @property (nonatomic, strong) NewsDetailModel *detailModel; // 新闻详情model
 @property (nonatomic, strong) NSString *channelName;    // 频道名
 @property (nonatomic, strong) YTPlayerView *playerView;
-@property (nonatomic, strong) UIImage *holderImage;
-@property (nonatomic, strong) UIImageView *holderView;
+@property (nonatomic, strong) UIView *holderView;
 @property (nonatomic, strong) NSIndexPath *indexPath;
 @property (nonatomic, strong) OnlyVideoCell *fromCell;
 @property (nonatomic, strong) UITableView *tableView;

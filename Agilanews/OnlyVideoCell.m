@@ -62,6 +62,7 @@
     [self.titleImageView addSubview:self.titleLabel];
     [self.titleImageView addSubview:self.durationLabel];
     [self.titleImageView addSubview:self.playButton];
+    [self.contentView addSubview:self.holderView];
     [self.contentView addSubview:self.watchView];
     [self.contentView addSubview:self.watchLabel];
     [self.contentView addSubview:self.commentView];
@@ -78,6 +79,13 @@
     }];
     // 标题图片布局
     [self.titleImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(0);
+        make.top.mas_equalTo(0);
+        make.width.mas_equalTo(kScreenWidth);
+        make.height.mas_equalTo(videoHeight);
+    }];
+    // 占位图片布局
+    [self.holderView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(0);
         make.top.mas_equalTo(0);
         make.width.mas_equalTo(kScreenWidth);
@@ -164,6 +172,13 @@
     }];
     // 标题图片布局
     [self.titleImageView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(0);
+        make.top.mas_equalTo(0);
+        make.width.mas_equalTo(kScreenWidth);
+        make.height.mas_equalTo(videoHeight);
+    }];
+    // 占位图片布局
+    [self.holderView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(0);
         make.top.mas_equalTo(0);
         make.width.mas_equalTo(kScreenWidth);
@@ -338,7 +353,7 @@
 #pragma mark - YTPlayerViewDelegate
 - (void)playerViewDidBecomeReady:(YTPlayerView *)playerView
 {
-    self.titleImageView.hidden = YES;
+    self.holderView.hidden = YES;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self.playerView playVideo];
     });
@@ -387,6 +402,8 @@
             self.titleLabel.hidden = YES;
             self.durationLabel.hidden = YES;
             self.playButton.hidden = YES;
+            self.titleImageView.hidden = YES;
+            self.holderView.hidden = NO;
         } else {
             [self.playerView stopVideo];
             self.shadowView.hidden = NO;
@@ -394,6 +411,7 @@
             self.durationLabel.hidden = NO;
             self.playButton.hidden = NO;
             self.titleImageView.hidden = NO;
+            self.holderView.hidden = YES;
         }
     }
 }
@@ -418,6 +436,16 @@
         _titleImageView.clipsToBounds = YES;
     }
     return _titleImageView;
+}
+
+- (UIView *)holderView
+{
+    if (_holderView == nil) {
+        _holderView = [[UIView alloc] init];
+        _holderView.backgroundColor = [UIColor blackColor];
+        _holderView.hidden = YES;
+    }
+    return _holderView;
 }
 
 - (UIImageView *)shadowView
