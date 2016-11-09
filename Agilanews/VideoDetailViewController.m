@@ -153,6 +153,27 @@
         _holderView.backgroundColor = [UIColor blackColor];
         [self.playerView addSubview:_holderView];
     }
+    
+    _enterTime = [[NSDate date] timeIntervalSince1970];
+//    NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
+//                                   [NSNumber numberWithLongLong:_enterTime], @"time",
+//                                   _channelName, @"channel",
+//                                   _model.news_id, @"article",
+//                                   [NetType getNetType], @"network",
+//                                   nil];
+//    if (_isPushEnter) {
+//        // 打点-推送新闻详情页进入-010007
+//        [Flurry logEvent:@"PushArticle_Enter" withParameters:articleParams];
+//#if DEBUG
+//        [iConsole info:[NSString stringWithFormat:@"PushArticle_Enter:%@",articleParams],nil];
+//#endif
+//    } else {
+//        // 打点-页面进入-010201
+//        [Flurry logEvent:@"Article_Enter" withParameters:articleParams];
+//#if DEBUG
+//        [iConsole info:[NSString stringWithFormat:@"Article_Enter:%@",articleParams],nil];
+//#endif
+//    }
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -171,6 +192,27 @@
         [task cancel];
     }
     [_tasks removeAllObjects];
+    
+    // 服务器打点-详情页返回-020201
+    NSMutableDictionary *eventDic = [NSMutableDictionary dictionary];
+    [eventDic setObject:@"020201" forKey:@"id"];
+    [eventDic setObject:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970] * 1000] forKey:@"time"];
+    [eventDic setObject:_model.news_id forKey:@"news_id"];
+    float pagePos = (_tableView.contentOffset.y + kScreenHeight - 64 - 50) / _tableView.contentSize.height;
+    [eventDic setObject:[NSString stringWithFormat:@"%.1f",MAX(pagePos, 1)] forKey:@"page_pos"];
+    float duration = ([[NSDate date] timeIntervalSince1970] * 1000 - _enterTime * 1000) / 1000.0;
+    [eventDic setObject:[NSString stringWithFormat:@"%.1f",duration] forKey:@"duration"];
+    [eventDic setObject:[NetType getNetType] forKey:@"net"];
+    if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
+        [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) forKey:@"lng"];
+        [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) forKey:@"lat"];
+    } else {
+        [eventDic setObject:@"" forKey:@"lng"];
+        [eventDic setObject:@"" forKey:@"lat"];
+    }
+    [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    [appDelegate.eventArray addObject:eventDic];
 }
 
 - (UIImage *)imageFromView:(UIView *)snapView {
@@ -241,6 +283,9 @@
         for (NSDictionary *dic in recommends) {
             NewsModel *model = [NewsModel mj_objectWithKeyValues:dic];
             [_recommend_news addObject:model];
+        }
+        if (_recommend_news.count > 0) {
+            weakSelf.isRecommendShow = YES;
         }
         [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
     } failure:^(NSError *error) {
@@ -1337,6 +1382,8 @@
                 [self recommendWithNewsID:model.news_id AppDelegate:appDelegate];
                 // 评论网络请求
                 [self requsetCommentsListWithNewsID:model.news_id];
+                // 详情网络请求
+                [self requsetDetailWithNewsID:_model.news_id];
             } else if (_recommendedView.retryLabel.hidden == NO){
                 AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
                 // 新闻推荐网络请求
@@ -1357,14 +1404,15 @@
     }
 }
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-//    float page_pos = (scrollView.contentOffset.y + kScreenHeight - 170) / _webView.height;
-//    if (page_pos >= 1.0 && !_webView.loading) {
+//- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+//{
+//    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1]];
+//    float page_pos = (scrollView.contentOffset.y + _tableView.height) / cell.top;
+//    if (page_pos >= 1.0) {
 //        // 推荐文章展示
 //        self.isRecommendShow = YES;
 //    }
-}
+//}
 
 #pragma mark - UITextViewDelegate
 - (void)textViewDidChange:(UITextView *)textView
@@ -1616,6 +1664,49 @@
         }
     }
     return _commentsView;
+}
+
+- (void)setIsRecommendShow:(BOOL)isRecommendShow
+{
+    if (_isRecommendShow != isRecommendShow) {
+        _isRecommendShow = isRecommendShow;
+        
+        if (isRecommendShow) {
+            // 服务器打点-详情页相关推荐展示-020203
+            NSMutableDictionary *eventDic = [NSMutableDictionary dictionary];
+            [eventDic setObject:@"020203" forKey:@"id"];
+            [eventDic setObject:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970] * 1000] forKey:@"time"];
+            [eventDic setObject:_model.news_id forKey:@"news_id"];
+            NSMutableArray *newslist = [NSMutableArray array];
+            @autoreleasepool {
+                for (NewsModel *model in _recommend_news) {
+                    [newslist addObject:model.news_id];
+                }
+            }
+            [eventDic setObject:newslist forKey:@"newslist"];
+            [eventDic setObject:[NetType getNetType] forKey:@"net"];
+            if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
+                [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) forKey:@"lng"];
+                [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) forKey:@"lat"];
+            } else {
+                [eventDic setObject:@"" forKey:@"lng"];
+                [eventDic setObject:@"" forKey:@"lat"];
+            }
+            NSDictionary *sessionDic = [NSDictionary dictionaryWithObjectsAndKeys:
+                                        DEF_PERSISTENT_GET_OBJECT(@"UUID"), @"id",
+                                        [NSArray arrayWithObject:eventDic], @"events",
+                                        nil];
+            NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObject:[NSArray arrayWithObject:sessionDic] forKey:@"sessions"];
+            [[SSHttpRequest sharedInstance] post:@"" params:params contentType:JsonType serverType:NetServer_Log success:^(id responseObj) {
+                // 打点成功
+            } failure:^(NSError *error) {
+                // 打点失败
+                [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
+                AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+                [appDelegate.eventArray addObject:eventDic];
+            } isShowHUD:NO];
+        }
+    }
 }
 
 #pragma mark - YTPlayerViewDelegate

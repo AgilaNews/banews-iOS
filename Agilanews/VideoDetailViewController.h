@@ -29,6 +29,7 @@
 @property (nonatomic, strong) UILabel *commentsLabel;   // 评论数标签
 @property (nonatomic, strong) CommentTextView *commentTextView; // 评论输入框
 @property (nonatomic, strong) NSMutableArray *recommend_news;
+@property (nonatomic, assign) BOOL isRecommendShow;     // 推荐文章展示
 @property (nonatomic, strong) RecommendedView *recommendedView;
 @property (nonatomic, strong) NSMutableArray *commentArray; // 评论数组
 @property (nonatomic, strong) RecommendedView *recommentsView;
@@ -39,8 +40,11 @@
 @property (nonatomic, strong) UILabel *blankLabel;
 @property (nonatomic, strong) UIImageView *failureView;
 @property (nonatomic, strong) NSMutableArray *tasks;
+@property (nonatomic, assign) long long enterTime;      // 文章进入时间
 @property (nonatomic, assign) BOOL isContentOpen;
 @property (nonatomic, assign) BOOL isOther;
+@property (nonatomic, assign) BOOL isPushEnter;
+
 
 
 @end
