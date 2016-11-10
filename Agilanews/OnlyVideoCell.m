@@ -104,7 +104,7 @@
         make.height.mas_equalTo(42);
     }];
     // 标题布局
-    CGSize titleLabelSize = [_model.title calculateSize:CGSizeMake(kScreenWidth - 22, 40) font:self.titleLabel.font];
+    CGSize titleLabelSize = [_model.title calculateSize:CGSizeMake(kScreenWidth - 22, 50) font:self.titleLabel.font];
     [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(11);
         make.top.mas_equalTo(6);
@@ -197,7 +197,7 @@
         make.height.mas_equalTo(42);
     }];
     // 标题布局
-    CGSize titleLabelSize = [_model.title calculateSize:CGSizeMake(kScreenWidth - 22, 40) font:self.titleLabel.font];
+    CGSize titleLabelSize = [_model.title calculateSize:CGSizeMake(kScreenWidth - 22, 50) font:self.titleLabel.font];
     [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(11);
         make.top.mas_equalTo(6);
@@ -337,8 +337,14 @@
     AFNetworkReachabilityManager *manager = [AFNetworkReachabilityManager sharedManager];
     if (manager.networkReachabilityStatus == AFNetworkReachabilityStatusReachableViaWiFi) {
         if (model.youtube_id) {
-            [self.playerView loadWithVideoId:model.youtube_id playerVars:_playerVars];
             self.isPlay = YES;
+            [self.playerView loadWithVideoId:model.youtube_id playerVars:_playerVars];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                if (self.playerView.playerState == kYTPlayerStateQueued) {
+                    [self.playerView playVideo];
+                    self.holderView.hidden = YES;
+                }
+            });
         }
     } else {
         NSString *message = @"You are playing video using traffic, whether to continue playing?";
@@ -356,10 +362,14 @@
 //#if DEBUG
 //            [iConsole info:@"LowDataTips_YES_Click",nil];
 //#endif
-            if (model.youtube_id) {
-                [weakSelf.playerView loadWithVideoId:model.youtube_id playerVars:_playerVars];
-                weakSelf.isPlay = YES;
-            }
+            weakSelf.isPlay = YES;
+            [weakSelf.playerView loadWithVideoId:model.youtube_id playerVars:_playerVars];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                if (weakSelf.playerView.playerState == kYTPlayerStateQueued) {
+                    [weakSelf.playerView playVideo];
+                    weakSelf.holderView.hidden = YES;
+                }
+            });
         }];
         [playingAlert addAction:stopAction];
         [playingAlert addAction:continueAction];
