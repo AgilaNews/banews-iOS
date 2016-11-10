@@ -239,10 +239,6 @@
         [_likeButton setBackgroundColor:kWhiteBgColor forState:UIControlStateNormal];
         [_likeButton setImage:[UIImage imageNamed:@"icon_article_like_default"] forState:UIControlStateNormal];
         [_likeButton setImage:[UIImage imageNamed:@"icon_article_like_select"] forState:UIControlStateSelected];
-        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-        if (appDelegate.likedDic[_model.news_id] != nil) {
-            _likeButton.selected = YES;
-        }
     }
     if (_model.likedCount.integerValue > 0) {
         _likeButton.imageEdgeInsets = UIEdgeInsetsMake(0, -5, 0, 0);
@@ -270,6 +266,19 @@
         [_likeButton setTitle:@"" forState:UIControlStateNormal];
     }
     return _likeButton;
+}
+
+- (void)setModel:(NewsModel *)model
+{
+    if (_model != model) {
+        _model = model;
+        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        if (appDelegate.likedDic[_model.news_id] != nil) {
+            self.likeButton.selected = YES;
+        } else {
+            self.likeButton.selected = NO;
+        }
+    }
 }
 
 - (void)awakeFromNib {
