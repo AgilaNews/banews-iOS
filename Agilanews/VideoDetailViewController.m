@@ -35,7 +35,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     if ([self.navigationController.navigationBar respondsToSelector:@selector(setBackgroundImage:forBarMetrics:)]) {
-        NSArray *list=self.navigationController.navigationBar.subviews;
+        NSArray *list = self.navigationController.navigationBar.subviews;
         for (id obj in list) {
             if ([UIDevice currentDevice].systemVersion.integerValue >= 10) {
                 UIView *view = (UIView *)obj;
@@ -149,6 +149,7 @@
                         @"autoplay" : @1,          // 自动播放
                         @"modestbranding" : @1,    // 将参数值设为1可以阻止YouTube徽标显示在控件栏中。
                         @"origin" : @"http://www.youtube.com",
+                        @"fs":@"0",
                         @"showinfo" : @0};         // 播放器是否显示视频标题和上传者等信息。  0:不显示  1:显示
         VideoModel *model = _model.videos.firstObject;
         [self.playerView loadWithVideoId:model.youtube_id playerVars:_playerVars];
@@ -236,10 +237,20 @@
     return targetImage;
 }
 
+/**
+ 左滑返回手势
+
+ @param gestureRecognizer 手势对象
+ */
 - (void)handlePan:(UIPanGestureRecognizer *)gestureRecognizer {
     /*调用UIPercentDrivenInteractiveTransition的updateInteractiveTransition:方法可以控制转场动画进行到哪了，
      当用户的下拉手势完成时，调用finishInteractiveTransition或者cancelInteractiveTransition，UIKit会自动执行剩下的一半动画，
      或者让动画回到最开始的状态。*/
+    // 左滑返回区域判断
+    float offsetX = [gestureRecognizer locationInView:self.view].x;
+    if (offsetX <= 0 || offsetX > 100) {
+        return;
+    }
     if([gestureRecognizer translationInView:self.view].x >= 0)
     {
         //手势滑动的比例
