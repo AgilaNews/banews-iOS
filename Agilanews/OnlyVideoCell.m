@@ -9,6 +9,7 @@
 #import "OnlyVideoCell.h"
 #import "ImageModel.h"
 #import "VideoModel.h"
+#import "AppDelegate.h"
 
 #define titleFont_Normal        [UIFont systemFontOfSize:15]
 #define titleFont_ExtraLarge    [UIFont systemFontOfSize:19]
@@ -315,6 +316,17 @@
 #pragma makr - tapAction
 - (void)tapAction
 {
+    // 打点-点击视频列表的视频播放按钮-010130
+    NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
+                                   [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
+                                   @"Video", @"channel",
+                                   _model.news_id, @"article",
+                                   [NetType getNetType], @"network",
+                                   nil];
+    [Flurry logEvent:@"Home_Videolist_Play_Click" withParameters:articleParams];
+#if DEBUG
+    [iConsole info:[NSString stringWithFormat:@"Home_Videolist_Play_Click:%@",articleParams],nil];
+#endif
     VideoModel *model = _model.videos.firstObject;
     __weak typeof(self) weakSelf = self;
     AFNetworkReachabilityManager *manager = [AFNetworkReachabilityManager sharedManager];
@@ -359,15 +371,50 @@
     });
 }
 
-- (void)playerView:(nonnull YTPlayerView *)playerView didChangeToState:(YTPlayerState)state
+- (void)playerView:(YTPlayerView *)playerView didChangeToState:(YTPlayerState)state
 {
     switch (state) {
         case kYTPlayerStatePlaying:
-            SSLog(@"Started playback");
+        {
+            _playStartTime = [[NSDate date] timeIntervalSince1970] * 1000;
+            if (_playTimeCount == 0) {
+                // 服务器打点-视频播放-020301
+                NSMutableDictionary *eventDic = [NSMutableDictionary dictionary];
+                [eventDic setObject:@"020301" forKey:@"id"];
+                [eventDic setObject:[NSNumber numberWithLongLong:_playStartTime] forKey:@"time"];
+                [eventDic setObject:_model.news_id forKey:@"news_id"];
+                VideoModel *model = _model.videos.firstObject;
+                [eventDic setObject:model.youtube_id forKey:@"youtube_video_id"];
+                [eventDic setObject:@"0" forKey:@"play_type"];
+                [eventDic setObject:[NetType getNetType] forKey:@"net"];
+                if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
+                    [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) forKey:@"lng"];
+                    [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) forKey:@"lat"];
+                } else {
+                    [eventDic setObject:@"" forKey:@"lng"];
+                    [eventDic setObject:@"" forKey:@"lat"];
+                }
+                NSDictionary *sessionDic = [NSDictionary dictionaryWithObjectsAndKeys:
+                                            DEF_PERSISTENT_GET_OBJECT(@"UUID"), @"id",
+                                            [NSArray arrayWithObject:eventDic], @"events",
+                                            nil];
+                NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObject:[NSArray arrayWithObject:sessionDic] forKey:@"sessions"];
+                [[SSHttpRequest sharedInstance] post:@"" params:params contentType:JsonType serverType:NetServer_Log success:^(id responseObj) {
+                    // 打点成功
+                } failure:^(NSError *error) {
+                    // 打点失败
+                    [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
+                    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+                    [appDelegate.eventArray addObject:eventDic];
+                } isShowHUD:NO];
+            }
             break;
+        }
         case kYTPlayerStatePaused:
-            SSLog(@"Paused playback");
+        {
+            _playTimeCount += [[NSDate date] timeIntervalSince1970] * 1000 - _playStartTime;
             break;
+        }
         case kYTPlayerStateEnded:
         {
             self.isPlay = NO;
@@ -412,6 +459,48 @@
             self.playButton.hidden = NO;
             self.titleImageView.hidden = NO;
             self.holderView.hidden = YES;
+            if (_playStartTime > 0) {
+                long long duration = 0;
+                if (self.playerView.playerState == kYTPlayerStatePlaying) {
+                    duration = ([[NSDate date] timeIntervalSince1970] * 1000 - _playStartTime + _playTimeCount) / 1000;
+                } else {
+                    duration = _playTimeCount / 1000;
+                }
+                _playStartTime = 0;
+                _playTimeCount = 0;
+                if (duration > 0 && duration < 7200) {
+                    // 服务器打点-视频播放完毕-020302
+                    NSMutableDictionary *eventDic = [NSMutableDictionary dictionary];
+                    [eventDic setObject:@"020302" forKey:@"id"];
+                    [eventDic setObject:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970] * 1000] forKey:@"time"];
+                    [eventDic setObject:_model.news_id forKey:@"news_id"];
+                    VideoModel *model = _model.videos.firstObject;
+                    [eventDic setObject:model.youtube_id forKey:@"youtube_video_id"];
+                    [eventDic setObject:@"0" forKey:@"play_type"];
+                    [eventDic setObject:[NSString stringWithFormat:@"%lld",duration] forKey:@"duration"];
+                    [eventDic setObject:[NetType getNetType] forKey:@"net"];
+                    if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
+                        [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) forKey:@"lng"];
+                        [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) forKey:@"lat"];
+                    } else {
+                        [eventDic setObject:@"" forKey:@"lng"];
+                        [eventDic setObject:@"" forKey:@"lat"];
+                    }
+                    NSDictionary *sessionDic = [NSDictionary dictionaryWithObjectsAndKeys:
+                                                DEF_PERSISTENT_GET_OBJECT(@"UUID"), @"id",
+                                                [NSArray arrayWithObject:eventDic], @"events",
+                                                nil];
+                    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObject:[NSArray arrayWithObject:sessionDic] forKey:@"sessions"];
+                    [[SSHttpRequest sharedInstance] post:@"" params:params contentType:JsonType serverType:NetServer_Log success:^(id responseObj) {
+                        // 打点成功
+                    } failure:^(NSError *error) {
+                        // 打点失败
+                        [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
+                        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+                        [appDelegate.eventArray addObject:eventDic];
+                    } isShowHUD:NO];
+                }
+            }
         }
     }
 }

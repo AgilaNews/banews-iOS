@@ -436,15 +436,6 @@
     if (!model.news_id.length) {
         return;
     }
-    // 打点-点击列表-010108
-    NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
-                                   [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
-                                   _model.name, @"channel",
-                                   nil];
-    [Flurry logEvent:@"Home_List_Click" withParameters:articleParams];
-#if DEBUG
-    [iConsole info:[NSString stringWithFormat:@"Home_List_Click:%@",articleParams],nil];
-#endif
     // 服务器打点-列表页点击详情-020102
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     NSString *pagePos = [NSString stringWithFormat:@"%.1f",(cell.top - tableView.contentOffset.y + 1.5) / tableView.height];
@@ -478,6 +469,16 @@
     } isShowHUD:NO];
     
     if ([_model.channelID isEqualToNumber:@30001] || model.tpl.integerValue == NEWS_OnlyVideo) {
+        // 打点-点击视频列表-010131
+        NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
+                                       [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
+                                       @"Video", @"channel",
+                                       [NetType getNetType], @"network",
+                                       nil];
+        [Flurry logEvent:@"Home_Videolist_Click" withParameters:articleParams];
+#if DEBUG
+        [iConsole info:[NSString stringWithFormat:@"Home_Videolist_Click:%@",articleParams],nil];
+#endif
         VideoDetailViewController *videoDetailVC = [[VideoDetailViewController alloc] init];
         videoDetailVC.model = model;
         videoDetailVC.channelName = _model.name;
@@ -490,6 +491,15 @@
         [self.navigationController pushViewController:videoDetailVC animated:YES];
         return;
     }
+    // 打点-点击列表-010108
+    NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
+                                   [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
+                                   _model.name, @"channel",
+                                   nil];
+    [Flurry logEvent:@"Home_List_Click" withParameters:articleParams];
+#if DEBUG
+    [iConsole info:[NSString stringWithFormat:@"Home_List_Click:%@",articleParams],nil];
+#endif
     [appDelegate.checkDic setObject:@1 forKey:model.news_id];
     NewsDetailViewController *newsDetailVC = [[NewsDetailViewController alloc] init];
     newsDetailVC.model = model;
@@ -1221,7 +1231,10 @@
         UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
         if ([cell isKindOfClass:[OnlyVideoCell class]]) {
             OnlyVideoCell *videoCell = (OnlyVideoCell *)cell;
+            [videoCell setNeedsLayout];
             if (videoCell.isMove) {
+                NSNumber *duration = dic[@"duration"];
+                videoCell.playTimeCount += duration.longLongValue;
                 [videoCell.contentView addSubview:playerView];
                 [videoCell.contentView bringSubviewToFront:videoCell.titleImageView];
                 videoCell.isMove = NO;

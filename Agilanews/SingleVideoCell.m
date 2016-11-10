@@ -102,19 +102,19 @@
         make.width.mas_equalTo(100);
         make.height.mas_equalTo(14);
     }];
+    // 评论视图布局
+    [self.commentView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(weakSelf.watchLabel.mas_right).offset(15);
+        make.centerY.mas_equalTo(weakSelf.watchView.mas_centerY);
+        make.width.mas_equalTo(12);
+        make.height.mas_equalTo(11);
+    }];
     // 评论数布局
     [self.commentLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(weakSelf.watchLabel.mas_right).offset(15);
+        make.left.mas_equalTo(weakSelf.commentView.mas_right).offset(5);
         make.centerY.mas_equalTo(weakSelf.watchView.mas_centerY);
         make.width.mas_equalTo(100);
         make.height.mas_equalTo(13);
-    }];
-    // 评论视图布局
-    [self.commentView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(weakSelf.commentLabel.mas_right).offset(5);
-        make.centerY.mas_equalTo(weakSelf.watchView.mas_centerY);
-        make.width.mas_equalTo(18);
-        make.height.mas_equalTo(18);
     }];
 }
 
@@ -209,8 +209,8 @@
     [self.commentView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(weakSelf.watchLabel.mas_right).offset(15);
         make.centerY.mas_equalTo(weakSelf.watchView.mas_centerY);
-        make.width.mas_equalTo(18);
-        make.height.mas_equalTo(18);
+        make.width.mas_equalTo(12);
+        make.height.mas_equalTo(11);
     }];
     // 评论数布局
     CGSize commentLabelSize = [_model.commentCount.stringValue calculateSize:CGSizeMake(100, 13) font:self.commentLabel.font];
