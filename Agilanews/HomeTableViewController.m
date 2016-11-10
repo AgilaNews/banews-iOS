@@ -479,6 +479,7 @@
 #if DEBUG
         [iConsole info:[NSString stringWithFormat:@"Home_Videolist_Click:%@",articleParams],nil];
 #endif
+        [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_PausedVideo object:model.news_id];
         VideoDetailViewController *videoDetailVC = [[VideoDetailViewController alloc] init];
         videoDetailVC.model = model;
         videoDetailVC.channelName = _model.name;

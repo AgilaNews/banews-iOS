@@ -11,10 +11,10 @@
 #import "VideoModel.h"
 #import "AppDelegate.h"
 
-#define titleFont_Normal        [UIFont systemFontOfSize:15]
-#define titleFont_ExtraLarge    [UIFont systemFontOfSize:19]
-#define titleFont_Large         [UIFont systemFontOfSize:17]
-#define titleFont_Small         [UIFont systemFontOfSize:13]
+#define titleFont_Normal        [UIFont systemFontOfSize:17]
+#define titleFont_ExtraLarge    [UIFont systemFontOfSize:21]
+#define titleFont_Large         [UIFont systemFontOfSize:19]
+#define titleFont_Small         [UIFont systemFontOfSize:15]
 #define videoHeight 180 * kScreenWidth / 320.0
 
 @implementation OnlyVideoCell
@@ -44,7 +44,7 @@
                                                      name:KNOTIFICATION_FontSize_Change
                                                    object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(pausedVideo)
+                                                 selector:@selector(pausedVideo:)
                                                      name:KNOTIFICATION_PausedVideo
                                                    object:nil];
     }
@@ -320,7 +320,7 @@
 #pragma makr - tapAction
 - (void)tapAction
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_PausedVideo object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_PausedVideo object:_model.news_id];
     // 打点-点击视频列表的视频播放按钮-010130
     NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
                                    [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
@@ -566,19 +566,39 @@
         _titleLabel = [[UILabel alloc] init];
         switch ([DEF_PERSISTENT_GET_OBJECT(SS_FontSize) integerValue]) {
             case 0:
-                _titleLabel.font = titleFont_Normal;
+                if (iPhone4 || iPhone5) {
+                    _titleLabel.font = [UIFont systemFontOfSize:15];
+                } else {
+                    _titleLabel.font = titleFont_Normal;
+                }
                 break;
             case 1:
-                _titleLabel.font = titleFont_ExtraLarge;
+                if (iPhone4 || iPhone5) {
+                    _titleLabel.font = [UIFont systemFontOfSize:19];
+                } else {
+                    _titleLabel.font = titleFont_ExtraLarge;
+                }
                 break;
             case 2:
-                _titleLabel.font = titleFont_Large;
+                if (iPhone4 || iPhone5) {
+                    _titleLabel.font = [UIFont systemFontOfSize:17];
+                } else {
+                    _titleLabel.font = titleFont_Large;
+                }
                 break;
             case 3:
-                _titleLabel.font = titleFont_Small;
+                if (iPhone4 || iPhone5) {
+                    _titleLabel.font = [UIFont systemFontOfSize:13];
+                } else {
+                    _titleLabel.font = titleFont_Small;
+                }
                 break;
             default:
-                _titleLabel.font = titleFont_Normal;
+                if (iPhone4 || iPhone5) {
+                    _titleLabel.font = [UIFont systemFontOfSize:15];
+                } else {
+                    _titleLabel.font = titleFont_Normal;
+                }
                 break;
         }
         _titleLabel.textColor = [UIColor whiteColor];
@@ -692,10 +712,11 @@
     [self setNeedsLayout];
 }
 
-- (void)pausedVideo
+- (void)pausedVideo:(NSNotification *)notif
 {
-    if (self.playerView.playerState == kYTPlayerStatePlaying) {
-        [self.playerView pauseVideo];
+    NSString *newsID = notif.object;
+    if (![_model.news_id isEqualToString:newsID]) {
+        self.isPlay = NO;
     }
 }
 
