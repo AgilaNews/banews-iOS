@@ -289,7 +289,6 @@
     [params setObject:newsID forKey:@"news_id"];
     NSURLSessionDataTask *task = [[SSHttpRequest sharedInstance] get:kHomeUrl_Recommend params:params contentType:JsonType serverType:NetServer_Video success:^(id responseObj) {
         [_recommendedView stopAnimation];
-        [appDelegate.likedDic setValue:@1 forKey:newsID];
         NSArray *recommends = responseObj[@"recommend_news"];
         _recommend_news = [NSMutableArray array];
         for (NSDictionary *dic in recommends) {
@@ -1339,7 +1338,6 @@
                     }
                     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
                     return cell;
-                    break;
                 }
                 default:
                 {
@@ -1357,7 +1355,6 @@
                     }
                     [cell setNeedsLayout];
                     return cell;
-                    break;
                 }
             }
             break;
@@ -1462,6 +1459,7 @@
                 _recommend_news = [NSMutableArray array];
                 _commentArray = [NSMutableArray array];
                 [self.tableView reloadData];
+                [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
                 self.isRecommendShow = NO;
                 // 播放结束打点
                 [self uploadOverPlayingVideo];

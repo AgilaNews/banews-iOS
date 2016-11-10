@@ -146,6 +146,31 @@
     self.sourceLabel.text = _model.source;
     self.watchLabel.text = views;
     self.contentLabel.text = model.content;
+    if (_model.likedCount.integerValue > 0) {
+        _likeButton.imageEdgeInsets = UIEdgeInsetsMake(0, -5, 0, 0);
+        NSString *buttonTitle = [NSString stringWithFormat:@"%@",_model.likedCount];
+        switch (buttonTitle.length) {
+            case 1:
+                _likeButton.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, -4);
+                [_likeButton setTitle:buttonTitle forState:UIControlStateNormal];
+                break;
+            case 2:
+                _likeButton.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, -8);
+                [_likeButton setTitle:buttonTitle forState:UIControlStateNormal];
+                break;
+            case 3:
+                _likeButton.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, -12);
+                [_likeButton setTitle:buttonTitle forState:UIControlStateNormal];
+                break;
+            default:
+                _likeButton.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, -12);
+                [_likeButton setTitle:@"999+" forState:UIControlStateNormal];
+                break;
+        }
+    } else {
+        _likeButton.imageEdgeInsets = UIEdgeInsetsMake(0, 3, 0, 0);
+        [_likeButton setTitle:@"" forState:UIControlStateNormal];
+    }
 }
 
 #pragma mark - setter/getter

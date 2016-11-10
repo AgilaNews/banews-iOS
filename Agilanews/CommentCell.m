@@ -101,7 +101,13 @@
     }];
     [super updateConstraints];
 
-    [self.avatarView sd_setImageWithURL:[NSURL URLWithString:_model.user_portrait_url] placeholderImage:[UIImage imageNamed:@"icon_sidebar_head"] options:SDWebImageRetryFailed completed:nil];
+    [self.avatarView sd_setImageWithURL:[NSURL URLWithString:_model.user_portrait_url] placeholderImage:[UIImage imageNamed:@"icon_sidebar_head"] options:SDWebImageRetryFailed completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        if (image) {
+            _avatarView.image = image;
+        } else {
+            _avatarView.image = [UIImage imageNamed:@"icon_sidebar_head"];
+        }
+    }];
     self.nameLabel.text = _model.user_name;
     self.contentLabel.text = _model.comment;
     self.timeLabel.text = time;
