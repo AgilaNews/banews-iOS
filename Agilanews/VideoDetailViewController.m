@@ -149,7 +149,7 @@
                         @"autoplay" : @1,          // 自动播放
                         @"modestbranding" : @1,    // 将参数值设为1可以阻止YouTube徽标显示在控件栏中。
                         @"origin" : @"http://www.youtube.com",
-                        @"fs":@"0",
+//                        @"fs" : @0,                // 是否显示全屏按钮
                         @"showinfo" : @0};         // 播放器是否显示视频标题和上传者等信息。  0:不显示  1:显示
         VideoModel *model = _model.videos.firstObject;
         [self.playerView loadWithVideoId:model.youtube_id playerVars:_playerVars];

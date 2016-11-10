@@ -43,6 +43,10 @@
                                                  selector:@selector(fontChange)
                                                      name:KNOTIFICATION_FontSize_Change
                                                    object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(pausedVideo)
+                                                     name:KNOTIFICATION_PausedVideo
+                                                   object:nil];
     }
     return self;
 }
@@ -316,6 +320,7 @@
 #pragma makr - tapAction
 - (void)tapAction
 {
+    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_PausedVideo object:nil];
     // 打点-点击视频列表的视频播放按钮-010130
     NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
                                    [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
@@ -685,6 +690,13 @@
             break;
     }
     [self setNeedsLayout];
+}
+
+- (void)pausedVideo
+{
+    if (self.playerView.playerState == kYTPlayerStatePlaying) {
+        [self.playerView pauseVideo];
+    }
 }
 
 - (void)awakeFromNib {

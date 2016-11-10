@@ -94,6 +94,7 @@
 #define KNOTIFICATION_CleanNewChannel @"KNOTIFICATION_CleanNewChannel"// 删除新频道通知
 #define KNOTIFICATION_PushExit        @"KNOTIFICATION_PushExit"       // 从推送页面退出
 #define KNOTIFICATION_RecoverVideo    @"KNOTIFICATION_RecoverVideo"   // 视频从详情页回位
+#define KNOTIFICATION_PausedVideo     @"KNOTIFICATION_PausedVideo"    // 暂停视频
 
 
 // 刷新成功提示banner
