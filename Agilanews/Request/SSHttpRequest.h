@@ -14,8 +14,15 @@ typedef enum : NSUInteger {
     JsonType,
 }ContentType;
 
+typedef enum : NSUInteger {
+    GET,
+    POST,
+    DELETE,
+}HttpType;
+
 @interface SSHttpRequest : AFHTTPSessionManager
 
+@property (nonatomic, assign) HttpType httpType;
 @property (nonatomic, assign) ContentType contentType;
 @property (nonatomic, strong) NSString *urlString;
 

@@ -41,13 +41,7 @@ static SSHttpRequest *_manager = nil;
 
 - (NSURLSessionDataTask *)get:(NSString *)url params:(NSMutableDictionary *)params contentType:(ContentType)contentType serverType:(NetServerType)serverType success:(void (^)(id))success failure:(void (^)(NSError *))failure isShowHUD:(BOOL)showHUD
 {
-    // 参数格式
-    
-    if (contentType == UrlencodedType) {
-        [_manager.requestSerializer setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-    } else {
-        [_manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    }
+    [self basicSetupWithHttpType:GET ContentType:contentType];
     
     // 接口拼接
     if (url.length < 1) {
@@ -274,13 +268,7 @@ static SSHttpRequest *_manager = nil;
 
 - (void)post:(NSString *)url params:(id)params contentType:(ContentType)contentType serverType:(NetServerType)serverType success:(void (^)(id))success failure:(void (^)(NSError *))failure isShowHUD:(BOOL)showHUD
 {
-    _manager.requestSerializer = [AFJSONRequestSerializer serializer];
-    // 参数格式
-    if (contentType == UrlencodedType) {
-        [_manager.requestSerializer setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-    } else {
-        [_manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    }
+    [self basicSetupWithHttpType:POST ContentType:contentType];
     
     NSMutableDictionary *baseParams = [NSMutableDictionary dictionary];
     // 添加默认参数
@@ -511,13 +499,7 @@ static SSHttpRequest *_manager = nil;
 
 - (void)DELETE:(NSString *)url params:(NSMutableDictionary *)params contentType:(ContentType)contentType serverType:(NetServerType)serverType success:(void (^)(id))success failure:(void (^)(NSError *))failure isShowHUD:(BOOL)showHUD
 {
-    _manager.requestSerializer = [AFJSONRequestSerializer serializer];
-    // 参数格式
-    if (contentType == UrlencodedType) {
-        [_manager.requestSerializer setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-    } else {
-        [_manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    }
+    [self basicSetupWithHttpType:DELETE ContentType:contentType];
     
     // 接口拼接
     switch (serverType) {
@@ -717,5 +699,19 @@ static SSHttpRequest *_manager = nil;
     }];
 }
 
+- (void)basicSetupWithHttpType:(HttpType)httpType ContentType:(ContentType)contentType
+{
+    if (httpType == GET) {
+        _manager.requestSerializer = [AFHTTPRequestSerializer serializer];
+    } else {
+        _manager.requestSerializer = [AFJSONRequestSerializer serializer];
+    }
+    // 参数格式
+    if (contentType == UrlencodedType) {
+        [_manager.requestSerializer setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    } else {
+        [_manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    }
+}
 
 @end

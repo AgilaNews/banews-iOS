@@ -14,7 +14,7 @@
 #import "NoPicCell.h"
 #import "BigPicCell.h"
 #import "OnlyVideoCell.h"
-#import "FavoriteDetailViewController.h"
+#import "NewsDetailViewController.h"
 #import "AppDelegate.h"
 #import "LoginViewController.h"
 #import "BaseNavigationController.h"
@@ -576,10 +576,10 @@
             [self.navigationController pushViewController:videoDetailVC animated:YES];
             return;
         }
-        FavoriteDetailViewController *favDetVC = [[FavoriteDetailViewController alloc] init];
-        favDetVC.model = model;
-        favDetVC.detailModel = _detailList[indexPath.row];
-        [self.navigationController pushViewController:favDetVC animated:YES];
+        NewsDetailViewController *newsDetailVC = [[NewsDetailViewController alloc] init];
+        newsDetailVC.model = model;
+        newsDetailVC.channelName = @"Hot";
+        [self.navigationController pushViewController:newsDetailVC animated:YES];
     } else {
         [_selectedList addObject:_dataList[indexPath.row]];
         if (_detailList) {
