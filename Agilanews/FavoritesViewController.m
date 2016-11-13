@@ -521,9 +521,9 @@
             if (cell == nil) {
                 cell = [[OnlyVideoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
                 [cell.shareButton addTarget:self action:@selector(shareToFacebook:) forControlEvents:UIControlEventTouchUpInside];
+                cell.playButton.enabled = NO;
             }
             cell.model = model;
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
             [cell setNeedsLayout];
             return cell;
         }
@@ -747,6 +747,27 @@
         [self.tableView removeFooter];
     }
 }
+
+//- (void)setIsEdit:(BOOL)isEdit
+//{
+//    if (_isEdit != isEdit) {
+//        _isEdit = isEdit;
+//        
+//        if (isEdit) {
+//            for (UITableViewCell *cell in self.tableView.visibleCells) {
+//                if ([cell isKindOfClass:[OnlyVideoCell class]]) {
+//                    ((OnlyVideoCell *)cell).playButton.enabled = NO;
+//                }
+//            }
+//        } else {
+//            for (UITableViewCell *cell in self.tableView.visibleCells) {
+//                if ([cell isKindOfClass:[OnlyVideoCell class]]) {
+//                    ((OnlyVideoCell *)cell).playButton.enabled = YES;
+//                }
+//            }
+//        }
+//    }
+//}
 
 #pragma mark - 表视图左划删除方法
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
