@@ -293,7 +293,6 @@
         NSNumber *channelVersion = responseObj[@"channel_version"];
         NSNumber *currentVersion = DEF_PERSISTENT_GET_OBJECT(@"channel_version");
         if (currentVersion == nil || currentVersion.integerValue < channelVersion.integerValue) {
-            DEF_PERSISTENT_SET_OBJECT(@"channel_version", channelVersion);
             // 请求下发频道
             if (!currentVersion) {
                 [weakSelf getChannelWithVersion:channelVersion isFirst:YES];
@@ -320,7 +319,7 @@
         if (isFirst) {
             // 首次安装无频道
             _categoriesArray = categoryArray;
-            [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Categories object:nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Categories object:version];
         } else {
             NSMutableArray *newArray = [NSMutableArray array];
             // 查找是否有新频道
@@ -367,7 +366,7 @@
                 }
             }
             if (newArray.count > 0 || deleteArray.count > 0) {
-                [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Categories object:nil];
+                [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Categories object:version];
             }
         }
     } failure:^(NSError *error) {

@@ -50,7 +50,7 @@ static CGFloat const ButtonHeight = 40;
     self.navigationItem.titleView = _titleButton;
     
     // 注册通知
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addSegment) name:KNOTIFICATION_Categories object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addSegment:) name:KNOTIFICATION_Categories object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refresh_success) name:KNOTIFICATION_Refresh_Success object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(findNewChannel) name:KNOTIFICATION_FindNewChannel object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cleanNewChannel) name:KNOTIFICATION_CleanNewChannel object:nil];
@@ -71,8 +71,51 @@ static CGFloat const ButtonHeight = 40;
         }
     } else {
         // 频道数组为空
-        NSArray *nameArray = @[@"Hot",@"National",@"Entertainment",@"NBA",@"Food",@"Sports",@"Photos",@"World",@"GIFs",@"Business",@"Lifestyle",@"Opinion",@"Sci&Tech",@"Games"];
-        NSArray *channelIDArray = @[@10001,@10010,@10004,@10013,@10015,@10003,@10011,@10002,@10012,@10007,@10006,@10009,@10008,@10005];
+//        [{"id":"10001","tag":0,"fixed":1,"name":"Hot","index":0},
+//        {"id":"30001","tag":1,"fixed":0,"name":"Videos","index":1},
+//        {"id":"10010","tag":0,"fixed":0,"name":"National","index":2},
+//        {"id":"10004","tag":1,"fixed":0,"name":"Entertainment","index":3},
+//        {"id":"10011","tag":1,"fixed":0,"name":"Photos","index":4},
+//        {"id":"10013","tag":0,"fixed":0,"name":"NBA","index":5},
+//        {"id":"10003","tag":0,"fixed":0,"name":"Sports","index":6},
+//        {"id":"10002","tag":0,"fixed":0,"name":"World","index":7},
+//        {"id":"10012","tag":0,"fixed":0,"name":"GIFs","index":8},
+//        {"id":"10007","tag":0,"fixed":0,"name":"Business","index":9},
+//        {"id":"10006","tag":0,"fixed":0,"name":"Lifestyle","index":10},
+//        {"id":"10009","tag":0,"fixed":0,"name":"Opinion","index":11},
+//        {"id":"10008","tag":0,"fixed":0,"name":"Sci&Tech","index":12},
+//        {"id":"10015","tag":0,"fixed":0,"name":"Food","index":13},
+//        {"id":"10005","tag":0,"fixed":0,"name":"Games","index":14}]
+        NSArray *nameArray = @[@"Hot",
+                               @"Videos",
+                               @"National",
+                               @"Entertainment",
+                               @"Photos",
+                               @"NBA",
+                               @"Sports",
+                               @"World",
+                               @"GIFs",
+                               @"Business",
+                               @"Lifestyle",
+                               @"Opinion",
+                               @"Sci&Tech",
+                               @"Food",
+                               @"Games"];
+        NSArray *channelIDArray = @[@10001,
+                                    @30001,
+                                    @10010,
+                                    @10004,
+                                    @10011,
+                                    @10013,
+                                    @10003,
+                                    @10002,
+                                    @10012,
+                                    @10007,
+                                    @10006,
+                                    @10009,
+                                    @10008,
+                                    @10015,
+                                    @10005];
         NSMutableArray *models = [NSMutableArray array];
         for (int i = 0; i < nameArray.count; i++) {
             CategoriesModel *model = [[CategoriesModel alloc] init];
@@ -80,6 +123,9 @@ static CGFloat const ButtonHeight = 40;
             model.channelID = channelIDArray[i];
             if (i == 0) {
                 model.fixed = YES;
+            }
+            if (i == 1 || i == 3 || i == 4) {
+                model.tag = YES;
             }
             [titleArray addObject:model.name];
             [models addObject:model];
@@ -116,13 +162,18 @@ static CGFloat const ButtonHeight = 40;
 }
 
 // 添加分段控制器
-- (void)addSegment
+- (void)addSegment:(NSNotification *)notif
 {
     _segmentVC.subViewControllers = nil;
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     // 缓存频道数据
     NSString *categoryFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/category.data"];
     [NSKeyedArchiver archiveRootObject:appDelegate.categoriesArray toFile:categoryFilePath];
+    // 存储频道版本号
+    NSNumber *version = notif.object;
+    if (version.integerValue > 0) {
+        DEF_PERSISTENT_SET_OBJECT(@"channel_version", version);
+    }
     // 添加标题
     NSMutableArray *titleArray = [NSMutableArray array];
     for (CategoriesModel *model in appDelegate.categoriesArray) {
