@@ -647,7 +647,6 @@
 {
     if (_watchView == nil) {
         _watchView = [[UIImageView alloc] init];
-        _watchView.backgroundColor = [UIColor whiteColor];
         _watchView.contentMode = UIViewContentModeScaleAspectFit;
         _watchView.image = [UIImage imageNamed:@"icon_video"];
     }
@@ -658,7 +657,6 @@
 {
     if (_watchLabel == nil) {
         _watchLabel = [[UILabel alloc] init];
-        _watchLabel.backgroundColor = [UIColor whiteColor];
         _watchLabel.font = [UIFont systemFontOfSize:13];
         _watchLabel.textColor = kBlackColor;
     }
@@ -692,7 +690,7 @@
         _shareButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _shareButton.imageView.backgroundColor = [UIColor whiteColor];
         _shareButton.adjustsImageWhenHighlighted = NO;
-        [_shareButton setBackgroundColor:[UIColor whiteColor] forState:UIControlStateNormal];
+//        [_shareButton setBackgroundColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_shareButton setImage:[UIImage imageNamed:@"icon_video_facebook"] forState:UIControlStateNormal];
     }
     return _shareButton;
