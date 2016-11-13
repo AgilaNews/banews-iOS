@@ -220,6 +220,7 @@ static CGFloat const ButtonHeight = 40;
     }
     [[UIApplication sharedApplication].keyWindow addSubview:_leftView];
     _leftView.isShow = YES;
+    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_PausedVideo object:nil];
 }
 
 /**
