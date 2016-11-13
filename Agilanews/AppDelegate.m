@@ -423,6 +423,7 @@
     [[FIRMessaging messaging] unsubscribeFromTopic:@"/topics/ios_v1.1.7"];
     [[FIRMessaging messaging] unsubscribeFromTopic:@"/topics/ios_v1.1.8"];
     [[FIRMessaging messaging] unsubscribeFromTopic:@"/topics/ios_v1.1.9"];
+    [[FIRMessaging messaging] unsubscribeFromTopic:@"/topics/ios_v1.2.0"];
     // 注册topics
     [[FIRMessaging messaging] subscribeToTopic:@"/topics/notification"];
     NSString * version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
