@@ -410,36 +410,38 @@
         case NEWS_ManyPic:
         {
             return 12 + 68 + 12;
-            break;
         }
         case NEWS_SinglePic:
         {
             return 12 + 68 + 12;
-            break;
         }
         case NEWS_NoPic:
         {
             CGSize titleLabelSize = [model.title calculateSize:CGSizeMake(kScreenWidth - 22, 60) font:titleFont];
             return 11 + titleLabelSize.height + 15 + 11 + 11;
-            break;
         }
         case NEWS_BigPic:
         {
             return 12 + 68 + 12;
-            break;
         }
         case NEWS_HaveVideo:
         {
             return 12 + 68 + 12;
-            break;
         }
         case NEWS_OnlyVideo:
         {
             return videoHeight + 42;
         }
         default:
-            return 50;
-            break;
+        {
+            ImageModel *imageModel = model.imgs.firstObject;
+            if (imageModel.pattern) {
+                return 12 + 68 + 12;
+            } else {
+                CGSize titleLabelSize = [model.title calculateSize:CGSizeMake(kScreenWidth - 22, 60) font:titleFont];
+                return 11 + titleLabelSize.height + 15 + 11 + 11;
+            }
+        }
     }
 }
 
