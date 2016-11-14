@@ -31,7 +31,6 @@ MJCodingImplementation
              @"recommend_news":@"NewsModel",
              @"title":@"title",
              @"source":@"source",
-             @"source":@"source",
              @"share_url":@"share_url",
              @"youtube_videos":@"VideoModel"
              };

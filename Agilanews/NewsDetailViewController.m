@@ -284,7 +284,13 @@
             _blankView = nil;
             _blankLabel = nil;
         }
-        weakSelf.detailModel = [NewsDetailModel mj_objectWithKeyValues:responseObj];
+        NewsDetailModel *detailModel = [NewsDetailModel mj_objectWithKeyValues:responseObj];
+        NSMutableArray *comments = [NSMutableArray array];
+        for (NSDictionary *dic in responseObj[@"comments"][@"new"]) {
+            [comments addObject:[CommentModel mj_objectWithKeyValues:dic]];
+        }
+        detailModel.comments = [NSArray arrayWithArray:comments];
+        weakSelf.detailModel = detailModel;
         // css文件路径
         NSString *cssFilePath = [[NSBundle mainBundle] pathForResource:@"webView" ofType:@"css"];
         NSString *jsFilePath = [[NSBundle mainBundle] pathForResource:@"webView" ofType:@"js"];
@@ -405,7 +411,7 @@
     [params setObject:commentModel.commentID forKey:@"last_id"];
     [[SSHttpRequest sharedInstance] get:kHomeUrl_Comment params:params contentType:UrlencodedType serverType:NetServer_Home success:^(id responseObj) {
         [_tableView.footer endRefreshing];
-        NSArray *array = responseObj;
+        NSArray *array = responseObj[@"new"];
         if (array.count > 0) {
             NSMutableArray *models = [NSMutableArray array];
             @autoreleasepool {
