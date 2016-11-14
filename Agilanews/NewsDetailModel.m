@@ -16,6 +16,14 @@
 
 MJCodingImplementation
 
++ (NSDictionary *)mj_replacedKeyFromPropertyName
+{
+    return @{
+             @"comments":@"comments.new",
+             @"hotComments":@"comments.hot"
+             };
+}
+
 + (NSDictionary *)mj_objectClassInArray
 {
     return @{
@@ -24,6 +32,7 @@ MJCodingImplementation
              @"collect_id":@"collect_id",
              @"commentCount":@"commentCount",
              @"comments":@"CommentModel",
+             @"hotComments":@"CommentModel",
              @"imgs":@"ImageModel",
              @"news_id":@"news_id",
              @"likedCount":@"likedCount",

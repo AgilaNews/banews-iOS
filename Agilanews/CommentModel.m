@@ -20,7 +20,15 @@ MJCodingImplementation
              @"comment":@"comment",
              @"user_id":@"user_id",
              @"user_name":@"user_name",
-             @"user_portrait_url":@"user_portrait_url"
+             @"user_portrait_url":@"user_portrait_url",
+             @"liked":@"liked"
+             };
+}
+
++ (NSDictionary *)mj_objectClassInArray
+{
+    return @{
+             @"reply":@"CommentModel"
              };
 }
 

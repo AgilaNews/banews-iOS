@@ -10,11 +10,14 @@
 
 @interface CommentModel : NSObject
 
-@property (nonatomic, strong) NSString *commentID;          // 评论ID
+@property (nonatomic, strong) NSNumber *commentID;          // 评论ID
 @property (nonatomic, strong) NSNumber *time;               // 评论时间
 @property (nonatomic, strong) NSString *comment;            // 评论详情
-@property (nonatomic, strong) NSNumber *user_id;            // 用户ID
+@property (nonatomic, strong) NSString *user_id;            // 用户ID
 @property (nonatomic, strong) NSString *user_name;          // 用户名
 @property (nonatomic, strong) NSString *user_portrait_url;  // 用户头像
+@property (nonatomic, strong) NSNumber *liked;              // 点赞数
+@property (nonatomic, strong) CommentModel *reply;          // 评论回复
+@property (nonatomic, strong) NSNumber *device_liked;       // 点赞状态
 
 @end

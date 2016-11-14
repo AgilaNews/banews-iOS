@@ -16,6 +16,9 @@
 @property (nonatomic, strong) UILabel *contentLabel;    // 评论内容
 @property (nonatomic, strong) UIImageView *timeView;    // 时钟视图
 @property (nonatomic, strong) UILabel *timeLabel;       // 评论时间
+@property (nonatomic, strong) UIButton *likeButton;     // 点赞按钮
+@property (nonatomic, strong) UILabel *replyLabel;      // 回复评论
+@property (nonatomic, strong) UILabel *replyContentLabel;
 
 @property (nonatomic, strong) CommentModel *model;
 

@@ -14,7 +14,8 @@
 @property (nonatomic, strong) NSNumber *channel_id;     // 频道ID
 @property (nonatomic, strong) NSString *collect_id;     // 收藏ID
 @property (nonatomic, strong) NSNumber *commentCount;   // 评论数
-@property (nonatomic, strong) NSArray *comments;        // 评论
+@property (nonatomic, strong) NSArray *comments;        // 新评论
+@property (nonatomic, strong) NSArray *hotComments;     // 热门评论
 @property (nonatomic, strong) NSArray *imgs;            // 图片
 @property (nonatomic, strong) NSString *news_id;        // 新闻ID
 @property (nonatomic, strong) NSNumber *likedCount;     // 点赞数
