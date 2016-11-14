@@ -183,6 +183,7 @@
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
+    self.navigationController.delegate = nil;
     long long duration = 0;
     if (_isOther) {
         duration = _playTimeCount;
@@ -201,6 +202,7 @@
 - (void)dealloc
 {
     self.playerView.delegate = nil;
+    self.navigationController.delegate = nil;
     for (NSURLSessionDataTask *task in _tasks) {
         [task cancel];
     }

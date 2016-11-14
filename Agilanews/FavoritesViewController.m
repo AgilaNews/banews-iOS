@@ -410,36 +410,38 @@
         case NEWS_ManyPic:
         {
             return 12 + 68 + 12;
-            break;
         }
         case NEWS_SinglePic:
         {
             return 12 + 68 + 12;
-            break;
         }
         case NEWS_NoPic:
         {
             CGSize titleLabelSize = [model.title calculateSize:CGSizeMake(kScreenWidth - 22, 60) font:titleFont];
             return 11 + titleLabelSize.height + 15 + 11 + 11;
-            break;
         }
         case NEWS_BigPic:
         {
             return 12 + 68 + 12;
-            break;
         }
         case NEWS_HaveVideo:
         {
             return 12 + 68 + 12;
-            break;
         }
         case NEWS_OnlyVideo:
         {
             return videoHeight + 42;
         }
         default:
-            return 50;
-            break;
+        {
+            ImageModel *imageModel = model.imgs.firstObject;
+            if (imageModel.pattern) {
+                return 12 + 68 + 12;
+            } else {
+                CGSize titleLabelSize = [model.title calculateSize:CGSizeMake(kScreenWidth - 22, 60) font:titleFont];
+                return 11 + titleLabelSize.height + 15 + 11 + 11;
+            }
+        }
     }
 }
 
@@ -519,9 +521,9 @@
             if (cell == nil) {
                 cell = [[OnlyVideoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
                 [cell.shareButton addTarget:self action:@selector(shareToFacebook:) forControlEvents:UIControlEventTouchUpInside];
+                cell.playButton.enabled = NO;
             }
             cell.model = model;
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
             [cell setNeedsLayout];
             return cell;
         }
@@ -745,6 +747,27 @@
         [self.tableView removeFooter];
     }
 }
+
+//- (void)setIsEdit:(BOOL)isEdit
+//{
+//    if (_isEdit != isEdit) {
+//        _isEdit = isEdit;
+//        
+//        if (isEdit) {
+//            for (UITableViewCell *cell in self.tableView.visibleCells) {
+//                if ([cell isKindOfClass:[OnlyVideoCell class]]) {
+//                    ((OnlyVideoCell *)cell).playButton.enabled = NO;
+//                }
+//            }
+//        } else {
+//            for (UITableViewCell *cell in self.tableView.visibleCells) {
+//                if ([cell isKindOfClass:[OnlyVideoCell class]]) {
+//                    ((OnlyVideoCell *)cell).playButton.enabled = YES;
+//                }
+//            }
+//        }
+//    }
+//}
 
 #pragma mark - 表视图左划删除方法
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
