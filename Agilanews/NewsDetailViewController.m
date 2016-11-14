@@ -685,7 +685,6 @@
     switch (section) {
         case 1:
             return MIN(_detailModel.recommend_news.count + 1, 4);
-            break;
         case 2:
             if (_detailModel.hotComments.count > 0) {
                 return _hotCommentArray.count + 1;
@@ -703,7 +702,6 @@
             }
         default:
             return 1;
-            break;
     }
 }
 
@@ -800,6 +798,17 @@
                     break;
                 default:
                 {
+                    if (_hotCommentArray.count > 0) {
+                        CommentModel *model = _hotCommentArray[indexPath.row - 1];
+                        CGSize commentLabelSize = [model.comment calculateSize:CGSizeMake(kScreenWidth - 55 - 11, 1000) font:[UIFont systemFontOfSize:15]];
+                        CommentModel *commentModel = model.reply;
+                        if (commentModel.comment) {
+                            NSString *replyString = [NSString stringWithFormat:@"@%@: %@",commentModel.user_name,commentModel.comment];
+                            CGSize replyLabelSize = [replyString calculateSize:CGSizeMake(kScreenWidth - 11 - 7 - 55, 1000) font:[UIFont systemFontOfSize:13]];
+                            return 10 + 5 + 16 + 12 + commentLabelSize.height + 5 + 12 + 9 + replyLabelSize.height + 10;
+                        }
+                        return 10 + 5 + 16 + 12 + commentLabelSize.height + 5 + 12 + 9;
+                    }
                     if (_commentArray.count > 0) {
                         CommentModel *model = _commentArray[indexPath.row - 1];
                         CGSize commentLabelSize = [model.comment calculateSize:CGSizeMake(kScreenWidth - 55 - 11, 1000) font:[UIFont systemFontOfSize:15]];
@@ -823,8 +832,8 @@
                     break;
                 default:
                 {
-                    if (_hotCommentArray.count > 0) {
-                        CommentModel *model = _hotCommentArray[indexPath.row - 1];
+                    if (_commentArray.count > 0) {
+                        CommentModel *model = _commentArray[indexPath.row - 1];
                         CGSize commentLabelSize = [model.comment calculateSize:CGSizeMake(kScreenWidth - 55 - 11, 1000) font:[UIFont systemFontOfSize:15]];
                         CommentModel *commentModel = model.reply;
                         if (commentModel.comment) {
@@ -998,7 +1007,7 @@
                             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
                         }
                         if (cell.contentView.subviews.count <= 0) {
-                            RecommendedView *recommendedView = [[RecommendedView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 30) titleImage:[UIImage imageNamed:@"icon_article_comments_small"] titleText:@"Comments" HaveLoading:NO];
+                            RecommendedView *recommendedView = [[RecommendedView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 30) titleImage:[UIImage imageNamed:@"icon_article_comments_small"] titleText:@"New Comments" HaveLoading:NO];
                             [cell.contentView addSubview:recommendedView];
                         }
                         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
@@ -1037,7 +1046,7 @@
                         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
                     }
                     if (cell.contentView.subviews.count <= 0) {
-                        RecommendedView *recommendedView = [[RecommendedView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 30) titleImage:[UIImage imageNamed:@"icon_article_comments_small"] titleText:@"Comments" HaveLoading:NO];
+                        RecommendedView *recommendedView = [[RecommendedView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 30) titleImage:[UIImage imageNamed:@"icon_article_comments_small"] titleText:@"New Comments" HaveLoading:NO];
                         [cell.contentView addSubview:recommendedView];
                     }
                     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
