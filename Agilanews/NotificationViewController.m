@@ -8,6 +8,8 @@
 
 #import "NotificationViewController.h"
 #import "NotificationModel.h"
+#import "AppDelegate.h"
+#import "LoginViewController.h"
 
 @interface NotificationViewController ()
 
@@ -33,13 +35,27 @@
     _tableView.tableFooterView = [UIView new];
     [self.view addSubview:_tableView];
     
-    [self requestDataIsFooter:NO];
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    if (appDelegate.model) {
+        [self requestDataIsFooter:NO];
+    }
+
+    // 注册通知
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(loginSuccess:)
+                                                 name:KNOTIFICATION_Login_Success
+                                               object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    if (!appDelegate.model) {
+        LoginViewController *loginVC = [[LoginViewController alloc] init];
+        loginVC.isNotification = YES;
+        [self.navigationController pushViewController:loginVC animated:NO];
+    }
     // 打点-页面进入-011401
     [Flurry logEvent:@"Notification_Enter"];
 #if DEBUG
@@ -159,6 +175,14 @@
     [self.tableView.footer setTitle:@"" forState:MJRefreshFooterStateIdle];
     [self.tableView.footer setTitle:@"Loading..." forState:MJRefreshFooterStateRefreshing];
     [self.tableView.footer setTitle:@"No more notifications" forState:MJRefreshFooterStateNoMoreData];
+}
+
+#pragma mark - Notification
+- (void)loginSuccess:(NSNotification *)notif
+{
+    if ([notif.object[@"isNotification"] isEqualToNumber:@1]) {
+        [self requestDataIsFooter:NO];
+    }
 }
 
 - (void)didReceiveMemoryWarning {

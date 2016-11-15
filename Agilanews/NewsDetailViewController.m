@@ -208,6 +208,7 @@
         [iConsole info:[NSString stringWithFormat:@"Article_Enter:%@",articleParams],nil];
 #endif
     }
+    [self.tableView reloadData];
 }
 
 - (void)viewWillDisappear:(BOOL)animated

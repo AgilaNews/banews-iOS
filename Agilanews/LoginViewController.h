@@ -12,6 +12,7 @@
 @interface LoginViewController : BaseViewController <GIDSignInDelegate, UIApplicationDelegate, GIDSignInUIDelegate>
 
 @property (nonatomic, strong) UIImageView *titleImageView;
+@property (nonatomic, assign) BOOL isNotification;  // 从侧边通知进入
 @property (nonatomic, assign) BOOL isFavorite;  // 从侧边收藏进入
 @property (nonatomic, assign) BOOL isCollect;   // 从新闻详情收藏进入
 @property (nonatomic, assign) BOOL isComment;   // 从评论框进入

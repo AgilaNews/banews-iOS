@@ -170,6 +170,7 @@
 		5F8E264E1D7428E100B48130 /* BigPicCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F8E264D1D7428E100B48130 /* BigPicCell.m */; };
 		5F907AC31DDAD9F200DD9748 /* NotificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F907AC21DDAD9F200DD9748 /* NotificationViewController.m */; };
 		5F907AC61DDAEA0200DD9748 /* NotificationModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F907AC51DDAEA0200DD9748 /* NotificationModel.m */; };
+		5F907AC91DDAF71800DD9748 /* NotificationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F907AC81DDAF71800DD9748 /* NotificationCell.m */; };
 		5FE7220D1D4EFCE30026BFC3 /* TwitterKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5FE722091D4EFCE30026BFC3 /* TwitterKit.framework */; };
 		5FE7220E1D4EFCE30026BFC3 /* TwitterKitResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5FE7220A1D4EFCE30026BFC3 /* TwitterKitResources.bundle */; };
 		5FE7220F1D4EFCE30026BFC3 /* TwitterCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5FE7220B1D4EFCE30026BFC3 /* TwitterCore.framework */; };
@@ -515,6 +516,8 @@
 		5F907AC21DDAD9F200DD9748 /* NotificationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationViewController.m; sourceTree = "<group>"; };
 		5F907AC41DDAEA0200DD9748 /* NotificationModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationModel.h; sourceTree = "<group>"; };
 		5F907AC51DDAEA0200DD9748 /* NotificationModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationModel.m; sourceTree = "<group>"; };
+		5F907AC71DDAF71800DD9748 /* NotificationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationCell.h; sourceTree = "<group>"; };
+		5F907AC81DDAF71800DD9748 /* NotificationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationCell.m; sourceTree = "<group>"; };
 		5FE722081D4EFCE30026BFC3 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		5FE722091D4EFCE30026BFC3 /* TwitterKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TwitterKit.framework; sourceTree = "<group>"; };
 		5FE7220A1D4EFCE30026BFC3 /* TwitterKitResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = TwitterKitResources.bundle; path = TwitterKit.framework/Versions/A/Resources/TwitterKitResources.bundle; sourceTree = "<group>"; };
@@ -1072,6 +1075,8 @@
 				5FE7221F1D506CD70026BFC3 /* FeedbackTextField.m */,
 				5F767A651D9BC30000822BAC /* ChannelCell.h */,
 				5F767A661D9BC30000822BAC /* ChannelCell.m */,
+				5F907AC71DDAF71800DD9748 /* NotificationCell.h */,
+				5F907AC81DDAF71800DD9748 /* NotificationCell.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1576,6 +1581,7 @@
 				5F635CC01D3E28E9006AAE3D /* LoginModel.m in Sources */,
 				5F42BFFA1D34E3D500B89651 /* AFURLSessionManager.m in Sources */,
 				5F635EDB1D4344E2006AAE3D /* SettingsViewController.m in Sources */,
+				5F907AC91DDAF71800DD9748 /* NotificationCell.m in Sources */,
 				5FF4B7761D37BD2C00CC6704 /* UIDevice+UhouAdditions.m in Sources */,
 				5F17B4E01DB8B430008EBD51 /* AccountFavorite+CoreDataClass.m in Sources */,
 				5F767A841D9CE82E00822BAC /* MJPropertyType.m in Sources */,
