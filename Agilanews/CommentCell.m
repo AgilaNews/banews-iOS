@@ -76,7 +76,7 @@
     // 评论回复布局
     [self.replyContentLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(weakSelf.nameLabel.mas_left).offset(7);
-        make.top.mas_equalTo(weakSelf.timeLabel.mas_bottom).offset(12);
+        make.top.mas_equalTo(weakSelf.timeLabel.mas_bottom).offset(11);
     }];
     // 竖线布局
     [self.verticalLine mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -135,7 +135,7 @@
     CGSize replyLabelSize = [replyString calculateSize:CGSizeMake(kScreenWidth - 11 - 7 - 55, 1000) font:self.replyContentLabel.font];
     [self.replyContentLabel mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(weakSelf.nameLabel.mas_left).offset(7);
-        make.top.mas_equalTo(weakSelf.timeLabel.mas_bottom).offset(12);
+        make.top.mas_equalTo(weakSelf.timeLabel.mas_bottom).offset(11);
         make.width.mas_equalTo(replyLabelSize.width);
         make.height.mas_equalTo(replyLabelSize.height);
     }];
@@ -196,7 +196,7 @@
     if (_nameLabel == nil) {
         _nameLabel = [[UILabel alloc] init];
         _nameLabel.backgroundColor = kWhiteBgColor;
-        _nameLabel.textColor = kGrayColor;
+        _nameLabel.textColor = SSColor_RGB(102);
         _nameLabel.font = [UIFont systemFontOfSize:14];
     }
     return _nameLabel;

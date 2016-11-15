@@ -10,6 +10,7 @@
 #import "NotificationModel.h"
 #import "AppDelegate.h"
 #import "LoginViewController.h"
+#import "NotificationCell.h"
 
 @interface NotificationViewController ()
 
@@ -121,14 +122,27 @@
     return _dataList.count;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NotificationModel *model = _dataList[indexPath.row];
+    CGSize commentLabelSize = [model.comment calculateSize:CGSizeMake(kScreenWidth - 55 - 11, 1000) font:[UIFont systemFontOfSize:15]];
+    CommentModel *commentModel = model.reply;
+    if (commentModel.comment) {
+        NSString *replyString = [NSString stringWithFormat:@"@%@: %@",commentModel.user_name,commentModel.comment];
+        CGSize replyLabelSize = [replyString calculateSize:CGSizeMake(kScreenWidth - 11 - 7 - 55, 1000) font:[UIFont systemFontOfSize:13]];
+        return 10 + 5 + 16 + 12 + commentLabelSize.height + 9 + replyLabelSize.height + 10;
+    }
+    return 10 + 5 + 16 + 12 + commentLabelSize.height + 9;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *cellID = @"SinglePicCellID";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+    NotificationCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+        cell = [[NotificationCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
     }
-//    cell.model = model;
+    cell.model = _dataList[indexPath.row];
     [cell setNeedsLayout];
     return cell;
 }
