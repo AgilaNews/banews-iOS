@@ -659,7 +659,7 @@
     }
     NetServerType type;
     if ([_model.channelID isEqualToNumber:@30001]) {
-        type = NetServer_Video;
+        type = NetServer_V3;
     } else {
         type = NetServer_Home;
     }

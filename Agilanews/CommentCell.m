@@ -217,8 +217,8 @@
         _likeButton.adjustsImageWhenHighlighted = NO;
         [_likeButton setTitleColor:SSColor(102, 102, 102) forState:UIControlStateNormal];
         [_likeButton setTitleColor:kOrangeColor forState:UIControlStateSelected];
-        [_likeButton setImage:[UIImage imageNamed:@"icon_like_d"] forState:UIControlStateNormal];
-        [_likeButton setImage:[UIImage imageNamed:@"icon_like_s"] forState:UIControlStateSelected];
+        [_likeButton setImage:[UIImage imageNamed:@"icon_commentlike_d"] forState:UIControlStateNormal];
+        [_likeButton setImage:[UIImage imageNamed:@"icon_commentlike_s"] forState:UIControlStateSelected];
     }
     if (_model.liked.integerValue > 0) {
         NSString *buttonTitle = [NSString stringWithFormat:@"%@",_model.liked];

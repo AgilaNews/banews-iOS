@@ -300,7 +300,7 @@
     __weak typeof(self) weakSelf = self;
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setObject:newsID forKey:@"news_id"];
-    NSURLSessionDataTask *task = [[SSHttpRequest sharedInstance] get:kHomeUrl_Recommend params:params contentType:JsonType serverType:NetServer_Video success:^(id responseObj) {
+    NSURLSessionDataTask *task = [[SSHttpRequest sharedInstance] get:kHomeUrl_Recommend params:params contentType:JsonType serverType:NetServer_V3 success:^(id responseObj) {
         [_recommendedView stopAnimation];
         NSArray *recommends = responseObj[@"recommend_news"];
         _recommend_news = [NSMutableArray array];
@@ -330,7 +330,7 @@
     [params setObject:newsID forKey:@"news_id"];
     [params setObject:@"later" forKey:@"prefer"];
     [params setObject:@3 forKey:@"pn"];
-    NSURLSessionDataTask *task = [[SSHttpRequest sharedInstance] get:kHomeUrl_VideoRecommend params:params contentType:UrlencodedType serverType:NetServer_Video success:^(id responseObj) {
+    NSURLSessionDataTask *task = [[SSHttpRequest sharedInstance] get:kHomeUrl_VideoRecommend params:params contentType:UrlencodedType serverType:NetServer_V3 success:^(id responseObj) {
         [_recommentsView stopAnimation];
         NSArray *array = responseObj;
         NSMutableArray *models = [NSMutableArray array];
@@ -360,7 +360,7 @@
     __weak typeof(self) weakSelf = self;
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setObject:newsID forKey:@"news_id"];
-    NSURLSessionDataTask *task = [[SSHttpRequest sharedInstance] get:kHomeUrl_NewsDetail params:params contentType:UrlencodedType serverType:NetServer_Video success:^(id responseObj) {
+    NSURLSessionDataTask *task = [[SSHttpRequest sharedInstance] get:kHomeUrl_NewsDetail params:params contentType:UrlencodedType serverType:NetServer_V3 success:^(id responseObj) {
         weakSelf.detailModel = [NewsDetailModel mj_objectWithKeyValues:responseObj];
         if (![_detailModel.collect_id isEqualToString:@"0"]) {
             UIButton *button = [weakSelf.commentsView viewWithTag:301];
@@ -413,7 +413,7 @@
         return;
     }
     [params setObject:commentModel.commentID forKey:@"last_id"];
-    NSURLSessionDataTask *task = [[SSHttpRequest sharedInstance] get:kHomeUrl_VideoRecommend params:params contentType:UrlencodedType serverType:NetServer_Video success:^(id responseObj) {
+    NSURLSessionDataTask *task = [[SSHttpRequest sharedInstance] get:kHomeUrl_VideoRecommend params:params contentType:UrlencodedType serverType:NetServer_V3 success:^(id responseObj) {
         [_tableView.footer endRefreshing];
         NSArray *array = responseObj;
         if (array.count > 0) {

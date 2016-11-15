@@ -22,7 +22,7 @@ typedef enum {
     NetServer_Mon,          /* 反馈接口 */
     NetServer_Referrer,     /* 推荐接口 */
     NetServer_Check,        /* 检查版本接口 */
-    NetServer_Video,
+    NetServer_V3,
 } NetServerType;
 
 #if DEBUG
@@ -30,13 +30,13 @@ typedef enum {
 #define kLogUrl         @"http://log.agilanews.info"
 #define kMonUrl         @"http://mon.agilanews.info"
 #define kReferrerUrl    @"http://api.agilanews.info/referrer"
-#define kVideoUrl       @"http://api.agilanews.info/v3"
+#define kV3Url          @"http://api.agilanews.info/v3"
 #else
 #define kHomeUrl        @"http://api.agilanews.today/v2"
 #define kLogUrl         @"http://log.agilanews.today"
 #define kMonUrl         @"http://mon.agilanews.today"
 #define kReferrerUrl    @"http://api.agilanews.today/referrer"
-#define kVideoUrl       @"http://api.agilanews.today/v3"
+#define kV3Url          @"http://api.agilanews.today/v3"
 #endif
 
 // 新闻列表刷新接口
@@ -67,7 +67,8 @@ typedef enum {
 #define kHomeUrl_VideoRecommend   @"/comment"
 // 评论点赞接口
 #define kHomeUrl_CommentLike   @"/comment/like"
-
+// 通知中心接口
+#define kHomeUrl_Notifications   @"/notifications"
 
 
 #endif /* Interface_h */
