@@ -32,6 +32,7 @@
     [self.contentView addSubview:self.likeButton];
     [self.contentView addSubview:self.replyLabel];
     [self.contentView addSubview:self.replyContentLabel];
+    [self.contentView addSubview:self.verticalLine];
     
     __weak typeof(self) weakSelf = self;
     // 头像布局
@@ -76,6 +77,12 @@
     [self.replyContentLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(weakSelf.nameLabel.mas_left).offset(7);
         make.top.mas_equalTo(weakSelf.timeLabel.mas_bottom).offset(12);
+    }];
+    // 竖线布局
+    [self.verticalLine mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(weakSelf.nameLabel.mas_left);
+        make.top.mas_equalTo(weakSelf.timeLabel.mas_bottom).offset(9);
+        make.width.mas_equalTo(3);
     }];
 }
 
@@ -132,6 +139,13 @@
         make.width.mas_equalTo(replyLabelSize.width);
         make.height.mas_equalTo(replyLabelSize.height);
     }];
+    // 竖线布局
+    [self.verticalLine mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(weakSelf.nameLabel.mas_left);
+        make.top.mas_equalTo(weakSelf.timeLabel.mas_bottom).offset(9);
+        make.width.mas_equalTo(3);
+        make.height.mas_equalTo(replyLabelSize.height + 4);
+    }];
     [super updateConstraints];
 
     [self.avatarView sd_setImageWithURL:[NSURL URLWithString:_model.user_portrait_url] placeholderImage:[UIImage imageNamed:@"icon_sidebar_head"] options:SDWebImageRetryFailed completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
@@ -158,8 +172,10 @@
     }
     if (commentModel.comment) {
         self.replyContentLabel.text = replyString;
+        self.verticalLine.hidden = NO;
     } else {
         self.replyContentLabel.text = @"";
+        self.verticalLine.hidden = YES;
     }
 }
 
@@ -287,6 +303,16 @@
         _replyContentLabel.textColor = kGrayColor;
     }
     return _replyContentLabel;
+}
+
+- (UIView *)verticalLine
+{
+    if (_verticalLine == nil) {
+        _verticalLine = [[UIView alloc] init];
+        _verticalLine.backgroundColor = SSColor_RGB(204);
+        _verticalLine.hidden = YES;
+    }
+    return _verticalLine;
 }
 
 - (void)awakeFromNib {

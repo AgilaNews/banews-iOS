@@ -45,6 +45,8 @@
 
 // 设置颜色
 #define SSColor(r, g, b) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:1.0]
+#define SSColor_RGB(rgb) [UIColor colorWithRed:(rgb)/255.0 green:(rgb)/255.0 blue:(rgb)/255.0 alpha:1.0]
+
 // 主色调颜色（橙色）
 #define kOrangeColor [UIColor colorWithRed:255 / 255.0 green:136 / 255.0 blue:0 / 255.0 alpha:1.0]
 // 黑色字体颜色

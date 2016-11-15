@@ -17,6 +17,7 @@
 #import "FavoritesViewController.h"
 #import "FeedbackViewController.h"
 #import "ChannelViewController.h"
+#import "NotificationViewController.h"
 
 @implementation LeftTableView
 
@@ -29,7 +30,7 @@
         self.showsVerticalScrollIndicator = NO;
         self.dataSource = self;
         self.delegate = self;
-        UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.width, self.height - 384 - 40)];
+        UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.width, self.height - 384 - 40 - 58)];
         footerView.backgroundColor = kWhiteBgColor;
         self.tableFooterView = footerView;
         UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.width, 140 + 40)];
@@ -83,7 +84,7 @@
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 4;
+    return 5;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -113,16 +114,12 @@
             view.backgroundColor = kWhiteBgColor;
             return view;
         }
-            break;
-            
         default:
         {
             UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 14)];
             view.backgroundColor = kWhiteBgColor;
             return view;
-            
         }
-            break;
     }
 }
 
@@ -140,21 +137,25 @@
     }
     switch (indexPath.section) {
         case 0:
+            cell.titleImageView.image = [UIImage imageNamed:@"icon_notification"];
+            cell.titleLabel.text = @"Notification";
+            break;
+        case 1:
             cell.titleImageView.image = [UIImage imageNamed:@"icon_sidebar_channel"];
             cell.titleLabel.text = @"Channels";
             if ([DEF_PERSISTENT_GET_OBJECT(kHaveNewChannel) isEqual:@1]) {
                 [self addRedPointWithLable:cell.titleLabel];
             }
             break;
-        case 1:
+        case 2:
             cell.titleImageView.image = [UIImage imageNamed:@"icon_sidebar_favorites"];
             cell.titleLabel.text = @"Favorites";
             break;
-        case 2:
+        case 3:
             cell.titleImageView.image = [UIImage imageNamed:@"icon_sidebar_feedback"];
             cell.titleLabel.text = @"Feedback";
             break;
-        case 3:
+        case 4:
             cell.titleImageView.image = [UIImage imageNamed:@"icon_sidebar_settings"];
             cell.titleLabel.text = @"Settings";
             break;
@@ -180,6 +181,18 @@
     switch (indexPath.section) {
         case 0:
         {
+            // 打点-点击通知按钮-010409
+            [Flurry logEvent:@"Menu_Notification_Click"];
+#if DEBUG
+            [iConsole info:@"Menu_Notification_Click",nil];
+#endif
+            // 点击Notification
+            NotificationViewController *notifVC = [[NotificationViewController alloc] init];
+            [navCtrl pushViewController:notifVC animated:YES];
+            break;
+        }
+        case 1:
+        {
             // 打点-点击频道-010407
             [Flurry logEvent:@"Menu_Channels_Click"];
 #if DEBUG
@@ -190,7 +203,7 @@
             [navCtrl pushViewController:channelVC animated:YES];
             break;
         }
-        case 1:
+        case 2:
         {
             // 打点-点击收藏-010403
             [Flurry logEvent:@"Info_Icon_Click"];
@@ -202,7 +215,7 @@
             [navCtrl pushViewController:favoritesVC animated:YES];            
             break;
         }
-        case 2:
+        case 3:
         {
             // 打点-点击反馈-010404
             [Flurry logEvent:@"Menu_FeedbackButton_Click"];
@@ -214,7 +227,7 @@
             [navCtrl pushViewController:feedbackVC animated:YES];
             break;
         }
-        case 3:
+        case 4:
         {
             // 打点-点击设置-010406
             [Flurry logEvent:@"Menu_SetButton_Click"];

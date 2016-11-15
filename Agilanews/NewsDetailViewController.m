@@ -406,7 +406,7 @@
     [[SSHttpRequest sharedInstance] get:kHomeUrl_Comment params:params contentType:UrlencodedType serverType:NetServer_Home success:^(id responseObj) {
         [_tableView.footer endRefreshing];
         NSArray *array = responseObj[@"new"];
-        if (array.count > 0) {
+        if ([array isKindOfClass:[NSArray class]] && array.count > 0) {
             NSMutableArray *models = [NSMutableArray array];
             @autoreleasepool {
                 for (NSDictionary *dic in array) {
@@ -652,6 +652,7 @@
     if ([button.superview.superview isKindOfClass:[CommentCell class]]) {
         CommentCell *cell = (CommentCell *)button.superview.superview;
         cell.model.liked = [NSNumber numberWithInteger:cell.model.liked.integerValue + 1];
+        button.selected = YES;
         NSMutableDictionary *params = [NSMutableDictionary dictionary];
         [params setObject:cell.model.commentID forKey:@"comment_id"];
         [[SSHttpRequest sharedInstance] post:kHomeUrl_CommentLike params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {

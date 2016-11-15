@@ -168,6 +168,8 @@
 		5F8D87C11D800F2A00FF4019 /* FirebaseMessaging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F8D87BF1D800F2A00FF4019 /* FirebaseMessaging.framework */; };
 		5F8D87C21D800F2A00FF4019 /* GoogleIPhoneUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F8D87C01D800F2A00FF4019 /* GoogleIPhoneUtilities.framework */; };
 		5F8E264E1D7428E100B48130 /* BigPicCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F8E264D1D7428E100B48130 /* BigPicCell.m */; };
+		5F907AC31DDAD9F200DD9748 /* NotificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F907AC21DDAD9F200DD9748 /* NotificationViewController.m */; };
+		5F907AC61DDAEA0200DD9748 /* NotificationModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F907AC51DDAEA0200DD9748 /* NotificationModel.m */; };
 		5FE7220D1D4EFCE30026BFC3 /* TwitterKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5FE722091D4EFCE30026BFC3 /* TwitterKit.framework */; };
 		5FE7220E1D4EFCE30026BFC3 /* TwitterKitResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5FE7220A1D4EFCE30026BFC3 /* TwitterKitResources.bundle */; };
 		5FE7220F1D4EFCE30026BFC3 /* TwitterCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5FE7220B1D4EFCE30026BFC3 /* TwitterCore.framework */; };
@@ -509,6 +511,10 @@
 		5F8D87C01D800F2A00FF4019 /* GoogleIPhoneUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleIPhoneUtilities.framework; sourceTree = "<group>"; };
 		5F8E264C1D7428E100B48130 /* BigPicCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BigPicCell.h; sourceTree = "<group>"; };
 		5F8E264D1D7428E100B48130 /* BigPicCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BigPicCell.m; sourceTree = "<group>"; };
+		5F907AC11DDAD9F200DD9748 /* NotificationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationViewController.h; sourceTree = "<group>"; };
+		5F907AC21DDAD9F200DD9748 /* NotificationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationViewController.m; sourceTree = "<group>"; };
+		5F907AC41DDAEA0200DD9748 /* NotificationModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationModel.h; sourceTree = "<group>"; };
+		5F907AC51DDAEA0200DD9748 /* NotificationModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationModel.m; sourceTree = "<group>"; };
 		5FE722081D4EFCE30026BFC3 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		5FE722091D4EFCE30026BFC3 /* TwitterKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TwitterKit.framework; sourceTree = "<group>"; };
 		5FE7220A1D4EFCE30026BFC3 /* TwitterKitResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = TwitterKitResources.bundle; path = TwitterKit.framework/Versions/A/Resources/TwitterKitResources.bundle; sourceTree = "<group>"; };
@@ -1045,6 +1051,8 @@
 				5FE722171D4F5F3F0026BFC3 /* FeedbackViewController.m */,
 				5F767A5E1D9BB6EA00822BAC /* ChannelViewController.h */,
 				5F767A5F1D9BB6EA00822BAC /* ChannelViewController.m */,
+				5F907AC11DDAD9F200DD9748 /* NotificationViewController.h */,
+				5F907AC21DDAD9F200DD9748 /* NotificationViewController.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -1071,6 +1079,8 @@
 		5F635CAB1D3DD42A006AAE3D /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				5F907AC41DDAEA0200DD9748 /* NotificationModel.h */,
+				5F907AC51DDAEA0200DD9748 /* NotificationModel.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -1651,10 +1661,12 @@
 				5F5AE9711D5353B400A5A8B7 /* BannerView.m in Sources */,
 				5F42BFB51D34E2F000B89651 /* main.m in Sources */,
 				5F8D85AC1D76A99700FF4019 /* WebViewJavascriptBridgeBase.m in Sources */,
+				5F907AC61DDAEA0200DD9748 /* NotificationModel.m in Sources */,
 				5FF4B7721D37BD2C00CC6704 /* NSUserDefaults+UhouAdditions.m in Sources */,
 				5F42BFF71D34E3D500B89651 /* AFSecurityPolicy.m in Sources */,
 				5FF4B7B21D38F7B200CC6704 /* MASViewConstraint.m in Sources */,
 				5F42C0861D34E41D00B89651 /* SDWebImageDecoder.m in Sources */,
+				5F907AC31DDAD9F200DD9748 /* NotificationViewController.m in Sources */,
 				5F5342C11DC32870005D78F1 /* PopTransitionAnimate.m in Sources */,
 				5F8D85AA1D76A99700FF4019 /* WebViewJavascriptBridge.m in Sources */,
 				5FF4B6E31D362F0000CC6704 /* base64.m in Sources */,
