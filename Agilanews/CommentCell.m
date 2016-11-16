@@ -240,38 +240,33 @@
         NSString *buttonTitle = [NSString stringWithFormat:@"%@",_model.liked];
         switch (buttonTitle.length) {
             case 1:
-                _likeButton.imageEdgeInsets = UIEdgeInsetsMake(0, -12, 0, 0);
-                _likeButton.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, -4);
+                _likeButton.imageEdgeInsets = UIEdgeInsetsMake(0, -4, 0, 0);
+                _likeButton.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, -2);
                 [_likeButton setTitle:buttonTitle forState:UIControlStateNormal];
                 break;
             case 2:
-                _likeButton.imageEdgeInsets = UIEdgeInsetsMake(0, -4, 0, 0);
-                _likeButton.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, -8);
+                _likeButton.imageEdgeInsets = UIEdgeInsetsMake(0, 2, 0, 0);
+                _likeButton.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, -6);
                 [_likeButton setTitle:buttonTitle forState:UIControlStateNormal];
                 break;
             case 3:
-                _likeButton.imageEdgeInsets = UIEdgeInsetsMake(0, 2, 0, 0);
-                _likeButton.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, -12);
+                _likeButton.imageEdgeInsets = UIEdgeInsetsMake(0, 9, 0, 0);
+                _likeButton.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, -14);
                 [_likeButton setTitle:buttonTitle forState:UIControlStateNormal];
                 break;
             case 4:
-                _likeButton.imageEdgeInsets = UIEdgeInsetsMake(0, 5, 0, 0);
-                _likeButton.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, -16);
-                [_likeButton setTitle:buttonTitle forState:UIControlStateNormal];
-                break;
-            case 5:
-                _likeButton.imageEdgeInsets = UIEdgeInsetsMake(0, 5, 0, 0);
-                _likeButton.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, -20);
-                [_likeButton setTitle:@"9999+" forState:UIControlStateNormal];
+                _likeButton.imageEdgeInsets = UIEdgeInsetsMake(0, 13, 0, 0);
+                _likeButton.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, -22);
+                [_likeButton setTitle:@"999+" forState:UIControlStateNormal];
                 break;
             default:
-                _likeButton.imageEdgeInsets = UIEdgeInsetsMake(0, -12, 0, 0);
-                _likeButton.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, -4);
+                _likeButton.imageEdgeInsets = UIEdgeInsetsMake(0, -4, 0, 0);
+                _likeButton.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, -2);
                 [_likeButton setTitle:buttonTitle forState:UIControlStateNormal];
                 break;
         }
     } else {
-        _likeButton.imageEdgeInsets = UIEdgeInsetsMake(0, -20, 0, 0);
+        _likeButton.imageEdgeInsets = UIEdgeInsetsMake(0, -10, 0, 0);
         [_likeButton setTitle:@"" forState:UIControlStateNormal];
     }
     return _likeButton;
