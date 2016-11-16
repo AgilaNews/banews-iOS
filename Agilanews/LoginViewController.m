@@ -98,6 +98,7 @@
             [iConsole info:@"Login_Facebook_Click",nil];
 #endif
             [SVProgressHUD show];
+            button.enabled = NO;
             [ShareSDK getUserInfo:SSDKPlatformTypeFacebook onStateChanged:^(SSDKResponseState state, SSDKUser *user, NSError *error) {
                 if (state == SSDKResponseStateSuccess) {
                     // 打点-登陆Facebook成功-010605
@@ -106,6 +107,7 @@
                     [iConsole info:@"Login_Facebook_Click_Y",nil];
 #endif
                     [self loginWithUserData:user LoginType:Facebook];
+                    button.enabled = YES;
                 } else {
                     // 打点-登陆Facebook失败-010608
                     [Flurry logEvent:@"Login_Facebook_Click_N"];
@@ -113,6 +115,7 @@
                     [iConsole info:@"Login_Facebook_Click_N",nil];
 #endif
                     [SVProgressHUD dismiss];
+                    button.enabled = YES;
                     SSLog(@"%@",error);
                 }
             }];
@@ -126,6 +129,7 @@
             [iConsole info:@"Login_Twitter_Click",nil];
 #endif
             [SVProgressHUD show];
+            button.enabled = NO;
             [ShareSDK getUserInfo:SSDKPlatformTypeTwitter onStateChanged:^(SSDKResponseState state, SSDKUser *user, NSError *error) {
                 if (state == SSDKResponseStateSuccess) {
                     // 打点-登陆twitter成功-010606
@@ -134,6 +138,7 @@
                     [iConsole info:@"Login_Twitter_Click_Y",nil];
 #endif
                     [self loginWithUserData:user LoginType:Twitter];
+                    button.enabled = YES;
                 } else {
                     // 打点-登陆twitter失败-010609
                     [Flurry logEvent:@"Login_Twitter_Click_N"];
@@ -141,6 +146,7 @@
                     [iConsole info:@"Login_Twitter_Click_N",nil];
 #endif
                     [SVProgressHUD dismiss];
+                    button.enabled = YES;
                     SSLog(@"%@",error);
                 }
             }];
@@ -153,6 +159,7 @@
 #if DEBUG
             [iConsole info:@"Login_Google_Click",nil];
 #endif
+            button.enabled = NO;
             [[GIDSignIn sharedInstance] signIn];
             break;
         }
@@ -275,6 +282,8 @@
 //    NSString *familyName = user.profile.familyName;
 //    NSString *email = user.profile.email;
     // ...
+    UIButton *button = [self.view viewWithTag:GooglePuls];
+    button.enabled = YES;
     if (error == nil) {
         // 打点-登陆Google＋成功-010607
         [Flurry logEvent:@"Login_Google_Click_Y"];
@@ -290,6 +299,7 @@
         loginUser.icon = avatar;
         [self loginWithUserData:loginUser LoginType:GooglePuls];
     } else {
+        [SVProgressHUD dismiss];
         // 打点-登陆Google＋失败-010610
         [Flurry logEvent:@"Login_Google_Click_N"];
 #if DEBUG
@@ -301,7 +311,7 @@
 
 - (void)signInWillDispatch:(GIDSignIn *)signIn error:(NSError *)error
 {
-//    NSLog(@"%@",signIn);
+    [SVProgressHUD show];
 }
 
 - (void)signIn:(GIDSignIn *)signIn presentViewController:(UIViewController *)viewController
