@@ -15,7 +15,6 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         self.backgroundColor = kWhiteBgColor;
-        [self setSelectionStyle:UITableViewCellSelectionStyleNone];
         // 初始化子视图
         [self _initSubviews];
     }
@@ -137,6 +136,19 @@
     } else {
         self.replyContentLabel.text = @"";
         self.verticalLine.hidden = YES;
+    }
+    if ([_model.status isEqualToNumber:@1]) {
+        self.avatarView.alpha = .5;
+        self.nameLabel.textColor = SSColor_RGB(204);
+        self.contentLabel.textColor = SSColor_RGB(204);
+        self.timeLabel.textColor = SSColor_RGB(204);
+        self.replyContentLabel.textColor = SSColor_RGB(204);
+    } else {
+        self.avatarView.alpha = 1;
+        self.nameLabel.textColor = SSColor_RGB(102);
+        self.contentLabel.textColor = kBlackColor;
+        self.timeLabel.textColor = kGrayColor;
+        self.replyContentLabel.textColor = kGrayColor;
     }
 }
 

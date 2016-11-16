@@ -332,7 +332,7 @@
     [params setObject:@3 forKey:@"pn"];
     NSURLSessionDataTask *task = [[SSHttpRequest sharedInstance] get:kHomeUrl_VideoRecommend params:params contentType:UrlencodedType serverType:NetServer_V3 success:^(id responseObj) {
         [_recommentsView stopAnimation];
-        NSArray *array = responseObj;
+        NSArray *array = responseObj[@"new"];
         NSMutableArray *models = [NSMutableArray array];
         @autoreleasepool {
             for (NSDictionary *dic in array) {

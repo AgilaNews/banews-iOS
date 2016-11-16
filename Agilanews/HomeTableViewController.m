@@ -95,6 +95,10 @@
                                              selector:@selector(recoverVideo:)
                                                  name:KNOTIFICATION_RecoverVideo
                                                object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(loginSuccess:)
+                                                 name:KNOTIFICATION_Login_Success
+                                               object:nil];
     
     // 创建表视图
     self.tableView.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight);
@@ -938,6 +942,7 @@
         // 登录后分享
         LoginViewController *loginVC = [[LoginViewController alloc] init];
         loginVC.isShareFacebook = YES;
+        loginVC.shareModel = newsModel;
         UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:loginVC];
         [weakSelf.navigationController presentViewController:navCtrl animated:YES completion:nil];
     }
@@ -1245,6 +1250,31 @@
                     videoCell.isPlay = NO;
                 }
             }
+        }
+    }
+}
+
+/**
+ *  点击收藏/评论后登录成功
+ */
+- (void)loginSuccess:(NSNotification *)notif
+{
+    if ([notif.object[@"isShareFacebook"] isEqualToNumber:@1]) {
+        // 分享Facebook
+        NewsModel *model = notif.object[@"shareModel"];
+        if (model) {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
+                NSString *shareString = model.share_url;
+                shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"facebook"];
+                content.contentURL = [NSURL URLWithString:shareString];
+                content.contentTitle = model.title;
+                ImageModel *imageModel = model.imgs.firstObject;
+                content.imageURL = [NSURL URLWithString:imageModel.src];
+                [FBSDKShareDialog showFromViewController:self
+                                             withContent:content
+                                                delegate:self];
+            });
         }
     }
 }

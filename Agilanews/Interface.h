@@ -66,9 +66,13 @@ typedef enum {
 // 新闻推荐接口
 #define kHomeUrl_VideoRecommend   @"/comment"
 // 评论点赞接口
-#define kHomeUrl_CommentLike   @"/comment/like"
+#define kHomeUrl_CommentLike      @"/comment/like"
 // 通知中心接口
-#define kHomeUrl_Notification   @"/notification"
+#define kHomeUrl_Notification     @"/notification"
+// 通知详情接口
+#define kHomeUrl_NotifDetail      @"/notification/related"
+
+
 
 
 #endif /* Interface_h */

@@ -11,6 +11,7 @@
 #import "AppDelegate.h"
 #import "LoginViewController.h"
 #import "NotificationCell.h"
+#import "NotifDetailViewController.h"
 
 @interface NotificationViewController ()
 
@@ -38,6 +39,7 @@
     
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     if (appDelegate.model) {
+        // 请求数据
         [self requestDataIsFooter:NO];
     }
 
@@ -147,6 +149,16 @@
     return cell;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    NotificationModel *model = _dataList[indexPath.row];
+    model.status = @1;
+    NotifDetailViewController *notifDetailVC = [[NotifDetailViewController alloc] init];
+    notifDetailVC.notify_id = model.notify_id;
+    [self.navigationController pushViewController:notifDetailVC animated:YES];
+}
+
 #pragma mark - setter/getter
 - (void)setShowBlankView:(BOOL)showBlankView
 {
@@ -160,7 +172,7 @@
             [self.tableView addSubview:_blankView];
             UIImageView *failureView = [[UIImageView alloc] initWithFrame:CGRectMake((_blankView.width - 28) * .5, 164 / kScreenHeight * 568, 28, 26)];
             failureView.backgroundColor = kWhiteBgColor;
-            failureView.image = [UIImage imageNamed:@"icon_nofavorites"];
+            failureView.image = [UIImage imageNamed:@"icon_nonotification"];
             [_blankView addSubview:failureView];
             UILabel *blankLabel = [[UILabel alloc] initWithFrame:CGRectMake((kScreenWidth - 300) * .5, failureView.bottom + 13, 300, 20)];
             blankLabel.backgroundColor = kWhiteBgColor;

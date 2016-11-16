@@ -171,6 +171,8 @@
 		5F907AC31DDAD9F200DD9748 /* NotificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F907AC21DDAD9F200DD9748 /* NotificationViewController.m */; };
 		5F907AC61DDAEA0200DD9748 /* NotificationModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F907AC51DDAEA0200DD9748 /* NotificationModel.m */; };
 		5F907AC91DDAF71800DD9748 /* NotificationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F907AC81DDAF71800DD9748 /* NotificationCell.m */; };
+		5F907ACC1DDB0CB200DD9748 /* NotifDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F907ACB1DDB0CB200DD9748 /* NotifDetailViewController.m */; };
+		5F907ACF1DDB100E00DD9748 /* NotifDetailModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F907ACE1DDB100E00DD9748 /* NotifDetailModel.m */; };
 		5FE7220D1D4EFCE30026BFC3 /* TwitterKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5FE722091D4EFCE30026BFC3 /* TwitterKit.framework */; };
 		5FE7220E1D4EFCE30026BFC3 /* TwitterKitResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5FE7220A1D4EFCE30026BFC3 /* TwitterKitResources.bundle */; };
 		5FE7220F1D4EFCE30026BFC3 /* TwitterCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5FE7220B1D4EFCE30026BFC3 /* TwitterCore.framework */; };
@@ -518,6 +520,10 @@
 		5F907AC51DDAEA0200DD9748 /* NotificationModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationModel.m; sourceTree = "<group>"; };
 		5F907AC71DDAF71800DD9748 /* NotificationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationCell.h; sourceTree = "<group>"; };
 		5F907AC81DDAF71800DD9748 /* NotificationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationCell.m; sourceTree = "<group>"; };
+		5F907ACA1DDB0CB200DD9748 /* NotifDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotifDetailViewController.h; sourceTree = "<group>"; };
+		5F907ACB1DDB0CB200DD9748 /* NotifDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotifDetailViewController.m; sourceTree = "<group>"; };
+		5F907ACD1DDB100E00DD9748 /* NotifDetailModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotifDetailModel.h; sourceTree = "<group>"; };
+		5F907ACE1DDB100E00DD9748 /* NotifDetailModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotifDetailModel.m; sourceTree = "<group>"; };
 		5FE722081D4EFCE30026BFC3 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		5FE722091D4EFCE30026BFC3 /* TwitterKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TwitterKit.framework; sourceTree = "<group>"; };
 		5FE7220A1D4EFCE30026BFC3 /* TwitterKitResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = TwitterKitResources.bundle; path = TwitterKit.framework/Versions/A/Resources/TwitterKitResources.bundle; sourceTree = "<group>"; };
@@ -1056,6 +1062,8 @@
 				5F767A5F1D9BB6EA00822BAC /* ChannelViewController.m */,
 				5F907AC11DDAD9F200DD9748 /* NotificationViewController.h */,
 				5F907AC21DDAD9F200DD9748 /* NotificationViewController.m */,
+				5F907ACA1DDB0CB200DD9748 /* NotifDetailViewController.h */,
+				5F907ACB1DDB0CB200DD9748 /* NotifDetailViewController.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -1086,6 +1094,8 @@
 			children = (
 				5F907AC41DDAEA0200DD9748 /* NotificationModel.h */,
 				5F907AC51DDAEA0200DD9748 /* NotificationModel.m */,
+				5F907ACD1DDB100E00DD9748 /* NotifDetailModel.h */,
+				5F907ACE1DDB100E00DD9748 /* NotifDetailModel.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -1652,6 +1662,7 @@
 				5FF4B7AF1D38F7B200CC6704 /* MASConstraintMaker.m in Sources */,
 				5F42C09E1D34E42A00B89651 /* SVProgressAnimatedView.m in Sources */,
 				5F17B4BE1DB86883008EBD51 /* Agila.xcdatamodeld in Sources */,
+				5F907ACC1DDB0CB200DD9748 /* NotifDetailViewController.m in Sources */,
 				5F5AE9761D54364E00A5A8B7 /* GuideRefreshView.m in Sources */,
 				5FF4B7711D37BD2C00CC6704 /* NSTimer+UhouAdditions.m in Sources */,
 				5F767A811D9CE82E00822BAC /* MJFoundation.m in Sources */,
@@ -1693,6 +1704,7 @@
 				5F42C0A81D34E43A00B89651 /* SSHttpRequest.m in Sources */,
 				5F42C0901D34E41D00B89651 /* UIImageView+WebCache.m in Sources */,
 				5FF4B7CF1D3A174900CC6704 /* MJRefreshComponent.m in Sources */,
+				5F907ACF1DDB100E00DD9748 /* NotifDetailModel.m in Sources */,
 				5FF4B6F11D372A9300CC6704 /* BaseNavigationController.m in Sources */,
 				5F17B4901DB5BEB5008EBD51 /* YTPlayerView.m in Sources */,
 				5F767A891D9CE82E00822BAC /* NSString+MJExtension.m in Sources */,

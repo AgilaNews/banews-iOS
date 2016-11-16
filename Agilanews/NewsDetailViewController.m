@@ -652,7 +652,9 @@
     }
     if ([button.superview.superview isKindOfClass:[CommentCell class]]) {
         CommentCell *cell = (CommentCell *)button.superview.superview;
-        cell.model.liked = [NSNumber numberWithInteger:cell.model.liked.integerValue + 1];
+        NSNumber *likeNum = [NSNumber numberWithInteger:cell.model.liked.integerValue + 1];
+        cell.model.liked = likeNum;
+        [button setTitle:[NSString stringWithFormat:@"%@",likeNum] forState:UIControlStateNormal];
         button.selected = YES;
         NSMutableDictionary *params = [NSMutableDictionary dictionary];
         [params setObject:cell.model.commentID forKey:@"comment_id"];
@@ -1694,7 +1696,6 @@
  */
 - (void)commentAction:(UITapGestureRecognizer *)tap
 {
-    
     if ([tap.view isKindOfClass:[UILabel class]]) {
         CommentCell *cell = (CommentCell *)tap.view.superview.superview;
         if ([cell isKindOfClass:[CommentCell class]]) {

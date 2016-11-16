@@ -212,15 +212,18 @@
         appDelegate.model = [LoginModel mj_objectWithKeyValues:responseObj];
         NSString *loginFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/userinfo.data"];
         [NSKeyedArchiver archiveRootObject:appDelegate.model toFile:loginFilePath];
-        [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Login_Success object:
-         [NSDictionary dictionaryWithObjectsAndKeys:
-          [NSNumber numberWithBool:_isNotification], @"isNotification",
-          [NSNumber numberWithBool:_isCollect], @"isCollect",
-          [NSNumber numberWithBool:_isComment], @"isComment",
-          [NSNumber numberWithBool:_isShareFacebook], @"isShareFacebook",
-          [NSNumber numberWithBool:_isShareTwitter], @"isShareTwitter",
-          [NSNumber numberWithBool:_isShareGoogle], @"isShareGoogle",
-          nil]];
+        NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                    [NSNumber numberWithBool:_isNotification], @"isNotification",
+                                    [NSNumber numberWithBool:_isCollect], @"isCollect",
+                                    [NSNumber numberWithBool:_isComment], @"isComment",
+                                    [NSNumber numberWithBool:_isShareFacebook], @"isShareFacebook",
+                                    [NSNumber numberWithBool:_isShareTwitter], @"isShareTwitter",
+                                    [NSNumber numberWithBool:_isShareGoogle], @"isShareGoogle",
+                                    nil];
+        if (_shareModel) {
+            [dic setObject:_shareModel forKey:@"shareModel"];
+        }
+        [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Login_Success object:dic];
         if (_isFavorite) {
             FavoritesViewController *favoritesVC = [[FavoritesViewController alloc] init];
             [weakSelf.navigationController pushViewController:favoritesVC animated:YES];
