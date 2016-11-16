@@ -170,7 +170,7 @@
             _blankView.backgroundColor = kWhiteBgColor;
             _blankView.userInteractionEnabled = YES;
             [self.tableView addSubview:_blankView];
-            UIImageView *failureView = [[UIImageView alloc] initWithFrame:CGRectMake((_blankView.width - 28) * .5, 164 / kScreenHeight * 568, 28, 26)];
+            UIImageView *failureView = [[UIImageView alloc] initWithFrame:CGRectMake((_blankView.width - 32) * .5, 164 / kScreenHeight * 568, 32, 34)];
             failureView.backgroundColor = kWhiteBgColor;
             failureView.image = [UIImage imageNamed:@"icon_nonotification"];
             [_blankView addSubview:failureView];

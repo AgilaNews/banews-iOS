@@ -81,7 +81,6 @@
         [weakSelf.tableView reloadData];
     } failure:^(NSError *error) {
         [SVProgressHUD dismiss];
-        
     } isShowHUD:NO];
 }
 
