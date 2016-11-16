@@ -102,7 +102,7 @@
              NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
                                             [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
                                             channelName, @"channel",
-                                            _model.news_id, @"article",
+                                            weakSelf.model.news_id, @"article",
                                             [NetType getNetType], @"network",
                                             nil];
              [Flurry logEvent:@"Article_Play_Click" withParameters:articleParams];
@@ -118,7 +118,7 @@
              detailPlayerVC.height = model.height;
              detailPlayerVC.pattern = model.pattern;
              detailPlayerVC.videoid = videoid;
-             detailPlayerVC.model = _model;
+             detailPlayerVC.model = weakSelf.model;
              [[UIApplication sharedApplication] setStatusBarHidden:YES];
              detailPlayerVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
              [weakSelf presentViewController:detailPlayerVC animated:YES completion:nil];
