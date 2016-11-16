@@ -208,7 +208,6 @@
         [iConsole info:[NSString stringWithFormat:@"Article_Enter:%@",articleParams],nil];
 #endif
     }
-    [self.tableView reloadData];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -415,7 +414,7 @@
                     [models addObject:model];
                 }
             }
-            [self.commentArray addObjectsFromArray:models];
+            [weakSelf.commentArray addObjectsFromArray:models];
             [weakSelf.tableView reloadData];
         } else {
             _tableView.footer.state = MJRefreshFooterStateNoMoreData;
@@ -654,6 +653,7 @@
         CommentCell *cell = (CommentCell *)button.superview.superview;
         NSNumber *likeNum = [NSNumber numberWithInteger:cell.model.liked.integerValue + 1];
         cell.model.liked = likeNum;
+        cell.model.device_liked = @1;
         [button setTitle:[NSString stringWithFormat:@"%@",likeNum] forState:UIControlStateNormal];
         button.selected = YES;
         NSMutableDictionary *params = [NSMutableDictionary dictionary];

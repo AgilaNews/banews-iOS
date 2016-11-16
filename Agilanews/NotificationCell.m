@@ -126,7 +126,7 @@
     }];
     [super updateConstraints];
     
-    [self.avatarView sd_setImageWithURL:[NSURL URLWithString:_model.user_portrait_url] placeholderImage:[UIImage imageNamed:@"icon_sidebar_head"] options:SDWebImageRetryFailed completed:nil];
+    [self.avatarView sd_setImageWithURL:[NSURL URLWithString:_model.user_portrait_url] placeholderImage:[UIImage imageNamed:@"icon_comment_head"] options:SDWebImageRetryFailed completed:nil];
     self.nameLabel.text = _model.user_name;
     self.contentLabel.text = _model.comment;
     self.timeLabel.text = time;
