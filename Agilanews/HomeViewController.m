@@ -37,7 +37,7 @@ static CGFloat const ButtonHeight = 40;
         negativeSpacer.width = -12;
         self.navigationItem.leftBarButtonItems = @[negativeSpacer, buttonItem];
     }
-    if ([DEF_PERSISTENT_GET_OBJECT(kHaveNewChannel) isEqual:@1]) {
+    if ([DEF_PERSISTENT_GET_OBJECT(kHaveNewChannel) isEqual:@1] || [DEF_PERSISTENT_GET_OBJECT(kHaveNewNotif) isEqual:@1]) {
         [self addRedPoint];
     }
     
@@ -54,6 +54,8 @@ static CGFloat const ButtonHeight = 40;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refresh_success) name:KNOTIFICATION_Refresh_Success object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(findNewChannel) name:KNOTIFICATION_FindNewChannel object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cleanNewChannel) name:KNOTIFICATION_CleanNewChannel object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(findNewNotif) name:KNOTIFICATION_FindNewNotif object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cleanNewNotif) name:KNOTIFICATION_CleanNewNotif object:nil];
     
     // 添加分段控制器
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
@@ -269,6 +271,32 @@ static CGFloat const ButtonHeight = 40;
     [self addRedPoint];
 }
 
+// 删除小红点
+- (void)cleanNewChannel
+{
+    DEF_PERSISTENT_SET_OBJECT(kHaveNewChannel, @0);
+    if ([DEF_PERSISTENT_GET_OBJECT(kHaveNewNotif) isEqualToNumber:@1]) {
+        return;
+    }
+    [_redPoint removeFromSuperview];
+}
+    
+// 发现新通知
+- (void)findNewNotif
+{
+    DEF_PERSISTENT_SET_OBJECT(kHaveNewNotif, @1);
+    [self addRedPoint];
+}
+    
+- (void)cleanNewNotif
+{
+    DEF_PERSISTENT_SET_OBJECT(kHaveNewNotif, @0);
+    if ([DEF_PERSISTENT_GET_OBJECT(kHaveNewChannel) isEqualToNumber:@1]) {
+        return;
+    }
+    [_redPoint removeFromSuperview];
+}
+
 // 添加小红点
 - (void)addRedPoint
 {
@@ -279,12 +307,6 @@ static CGFloat const ButtonHeight = 40;
     [_leftButton addSubview:_redPoint];
 }
 
-// 删除小红点
-- (void)cleanNewChannel
-{
-    DEF_PERSISTENT_SET_OBJECT(kHaveNewChannel, @0);
-    [_redPoint removeFromSuperview];
-}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

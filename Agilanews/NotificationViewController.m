@@ -48,6 +48,9 @@
                                              selector:@selector(loginSuccess:)
                                                  name:KNOTIFICATION_Login_Success
                                                object:nil];
+    // 发送通知
+    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_CleanNewNotif
+                                                        object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -69,6 +72,11 @@
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - Network

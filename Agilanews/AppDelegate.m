@@ -517,7 +517,11 @@
         }
         case 4:
         {
-            
+            NSString *user_id = userInfo[@"user_id"];
+            if (user_id && [self.model.user_id isEqualToString:user_id]) {
+                // 添加通知小红点
+                [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_FindNewNotif object:nil];
+            }
         }
         default:
             break;

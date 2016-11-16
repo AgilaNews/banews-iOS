@@ -58,6 +58,7 @@
 
 
 #define kHaveNewChannel @"HaveNewChannel"
+#define kHaveNewNotif   @"HaveNewNotif"
 
 
 #define SS_LATITUDE     @"latitude"              // 纬度
@@ -97,6 +98,9 @@
 #define KNOTIFICATION_PushExit        @"KNOTIFICATION_PushExit"       // 从推送页面退出
 #define KNOTIFICATION_RecoverVideo    @"KNOTIFICATION_RecoverVideo"   // 视频从详情页回位
 #define KNOTIFICATION_PausedVideo     @"KNOTIFICATION_PausedVideo"    // 暂停视频
+#define KNOTIFICATION_FindNewNotif    @"KNOTIFICATION_FindNewNotif"   // 发现新频道通知
+#define KNOTIFICATION_CleanNewNotif   @"KNOTIFICATION_CleanNewNotif"  // 删除新频道通知
+
 
 
 // 刷新成功提示banner

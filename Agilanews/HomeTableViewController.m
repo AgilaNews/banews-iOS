@@ -158,9 +158,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    if ([_model.channelID isEqualToNumber:@30001]) {
-        self.navigationController.delegate = self;
-    }
+    self.navigationController.delegate = self;
 }
 
 - (void)viewDidAppear:(BOOL)animated

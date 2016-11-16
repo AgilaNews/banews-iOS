@@ -139,12 +139,15 @@
         case 0:
             cell.titleImageView.image = [UIImage imageNamed:@"icon_notification"];
             cell.titleLabel.text = @"Notification";
+            if ([DEF_PERSISTENT_GET_OBJECT(kHaveNewNotif) isEqual:@1]) {
+                [self addRedPointWithLable:cell.titleLabel Index:indexPath.row];
+            }
             break;
         case 1:
             cell.titleImageView.image = [UIImage imageNamed:@"icon_sidebar_channel"];
             cell.titleLabel.text = @"Channels";
             if ([DEF_PERSISTENT_GET_OBJECT(kHaveNewChannel) isEqual:@1]) {
-                [self addRedPointWithLable:cell.titleLabel];
+                [self addRedPointWithLable:cell.titleLabel Index:indexPath.row];
             }
             break;
         case 2:
@@ -308,9 +311,20 @@
     _appDelegate.model = nil;
 }
 
-- (void)addRedPointWithLable:(UILabel *)label
+- (void)addRedPointWithLable:(UILabel *)label Index:(NSInteger)index
 {
-    UIView *redPoint = [[UIView alloc] initWithFrame:CGRectMake(label.right - 140, label.top - 10, 5, 5)];
+    NSInteger right = 0;
+    switch (index) {
+        case 0:
+            right = 120;
+            break;
+        case 1:
+            right = 140;
+            break;
+        default:
+            break;
+    }
+    UIView *redPoint = [[UIView alloc] initWithFrame:CGRectMake(label.right - right, label.top - 10, 5, 5)];
     redPoint.backgroundColor = SSColor(233, 51, 17);
     redPoint.layer.cornerRadius = 2.5;
     redPoint.layer.masksToBounds = YES;
