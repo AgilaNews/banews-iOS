@@ -103,7 +103,16 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    self.navigationController.delegate = self;
+    if (IOS_VERSION_CODE <= 8) {
+        __weak typeof(self.navigationController.delegate) weakDelegate = self.navigationController.delegate;
+        if (weakDelegate != self) {
+            weakDelegate = self;
+        }
+    } else {
+        if (self.navigationController.delegate != self) {
+            self.navigationController.delegate = self;
+        }
+    }
 
     // 打点-页面进入-010501
     [Flurry logEvent:@"Favor_Enter"];
@@ -162,6 +171,9 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    if (self.navigationController.delegate == self) {
+        self.navigationController.delegate = nil;
+    }
 }
 
 #pragma mark - Network

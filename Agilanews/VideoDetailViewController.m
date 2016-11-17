@@ -117,7 +117,16 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    self.navigationController.delegate = self;
+    if (IOS_VERSION_CODE <= 8) {
+        __weak typeof(self.navigationController.delegate) weakDelegate = self.navigationController.delegate;
+        if (weakDelegate != self) {
+            weakDelegate = self;
+        }
+    } else {
+        if (self.navigationController.delegate != self) {
+            self.navigationController.delegate = self;
+        }
+    }
     [[UIApplication sharedApplication] setStatusBarHidden:YES];
     if ([UIDevice currentDevice].systemVersion.floatValue >= 10.0) {
         [self.navigationController.navigationBar setBarTintColor:[UIColor clearColor]];
@@ -180,10 +189,17 @@
     }
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    if (self.navigationController.delegate == self) {
+        self.navigationController.delegate = nil;
+    }
+}
+
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-    self.navigationController.delegate = nil;
     long long duration = 0;
     if (_isOther) {
         duration = _playTimeCount;
@@ -202,7 +218,6 @@
 - (void)dealloc
 {
     self.playerView.delegate = nil;
-    self.navigationController.delegate = nil;
     for (NSURLSessionDataTask *task in _tasks) {
         [task cancel];
     }
@@ -415,7 +430,7 @@
     [params setObject:commentModel.commentID forKey:@"last_id"];
     NSURLSessionDataTask *task = [[SSHttpRequest sharedInstance] get:kHomeUrl_VideoRecommend params:params contentType:UrlencodedType serverType:NetServer_V3 success:^(id responseObj) {
         [_tableView.footer endRefreshing];
-        NSArray *array = responseObj;
+        NSArray *array = responseObj[@"new"];
         if (array.count > 0) {
             NSMutableArray *models = [NSMutableArray array];
             @autoreleasepool {

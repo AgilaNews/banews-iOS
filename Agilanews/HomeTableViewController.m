@@ -158,7 +158,16 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    self.navigationController.delegate = self;
+    if (IOS_VERSION_CODE <= 8) {
+        __weak typeof(self.navigationController.delegate) weakDelegate = self.navigationController.delegate;
+        if (weakDelegate != self) {
+            weakDelegate = self;
+        }
+    } else {
+        if (self.navigationController.delegate != self) {
+            self.navigationController.delegate = self;
+        }
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -181,6 +190,9 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    if (self.navigationController.delegate == self) {
+        self.navigationController.delegate = nil;
+    }
 }
 
 - (void)dealloc
