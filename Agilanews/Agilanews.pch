@@ -72,6 +72,8 @@
 #import <GoogleSignIn/GoogleSignIn.h>
 #import "YouTubeiOSPlayerHelper.h"
 #import "CoreDataManager.h"
+#import <FBAudienceNetwork/FBAudienceNetwork.h>
+#import "FacebookAdManager.h"
 
 
 ////////////////////////////////////////

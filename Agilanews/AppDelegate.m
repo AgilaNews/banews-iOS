@@ -73,12 +73,12 @@
     UILocalNotification *notification=[[UILocalNotification alloc]init];
     notification.applicationIconBadgeNumber = -1;
     [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
-    // 启动上报打点
-    NSString *logFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/log.data"];
-    NSMutableArray *logData = [NSKeyedUnarchiver unarchiveObjectWithFile:logFilePath];
-    if (logData.count > 0 && logData != nil) {
-        [self serverLogWithEventArray:logData];
-    }
+//    // 启动上报打点
+//    NSString *logFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/log.data"];
+//    NSMutableArray *logData = [NSKeyedUnarchiver unarchiveObjectWithFile:logFilePath];
+//    if (logData.count > 0 && logData != nil) {
+//        [self serverLogWithEventArray:logData];
+//    }
     _eventArray = [NSMutableArray array];
     //设置启动页面时间
     [NSThread sleepForTimeInterval:2.0];

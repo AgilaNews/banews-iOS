@@ -173,6 +173,9 @@
 		5F907AC91DDAF71800DD9748 /* NotificationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F907AC81DDAF71800DD9748 /* NotificationCell.m */; };
 		5F907ACC1DDB0CB200DD9748 /* NotifDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F907ACB1DDB0CB200DD9748 /* NotifDetailViewController.m */; };
 		5F907ACF1DDB100E00DD9748 /* NotifDetailModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F907ACE1DDB100E00DD9748 /* NotifDetailModel.m */; };
+		5F907ABA1DD59D5B00DD9748 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F907AB91DD59D5B00DD9748 /* StoreKit.framework */; };
+		5F907ABC1DD59DC200DD9748 /* FBAudienceNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F907ABB1DD59DC200DD9748 /* FBAudienceNetwork.framework */; };
+		5F907AC01DD5A8F200DD9748 /* FacebookAdManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F907ABF1DD5A8F200DD9748 /* FacebookAdManager.m */; };
 		5FE7220D1D4EFCE30026BFC3 /* TwitterKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5FE722091D4EFCE30026BFC3 /* TwitterKit.framework */; };
 		5FE7220E1D4EFCE30026BFC3 /* TwitterKitResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5FE7220A1D4EFCE30026BFC3 /* TwitterKitResources.bundle */; };
 		5FE7220F1D4EFCE30026BFC3 /* TwitterCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5FE7220B1D4EFCE30026BFC3 /* TwitterCore.framework */; };
@@ -524,6 +527,10 @@
 		5F907ACB1DDB0CB200DD9748 /* NotifDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotifDetailViewController.m; sourceTree = "<group>"; };
 		5F907ACD1DDB100E00DD9748 /* NotifDetailModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotifDetailModel.h; sourceTree = "<group>"; };
 		5F907ACE1DDB100E00DD9748 /* NotifDetailModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotifDetailModel.m; sourceTree = "<group>"; };
+		5F907AB91DD59D5B00DD9748 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		5F907ABB1DD59DC200DD9748 /* FBAudienceNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBAudienceNetwork.framework; sourceTree = "<group>"; };
+		5F907ABE1DD5A8F200DD9748 /* FacebookAdManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FacebookAdManager.h; sourceTree = "<group>"; };
+		5F907ABF1DD5A8F200DD9748 /* FacebookAdManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FacebookAdManager.m; sourceTree = "<group>"; };
 		5FE722081D4EFCE30026BFC3 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		5FE722091D4EFCE30026BFC3 /* TwitterKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TwitterKit.framework; sourceTree = "<group>"; };
 		5FE7220A1D4EFCE30026BFC3 /* TwitterKitResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = TwitterKitResources.bundle; path = TwitterKit.framework/Versions/A/Resources/TwitterKitResources.bundle; sourceTree = "<group>"; };
@@ -661,6 +668,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5F635CDC1D3E3F79006AAE3D /* CoreMotion.framework in Frameworks */,
+				5F907ABA1DD59D5B00DD9748 /* StoreKit.framework in Frameworks */,
 				5F17B4921DB861F5008EBD51 /* CoreData.framework in Frameworks */,
 				5F5C638E1D938DA9005D3578 /* UserNotifications.framework in Frameworks */,
 				5F42C0BC1D34ED8E00B89651 /* Security.framework in Frameworks */,
@@ -675,7 +684,6 @@
 				5F635CE21D3E3F99006AAE3D /* AssetsLibrary.framework in Frameworks */,
 				5F635CE01D3E3F91006AAE3D /* MediaPlayer.framework in Frameworks */,
 				5F635CDE1D3E3F85006AAE3D /* CoreLocation.framework in Frameworks */,
-				5F635CDC1D3E3F79006AAE3D /* CoreMotion.framework in Frameworks */,
 				5F571F711D58742B00604CDD /* libFlurry_7.6.6.a in Frameworks */,
 				5F635CDA1D3E3F64006AAE3D /* JavaScriptCore.framework in Frameworks */,
 				5F17B45F1DA8A5D6008EBD51 /* GoogleNetworkingUtilities.framework in Frameworks */,
@@ -696,6 +704,7 @@
 				5F8D87BE1D800F1D00FF4019 /* GoogleUtilities.framework in Frameworks */,
 				5F42C0B61D34ED7400B89651 /* ImageIO.framework in Frameworks */,
 				5F635CCC1D3E3EDF006AAE3D /* ShareSDK.framework in Frameworks */,
+				5F907ABC1DD59DC200DD9748 /* FBAudienceNetwork.framework in Frameworks */,
 				5F571F811D5C1FBD00604CDD /* FBSDKCoreKit.framework in Frameworks */,
 				5F571F8D1D5C1FFE00604CDD /* GooglePlus.framework in Frameworks */,
 				5F8D87BC1D800F1D00FF4019 /* GoogleInterchangeUtilities.framework in Frameworks */,
@@ -788,6 +797,7 @@
 				5FF4B6F51D372BDE00CC6704 /* Home */,
 				5F635CA81D3DD3B9006AAE3D /* Left */,
 				5F5AE9721D54344700A5A8B7 /* Guide */,
+				5F907ABD1DD5A3E700DD9748 /* FacebookAd */,
 				5F42BFBC1D34E2F000B89651 /* Main.storyboard */,
 				5F42BFBF1D34E2F000B89651 /* Assets.xcassets */,
 				5F42BFC11D34E2F000B89651 /* LaunchScreen.storyboard */,
@@ -929,6 +939,8 @@
 		5F42C0B41D34ED6300B89651 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5F907ABB1DD59DC200DD9748 /* FBAudienceNetwork.framework */,
+				5F907AB91DD59D5B00DD9748 /* StoreKit.framework */,
 				5F17B4911DB861F5008EBD51 /* CoreData.framework */,
 				5F17B45E1DA8A5D6008EBD51 /* GoogleNetworkingUtilities.framework */,
 				5F17B45C1DA8A5CD008EBD51 /* GoogleAuthUtilities.framework */,
@@ -1210,6 +1222,15 @@
 				5F8D85A91D76A99700FF4019 /* WKWebViewJavascriptBridge.m */,
 			);
 			path = WebViewJavascriptBridge;
+			sourceTree = "<group>";
+		};
+		5F907ABD1DD5A3E700DD9748 /* FacebookAd */ = {
+			isa = PBXGroup;
+			children = (
+				5F907ABE1DD5A8F200DD9748 /* FacebookAdManager.h */,
+				5F907ABF1DD5A8F200DD9748 /* FacebookAdManager.m */,
+			);
+			name = FacebookAd;
 			sourceTree = "<group>";
 		};
 		5FF4B6E51D36432800CC6704 /* Login */ = {
@@ -1628,6 +1649,7 @@
 				5F42C0851D34E41D00B89651 /* SDWebImageCompat.m in Sources */,
 				5F42C08D1D34E41D00B89651 /* UIImage+MultiFormat.m in Sources */,
 				5F42BFF61D34E3D500B89651 /* AFNetworkReachabilityManager.m in Sources */,
+				5F907AC01DD5A8F200DD9748 /* FacebookAdManager.m in Sources */,
 				5FF4B7311D379B1B00CC6704 /* ImageModel.m in Sources */,
 				5F635ECF1D3F826D006AAE3D /* LoginViewController.m in Sources */,
 				5F635CB71D3E14F8006AAE3D /* BaseViewController.m in Sources */,
