@@ -1419,17 +1419,17 @@
 {
     _commentArray = commentArray;
     
-    __weak NewsDetailViewController *weakSelf = self;
     if (commentArray.count > 0) {
+        __weak NewsDetailViewController *weakSelf = self;
         [self.tableView addLegendFooterWithRefreshingBlock:^{
             [weakSelf tableViewDidTriggerFooterRefresh];
             [weakSelf.tableView.footer beginRefreshing];
         }];
-        [weakSelf.tableView.footer setTitle:@"" forState:MJRefreshFooterStateIdle];
-        [weakSelf.tableView.footer setTitle:@"Loading..." forState:MJRefreshFooterStateRefreshing];
-        [weakSelf.tableView.footer setTitle:@"No more comments" forState:MJRefreshFooterStateNoMoreData];
+        [self.tableView.footer setTitle:@"" forState:MJRefreshFooterStateIdle];
+        [self.tableView.footer setTitle:@"Loading..." forState:MJRefreshFooterStateRefreshing];
+        [self.tableView.footer setTitle:@"No more comments" forState:MJRefreshFooterStateNoMoreData];
     } else {
-        [weakSelf.tableView removeFooter];
+        [self.tableView removeFooter];
     }
 }
 

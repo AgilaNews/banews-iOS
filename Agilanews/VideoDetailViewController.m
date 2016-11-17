@@ -347,16 +347,29 @@
     [params setObject:@3 forKey:@"pn"];
     NSURLSessionDataTask *task = [[SSHttpRequest sharedInstance] get:kHomeUrl_VideoRecommend params:params contentType:UrlencodedType serverType:NetServer_V3 success:^(id responseObj) {
         [_recommentsView stopAnimation];
-        NSArray *array = responseObj[@"new"];
-        NSMutableArray *models = [NSMutableArray array];
+        NSArray *newArray = responseObj[@"new"];
+        NSMutableArray *newModels = [NSMutableArray array];
         @autoreleasepool {
-            for (NSDictionary *dic in array) {
+            for (NSDictionary *dic in newArray) {
                 CommentModel *model = [CommentModel mj_objectWithKeyValues:dic];
-                [models addObject:model];
+                [newModels addObject:model];
             }
         }
-        weakSelf.commentArray = [NSMutableArray arrayWithArray:models];
-        [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationFade];
+        weakSelf.commentArray = [NSMutableArray arrayWithArray:newModels];
+        NSArray *hotArray = responseObj[@"hot"];
+        NSMutableArray *hotModels = [NSMutableArray array];
+        @autoreleasepool {
+            for (NSDictionary *dic in hotArray) {
+                CommentModel *model = [CommentModel mj_objectWithKeyValues:dic];
+                [hotModels addObject:model];
+            }
+        }
+        weakSelf.hotCommentArray = [NSMutableArray arrayWithArray:hotModels];
+        if (weakSelf.hotCommentArray.count > 0) {
+            [weakSelf.tableView reloadData];
+        } else {
+            [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationFade];
+        }
     } failure:^(NSError *error) {
         [_recommentsView stopAnimation];
         _recommentsView.retryLabel.hidden = NO;
@@ -505,9 +518,19 @@
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setObject:_model.news_id forKey:@"news_id"];
     [params setObject:_commentTextView.textView.text forKey:@"comment_detail"];
+    if (_commentID) {
+        [params setObject:_commentID forKey:@"ref_id"];
+    }
     [[SSHttpRequest sharedInstance] post:kHomeUrl_Comment params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
         _commentTextView.sendButton.enabled = YES;
         CommentModel *model = [CommentModel mj_objectWithKeyValues:responseObj[@"comment"]];
+        for (CommentModel *commentModel in _commentArray) {
+            if (_commentID && [commentModel.commentID isEqualToNumber:_commentID]) {
+                model.reply = commentModel;
+                _commentID = nil;
+                break;
+            }
+        }
         if (model) {
             [weakSelf.commentArray insertObject:model atIndex:0];
             weakSelf.commentArray = weakSelf.commentArray;
@@ -654,6 +677,43 @@
 }
 
 /**
+ 评论点赞网络请求
+ 
+ @param button
+ */
+- (void)commentLike:(UIButton *)button
+{
+    //    __weak typeof(self) weakSelf = self;
+    if (button.selected == YES) {
+        return;
+    }
+    if ([button.superview.superview isKindOfClass:[CommentCell class]]) {
+        CommentCell *cell = (CommentCell *)button.superview.superview;
+        NSNumber *likeNum = [NSNumber numberWithInteger:cell.model.liked.integerValue + 1];
+        cell.model.liked = likeNum;
+        cell.model.device_liked = @1;
+        [button setTitle:[NSString stringWithFormat:@"%@",likeNum] forState:UIControlStateNormal];
+        button.selected = YES;
+        [cell setNeedsLayout];
+        NSMutableDictionary *params = [NSMutableDictionary dictionary];
+        [params setObject:cell.model.commentID forKey:@"comment_id"];
+        [[SSHttpRequest sharedInstance] post:kHomeUrl_CommentLike params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
+            NSNumber *likeNum = responseObj[@"liked"];
+            if (likeNum.integerValue > 0) {
+                cell.model.liked = likeNum;
+                cell.model.device_liked = @1;
+                [button setTitle:[NSString stringWithFormat:@"%@",likeNum] forState:UIControlStateNormal];
+                button.selected = YES;
+                [cell setNeedsLayout];
+            }
+        } failure:^(NSError *error) {
+            //        [button setTitle:[NSString stringWithFormat:@"%d",button.titleLabel.text.intValue - 1] forState:UIControlStateNormal];
+            //        weakSelf.likeButton.selected = NO;
+        } isShowHUD:NO];
+    }
+}
+
+/**
  播放结束打点
  */
 - (void)uploadOverPlayingVideo
@@ -769,8 +829,16 @@
 /**
  *  评论框点击事件
  */
-- (void)commentAction
+- (void)commentAction:(UITapGestureRecognizer *)tap
 {
+    if ([tap.view isKindOfClass:[UILabel class]]) {
+        CommentCell *cell = (CommentCell *)tap.view.superview.superview;
+        if ([cell isKindOfClass:[CommentCell class]]) {
+            _commentID = cell.model.commentID;
+        }
+    } else {
+        _commentID = nil;
+    }
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     if (appDelegate.model) {
         // 评论
@@ -1086,7 +1154,11 @@
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 3;
+    if (_hotCommentArray.count > 0){
+        return 4;
+    } else {
+        return 3;
+    }
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -1099,6 +1171,15 @@
                 return 1;
             }
         case 2:
+            if (_hotCommentArray.count > 0){
+                return _hotCommentArray.count + 1;
+            }
+            if (_commentArray.count > 0) {
+                return _commentArray.count + 1;
+            } else {
+                return 2;
+            }
+        case 3:
             if (_commentArray.count > 0) {
                 return _commentArray.count + 1;
             } else {
@@ -1210,14 +1291,53 @@
                     break;
                 default:
                 {
+                    if (_hotCommentArray.count > 0) {
+                        CommentModel *model = _hotCommentArray[indexPath.row - 1];
+                        CGSize commentLabelSize = [model.comment calculateSize:CGSizeMake(kScreenWidth - 55 - 11, 1000) font:[UIFont systemFontOfSize:15]];
+                        CommentModel *commentModel = model.reply;
+                        if (commentModel.comment) {
+                            NSString *replyString = [NSString stringWithFormat:@"@%@: %@",commentModel.user_name,commentModel.comment];
+                            CGSize replyLabelSize = [replyString calculateSize:CGSizeMake(kScreenWidth - 11 - 7 - 55, 1000) font:[UIFont systemFontOfSize:13]];
+                            return 10 + 5 + 16 + 12 + commentLabelSize.height + 5 + 12 + 9 + replyLabelSize.height + 10;
+                        }
+                        return 10 + 5 + 16 + 12 + commentLabelSize.height + 5 + 12 + 9;
+                    }
                     if (_commentArray.count > 0) {
                         CommentModel *model = _commentArray[indexPath.row - 1];
-                        CGSize commentLabelSize = [model.comment calculateSize:CGSizeMake(kScreenWidth - 55 - 11, 1000) font:[UIFont systemFontOfSize:14]];
-                        return 10 + 5 + 16 + 12 + commentLabelSize.height + 10;
+                        CGSize commentLabelSize = [model.comment calculateSize:CGSizeMake(kScreenWidth - 55 - 11, 1000) font:[UIFont systemFontOfSize:15]];
+                        CommentModel *commentModel = model.reply;
+                        if (commentModel.comment) {
+                            NSString *replyString = [NSString stringWithFormat:@"@%@: %@",commentModel.user_name,commentModel.comment];
+                            CGSize replyLabelSize = [replyString calculateSize:CGSizeMake(kScreenWidth - 11 - 7 - 55, 1000) font:[UIFont systemFontOfSize:13]];
+                            return 10 + 5 + 16 + 12 + commentLabelSize.height + 5 + 12 + 9 + replyLabelSize.height + 10;
+                        }
+                        return 10 + 5 + 16 + 12 + commentLabelSize.height + 5 + 12 + 9;
                     } else {
                         return 90;
                     }
+                }
+            }
+            break;
+        case 3:
+            switch (indexPath.row) {
+                case 0:
+                    return 30;
                     break;
+                default:
+                {
+                    if (_commentArray.count > 0) {
+                        CommentModel *model = _commentArray[indexPath.row - 1];
+                        CGSize commentLabelSize = [model.comment calculateSize:CGSizeMake(kScreenWidth - 55 - 11, 1000) font:[UIFont systemFontOfSize:15]];
+                        CommentModel *commentModel = model.reply;
+                        if (commentModel.comment) {
+                            NSString *replyString = [NSString stringWithFormat:@"@%@: %@",commentModel.user_name,commentModel.comment];
+                            CGSize replyLabelSize = [replyString calculateSize:CGSizeMake(kScreenWidth - 11 - 7 - 55, 1000) font:[UIFont systemFontOfSize:13]];
+                            return 10 + 5 + 16 + 12 + commentLabelSize.height + 5 + 12 + 9 + replyLabelSize.height + 10;
+                        }
+                        return 10 + 5 + 16 + 12 + commentLabelSize.height + 5 + 12 + 9;
+                    } else {
+                        return 90;
+                    }
                 }
             }
             break;
@@ -1352,6 +1472,81 @@
         case 2:
         {
             // 新闻评论
+            if (_hotCommentArray.count > 0) {
+                switch (indexPath.row) {
+                    case 0:
+                    {
+                        static NSString *cellID = @"HotCommentsCellID";
+                        cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+                        if (cell == nil) {
+                            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+                        }
+                        if (cell.contentView.subviews.count <= 0) {
+                            RecommendedView *recommendedView = [[RecommendedView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 30) titleImage:[UIImage imageNamed:@"icon_hotcomment"] titleText:@"Hot Comments" HaveLoading:NO];
+                            [cell.contentView addSubview:recommendedView];
+                        }
+                        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+                        return cell;
+                    }
+                    default:
+                    {
+                        // 评论cell
+                        static NSString *cellID = @"commentID";
+                        cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+                        if (cell == nil) {
+                            cell = [[CommentCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+                            [((CommentCell *)cell).likeButton addTarget:self action:@selector(commentLike:) forControlEvents:UIControlEventTouchUpInside];
+                            UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(commentAction:)];
+                            [((CommentCell *)cell).replyLabel addGestureRecognizer:tap];
+                        }
+                        if (_commentArray.count > 0) {
+                            [self.noCommentView removeFromSuperview];
+                        }
+                        ((CommentCell *)cell).model = _hotCommentArray[indexPath.row - 1];
+                        [cell setNeedsLayout];
+                        return cell;
+                    }
+                }
+            } else {
+                switch (indexPath.row) {
+                    case 0:
+                    {
+                        static NSString *cellID = @"commentsCellID";
+                        cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+                        if (cell == nil) {
+                            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+                        }
+                        if (cell.contentView.subviews.count <= 0) {
+                            RecommendedView *recommendedView = [[RecommendedView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 30) titleImage:[UIImage imageNamed:@"icon_newcomment"] titleText:@"New Comments" HaveLoading:NO];
+                            [cell.contentView addSubview:recommendedView];
+                        }
+                        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+                        return cell;
+                    }
+                    default:
+                    {
+                        // 评论cell
+                        static NSString *cellID = @"commentID";
+                        cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+                        if (cell == nil) {
+                            cell = [[CommentCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+                            [((CommentCell *)cell).likeButton addTarget:self action:@selector(commentLike:) forControlEvents:UIControlEventTouchUpInside];
+                            UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(commentAction:)];
+                            [((CommentCell *)cell).replyLabel addGestureRecognizer:tap];
+                        }
+                        if (_commentArray.count > 0) {
+                            [self.noCommentView removeFromSuperview];
+                            ((CommentCell *)cell).model = _commentArray[indexPath.row - 1];
+                        } else {
+                            [cell.contentView addSubview:self.noCommentView];
+                        }
+                        [cell setNeedsLayout];
+                        return cell;
+                    }
+                }
+            }
+        }
+        case 3:
             switch (indexPath.row) {
                 case 0:
                 {
@@ -1361,8 +1556,8 @@
                         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
                     }
                     if (cell.contentView.subviews.count <= 0) {
-                        _recommentsView = [[RecommendedView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 30) titleImage:[UIImage imageNamed:@"icon_article_comments_small"] titleText:@"Comments" HaveLoading:YES];
-                        [cell.contentView addSubview:_recommentsView];
+                        RecommendedView *recommendedView = [[RecommendedView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 30) titleImage:[UIImage imageNamed:@"icon_newcomment"] titleText:@"New Comments" HaveLoading:NO];
+                        [cell.contentView addSubview:recommendedView];
                     }
                     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
                     return cell;
@@ -1374,6 +1569,9 @@
                     cell = [tableView dequeueReusableCellWithIdentifier:cellID];
                     if (cell == nil) {
                         cell = [[CommentCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+                        [((CommentCell *)cell).likeButton addTarget:self action:@selector(commentLike:) forControlEvents:UIControlEventTouchUpInside];
+                        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(commentAction:)];
+                        [((CommentCell *)cell).replyLabel addGestureRecognizer:tap];
                     }
                     if (_commentArray.count > 0) {
                         [self.noCommentView removeFromSuperview];
@@ -1385,8 +1583,6 @@
                     return cell;
                 }
             }
-            break;
-        }
         default:
             break;
     }
@@ -1684,17 +1880,17 @@
 {
     _commentArray = commentArray;
     
-    __weak typeof(self) weakSelf = self;
     if (commentArray.count > 0) {
+        __weak typeof(self) weakSelf = self;
         [self.tableView addLegendFooterWithRefreshingBlock:^{
             [weakSelf tableViewDidTriggerFooterRefresh];
             [weakSelf.tableView.footer beginRefreshing];
         }];
-        [weakSelf.tableView.footer setTitle:@"" forState:MJRefreshFooterStateIdle];
-        [weakSelf.tableView.footer setTitle:@"Loading..." forState:MJRefreshFooterStateRefreshing];
-        [weakSelf.tableView.footer setTitle:@"No more comments" forState:MJRefreshFooterStateNoMoreData];
+        [self.tableView.footer setTitle:@"" forState:MJRefreshFooterStateIdle];
+        [self.tableView.footer setTitle:@"Loading..." forState:MJRefreshFooterStateRefreshing];
+        [self.tableView.footer setTitle:@"No more comments" forState:MJRefreshFooterStateNoMoreData];
     } else {
-        [weakSelf.tableView removeFooter];
+        [self.tableView removeFooter];
     }
 }
 
@@ -1711,7 +1907,7 @@
         CommentTextField *textField = [[CommentTextField alloc] initWithFrame:CGRectMake(11, 8, kScreenWidth - 22 - 19 * 3 - 24 * 3, 34)];
         [_commentsView addSubview:textField];
         UIView *view = [[UIView alloc] initWithFrame:textField.frame];
-        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(commentAction)];
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(commentAction:)];
         [view addGestureRecognizer:tap];
         [_commentsView addSubview:view];
         

@@ -32,7 +32,9 @@
 @property (nonatomic, assign) BOOL isRecommendShow;     // 推荐文章展示
 @property (nonatomic, strong) RecommendedView *recommendedView;
 @property (nonatomic, strong) NSMutableArray *commentArray; // 评论数组
+@property (nonatomic, strong) NSMutableArray *hotCommentArray;// 热评数组
 @property (nonatomic, strong) RecommendedView *recommentsView;
+@property (nonatomic, strong) NSNumber *commentID;
 @property (nonatomic, strong) UIView *noCommentView;        // 无评论视图
 @property (nonatomic, strong) NSString *collectID;          // 收藏新闻ID
 @property (nonatomic, assign) NSInteger pullupCount;    // 上拉加载次数

@@ -176,6 +176,12 @@
     }
 }
 
+- (void)dealloc
+{
+    [SVProgressHUD dismiss];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 #pragma mark - Network
 // 请求数据
 - (void)requestDataWithIsFooter:(BOOL)isFooter
@@ -533,7 +539,6 @@
             if (cell == nil) {
                 cell = [[OnlyVideoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
                 [cell.shareButton addTarget:self action:@selector(shareToFacebook:) forControlEvents:UIControlEventTouchUpInside];
-                cell.playButton.enabled = NO;
             }
             cell.model = model;
             [cell setNeedsLayout];
