@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
+@class FBNativeAd;
 @interface NewsModel : NSObject
 
 @property (nonatomic, strong) NSString *issuedID;   // 下发ID
@@ -25,6 +26,8 @@
 @property (nonatomic, strong) NSArray  *videos;     // 视频数组
 @property (nonatomic, strong) NSString *tag;        // 新闻标签
 @property (nonatomic, strong) NSNumber *views;      // 观看量
-@property (nonatomic, strong) NSNumber *channel_id;
+@property (nonatomic, strong) NSNumber *channel_id; // 频道id
+@property (nonatomic, strong) FBNativeAd *nativeAd; // facebook广告
+@property (nonatomic, strong) NSNumber *ad_id;      // 广告id
 
 @end

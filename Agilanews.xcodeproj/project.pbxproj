@@ -70,6 +70,7 @@
 		5F42C0BE1D34ED9700B89651 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F42C0BD1D34ED9700B89651 /* SystemConfiguration.framework */; };
 		5F42C0C01D34EFEE00B89651 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F42C0BF1D34EFEE00B89651 /* UIKit.framework */; };
 		5F4C40C11DDC78E8008C0657 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5F4C40C01DDC78E8008C0657 /* GoogleService-Info.plist */; };
+		5F500B421DDF1F9100E88198 /* FacebookAdCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F500B411DDF1F9100E88198 /* FacebookAdCell.m */; };
 		5F5342B41DBDF30E005D78F1 /* OnlyVideoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5342B31DBDF30E005D78F1 /* OnlyVideoCell.m */; };
 		5F5342B71DBF3CD8005D78F1 /* DetailPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5342B61DBF3CD8005D78F1 /* DetailPlayerViewController.m */; };
 		5F5342BA1DC21C7E005D78F1 /* VideoDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5342B91DC21C7E005D78F1 /* VideoDetailViewController.m */; };
@@ -358,6 +359,8 @@
 		5F42C0BD1D34ED9700B89651 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		5F42C0BF1D34EFEE00B89651 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		5F4C40C01DDC78E8008C0657 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		5F500B401DDF1F9100E88198 /* FacebookAdCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FacebookAdCell.h; sourceTree = "<group>"; };
+		5F500B411DDF1F9100E88198 /* FacebookAdCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FacebookAdCell.m; sourceTree = "<group>"; };
 		5F5342B21DBDF30E005D78F1 /* OnlyVideoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnlyVideoCell.h; sourceTree = "<group>"; };
 		5F5342B31DBDF30E005D78F1 /* OnlyVideoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnlyVideoCell.m; sourceTree = "<group>"; };
 		5F5342B51DBF3CD8005D78F1 /* DetailPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailPlayerViewController.h; sourceTree = "<group>"; };
@@ -1229,6 +1232,8 @@
 			children = (
 				5F907ABE1DD5A8F200DD9748 /* FacebookAdManager.h */,
 				5F907ABF1DD5A8F200DD9748 /* FacebookAdManager.m */,
+				5F500B401DDF1F9100E88198 /* FacebookAdCell.h */,
+				5F500B411DDF1F9100E88198 /* FacebookAdCell.m */,
 			);
 			name = FacebookAd;
 			sourceTree = "<group>";
@@ -1654,6 +1659,7 @@
 				5F635ECF1D3F826D006AAE3D /* LoginViewController.m in Sources */,
 				5F635CB71D3E14F8006AAE3D /* BaseViewController.m in Sources */,
 				5FF4B7701D37BD2C00CC6704 /* NSString+UhouAdditions.m in Sources */,
+				5F500B421DDF1F9100E88198 /* FacebookAdCell.m in Sources */,
 				5FF4B7D51D3A174900CC6704 /* MJRefreshLegendFooter.m in Sources */,
 				5F8E264E1D7428E100B48130 /* BigPicCell.m in Sources */,
 				5FF4B7731D37BD2C00CC6704 /* UIApplication+ActivityViewController.m in Sources */,

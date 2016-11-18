@@ -26,6 +26,7 @@
 #import "LoginViewController.h"
 #import "VideoDetailViewController.h"
 #import "PushTransitionAnimate.h"
+#import "FacebookAdCell.h"
 
 #define titleFont_Normal        [UIFont systemFontOfSize:16]
 #define titleFont_ExtraLarge    [UIFont systemFontOfSize:20]
@@ -276,6 +277,10 @@
         {
             return videoHeight + 42;
         }
+        case ADS_List:
+        {
+            
+        }
         default:
             return 50;
     }
@@ -403,11 +408,24 @@
             case NEWS_OnlyVideo:
             {
                 // 视频cell
-                static NSString *cellID = @"OnlyVideoCell";
+                static NSString *cellID = @"OnlyVideoCellID";
                 OnlyVideoCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
                 if (cell == nil) {
                     cell = [[OnlyVideoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
                     [cell.shareButton addTarget:self action:@selector(shareToFacebook:) forControlEvents:UIControlEventTouchUpInside];
+                }
+                cell.model = model;
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                [cell setNeedsLayout];
+                return cell;
+            }
+            case ADS_List:
+            {
+                // 广告cell
+                static NSString *cellID = @"FacebookAdCellID";
+                FacebookAdCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+                if (cell == nil) {
+                    cell = [[FacebookAdCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
                 }
                 cell.model = model;
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -726,7 +744,15 @@
                         }
                     }
                 }
-                [models addObject:model];
+                if ([model.tpl isEqualToNumber:@5000]) {
+                    FBNativeAd *nativeAd = [[FacebookAdManager sharedInstance] getFBNativeAdFromListADArray];
+                    if (nativeAd) {
+                        model.nativeAd = nativeAd;
+                        [models addObject:model];
+                    }
+                } else {
+                    [models addObject:model];
+                }
             }
         }
         if (showBanner) {
