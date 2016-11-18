@@ -8,10 +8,30 @@
 
 #import <Foundation/Foundation.h>
 
-@interface FacebookAdManager : NSObject <FBNativeAdsManagerDelegate>
+//@protocol FacebookAdManagerDelegate <NSObject>
+//- (void)facebookAdsLoadedWithManager:(FBNativeAdsManager *)manager;
+//@end
+typedef enum : NSUInteger {
+    ListAd,
+    DetailAd,
+} AdsType;
 
-@property (strong, nonatomic) FBNativeAdsManager *adsManager;
+@interface FacebookAdManager : NSObject <FBNativeAdDelegate>
 
-- (void)loadNativeAd;
+@property (nonatomic, assign) AdsType adsType;
+
+// 列表广告数组
+@property (atomic, strong) NSMutableArray *newadListArray;
+@property (atomic, strong) NSMutableArray *oldadListArray;
+
+// 详情广告数组
+@property (atomic, strong) NSMutableArray *newadDetailArray;
+@property (atomic, strong) NSMutableArray *oldadDetailArray;
+
++ (instancetype)sharedInstance;
+
+- (void)checkNewAdNumWithType:(AdsType)adsType;
+- (FBNativeAd *)getFBNativeAdFromListADArray;
+- (FBNativeAd *)getFBNativeAdFromDetailADArray;
 
 @end

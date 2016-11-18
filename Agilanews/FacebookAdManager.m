@@ -8,38 +8,185 @@
 
 #import "FacebookAdManager.h"
 
+#define kListPlacementID    @"YOUR_PLACEMENT_ID"
+#define kDetailPlacementID  @"YOUR_PLACEMENT_ID"
+
 @implementation FacebookAdManager
 
-- (void)loadNativeAd
+static FacebookAdManager *_manager = nil;
++ (instancetype)sharedInstance
 {
-    if (!self.adsManager) {
-        // Create a native ad manager with a unique placement ID (generate your own on the Facebook app settings)
-        // and how many ads you would like to create. Note that you may get fewer ads than you ask for.
-        // Use different ID for each ad placement in your app.
-        self.adsManager = [[FBNativeAdsManager alloc] initWithPlacementID:@"YOUR_PLACEMENT_ID"
-                                                        forNumAdsRequested:5];
-        // Set a delegate to get notified when the ads are loaded.
-        self.adsManager.delegate = self;
-        
-        // Configure native ad manager to wait to call nativeAdsLoaded until all ad assets are loaded
-        self.adsManager.mediaCachePolicy = FBNativeAdsCachePolicyAll;
-        
-        // When testing on a device, add its hashed ID to force test ads.
-        // The hash ID is printed to console when running on a device.
-        // [FBAdSettings addTestDevice:@"THE HASHED ID AS PRINTED TO CONSOLE"];
-    }
-    
-    // Load some ads
-    [self.adsManager loadAds];
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _manager = [[FacebookAdManager alloc] init];
+        _manager.newadListArray = [NSMutableArray array];
+        _manager.oldadListArray = [NSMutableArray array];
+        _manager.newadDetailArray = [NSMutableArray array];
+        _manager.oldadDetailArray = [NSMutableArray array];
+    });
+    return _manager;
 }
 
-#pragma mark - FBNativeAdsManagerDelegate implementation
-- (void)nativeAdsLoaded
+- (void)loadNativeAdWithPlacementID:(NSString *)placementID
 {
-    NSLog(@"%@",self.adsManager);
-}
-- (void)nativeAdsFailedToLoadWithError:(NSError *)error
-{
+    // Create a native ad request with a unique placement ID (generate your own on the Facebook app settings).
+    // Use different ID for each ad placement in your app.
+    FBNativeAd *nativeAd = [[FBNativeAd alloc] initWithPlacementID:placementID];
     
+    // Set a delegate to get notified when the ad was loaded.
+    nativeAd.delegate = self;
+    
+    // Configure native ad to wait to call nativeAdDidLoad: until all ad assets are loaded
+    nativeAd.mediaCachePolicy = FBNativeAdsCachePolicyCoverImage;
+    
+    // When testing on a device, add its hashed ID to force test ads.
+    // The hash ID is printed to console when running on a device.
+    // [FBAdSettings addTestDevice:@"THE HASHED ID AS PRINTED TO CONSOLE"];
+    
+    // Initiate a request to load an ad.
+    [nativeAd loadAd];
 }
+
+// 检查新广告数组是否足够，不够自动填充
+- (void)checkNewAdNumWithType:(AdsType)adsType
+{
+    if (adsType == ListAd) {
+        if (self.newadListArray.count < 3) {
+            [self loadNativeAdWithPlacementID:kListPlacementID];
+        }
+    } else {
+        if (self.newadDetailArray.count < 3) {
+            [self loadNativeAdWithPlacementID:kDetailPlacementID];
+        }
+    }
+}
+
+#pragma mark - FBNativeAdDelegate
+- (void)nativeAdDidLoad:(FBNativeAd *)nativeAd
+{
+    if ([nativeAd.placementID isEqualToString:kListPlacementID]) {
+        // 列表广告
+        if (!self.newadListArray) {
+            self.newadListArray = [NSMutableArray array];
+        }
+        NSMutableArray *adArray = [self.newadListArray copy];
+        BOOL isHaveAd = NO;
+        for (FBNativeAd *ad in adArray) {
+            if ([ad.coverImage.url.absoluteString isEqualToString:nativeAd.coverImage.url.absoluteString]) {
+                isHaveAd = YES;
+            }
+        }
+        if (!isHaveAd) {
+            [self.newadListArray addObject:nativeAd];
+        }
+    } else {
+        // 详情广告
+        if (!self.newadDetailArray) {
+            self.newadDetailArray = [NSMutableArray array];
+        }
+        NSMutableArray *adArray = [self.newadDetailArray copy];
+        BOOL isHaveAd = NO;
+        for (FBNativeAd *ad in adArray) {
+            if ([ad.coverImage.url.absoluteString isEqualToString:nativeAd.coverImage.url.absoluteString]) {
+                isHaveAd = YES;
+            }
+        }
+        if (!isHaveAd) {
+            [self.newadDetailArray addObject:nativeAd];
+        }
+    }
+}
+
+- (void)nativeAd:(FBNativeAd *)nativeAd didFailWithError:(NSError *)error
+{
+    SSLog(@"Native ad failed to load with error: %@", error);
+}
+
+
+/**
+ 获取列表广告
+
+ @return 返回广告
+ */
+- (FBNativeAd *)getFBNativeAdFromListADArray
+{
+    if (self.newadListArray && self.newadListArray.count > 0) {
+        // 取新广告
+        FBNativeAd *nativeAd = [[FBNativeAd alloc] init];
+        nativeAd = self.newadListArray.firstObject;
+        if (!self.oldadListArray) {
+            self.oldadListArray = [NSMutableArray array];
+        }
+        NSMutableArray *adArray = [self.oldadListArray copy];
+        BOOL isHaveAd = NO;
+        for (FBNativeAd *ad in adArray) {
+            if ([ad.coverImage.url.absoluteString isEqualToString:nativeAd.coverImage.url.absoluteString]) {
+                isHaveAd = YES;
+            }
+        }
+        if (!isHaveAd) {
+            if (self.oldadListArray.count >= 10) {
+                [self.oldadListArray removeObjectAtIndex:0];
+            }
+            [self.oldadListArray addObject:nativeAd];
+        }
+        [self.newadListArray removeObjectAtIndex:0];
+        // 检查新广告
+        [self checkNewAdNumWithType:ListAd];
+        return nativeAd;
+    } else if (self.oldadListArray && self.oldadListArray.count > 0) {
+        // 取旧广告
+        FBNativeAd *nativeAd = [[FBNativeAd alloc] init];
+        nativeAd = self.oldadListArray.firstObject;
+        [self.oldadListArray removeObjectAtIndex:0];
+        [self.oldadListArray addObject:nativeAd];
+        return nativeAd;
+    }
+    return nil;
+}
+
+/**
+ 获取详情广告
+ 
+ @return 返回广告
+ */
+- (FBNativeAd *)getFBNativeAdFromDetailADArray
+{
+    if (self.newadDetailArray && self.newadDetailArray.count > 0) {
+        // 取新广告
+        FBNativeAd *nativeAd = [[FBNativeAd alloc] init];
+        nativeAd = self.newadDetailArray.firstObject;
+        if (!self.oldadDetailArray) {
+            self.oldadDetailArray = [NSMutableArray array];
+        }
+        NSMutableArray *adArray = [self.oldadDetailArray copy];
+        BOOL isHaveAd = NO;
+        for (FBNativeAd *ad in adArray) {
+            if ([ad.coverImage.url.absoluteString isEqualToString:nativeAd.coverImage.url.absoluteString]) {
+                isHaveAd = YES;
+            }
+        }
+        if (!isHaveAd) {
+            if (self.oldadDetailArray.count >= 10) {
+                [self.oldadDetailArray removeObjectAtIndex:0];
+            }
+            [self.oldadDetailArray addObject:nativeAd];
+        }
+        [self.newadDetailArray removeObjectAtIndex:0];
+        // 检查新广告
+        [self checkNewAdNumWithType:DetailAd];
+        return nativeAd;
+    } else if (self.oldadDetailArray && self.oldadDetailArray.count > 0) {
+        // 取旧广告
+        FBNativeAd *nativeAd = [[FBNativeAd alloc] init];
+        nativeAd = self.oldadDetailArray.firstObject;
+        [self.oldadDetailArray removeObjectAtIndex:0];
+        [self.oldadDetailArray addObject:nativeAd];
+        return nativeAd;
+    }
+    return nil;
+}
+
+
+
 @end
