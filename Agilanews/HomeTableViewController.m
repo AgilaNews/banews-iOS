@@ -477,6 +477,10 @@
         [eventDic setObject:@"" forKey:@"lng"];
         [eventDic setObject:@"" forKey:@"lat"];
     }
+    NSString *abflag = DEF_PERSISTENT_GET_OBJECT(@"abflag");
+    if (abflag && abflag.length > 0) {
+        [eventDic setObject:abflag forKey:@"abflag"];
+    }
     NSDictionary *sessionDic = [NSDictionary dictionaryWithObjectsAndKeys:
                                 DEF_PERSISTENT_GET_OBJECT(@"UUID"), @"id",
                                 [NSArray arrayWithObject:eventDic], @"events",
@@ -612,6 +616,10 @@
                 [eventDic setObject:@"" forKey:@"lng"];
                 [eventDic setObject:@"" forKey:@"lat"];
             }
+            NSString *abflag = DEF_PERSISTENT_GET_OBJECT(@"abflag");
+            if (abflag && abflag.length > 0) {
+                [eventDic setObject:abflag forKey:@"abflag"];
+            }
             [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
             AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
             [appDelegate.eventArray addObject:eventDic];
@@ -657,6 +665,10 @@
         [eventDic setObject:@"" forKey:@"lng"];
         [eventDic setObject:@"" forKey:@"lat"];
     }
+    NSString *abflag = DEF_PERSISTENT_GET_OBJECT(@"abflag");
+    if (abflag && abflag.length > 0) {
+        [eventDic setObject:abflag forKey:@"abflag"];
+    }
     [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     [appDelegate.eventArray addObject:eventDic];
@@ -686,11 +698,19 @@
     [[SSHttpRequest sharedInstance] get:kHomeUrl_NewsList params:params contentType:UrlencodedType serverType:type success:^(id responseObj) {
         [SVProgressHUD dismiss];
         NSMutableArray *models = [NSMutableArray array];
-        for (NSDictionary *dic in [responseObj valueForKey:[responseObj allKeys].firstObject])
+        NSNumber *has_ad = responseObj[@"has_ad"];
+        if (has_ad && [has_ad isEqualToNumber:@1]) {
+            [[FacebookAdManager sharedInstance] checkNewAdNumWithType:ListAd];
+        }
+        NSString *abflag = responseObj[@"abflag"];
+        if (abflag && abflag.length > 0) {
+            DEF_PERSISTENT_SET_OBJECT(@"abflag", abflag);
+        }
+        for (NSDictionary *dic in responseObj[@"news"])
         {
             @autoreleasepool {
                 NewsModel *model = [NewsModel mj_objectWithKeyValues:dic];
-                model.issuedID = [responseObj allKeys].firstObject;
+                model.issuedID = responseObj[@"dispatch_id"];
                 if (later == YES) {
                     model.public_time = [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]];
                 } else {

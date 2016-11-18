@@ -31,7 +31,8 @@ MJCodingImplementation
              @"share_url":@"share_url",
              @"videos":@"VideoModel",
              @"tag":@"tag",
-             @"views":@"views"
+             @"views":@"views",
+             @"channel_id":@"channel_id"
              };
 }
 

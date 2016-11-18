@@ -256,6 +256,10 @@
         [eventDic setObject:@"" forKey:@"lng"];
         [eventDic setObject:@"" forKey:@"lat"];
     }
+    NSString *abflag = DEF_PERSISTENT_GET_OBJECT(@"abflag");
+    if (abflag && abflag.length > 0) {
+        [eventDic setObject:abflag forKey:@"abflag"];
+    }
     [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     [appDelegate.eventArray addObject:eventDic];
@@ -1135,6 +1139,10 @@
                     [eventDic setObject:@"" forKey:@"lng"];
                     [eventDic setObject:@"" forKey:@"lat"];
                 }
+                NSString *abflag = DEF_PERSISTENT_GET_OBJECT(@"abflag");
+                if (abflag && abflag.length > 0) {
+                    [eventDic setObject:abflag forKey:@"abflag"];
+                }
                 NSDictionary *sessionDic = [NSDictionary dictionaryWithObjectsAndKeys:
                                             DEF_PERSISTENT_GET_OBJECT(@"UUID"), @"id",
                                             [NSArray arrayWithObject:eventDic], @"events",
@@ -1492,6 +1500,10 @@
             } else {
                 [eventDic setObject:@"" forKey:@"lng"];
                 [eventDic setObject:@"" forKey:@"lat"];
+            }
+            NSString *abflag = DEF_PERSISTENT_GET_OBJECT(@"abflag");
+            if (abflag && abflag.length > 0) {
+                [eventDic setObject:abflag forKey:@"abflag"];
             }
             NSDictionary *sessionDic = [NSDictionary dictionaryWithObjectsAndKeys:
                                         DEF_PERSISTENT_GET_OBJECT(@"UUID"), @"id",
