@@ -520,6 +520,23 @@
     }
 }
 
+- (void)setEditing:(BOOL)editing animated:(BOOL)animated
+{
+    [super setEditing:editing animated:animated];
+    if (editing) {
+        self.playButton.enabled = NO;
+    } else {
+        self.playButton.enabled = YES;
+    }
+}
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated
+{
+    [super setSelected:selected animated:animated];
+    self.titleLabel.backgroundColor = [UIColor clearColor];
+    self.durationLabel.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.4];
+}
+
 - (YTPlayerView *)playerView
 {
     if (_playerView == nil) {
@@ -731,12 +748,6 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
-}
-
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
 }
 
 @end
