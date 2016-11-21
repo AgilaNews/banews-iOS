@@ -279,7 +279,7 @@
         }
         case ADS_List:
         {
-            
+            return 12 + 68 + 12;
         }
         default:
             return 50;

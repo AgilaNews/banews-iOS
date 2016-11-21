@@ -8,8 +8,13 @@
 
 #import "FacebookAdManager.h"
 
-#define kListPlacementID    @"YOUR_PLACEMENT_ID"
+#if DEBUG
+#define kListPlacementID    @"1188655531159250_1397507120274089"
 #define kDetailPlacementID  @"YOUR_PLACEMENT_ID"
+#else
+#define kListPlacementID    @"1188655531159250_1397507120274089"
+#define kDetailPlacementID  @"1188655531159250_1397507606940707"
+#endif
 
 @implementation FacebookAdManager
 
@@ -41,7 +46,7 @@ static FacebookAdManager *_manager = nil;
     
     // When testing on a device, add its hashed ID to force test ads.
     // The hash ID is printed to console when running on a device.
-    // [FBAdSettings addTestDevice:@"THE HASHED ID AS PRINTED TO CONSOLE"];
+    [FBAdSettings addTestDevice:@"e94e40bf9ef497a17ada25682e65ef02d18e23ae"];
     
     // Initiate a request to load an ad.
     [nativeAd loadAd];
@@ -50,14 +55,32 @@ static FacebookAdManager *_manager = nil;
 // 检查新广告数组是否足够，不够自动填充
 - (void)checkNewAdNumWithType:(AdsType)adsType
 {
-    if (adsType == ListAd) {
-        if (self.newadListArray.count < 3) {
-            [self loadNativeAdWithPlacementID:kListPlacementID];
+    switch (adsType) {
+        case ListAd:
+        {
+            if (self.newadListArray.count < 3) {
+                [self loadNativeAdWithPlacementID:kListPlacementID];
+            }
+            break;
         }
-    } else {
-        if (self.newadDetailArray.count < 3) {
-            [self loadNativeAdWithPlacementID:kDetailPlacementID];
+        case DetailAd:
+        {
+            if (self.newadDetailArray.count < 3) {
+                [self loadNativeAdWithPlacementID:kDetailPlacementID];
+            }
+            break;
         }
+        case AllAd:
+        {
+            if (self.newadListArray.count < 3) {
+                [self loadNativeAdWithPlacementID:kListPlacementID];
+            }
+            if (self.newadDetailArray.count < 3) {
+                [self loadNativeAdWithPlacementID:kDetailPlacementID];
+            }
+        }
+        default:
+            break;
     }
 }
 
@@ -99,7 +122,7 @@ static FacebookAdManager *_manager = nil;
 
 - (void)nativeAd:(FBNativeAd *)nativeAd didFailWithError:(NSError *)error
 {
-    SSLog(@"Native ad failed to load with error: %@", error);
+    SSLog(@"广告加载失败: %@", error);
 }
 
 
@@ -140,6 +163,8 @@ static FacebookAdManager *_manager = nil;
         nativeAd = self.oldadListArray.firstObject;
         [self.oldadListArray removeObjectAtIndex:0];
         [self.oldadListArray addObject:nativeAd];
+        // 检查新广告
+        [self checkNewAdNumWithType:ListAd];
         return nativeAd;
     }
     return nil;
@@ -182,6 +207,8 @@ static FacebookAdManager *_manager = nil;
         nativeAd = self.oldadDetailArray.firstObject;
         [self.oldadDetailArray removeObjectAtIndex:0];
         [self.oldadDetailArray addObject:nativeAd];
+        // 检查新广告
+        [self checkNewAdNumWithType:DetailAd];
         return nativeAd;
     }
     return nil;

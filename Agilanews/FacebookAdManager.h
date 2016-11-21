@@ -14,6 +14,7 @@
 typedef enum : NSUInteger {
     ListAd,
     DetailAd,
+    AllAd,
 } AdsType;
 
 @interface FacebookAdManager : NSObject <FBNativeAdDelegate>

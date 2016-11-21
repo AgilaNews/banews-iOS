@@ -107,9 +107,21 @@
             if (homeTabVC.dataList.count > 0) {
                 NSInteger length = 30;
                 if (homeTabVC.dataList.count > length) {
-                    [newsDic setObject:[NSMutableArray arrayWithArray:[homeTabVC.dataList subarrayWithRange:NSMakeRange(0, length)]] forKey:homeTabVC.model.channelID];
+                    NSMutableArray *listArray = [NSMutableArray arrayWithArray:[homeTabVC.dataList subarrayWithRange:NSMakeRange(0, length)]];
+                    for (NewsModel *model in listArray) {
+                        if (model && [model isKindOfClass:[NewsModel class]] && model.nativeAd) {
+                            model.nativeAd = nil;
+                        }
+                    }
+                    [newsDic setObject:listArray forKey:homeTabVC.model.channelID];
                 } else {
-                    [newsDic setObject:[NSMutableArray arrayWithArray:homeTabVC.dataList] forKey:homeTabVC.model.channelID];
+                    NSMutableArray *listArray = [NSMutableArray arrayWithArray:homeTabVC.dataList];
+                    for (NewsModel *model in listArray) {
+                        if (model && [model isKindOfClass:[NewsModel class]] && model.nativeAd) {
+                            model.nativeAd = nil;
+                        }
+                    }
+                    [newsDic setObject:listArray forKey:homeTabVC.model.channelID];
                 }
                 // 记录列表页滚动位置
                 [scrollDic setObject:[NSNumber numberWithFloat:homeTabVC.tableView.contentOffset.y] forKey:homeTabVC.model.channelID];
@@ -303,6 +315,9 @@
     } failure:^(NSError *error) {
         
     } isShowHUD:NO];
+    
+    // 检查是否有新广告
+    [[FacebookAdManager sharedInstance] checkNewAdNumWithType:AllAd];
 }
 
 #pragma mark - 请求下发频道
@@ -889,9 +904,21 @@
             if (homeTabVC.dataList.count > 0) {
                 NSInteger length = 30;
                 if (homeTabVC.dataList.count > length) {
-                    [newsDic setObject:[NSMutableArray arrayWithArray:[homeTabVC.dataList subarrayWithRange:NSMakeRange(0, length)]] forKey:homeTabVC.model.channelID];
+                    NSMutableArray *listArray = [NSMutableArray arrayWithArray:[homeTabVC.dataList subarrayWithRange:NSMakeRange(0, length)]];
+                    for (NewsModel *model in [listArray copy]) {
+                        if (model && [model isKindOfClass:[NewsModel class]] && model.nativeAd) {
+                            [listArray removeObject:model];
+                        }
+                    }
+                    [newsDic setObject:listArray forKey:homeTabVC.model.channelID];
                 } else {
-                    [newsDic setObject:[NSMutableArray arrayWithArray:homeTabVC.dataList] forKey:homeTabVC.model.channelID];
+                    NSMutableArray *listArray = [NSMutableArray arrayWithArray:homeTabVC.dataList];
+                    for (NewsModel *model in [listArray copy]) {
+                        if (model && [model isKindOfClass:[NewsModel class]] && model.nativeAd) {
+                            [listArray removeObject:model];
+                        }
+                    }
+                    [newsDic setObject:listArray forKey:homeTabVC.model.channelID];
                 }
             }
         }
