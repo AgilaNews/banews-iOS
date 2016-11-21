@@ -590,7 +590,7 @@
 - (void)pushEnterWithUserInfo:(NSDictionary *)userInfo
 {
     // 消除小红点
-    UILocalNotification *notification=[[UILocalNotification alloc]init];
+    UILocalNotification *notification = [[UILocalNotification alloc] init];
     notification.applicationIconBadgeNumber = -1;
     [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
     // 服务器打点-用户从推送点击详情页-020105
@@ -626,6 +626,9 @@
     
     NewsModel *model = [[NewsModel alloc] init];
     model.news_id = userInfo[@"news_id"];
+    if (model.news_id == nil) {
+        return;
+    }
     NSNumber *tpl = userInfo[@"tpl"];
     if (tpl && (tpl.integerValue == NEWS_OnlyVideo || tpl.integerValue == NEWS_HotVideo)) {
         VideoDetailViewController *videoDetailVC = [[VideoDetailViewController alloc] init];
