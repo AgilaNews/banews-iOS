@@ -628,17 +628,6 @@
     model.news_id = userInfo[@"news_id"];
     NSNumber *tpl = userInfo[@"tpl"];
     if (tpl && (tpl.integerValue == NEWS_OnlyVideo || tpl.integerValue == NEWS_HotVideo)) {
-        // 打点-点击视频列表-010131
-        NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
-                                       [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
-                                       @"Video", @"channel",
-                                       [NetType getNetType], @"network",
-                                       nil];
-        [Flurry logEvent:@"Home_Videolist_Click" withParameters:articleParams];
-#if DEBUG
-        [iConsole info:[NSString stringWithFormat:@"Home_Videolist_Click:%@",articleParams],nil];
-#endif
-        [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_PausedVideo object:model.news_id];
         VideoDetailViewController *videoDetailVC = [[VideoDetailViewController alloc] init];
         videoDetailVC.model = model;
         videoDetailVC.isPushEnter = YES;
