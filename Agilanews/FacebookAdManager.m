@@ -72,6 +72,10 @@ static FacebookAdManager *_manager = nil;
         }
         case AllAd:
         {
+            if (self.newadListArray.count < 2 && self.newadDetailArray.count < 2) {
+                [self loadNativeAdWithPlacementID:kListPlacementID];
+                [self loadNativeAdWithPlacementID:kDetailPlacementID];
+            }
             if (self.newadListArray.count < 3) {
                 [self loadNativeAdWithPlacementID:kListPlacementID];
             }
