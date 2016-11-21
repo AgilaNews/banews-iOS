@@ -263,6 +263,12 @@
     [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     [appDelegate.eventArray addObject:eventDic];
+    
+    // 检查是否有新通知
+    NSInteger num = arc4random() % 10;
+    if (num / 2 == 0) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_CheckNewNotif object:nil];
+    }
 }
 
 #pragma mark - Network

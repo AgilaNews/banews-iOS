@@ -50,12 +50,38 @@ static CGFloat const ButtonHeight = 40;
     self.navigationItem.titleView = _titleButton;
     
     // 注册通知
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addSegment:) name:KNOTIFICATION_Categories object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refresh_success) name:KNOTIFICATION_Refresh_Success object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(findNewChannel) name:KNOTIFICATION_FindNewChannel object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cleanNewChannel) name:KNOTIFICATION_CleanNewChannel object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(findNewNotif) name:KNOTIFICATION_FindNewNotif object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cleanNewNotif) name:KNOTIFICATION_CleanNewNotif object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(addSegment:)
+                                                 name:KNOTIFICATION_Categories
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(refresh_success)
+                                                 name:KNOTIFICATION_Refresh_Success
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(findNewChannel)
+                                                 name:KNOTIFICATION_FindNewChannel
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(cleanNewChannel)
+                                                 name:KNOTIFICATION_CleanNewChannel
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(findNewNotif)
+                                                 name:KNOTIFICATION_FindNewNotif
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(cleanNewNotif)
+                                                 name:KNOTIFICATION_CleanNewNotif
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(checkNewNotif)
+                                                 name:KNOTIFICATION_Secect_Channel
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(checkNewNotif)
+                                                 name:KNOTIFICATION_CheckNewNotif
+                                               object:nil];
     
     // 添加分段控制器
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
@@ -297,6 +323,35 @@ static CGFloat const ButtonHeight = 40;
     [_redPoint removeFromSuperview];
 }
 
+/**
+ 检查是否有新通知
+ */
+- (void)checkNewNotif
+{
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    if (appDelegate.model == nil) {
+        return;
+    }
+    
+    __weak typeof(self) weakSelf = self;
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    NSNumber *last_id = DEF_PERSISTENT_GET_OBJECT(kLastNotifID);
+    if (last_id == nil) {
+        last_id = @0;
+    }
+    [params setObject:last_id forKey:@"latest_id"];
+    [[SSHttpRequest sharedInstance] get:kHomeUrl_NotifCheck params:params contentType:UrlencodedType serverType:NetServer_Home success:^(id responseObj) {
+        NSString *status = responseObj[@"status"];
+        if (status && [status isEqualToString:@"1"]) {
+            // 有新通知
+            DEF_PERSISTENT_SET_OBJECT(kHaveNewNotif, @1);
+            [weakSelf addRedPoint];
+        }
+    } failure:^(NSError *error) {
+        
+    } isShowHUD:NO];
+}
+
 // 添加小红点
 - (void)addRedPoint
 {
@@ -306,7 +361,6 @@ static CGFloat const ButtonHeight = 40;
     _redPoint.layer.masksToBounds = YES;
     [_leftButton addSubview:_redPoint];
 }
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

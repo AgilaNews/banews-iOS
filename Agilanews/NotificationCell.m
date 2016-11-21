@@ -126,7 +126,11 @@
     }];
     [super updateConstraints];
     
-    [self.avatarView sd_setImageWithURL:[NSURL URLWithString:_model.user_portrait_url] placeholderImage:[UIImage imageNamed:@"icon_comment_head"] options:SDWebImageRetryFailed completed:nil];
+    if ([_model.type isEqualToNumber:@3]) {
+        self.avatarView.image = [UIImage imageNamed:@"icon_system_head"];
+    } else {
+        [self.avatarView sd_setImageWithURL:[NSURL URLWithString:_model.user_portrait_url] placeholderImage:[UIImage imageNamed:@"icon_comment_head"] options:SDWebImageRetryFailed completed:nil];
+    }
     self.nameLabel.text = _model.user_name;
     self.contentLabel.text = _model.comment;
     self.timeLabel.text = time;
@@ -145,7 +149,11 @@
         self.replyContentLabel.textColor = SSColor_RGB(204);
     } else {
         self.avatarView.alpha = 1;
-        self.nameLabel.textColor = SSColor_RGB(102);
+        if ([_model.type isEqualToNumber:@3]) {
+            self.nameLabel.textColor = kOrangeColor;
+        } else {
+            self.nameLabel.textColor = SSColor_RGB(102);
+        }
         self.contentLabel.textColor = kBlackColor;
         self.timeLabel.textColor = kGrayColor;
         self.replyContentLabel.textColor = kGrayColor;

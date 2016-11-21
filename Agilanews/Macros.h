@@ -59,6 +59,7 @@
 
 #define kHaveNewChannel @"HaveNewChannel"
 #define kHaveNewNotif   @"HaveNewNotif"
+#define kLastNotifID    @"kLastNotifID"
 
 
 #define SS_LATITUDE     @"latitude"              // 纬度
@@ -102,6 +103,7 @@
 #define KNOTIFICATION_PausedVideo     @"KNOTIFICATION_PausedVideo"    // 暂停视频
 #define KNOTIFICATION_FindNewNotif    @"KNOTIFICATION_FindNewNotif"   // 发现新频道通知
 #define KNOTIFICATION_CleanNewNotif   @"KNOTIFICATION_CleanNewNotif"  // 删除新频道通知
+#define KNOTIFICATION_CheckNewNotif   @"KNOTIFICATION_CheckNewNotif"  // 检查新频道通知
 
 
 

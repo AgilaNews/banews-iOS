@@ -71,6 +71,10 @@ typedef enum {
 #define kHomeUrl_Notification     @"/notification"
 // 通知详情接口
 #define kHomeUrl_NotifDetail      @"/notification/related"
+// 检查通知接口
+#define kHomeUrl_NotifCheck       @"/notification/check"
+// 阅读通知接口
+#define kHomeUrl_NotifRead        @"/notification/read"
 
 
 

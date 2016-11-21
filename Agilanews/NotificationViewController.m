@@ -203,6 +203,9 @@
     NotificationModel *model = _dataList[indexPath.row];
     model.status = @1;
     if ([model.type isEqualToNumber:@3] && model.news_id) {
+        NSMutableDictionary *params = [NSMutableDictionary dictionary];
+        [params setObject:model.notify_id forKey:@"notification_id"];
+        [[SSHttpRequest sharedInstance] get:kHomeUrl_NotifRead params:params contentType:JsonType serverType:NetServer_Home success:nil failure:nil isShowHUD:NO];
         NewsModel *newsModel = [[NewsModel alloc] init];
         newsModel.news_id = model.news_id;
         if (model.tpl.integerValue == NEWS_HotVideo || model.tpl.integerValue == NEWS_OnlyVideo) {
@@ -257,6 +260,8 @@
 - (void)setDataList:(NSMutableArray *)dataList
 {
     _dataList = dataList;
+    NotificationModel *model = dataList.firstObject;
+    DEF_PERSISTENT_SET_OBJECT(kLastNotifID, model.notify_id);
 
     __weak typeof(self) weakSelf = self;
     [self.tableView addLegendFooterWithRefreshingBlock:^{
