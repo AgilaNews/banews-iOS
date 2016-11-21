@@ -18,6 +18,7 @@
 #import "LoginViewController.h"
 #import "NewsDetailViewController.h"
 #import "VideoDetailViewController.h"
+#import "PushTransitionAnimate.h"
 
 #define titleFont_Normal        [UIFont systemFontOfSize:16]
 #define titleFont_ExtraLarge    [UIFont systemFontOfSize:20]
@@ -66,6 +67,50 @@
                                              selector:@selector(keyboardWillHidden)
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(recoverVideo:)
+                                                 name:KNOTIFICATION_RecoverVideo
+                                               object:nil];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    if (IOS_VERSION_CODE <= 8) {
+        __weak typeof(self.navigationController.delegate) weakDelegate = self.navigationController.delegate;
+        if (weakDelegate != self) {
+            weakDelegate = self;
+        }
+    } else {
+        if (self.navigationController.delegate != self) {
+            self.navigationController.delegate = self;
+        }
+    }
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    if ([UIDevice currentDevice].systemVersion.floatValue >= 10.0) {
+        [self.navigationController.navigationBar setBarTintColor:kOrangeColor];
+        UIView *barBgView = self.navigationController.navigationBar.subviews.firstObject;
+        for (UIView *subview in barBgView.subviews) {
+            if([subview isKindOfClass:[UIVisualEffectView class]]) {
+                subview.backgroundColor = kOrangeColor;
+                [subview removeAllSubviews];
+            }
+        }
+    } else {
+        [self.navigationController.navigationBar lt_setBackgroundColor:kOrangeColor];
+    }
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    if (self.navigationController.delegate == self) {
+        self.navigationController.delegate = nil;
+    }
 }
 
 #pragma mark - Network
@@ -563,6 +608,7 @@
     SSLog(@"取消分享");
 }
 
+#pragma mark - Notification
 /**
  *  点击收藏/评论后登录成功
  */
@@ -585,6 +631,44 @@
                                                 delegate:self];
             });
         }
+    }
+}
+
+/**
+ 视频从详情回位
+ */
+- (void)recoverVideo:(NSNotification *)notif
+{
+    NSDictionary *dic = notif.object;
+    YTPlayerView *playerView = dic[@"playerView"];
+    NSIndexPath *indexPath = dic[@"index"];
+    NSNumber *isPlay = dic[@"stop"];
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    if ([cell isKindOfClass:[OnlyVideoCell class]]) {
+        OnlyVideoCell *videoCell = (OnlyVideoCell *)cell;
+        [videoCell setNeedsLayout];
+        if (videoCell.isMove) {
+            NSNumber *duration = dic[@"duration"];
+            videoCell.playTimeCount += duration.longLongValue;
+            [videoCell.contentView addSubview:playerView];
+            [videoCell.contentView bringSubviewToFront:videoCell.titleImageView];
+            videoCell.isMove = NO;
+            if ([isPlay isEqualToNumber:@1]) {
+                videoCell.isPlay = NO;
+            }
+        }
+    }
+}
+
+#pragma mark - UINavigationControllerDelegate
+- (id<UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController animationControllerForOperation:(UINavigationControllerOperation)operation fromViewController:(UIViewController *)fromVC toViewController:(UIViewController *)toVC
+{
+    // && [_model.channelID isEqualToNumber:@30001]
+    if(operation == UINavigationControllerOperationPush) {
+        PushTransitionAnimate *pushTransition = [[PushTransitionAnimate alloc] init];
+        return pushTransition;
+    } else {
+        return nil;
     }
 }
 
