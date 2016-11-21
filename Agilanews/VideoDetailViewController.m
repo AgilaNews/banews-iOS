@@ -23,6 +23,7 @@
 #define titleFont_ExtraLarge    [UIFont systemFontOfSize:20]
 #define titleFont_Large         [UIFont systemFontOfSize:18]
 #define titleFont_Small         [UIFont systemFontOfSize:14]
+#define videoHeight 180 * kScreenWidth / 320.0
 
 @import SafariServices;
 @interface VideoDetailViewController ()
@@ -89,8 +90,17 @@
     UIPanGestureRecognizer *gestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
     [self.view addGestureRecognizer:gestureRecognizer];
     
-    [self.view addSubview:_playerView];
-    self.playerView.delegate = self;
+    if (_playerView) {
+        [self.view addSubview:_playerView];
+        self.playerView.delegate = self;
+    } else {
+        _playerView = [[YTPlayerView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, videoHeight)];
+        [self.view addSubview:_playerView];
+        self.playerView.delegate = self;
+        _holderView = [[UIView alloc] initWithFrame:_playerView.bounds];
+        _holderView.backgroundColor = [UIColor blackColor];
+        [self.playerView addSubview:_holderView];
+    }
     
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, _playerView.bottom, kScreenWidth, kScreenHeight - _playerView.bottom - 50) style:UITableViewStyleGrouped];
     _tableView.backgroundColor = kWhiteBgColor;
@@ -112,6 +122,19 @@
         // 详情网络请求
         [self requsetDetailWithNewsID:_model.news_id];
     });
+    
+    _playerVars = @{@"autohide" : @2,          // 参数设为1，则视频进度条和播放器控件将会在视频开始播放几秒钟后退出播放界面。
+                    // 仅在用户将鼠标移动到视频播放器上方或按键盘上的某个键时，进度条和控件才会重新显示。
+                    // 参数设为0，则视频进度条和视频播放器控件在视频播放全程和全屏状态下均会显示。
+                    @"iv_load_policy" : @3,    // 将此值设为1会在默认情况下显示视频注释，而将其设为3则默认不显示。
+                    @"playsinline" : @1,       // 以内嵌方式播放还是以全屏形式播放。  1:内嵌模式  0:全屏模式
+                    @"loop" : @1,              // 是否循环播放。  0:不循环  1:循环
+                    @"rel" : @0,               // 视频播放结束时，播放器是否应显示相关视频。  0:不显示  1:显示
+                    @"autoplay" : @1,          // 自动播放
+                    @"modestbranding" : @1,    // 将参数值设为1可以阻止YouTube徽标显示在控件栏中。
+                    @"origin" : @"http://www.youtube.com",
+                    //                        @"fs" : @0,                // 是否显示全屏按钮
+                    @"showinfo" : @0};         // 播放器是否显示视频标题和上传者等信息。  0:不显示  1:显示
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -140,7 +163,9 @@
     } else {
         [self.navigationController.navigationBar lt_setBackgroundColor:[UIColor clearColor]];
     }
-    
+    if (_isNoModel) {
+        return;
+    }
     // 判断播放器状态
     if (self.playerView.playerState == kYTPlayerStatePaused || self.playerView.playerState == kYTPlayerStateEnded) {
         if (self.playerView.playerState == kYTPlayerStatePaused) {
@@ -148,18 +173,6 @@
         }
         [self.playerView playVideo];
     } else if (self.playerView.playerState != kYTPlayerStatePlaying) {
-        _playerVars = @{@"autohide" : @2,          // 参数设为1，则视频进度条和播放器控件将会在视频开始播放几秒钟后退出播放界面。
-                                                   // 仅在用户将鼠标移动到视频播放器上方或按键盘上的某个键时，进度条和控件才会重新显示。
-                                                   // 参数设为0，则视频进度条和视频播放器控件在视频播放全程和全屏状态下均会显示。
-                        @"iv_load_policy" : @3,    // 将此值设为1会在默认情况下显示视频注释，而将其设为3则默认不显示。
-                        @"playsinline" : @1,       // 以内嵌方式播放还是以全屏形式播放。  1:内嵌模式  0:全屏模式
-                        @"loop" : @1,              // 是否循环播放。  0:不循环  1:循环
-                        @"rel" : @0,               // 视频播放结束时，播放器是否应显示相关视频。  0:不显示  1:显示
-                        @"autoplay" : @1,          // 自动播放
-                        @"modestbranding" : @1,    // 将参数值设为1可以阻止YouTube徽标显示在控件栏中。
-                        @"origin" : @"http://www.youtube.com",
-//                        @"fs" : @0,                // 是否显示全屏按钮
-                        @"showinfo" : @0};         // 播放器是否显示视频标题和上传者等信息。  0:不显示  1:显示
         VideoModel *model = _model.videos.firstObject;
         [self.playerView loadWithVideoId:model.youtube_id playerVars:_playerVars];
         _holderView = [[UIView alloc] initWithFrame:_playerView.bounds];
@@ -207,6 +220,9 @@
         [self uploadOverPlayingVideo];
     } else {
         duration = [[NSDate date] timeIntervalSince1970] * 1000 - _playStartTime + _playTimeCount;
+    }
+    if (_isNoModel) {
+        return;
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_RecoverVideo
                                                         object:@{@"index":_indexPath,
@@ -393,6 +409,12 @@
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setObject:newsID forKey:@"news_id"];
     NSURLSessionDataTask *task = [[SSHttpRequest sharedInstance] get:kHomeUrl_NewsDetail params:params contentType:UrlencodedType serverType:NetServer_V3 success:^(id responseObj) {
+        if (_isNoModel) {
+            weakSelf.model = [NewsModel mj_objectWithKeyValues:responseObj];
+            [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+            VideoModel *model = weakSelf.model.videos.firstObject;
+            [weakSelf.playerView loadWithVideoId:model.youtube_id playerVars:_playerVars];
+        }
         weakSelf.detailModel = [NewsDetailModel mj_objectWithKeyValues:responseObj];
         if (![_detailModel.collect_id isEqualToString:@"0"]) {
             UIButton *button = [weakSelf.commentsView viewWithTag:301];

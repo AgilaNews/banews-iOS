@@ -22,5 +22,8 @@
 @property (nonatomic, strong) NSNumber *device_liked;       // 点赞状态
 @property (nonatomic, strong) NSNumber *notify_id;          // 通知ID
 @property (nonatomic, strong) NSNumber *status;             // 查看状态
+@property (nonatomic, strong) NSNumber *type;               // 通知类型
+@property (nonatomic, strong) NSString *news_id;            // 新闻ID
+@property (nonatomic, strong) NSNumber *tpl;                // 模板id
 
 @end

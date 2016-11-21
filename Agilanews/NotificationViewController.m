@@ -12,6 +12,9 @@
 #import "LoginViewController.h"
 #import "NotificationCell.h"
 #import "NotifDetailViewController.h"
+#import "NewsDetailViewController.h"
+#import "VideoDetailViewController.h"
+#import "PushTransitionAnimate.h"
 
 @interface NotificationViewController ()
 
@@ -22,12 +25,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
+    self.automaticallyAdjustsScrollViewInsets = NO;
     self.title = @"Notification";
     self.isBackButton = YES;
     self.view.backgroundColor = kWhiteBgColor;
     
-    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight) style:UITableViewStylePlain];
+    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, kScreenWidth, kScreenHeight - 64) style:UITableViewStylePlain];
     _tableView.backgroundColor = kWhiteBgColor;
     _tableView.dataSource = self;
     _tableView.delegate = self;
@@ -56,6 +59,18 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    if (IOS_VERSION_CODE <= 8) {
+        __weak typeof(self.navigationController.delegate) weakDelegate = self.navigationController.delegate;
+        if (weakDelegate != self) {
+            weakDelegate = self;
+        }
+    } else {
+        if (self.navigationController.delegate != self) {
+            self.navigationController.delegate = self;
+        }
+    }
+    
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     if (!appDelegate.model) {
         LoginViewController *loginVC = [[LoginViewController alloc] init];
@@ -67,6 +82,31 @@
 #if DEBUG
     [iConsole info:@"Notification_Enter",nil];
 #endif
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    if ([UIDevice currentDevice].systemVersion.floatValue >= 10.0) {
+        [self.navigationController.navigationBar setBarTintColor:kOrangeColor];
+        UIView *barBgView = self.navigationController.navigationBar.subviews.firstObject;
+        for (UIView *subview in barBgView.subviews) {
+            if([subview isKindOfClass:[UIVisualEffectView class]]) {
+                subview.backgroundColor = kOrangeColor;
+                [subview removeAllSubviews];
+            }
+        }
+    } else {
+        [self.navigationController.navigationBar lt_setBackgroundColor:kOrangeColor];
+    }
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    if (self.navigationController.delegate == self) {
+        self.navigationController.delegate = nil;
+    }
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -162,6 +202,23 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NotificationModel *model = _dataList[indexPath.row];
     model.status = @1;
+    if ([model.type isEqualToNumber:@3] && model.news_id) {
+        NewsModel *newsModel = [[NewsModel alloc] init];
+        newsModel.news_id = model.news_id;
+        if (model.tpl.integerValue == NEWS_HotVideo || model.tpl.integerValue == NEWS_OnlyVideo) {
+            VideoDetailViewController *videoDetailVC = [[VideoDetailViewController alloc] init];
+            videoDetailVC.model = newsModel;
+            videoDetailVC.channelName = @"Videos";
+            videoDetailVC.isNoModel = YES;
+            [self.navigationController pushViewController:videoDetailVC animated:YES];
+            return;
+        }
+        NewsDetailViewController *newsDetailVC = [[NewsDetailViewController alloc] init];
+        newsDetailVC.model = newsModel;
+        newsDetailVC.channelName = @"Hot";
+        [self.navigationController pushViewController:newsDetailVC animated:YES];
+        return;
+    }
     NotifDetailViewController *notifDetailVC = [[NotifDetailViewController alloc] init];
     notifDetailVC.notify_id = model.notify_id;
     [self.navigationController pushViewController:notifDetailVC animated:YES];
@@ -216,6 +273,18 @@
 {
     if ([notif.object[@"isNotification"] isEqualToNumber:@1]) {
         [self requestDataIsFooter:NO];
+    }
+}
+
+#pragma mark - UINavigationControllerDelegate
+- (id<UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController animationControllerForOperation:(UINavigationControllerOperation)operation fromViewController:(UIViewController *)fromVC toViewController:(UIViewController *)toVC
+{
+    // && [_model.channelID isEqualToNumber:@30001]
+    if(operation == UINavigationControllerOperationPush) {
+        PushTransitionAnimate *pushTransition = [[PushTransitionAnimate alloc] init];
+        return pushTransition;
+    } else {
+        return nil;
     }
 }
 

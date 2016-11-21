@@ -23,7 +23,10 @@ MJCodingImplementation
              @"user_portrait_url":@"user_portrait_url",
              @"liked":@"liked",
              @"notify_id":@"notify_id",
-             @"status":@"status"
+             @"status":@"status",
+             @"type":@"type",
+             @"news_id":@"news_id",
+             @"tpl":@"tpl"
              };
 }
 

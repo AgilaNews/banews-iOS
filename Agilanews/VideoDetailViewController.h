@@ -49,6 +49,7 @@
 @property (nonatomic, assign) BOOL isContentOpen;
 @property (nonatomic, assign) BOOL isOther;
 @property (nonatomic, assign) BOOL isPushEnter;
+@property (nonatomic, assign) BOOL isNoModel;
 
 
 
