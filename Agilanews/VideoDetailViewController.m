@@ -140,15 +140,8 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    if (IOS_VERSION_CODE <= 8) {
-        __weak typeof(self.navigationController.delegate) weakDelegate = self.navigationController.delegate;
-        if (weakDelegate != self) {
-            weakDelegate = self;
-        }
-    } else {
-        if (self.navigationController.delegate != self) {
-            self.navigationController.delegate = self;
-        }
+    if (self.navigationController.delegate != self) {
+        self.navigationController.delegate = self;
     }
     [[UIApplication sharedApplication] setStatusBarHidden:YES];
     if ([UIDevice currentDevice].systemVersion.floatValue >= 10.0) {

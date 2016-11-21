@@ -439,6 +439,7 @@
     [[FIRMessaging messaging] unsubscribeFromTopic:@"/topics/ios_v1.1.8"];
     [[FIRMessaging messaging] unsubscribeFromTopic:@"/topics/ios_v1.1.9"];
     [[FIRMessaging messaging] unsubscribeFromTopic:@"/topics/ios_v1.2.0"];
+    [[FIRMessaging messaging] unsubscribeFromTopic:@"/topics/ios_v1.2.1"];
     // 注册topics
     [[FIRMessaging messaging] subscribeToTopic:@"/topics/notification"];
     NSString * version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
@@ -531,6 +532,14 @@
             break;
         }
         case 4:
+        {
+            NSString *user_id = userInfo[@"user_id"];
+            if (user_id && [self.model.user_id isEqualToString:user_id]) {
+                // 添加通知小红点
+                [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_FindNewNotif object:nil];
+            }
+        }
+        case 5:
         {
             NSString *user_id = userInfo[@"user_id"];
             if (user_id && [self.model.user_id isEqualToString:user_id]) {
