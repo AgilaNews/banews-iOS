@@ -34,7 +34,6 @@ MJCodingImplementation
              @"views":@"views",
              @"channel_id":@"channel_id",
              @"ad_id":@"ad_id",
-             @"nativeAd":@"nativeAd"
              };
 }
 
