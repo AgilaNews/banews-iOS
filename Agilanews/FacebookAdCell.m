@@ -7,11 +7,19 @@
 //
 
 #import "FacebookAdCell.h"
+#import "AppDelegate.h"
 
 #define titleFont_Normal        [UIFont systemFontOfSize:16]
 #define titleFont_ExtraLarge    [UIFont systemFontOfSize:20]
 #define titleFont_Large         [UIFont systemFontOfSize:18]
 #define titleFont_Small         [UIFont systemFontOfSize:14]
+#if DEBUG
+#define kListPlacementID    @"1188655531159250_1397507120274089"
+#define kDetailPlacementID  @"YOUR_PLACEMENT_ID"
+#else
+#define kListPlacementID    @"1188655531159250_1397507120274089"
+#define kDetailPlacementID  @"1188655531159250_1397507606940707"
+#endif
 
 @implementation FacebookAdCell
 
@@ -133,19 +141,77 @@
 }
 
 #pragma mark - FBNativeAdDelegate
+- (void)nativeAdWillLogImpression:(FBNativeAd *)nativeAd
+{
+    SSLog(@"广告展示");
+    // 服务器打点-广告show-060102
+    NSMutableDictionary *eventDic = [NSMutableDictionary dictionary];
+    [eventDic setObject:@"060102" forKey:@"id"];
+    [eventDic setObject:_model.tpl forKey:@"AD style"];
+    [eventDic setObject:_model.nativeAd.coverImage.url.absoluteString forKey:@"ImageUrl"];
+    [eventDic setObject:@"native" forKey:@"Facebook Native AD Style"];
+    [eventDic setObject:@"" forKey:@"Advertiser"];
+    [eventDic setObject:kListPlacementID forKey:@"Facebook AD Placement ID"];
+    [eventDic setObject:_model.nativeAd.callToAction forKey:@"CallToAction"];
+    [eventDic setObject:_model.ad_id forKey:@"AD_ID"];
+    [eventDic setObject:_model.nativeAd.body forKey:@"Body"];
+    [eventDic setObject:_model.nativeAd.icon.url.absoluteString forKey:@"IconUrl"];
+    [eventDic setObject:@"facebook" forKey:@"AD Type"];
+    [eventDic setObject:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970] * 1000] forKey:@"time"];
+    [eventDic setObject:[NetType getNetType] forKey:@"net"];
+    if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
+        [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) forKey:@"lng"];
+        [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) forKey:@"lat"];
+    } else {
+        [eventDic setObject:@"" forKey:@"lng"];
+        [eventDic setObject:@"" forKey:@"lat"];
+    }
+    NSString *abflag = DEF_PERSISTENT_GET_OBJECT(@"abflag");
+    if (abflag && abflag.length > 0) {
+        [eventDic setObject:abflag forKey:@"abflag"];
+    }
+    [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    [appDelegate.eventArray addObject:eventDic];
+}
+
 - (void)nativeAdDidClick:(FBNativeAd *)nativeAd
 {
     SSLog(@"广告点击");
+    // 服务器打点-广告click-060103
+    NSMutableDictionary *eventDic = [NSMutableDictionary dictionary];
+    [eventDic setObject:@"060103" forKey:@"id"];
+    [eventDic setObject:_model.tpl forKey:@"AD style"];
+    [eventDic setObject:_model.nativeAd.coverImage.url.absoluteString forKey:@"ImageUrl"];
+    [eventDic setObject:@"native" forKey:@"Facebook Native AD Style"];
+    [eventDic setObject:@"" forKey:@"Advertiser"];
+    [eventDic setObject:kListPlacementID forKey:@"Facebook AD Placement ID"];
+    [eventDic setObject:_model.nativeAd.callToAction forKey:@"CallToAction"];
+    [eventDic setObject:_model.ad_id forKey:@"AD_ID"];
+    [eventDic setObject:_model.nativeAd.body forKey:@"Body"];
+    [eventDic setObject:_model.nativeAd.icon.url.absoluteString forKey:@"IconUrl"];
+    [eventDic setObject:@"facebook" forKey:@"AD Type"];
+    [eventDic setObject:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970] * 1000] forKey:@"time"];
+    [eventDic setObject:[NetType getNetType] forKey:@"net"];
+    if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
+        [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) forKey:@"lng"];
+        [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) forKey:@"lat"];
+    } else {
+        [eventDic setObject:@"" forKey:@"lng"];
+        [eventDic setObject:@"" forKey:@"lat"];
+    }
+    NSString *abflag = DEF_PERSISTENT_GET_OBJECT(@"abflag");
+    if (abflag && abflag.length > 0) {
+        [eventDic setObject:abflag forKey:@"abflag"];
+    }
+    [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    [appDelegate.eventArray addObject:eventDic];
 }
 
 - (void)nativeAdDidFinishHandlingClick:(FBNativeAd *)nativeAd
 {
     SSLog(@"广告点击完成");
-}
-
-- (void)nativeAdWillLogImpression:(FBNativeAd *)nativeAd
-{
-    SSLog(@"广告展示");
 }
 
 #pragma mark - setter/getter
@@ -159,6 +225,35 @@
         _model = model;
         model.nativeAd.delegate = self;
         [model.nativeAd registerViewForInteraction:self.contentView withViewController:self.ViewController];
+        // 服务器打点-广告填充-060101
+        NSMutableDictionary *eventDic = [NSMutableDictionary dictionary];
+        [eventDic setObject:@"060101" forKey:@"id"];
+        [eventDic setObject:model.tpl forKey:@"AD style"];
+        [eventDic setObject:model.nativeAd.coverImage.url.absoluteString forKey:@"ImageUrl"];
+        [eventDic setObject:@"native" forKey:@"Facebook Native AD Style"];
+        [eventDic setObject:@"" forKey:@"Advertiser"];
+        [eventDic setObject:kListPlacementID forKey:@"Facebook AD Placement ID"];
+        [eventDic setObject:model.nativeAd.callToAction forKey:@"CallToAction"];
+        [eventDic setObject:model.ad_id forKey:@"AD_ID"];
+        [eventDic setObject:model.nativeAd.body forKey:@"Body"];
+        [eventDic setObject:model.nativeAd.icon.url.absoluteString forKey:@"IconUrl"];
+        [eventDic setObject:@"facebook" forKey:@"AD Type"];
+        [eventDic setObject:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970] * 1000] forKey:@"time"];
+        [eventDic setObject:[NetType getNetType] forKey:@"net"];
+        if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
+            [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) forKey:@"lng"];
+            [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) forKey:@"lat"];
+        } else {
+            [eventDic setObject:@"" forKey:@"lng"];
+            [eventDic setObject:@"" forKey:@"lat"];
+        }
+        NSString *abflag = DEF_PERSISTENT_GET_OBJECT(@"abflag");
+        if (abflag && abflag.length > 0) {
+            [eventDic setObject:abflag forKey:@"abflag"];
+        }
+        [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
+        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        [appDelegate.eventArray addObject:eventDic];
     }
 }
 

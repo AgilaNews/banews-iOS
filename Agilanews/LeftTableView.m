@@ -189,6 +189,35 @@
 #if DEBUG
             [iConsole info:@"Menu_Notification_Click",nil];
 #endif
+            // 服务器打点-notification点击-050105
+            NSMutableDictionary *eventDic = [NSMutableDictionary dictionary];
+            [eventDic setObject:@"050105" forKey:@"id"];
+            [eventDic setObject:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970] * 1000] forKey:@"time"];
+            [eventDic setObject:[NetType getNetType] forKey:@"net"];
+            if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
+                [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) forKey:@"lng"];
+                [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) forKey:@"lat"];
+            } else {
+                [eventDic setObject:@"" forKey:@"lng"];
+                [eventDic setObject:@"" forKey:@"lat"];
+            }
+            NSString *abflag = DEF_PERSISTENT_GET_OBJECT(@"abflag");
+            if (abflag && abflag.length > 0) {
+                [eventDic setObject:abflag forKey:@"abflag"];
+            }
+            NSDictionary *sessionDic = [NSDictionary dictionaryWithObjectsAndKeys:
+                                        DEF_PERSISTENT_GET_OBJECT(@"UUID"), @"id",
+                                        [NSArray arrayWithObject:eventDic], @"events",
+                                        nil];
+            NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObject:[NSArray arrayWithObject:sessionDic] forKey:@"sessions"];
+            [[SSHttpRequest sharedInstance] post:@"" params:params contentType:JsonType serverType:NetServer_Log success:^(id responseObj) {
+                // 打点成功
+            } failure:^(NSError *error) {
+                // 打点失败
+                [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
+                AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+                [appDelegate.eventArray addObject:eventDic];
+            } isShowHUD:NO];
             // 点击Notification
             NotificationViewController *notifVC = [[NotificationViewController alloc] init];
             [navCtrl pushViewController:notifVC animated:YES];
