@@ -273,6 +273,11 @@
         {
             return videoHeight + 42;
         }
+        case NEWS_HotVideo:
+        {
+            CGSize titleLabelSize = [model.title calculateSize:CGSizeMake(kScreenWidth - 22, 40) font:titleFont];
+            return 12 + titleLabelSize.height + imageHeight + 20 + 11 + 11;
+        }
         case ADS_List:
         {
             return 12 + 68 + 12;
@@ -355,6 +360,7 @@
                     cell = [[BigPicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
                 }
                 cell.model = model;
+                cell.isHaveVideo = NO;
                 [cell setNeedsLayout];
                 return cell;
             }
@@ -412,6 +418,19 @@
                 }
                 cell.model = model;
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                [cell setNeedsLayout];
+                return cell;
+            }
+            case NEWS_HotVideo:
+            {
+                // 大图cell
+                static NSString *cellID = @"BigPicCellID";
+                BigPicCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+                if (cell == nil) {
+                    cell = [[BigPicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
+                }
+                cell.model = model;
+                cell.isHaveVideo = YES;
                 [cell setNeedsLayout];
                 return cell;
             }
@@ -542,6 +561,14 @@
     [iConsole info:[NSString stringWithFormat:@"Home_List_Click:%@",articleParams],nil];
 #endif
     [appDelegate.checkDic setObject:@1 forKey:model.news_id];
+    
+    if (model.tpl.integerValue == NEWS_HotVideo) {
+        VideoDetailViewController *videoDetailVC = [[VideoDetailViewController alloc] init];
+        videoDetailVC.model = model;
+        videoDetailVC.channelName = _model.name;
+        [self.navigationController pushViewController:videoDetailVC animated:YES];
+        return;
+    }
     NewsDetailViewController *newsDetailVC = [[NewsDetailViewController alloc] init];
     newsDetailVC.model = model;
     newsDetailVC.channelName = _model.name;

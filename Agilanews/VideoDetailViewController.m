@@ -214,7 +214,7 @@
     } else {
         duration = [[NSDate date] timeIntervalSince1970] * 1000 - _playStartTime + _playTimeCount;
     }
-    if (_isNoModel) {
+    if (_isNoModel || !_indexPath) {
         return;
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_RecoverVideo

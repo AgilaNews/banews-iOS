@@ -21,6 +21,8 @@
 @property (nonatomic, strong) UIImageView *commentView;     // 评论
 @property (nonatomic, strong) UILabel *commentLabel;        // 评论数
 @property (nonatomic, strong) UIColor *bgColor;
+@property (nonatomic, assign) BOOL isHaveVideo;
+@property (nonatomic, strong) UIImageView *haveVideoView;
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier bgColor:(UIColor *)bgColor;
 

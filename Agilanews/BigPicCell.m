@@ -50,6 +50,7 @@
     [self.contentView addSubview:self.commentView];
     [self.contentView addSubview:self.commentLabel];
     [self.contentView addSubview:self.titleImageView];
+    [self.contentView addSubview:self.haveVideoView];
     
     __weak typeof(self) weakSelf = self;
     // 标题布局
@@ -110,6 +111,13 @@
         make.centerY.mas_equalTo(weakSelf.sourceLabel.mas_centerY);
         make.width.mas_equalTo(50);
         make.height.mas_equalTo(13);
+    }];
+    // 播放视图布局
+    [self.haveVideoView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.mas_equalTo(weakSelf.titleImageView.mas_centerX);
+        make.centerY.mas_equalTo(weakSelf.titleImageView.mas_centerY);
+        make.width.mas_equalTo(45);
+        make.height.mas_equalTo(45);
     }];
 }
 
@@ -205,6 +213,13 @@
         self.commentView.hidden = YES;
         self.commentLabel.hidden = YES;
     }
+    // 播放视图布局
+    [self.haveVideoView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.centerX.mas_equalTo(weakSelf.titleImageView.mas_centerX);
+        make.centerY.mas_equalTo(weakSelf.titleImageView.mas_centerY);
+        make.width.mas_equalTo(45);
+        make.height.mas_equalTo(45);
+    }];
     
     [super updateConstraints];
     
@@ -243,6 +258,11 @@
             _titleImageView.image = image;
         }
     }];
+    if (self.isHaveVideo) {
+        self.haveVideoView.hidden = NO;
+    } else {
+        self.haveVideoView.hidden = YES;
+    }
 }
 
 - (UILabel *)titleLabel
@@ -359,6 +379,17 @@
         _commentLabel.hidden = YES;
     }
     return _commentLabel;
+}
+
+- (UIImageView *)haveVideoView
+{
+    if (_haveVideoView == nil) {
+        _haveVideoView = [[UIImageView alloc] init];
+        _haveVideoView.contentMode = UIViewContentModeScaleAspectFit;
+        _haveVideoView.image = [UIImage imageNamed:@"icon_video_play"];
+        _haveVideoView.hidden = YES;
+    }
+    return _haveVideoView;
 }
 
 - (void)fontChange
