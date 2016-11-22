@@ -665,7 +665,17 @@
  */
 - (void)commentLike:(UIButton *)button
 {
-    //    __weak typeof(self) weakSelf = self;
+    // 打点-点击评论点赞按钮-010228
+    NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
+                                   [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
+                                   _model.channel_id, @"channel",
+                                   _model.news_id, @"article",
+                                   [NetType getNetType], @"network",
+                                   nil];
+    [Flurry logEvent:@"Article_CommentsLike_Click" withParameters:articleParams];
+#if DEBUG
+    [iConsole info:[NSString stringWithFormat:@"Article_CommentsLike_Click:%@",articleParams],nil];
+#endif
     if (button.selected == YES) {
         return;
     }
@@ -1739,6 +1749,17 @@
         CommentCell *cell = (CommentCell *)tap.view.superview.superview;
         if ([cell isKindOfClass:[CommentCell class]]) {
             _commentID = cell.model.commentID;
+            // 打点-点击评论回复按钮-010229
+            NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
+                                           [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
+                                           _model.channel_id, @"channel",
+                                           _model.news_id, @"article",
+                                           [NetType getNetType], @"network",
+                                           nil];
+            [Flurry logEvent:@"Article_CommentsReply_Click" withParameters:articleParams];
+#if DEBUG
+            [iConsole info:[NSString stringWithFormat:@"Article_CommentsReply_Click:%@",articleParams],nil];
+#endif
         }
     } else {
         _commentID = nil;

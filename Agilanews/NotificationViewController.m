@@ -117,6 +117,11 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    // 打点-点击返回-011403
+    [Flurry logEvent:@"Notification_BackButton_Click"];
+#if DEBUG
+    [iConsole info:@"Notification_BackButton_Click",nil];
+#endif
 }
 
 #pragma mark - Network
@@ -199,6 +204,11 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    // 打点-点击评论通知消息-011402
+    [Flurry logEvent:@"Notification_ReplyComment_Click"];
+#if DEBUG
+    [iConsole info:@"Notification_ReplyComment_Click",nil];
+#endif
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NotificationModel *model = _dataList[indexPath.row];
     model.status = @1;

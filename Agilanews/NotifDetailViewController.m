@@ -86,6 +86,11 @@
             self.navigationController.delegate = self;
         }
     }
+    // 打点-页面进入-011501
+    [Flurry logEvent:@"ReplyComments_Enter"];
+#if DEBUG
+    [iConsole info:@"ReplyComments_Enter",nil];
+#endif
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -113,6 +118,15 @@
     }
 }
 
+- (void)dealloc
+{
+    // 打点-页面进入-011501
+    [Flurry logEvent:@"ReplyComments_BackButton_Click"];
+#if DEBUG
+    [iConsole info:@"ReplyComments_BackButton_Click",nil];
+#endif
+}
+
 #pragma mark - Network
 - (void)requestData
 {
@@ -136,7 +150,17 @@
  */
 - (void)commentLike:(UIButton *)button
 {
-    //    __weak typeof(self) weakSelf = self;
+    // 打点-点击评论点赞按钮-011503
+    NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
+                                   [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
+                                   _model.related_news.channel_id, @"channel",
+                                   _model.related_news.news_id, @"article",
+                                   [NetType getNetType], @"network",
+                                   nil];
+    [Flurry logEvent:@"ReplyComments_Like_Click" withParameters:articleParams];
+#if DEBUG
+    [iConsole info:[NSString stringWithFormat:@"ReplyComments_Like_Click:%@",articleParams],nil];
+#endif
     if (button.selected == YES) {
         return;
     }
@@ -237,9 +261,31 @@
         CommentCell *cell = (CommentCell *)tap.view.superview.superview;
         if ([cell isKindOfClass:[CommentCell class]]) {
             _commentID = cell.model.commentID;
+            // 打点-点击回复按钮-011502
+            NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
+                                           [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
+                                           _model.related_news.channel_id, @"channel",
+                                           _model.related_news.news_id, @"article",
+                                           [NetType getNetType], @"network",
+                                           nil];
+            [Flurry logEvent:@"ReplyComments_Reply_Click" withParameters:articleParams];
+#if DEBUG
+            [iConsole info:[NSString stringWithFormat:@"ReplyComments_Reply_Click:%@",articleParams],nil];
+#endif
         }
     } else {
         _commentID = nil;
+        // 打点-点击评论框-011504
+        NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
+                                       [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
+                                       _model.related_news.channel_id, @"channel",
+                                       _model.related_news.news_id, @"article",
+                                       [NetType getNetType], @"network",
+                                       nil];
+        [Flurry logEvent:@"ReplyComments_Comment_Click" withParameters:articleParams];
+#if DEBUG
+        [iConsole info:[NSString stringWithFormat:@"ReplyComments_Comment_Click:%@",articleParams],nil];
+#endif
     }
     // 评论
     _commentTextView = [[CommentTextView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
@@ -514,6 +560,17 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.row == 0) {
+        // 打点-点击新闻列表-011505
+        NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
+                                       [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
+                                       _model.related_news.channel_id, @"channel",
+                                       _model.related_news.news_id, @"article",
+                                       [NetType getNetType], @"network",
+                                       nil];
+        [Flurry logEvent:@"ReplyComments_Article_Click" withParameters:articleParams];
+#if DEBUG
+        [iConsole info:[NSString stringWithFormat:@"ReplyComments_Article_Click:%@",articleParams],nil];
+#endif
         NewsModel *model = _model.related_news;
         if (model.tpl.integerValue == NEWS_OnlyVideo) {
             VideoDetailViewController *videoDetailVC = [[VideoDetailViewController alloc] init];
