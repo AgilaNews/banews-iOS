@@ -81,7 +81,7 @@
         make.height.mas_equalTo(sourceLabelSize.height);
     }];
     // 更多按钮布局
-    CGSize learnButtonSize = [@"Learn more" calculateSize:CGSizeMake(100, 15) font:self.learnButton.titleLabel.font];
+    CGSize learnButtonSize = [self.nativeAd.callToAction calculateSize:CGSizeMake(100, 15) font:self.learnButton.titleLabel.font];
     [self.learnButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.mas_equalTo(weakSelf.titleImageView.mas_right);
         make.top.mas_equalTo(weakSelf.titleImageView.mas_bottom).offset(11);
@@ -99,6 +99,7 @@
     
     self.titleLabel.text = self.nativeAd.title;
     self.contentLabel.text = self.nativeAd.body;
+    [self.learnButton setTitle:self.nativeAd.callToAction forState:UIControlStateNormal];
     [self.nativeAd.coverImage loadImageAsyncWithBlock:^(UIImage *image) {
         __strong typeof(self) strongSelf = weakSelf;
         strongSelf.titleImageView.image = image;
@@ -194,7 +195,6 @@
 {
     if (_learnButton == nil) {
         _learnButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_learnButton setTitle:@"Learn more" forState:UIControlStateNormal];
         [_learnButton setTitleColor:kOrangeColor forState:UIControlStateNormal];
         _learnButton.titleLabel.font = [UIFont systemFontOfSize:12];
         _learnButton.layer.cornerRadius = 4;
