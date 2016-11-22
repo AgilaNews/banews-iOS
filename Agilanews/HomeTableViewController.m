@@ -778,7 +778,7 @@
                 }
             }
         }
-        if (showBanner) {
+        if (showBanner && models.count > 0) {
             [models addObject:[NSString stringWithFormat:@"refresh"]];
         }
         if (_dataList == nil) {
@@ -830,7 +830,11 @@
             if (showBanner) {
                 count -= 1;
             }
-            [[BannerView sharedInstance] showBannerWithText:DEF_banner((long)count) superView:weakSelf.tableView];
+            if (count > 0) {
+                [[BannerView sharedInstance] showBannerWithText:DEF_banner((long)count) superView:weakSelf.tableView];
+            } else {
+                [[BannerView sharedInstance] showBannerWithText:@"Sorry, no more news, please try later" superView:weakSelf.tableView];
+            }
         }
         [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Refresh_Success object:nil];
     } failure:^(NSError *error) {
