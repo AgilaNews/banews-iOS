@@ -71,7 +71,7 @@
 		5F42C0C01D34EFEE00B89651 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F42C0BF1D34EFEE00B89651 /* UIKit.framework */; };
 		5F500B421DDF1F9100E88198 /* FacebookAdCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F500B411DDF1F9100E88198 /* FacebookAdCell.m */; };
 		5F500B451DE3F2A600E88198 /* FacebookAdView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F500B441DE3F2A600E88198 /* FacebookAdView.m */; };
-		5F500B491DE4406200E88198 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5F500B481DE4406200E88198 /* GoogleService-Info.plist */; };
+		5F500B4B1DE44BDB00E88198 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5F500B4A1DE44BDB00E88198 /* GoogleService-Info.plist */; };
 		5F5342B41DBDF30E005D78F1 /* OnlyVideoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5342B31DBDF30E005D78F1 /* OnlyVideoCell.m */; };
 		5F5342B71DBF3CD8005D78F1 /* DetailPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5342B61DBF3CD8005D78F1 /* DetailPlayerViewController.m */; };
 		5F5342BA1DC21C7E005D78F1 /* VideoDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5342B91DC21C7E005D78F1 /* VideoDetailViewController.m */; };
@@ -363,7 +363,7 @@
 		5F500B411DDF1F9100E88198 /* FacebookAdCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FacebookAdCell.m; sourceTree = "<group>"; };
 		5F500B431DE3F2A600E88198 /* FacebookAdView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FacebookAdView.h; sourceTree = "<group>"; };
 		5F500B441DE3F2A600E88198 /* FacebookAdView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FacebookAdView.m; sourceTree = "<group>"; };
-		5F500B481DE4406200E88198 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		5F500B4A1DE44BDB00E88198 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5F5342B21DBDF30E005D78F1 /* OnlyVideoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnlyVideoCell.h; sourceTree = "<group>"; };
 		5F5342B31DBDF30E005D78F1 /* OnlyVideoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnlyVideoCell.m; sourceTree = "<group>"; };
 		5F5342B51DBF3CD8005D78F1 /* DetailPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailPlayerViewController.h; sourceTree = "<group>"; };
@@ -809,7 +809,7 @@
 				5F42BFC11D34E2F000B89651 /* LaunchScreen.storyboard */,
 				5F42BFC41D34E2F000B89651 /* Info.plist */,
 				5F17B4BC1DB86883008EBD51 /* Agila.xcdatamodeld */,
-				5F500B481DE4406200E88198 /* GoogleService-Info.plist */,
+				5F500B4A1DE44BDB00E88198 /* GoogleService-Info.plist */,
 				5F17B4D21DB87574008EBD51 /* CoreData */,
 				5F42BFB31D34E2F000B89651 /* Supporting Files */,
 			);
@@ -1582,12 +1582,12 @@
 				5F42C09F1D34E42A00B89651 /* SVProgressHUD.bundle in Resources */,
 				5F635ED81D41EB51006AAE3D /* webView.css in Resources */,
 				5F635CCE1D3E3EDF006AAE3D /* ShareSDKUI.bundle in Resources */,
-				5F500B491DE4406200E88198 /* GoogleService-Info.plist in Resources */,
 				5F2E0A201D87B47A00FEC0AC /* whiteplaceholder.png in Resources */,
 				5F571FE41D64057500604CDD /* webView.js in Resources */,
 				5F767A7F1D9CE82E00822BAC /* Info.plist in Resources */,
 				5FF4B7AC1D38F7B200CC6704 /* Info.plist in Resources */,
 				5F635CD11D3E3EDF006AAE3D /* ShareSDK.bundle in Resources */,
+				5F500B4B1DE44BDB00E88198 /* GoogleService-Info.plist in Resources */,
 				5FE7220E1D4EFCE30026BFC3 /* TwitterKitResources.bundle in Resources */,
 				5F17B48E1DB5BEB5008EBD51 /* Assets.bundle in Resources */,
 				5F571F8C1D5C1FFE00604CDD /* GooglePlus.bundle in Resources */,
