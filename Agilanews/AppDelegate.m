@@ -98,45 +98,45 @@
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     SSLog(@"进入不活跃状态");
-    if (_isStart) {
-        UINavigationController *navCtrl = (UINavigationController *)_window.rootViewController;
-        HomeViewController *homeVC = navCtrl.viewControllers.firstObject;
-        // 缓存新闻列表
-        NSMutableDictionary *newsDic = [NSMutableDictionary dictionary];
-        NSMutableDictionary *scrollDic = [NSMutableDictionary dictionary];
-        for (HomeTableViewController *homeTabVC in homeVC.segmentVC.subViewControllers) {
-            if (homeTabVC.dataList.count > 0) {
-                NSInteger length = 30;
-                if (homeTabVC.dataList.count > length) {
-                    NSMutableArray *listArray = [NSMutableArray arrayWithArray:[homeTabVC.dataList subarrayWithRange:NSMakeRange(0, length)]];
-                    for (NewsModel *model in listArray) {
-                        if (model && [model isKindOfClass:[NewsModel class]] && model.nativeAd) {
-                            model.nativeAd = nil;
-                        }
-                    }
-                    [newsDic setObject:listArray forKey:homeTabVC.model.channelID];
-                } else {
-                    NSMutableArray *listArray = [NSMutableArray arrayWithArray:homeTabVC.dataList];
-                    for (NewsModel *model in listArray) {
-                        if (model && [model isKindOfClass:[NewsModel class]] && model.nativeAd) {
-                            model.nativeAd = nil;
-                        }
-                    }
-                    [newsDic setObject:listArray forKey:homeTabVC.model.channelID];
-                }
-                // 记录列表页滚动位置
-                [scrollDic setObject:[NSNumber numberWithFloat:homeTabVC.tableView.contentOffset.y] forKey:homeTabVC.model.channelID];
-//                [homeTabVC.dataList removeAllObjects];
-            }
-//            [homeTabVC.tableView reloadData];
-        }
-        NSString *newsFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/news.data"];
-        NSDictionary *newsData = [NSDictionary dictionaryWithObject:newsDic forKey:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]]];
-        [NSKeyedArchiver archiveRootObject:newsData toFile:newsFilePath];
-        // 缓存列表滚动位置
-        NSString *scrollFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/scroll.data"];
-        [NSKeyedArchiver archiveRootObject:scrollDic toFile:scrollFilePath];
-    }
+//    if (_isStart) {
+//        UINavigationController *navCtrl = (UINavigationController *)_window.rootViewController;
+//        HomeViewController *homeVC = navCtrl.viewControllers.firstObject;
+//        // 缓存新闻列表
+//        NSMutableDictionary *newsDic = [NSMutableDictionary dictionary];
+//        NSMutableDictionary *scrollDic = [NSMutableDictionary dictionary];
+//        for (HomeTableViewController *homeTabVC in homeVC.segmentVC.subViewControllers) {
+//            if (homeTabVC.dataList.count > 0) {
+//                NSInteger length = 30;
+//                if (homeTabVC.dataList.count > length) {
+//                    NSMutableArray *listArray = [NSMutableArray arrayWithArray:[homeTabVC.dataList subarrayWithRange:NSMakeRange(0, length)]];
+//                    for (NewsModel *model in listArray) {
+//                        if (model && [model isKindOfClass:[NewsModel class]] && model.nativeAd) {
+//                            model.nativeAd = nil;
+//                        }
+//                    }
+//                    [newsDic setObject:listArray forKey:homeTabVC.model.channelID];
+//                } else {
+//                    NSMutableArray *listArray = [NSMutableArray arrayWithArray:homeTabVC.dataList];
+//                    for (NewsModel *model in listArray) {
+//                        if (model && [model isKindOfClass:[NewsModel class]] && model.nativeAd) {
+//                            model.nativeAd = nil;
+//                        }
+//                    }
+//                    [newsDic setObject:listArray forKey:homeTabVC.model.channelID];
+//                }
+//                // 记录列表页滚动位置
+//                [scrollDic setObject:[NSNumber numberWithFloat:homeTabVC.tableView.contentOffset.y] forKey:homeTabVC.model.channelID];
+////                [homeTabVC.dataList removeAllObjects];
+//            }
+////            [homeTabVC.tableView reloadData];
+//        }
+//        NSString *newsFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/news.data"];
+//        NSDictionary *newsData = [NSDictionary dictionaryWithObject:newsDic forKey:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]]];
+//        [NSKeyedArchiver archiveRootObject:newsData toFile:newsFilePath];
+//        // 缓存列表滚动位置
+//        NSString *scrollFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/scroll.data"];
+//        [NSKeyedArchiver archiveRootObject:scrollDic toFile:scrollFilePath];
+//    }
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
 }
@@ -209,32 +209,32 @@
     [self connectToFcm];
     // 激活AppsFlyer
     [[AppsFlyerTracker sharedTracker] trackAppLaunch];
-    if (_isStart) {
-        NSNumber *backgroundTime = DEF_PERSISTENT_GET_OBJECT(@"BackgroundTime");
-        if ([[NSDate date] timeIntervalSince1970] - backgroundTime.longLongValue <= 3600) {
-            NSString *newsFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/news.data"];
-            NSDictionary *newsData = [NSKeyedUnarchiver unarchiveObjectWithFile:newsFilePath];
-            NSNumber *checkNum = newsData.allKeys.firstObject;
-            NSString *scrollFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/scroll.data"];
-            NSMutableDictionary *scrollDic = [NSKeyedUnarchiver unarchiveObjectWithFile:scrollFilePath];
-            // 刷新页面
-            UINavigationController *navCtrl = (UINavigationController *)_window.rootViewController;
-            HomeViewController *homeVC = navCtrl.viewControllers.firstObject;
-            for (HomeTableViewController *homeTabVC in homeVC.segmentVC.subViewControllers) {
-                NSMutableArray *dataList = newsData[checkNum][homeTabVC.model.channelID];
-                if (dataList == nil) {
-                    dataList = [NSMutableArray array];
-                }
-                // 列表页滚动位置还原
-                NSNumber *contentOffsetY = scrollDic[homeTabVC.model.channelID];
-                if (contentOffsetY.integerValue > 10) {
-                    [homeTabVC.tableView setContentOffset:CGPointMake(homeTabVC.tableView.contentOffset.x, contentOffsetY.floatValue) animated:NO];
-                }
-                homeTabVC.dataList = dataList;
-                [homeTabVC.tableView reloadData];
-            }
-        }
-    }
+//    if (_isStart) {
+//        NSNumber *backgroundTime = DEF_PERSISTENT_GET_OBJECT(@"BackgroundTime");
+//        if ([[NSDate date] timeIntervalSince1970] - backgroundTime.longLongValue <= 3600) {
+//            NSString *newsFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/news.data"];
+//            NSDictionary *newsData = [NSKeyedUnarchiver unarchiveObjectWithFile:newsFilePath];
+//            NSNumber *checkNum = newsData.allKeys.firstObject;
+//            NSString *scrollFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/scroll.data"];
+//            NSMutableDictionary *scrollDic = [NSKeyedUnarchiver unarchiveObjectWithFile:scrollFilePath];
+//            // 刷新页面
+//            UINavigationController *navCtrl = (UINavigationController *)_window.rootViewController;
+//            HomeViewController *homeVC = navCtrl.viewControllers.firstObject;
+//            for (HomeTableViewController *homeTabVC in homeVC.segmentVC.subViewControllers) {
+//                NSMutableArray *dataList = newsData[checkNum][homeTabVC.model.channelID];
+//                if (dataList == nil) {
+//                    dataList = [NSMutableArray array];
+//                }
+//                // 列表页滚动位置还原
+//                NSNumber *contentOffsetY = scrollDic[homeTabVC.model.channelID];
+//                if (contentOffsetY.integerValue > 10) {
+//                    [homeTabVC.tableView setContentOffset:CGPointMake(homeTabVC.tableView.contentOffset.x, contentOffsetY.floatValue) animated:NO];
+//                }
+//                homeTabVC.dataList = dataList;
+//                [homeTabVC.tableView reloadData];
+//            }
+//        }
+//    }
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 }
 

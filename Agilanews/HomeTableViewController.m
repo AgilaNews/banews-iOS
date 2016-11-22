@@ -48,6 +48,7 @@
     self = [super initWithStyle:UITableViewStylePlain];
     if (self) {
         _model = model;
+        _dataList = [NSMutableArray array];
     }
     return self;
 }
@@ -125,7 +126,7 @@
         self.tableView.scrollsToTop = NO;
     }
     [self.tableView setContentOffset:CGPointMake(self.tableView.contentOffset.x, .5)];
-    _dataList = [NSMutableArray array];
+    
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     NSNumber *refreshNum = appDelegate.refreshTimeDic[_model.channelID];
     _refreshTime = refreshNum.longLongValue;
@@ -134,18 +135,13 @@
         NSDictionary *newsData = [NSKeyedUnarchiver unarchiveObjectWithFile:newsFilePath];
         NSNumber *checkNum = newsData.allKeys.firstObject;
         NSArray *dataList = newsData[checkNum][_model.channelID];
+        // 加载缓存
+        _dataList = [NSMutableArray arrayWithArray:dataList];
+        [self.tableView reloadData];
         if ([[NSDate date] timeIntervalSince1970] - _refreshTime < 3600) {
             if (dataList.count == 0 && [_model.channelID isEqualToNumber:@10001]) {
                 [self requestDataWithChannelID:_model.channelID isLater:YES isShowHUD:NO isShowBanner:NO];
-            } else {                
-                // 加载缓存
-                _dataList = [NSMutableArray arrayWithArray:dataList];
-                [self.tableView reloadData];
             }
-        } else if ([[NetType getNetType] isEqualToString:@"unknow"] && dataList.count > 0) {
-            // 无网状态下加载缓存
-            _dataList = [NSMutableArray arrayWithArray:dataList];
-            [self.tableView reloadData];
         } else if ([_model.channelID isEqualToNumber:@10001]) {
             // 请求数据
             [self requestDataWithChannelID:_model.channelID isLater:YES isShowHUD:NO isShowBanner:NO];
@@ -772,6 +768,14 @@
 #if DEBUG
             [iConsole info:[NSString stringWithFormat:@"Home_List_DownRefresh_Y:%@",articleParams],nil];
 #endif
+            NewsModel *firstModel = _dataList.firstObject;
+            long long refreshTime = 0;
+            if (firstModel && [firstModel isKindOfClass:[NewsModel class]]) {
+                refreshTime = firstModel.public_time.longLongValue;
+            }
+            if ([[NSDate date] timeIntervalSince1970] - refreshTime > 3600) {
+                _dataList = [NSMutableArray array];
+            }
             NSArray *dataList = [_dataList copy];
             for (id object in dataList) {
                 if ([object isKindOfClass:[NSString class]]) {
@@ -1241,13 +1245,18 @@
  */
 - (void)applicationWillEnterForeground
 {
-    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    NSNumber *refreshNum = appDelegate.refreshTimeDic[_model.channelID];
-    _refreshTime = refreshNum.longLongValue;
+//    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+//    NSNumber *refreshNum = appDelegate.refreshTimeDic[_model.channelID];
+//    _refreshTime = refreshNum.longLongValue;
+    NewsModel *model = _dataList.firstObject;
+    long long refreshTime = 0;
+    if (model && [model isKindOfClass:[NewsModel class]]) {
+        refreshTime = model.public_time.longLongValue;
+    }
 
-    if ([[NSDate date] timeIntervalSince1970] - _refreshTime > 3600)
+    if ([[NSDate date] timeIntervalSince1970] - refreshTime > 3600)
     {
-        _dataList = [NSMutableArray array];
+//        _dataList = [NSMutableArray array];
         if ([self.tableView isDisplayedInScreen]) {
             _isShowBanner = NO;
             // 修复下拉刷新位置卡住问题
@@ -1262,11 +1271,16 @@
 - (void)pushExit
 {
     if ([self.tableView isDisplayedInScreen]) {
-        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-        NSNumber *refreshNum = appDelegate.refreshTimeDic[_model.channelID];
-        _refreshTime = refreshNum.longLongValue;
-        if ([[NSDate date] timeIntervalSince1970] - _refreshTime > 3600) {
-            _dataList = [NSMutableArray array];
+        NewsModel *model = _dataList.firstObject;
+        long long refreshTime = 0;
+        if (model && [model isKindOfClass:[NewsModel class]]) {
+            refreshTime = model.public_time.longLongValue;
+        }
+//        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+//        NSNumber *refreshNum = appDelegate.refreshTimeDic[_model.channelID];
+//        _refreshTime = refreshNum.longLongValue;
+        if ([[NSDate date] timeIntervalSince1970] - refreshTime > 3600) {
+//            _dataList = [NSMutableArray array];
             _isShowBanner = NO;
             [self requestDataWithChannelID:_model.channelID isLater:YES isShowHUD:NO isShowBanner:NO];
         }
