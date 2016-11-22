@@ -26,6 +26,7 @@
 #define titleFont_ExtraLarge    [UIFont systemFontOfSize:20]
 #define titleFont_Large         [UIFont systemFontOfSize:18]
 #define titleFont_Small         [UIFont systemFontOfSize:14]
+#define imageHeight 155 * kScreenWidth / 320.0
 
 @import SafariServices;
 @interface NewsDetailViewController ()
@@ -158,7 +159,8 @@
              }
          }
      }];
-
+    // 检查是否有新广告
+    [[FacebookAdManager sharedInstance] checkNewAdNumWithType:DetailAd];
     // 请求新闻详情
     [self requestDataWithNewsID:_model.news_id ShowHUD:YES];
     
@@ -293,6 +295,14 @@
             [_blankLabel removeFromSuperview];
             _blankView = nil;
             _blankLabel = nil;
+        }
+        _adInfo = responseObj[@"ad"];
+        if (_adInfo && _adInfo.count > 0) {
+            FBNativeAd *nativeAd = [[FacebookAdManager sharedInstance] getFBNativeAdFromDetailADArray];
+            if (nativeAd) {
+                _isHaveAd = YES;
+                _facebookAdView = [[FacebookAdView alloc] initWithNativeAd:nativeAd AdId:_adInfo[@"ad_id"]];
+            }
         }
         weakSelf.detailModel = [NewsDetailModel mj_objectWithKeyValues:responseObj];
         // css文件路径
@@ -749,7 +759,11 @@
             if (_detailModel == nil) {
                 return kScreenHeight;
             } else {
-                return _webViewHeight + 54;
+                if (_isHaveAd) {
+                    return _webViewHeight + 54 + 83 + imageHeight;
+                } else {
+                    return _webViewHeight + 54;
+                }
             }
             break;
         case 1:
@@ -887,6 +901,10 @@
             [cell.contentView addSubview:_webView];
             [cell.contentView addSubview:self.likeButton];
             self.likeButton.top = _webView.bottom;
+            if (_isHaveAd) {
+                [cell.contentView addSubview:self.facebookAdView];
+                self.facebookAdView.top = self.likeButton.bottom + 20;
+            }
             break;
         }
         case 1:

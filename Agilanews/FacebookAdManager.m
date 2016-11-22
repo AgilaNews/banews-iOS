@@ -9,7 +9,7 @@
 #import "FacebookAdManager.h"
 
 #if DEBUG
-#define kListPlacementID    @"YOUR_PLACEMENT_ID"
+#define kListPlacementID    @"1188655531159250_1397507120274089"
 #define kDetailPlacementID  @"YOUR_PLACEMENT_ID"
 #else
 #define kListPlacementID    @"1188655531159250_1397507120274089"

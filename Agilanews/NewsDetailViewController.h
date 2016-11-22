@@ -12,6 +12,7 @@
 #import "NewsDetailModel.h"
 #import "AppDelegate.h"
 #import "CommentTextView.h"
+#import "FacebookAdView.h"
 
 @interface NewsDetailViewController : BaseViewController <UIWebViewDelegate, UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, UITextViewDelegate, FBSDKSharingDelegate>
 
@@ -41,5 +42,8 @@
 @property (nonatomic, assign) float webviewOffsetY;
 @property (nonatomic, assign) BOOL isPushEnter;
 @property (nonatomic, strong) NSNumber *commentID;
+@property (nonatomic, assign) BOOL isHaveAd;
+@property (nonatomic, strong) NSDictionary *adInfo;
+@property (nonatomic, strong) FacebookAdView *facebookAdView;
 
 @end

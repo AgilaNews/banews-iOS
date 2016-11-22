@@ -319,6 +319,7 @@
     
     // 检查是否有新广告
     [[FacebookAdManager sharedInstance] checkNewAdNumWithType:AllAd];
+    [[FacebookAdManager sharedInstance] checkNewAdNumWithType:AllAd];
 }
 
 #pragma mark - 请求下发频道
