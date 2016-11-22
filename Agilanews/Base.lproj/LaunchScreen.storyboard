@@ -46,8 +46,8 @@
                             </label>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="new_name" translatesAutoresizingMaskIntoConstraints="NO" id="XWZ-9H-yn8">
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="34" id="9YK-JN-ypz"/>
-                                    <constraint firstAttribute="height" constant="13" id="Pfx-D9-VXc"/>
+                                    <constraint firstAttribute="width" constant="61" id="9YK-JN-ypz"/>
+                                    <constraint firstAttribute="height" constant="11" id="Pfx-D9-VXc"/>
                                 </constraints>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="map" translatesAutoresizingMaskIntoConstraints="NO" id="BdJ-ct-fAz">
@@ -86,6 +86,6 @@
     <resources>
         <image name="icon" width="24" height="24"/>
         <image name="map" width="261" height="358"/>
-        <image name="new_name" width="36" height="13"/>
+        <image name="new_name" width="61" height="11"/>
     </resources>
 </document>
