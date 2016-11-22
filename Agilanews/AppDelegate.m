@@ -631,7 +631,7 @@
         return;
     }
     NSNumber *tpl = userInfo[@"tpl"];
-    if (tpl && (tpl.integerValue == NEWS_OnlyVideo || tpl.integerValue == NEWS_HotVideo)) {
+    if (tpl && tpl.integerValue == 3) {
         VideoDetailViewController *videoDetailVC = [[VideoDetailViewController alloc] init];
         videoDetailVC.model = model;
         videoDetailVC.isPushEnter = YES;
