@@ -87,38 +87,38 @@ static GuideRefreshView *_guideView = nil;
 /**
  *  初始化菜单引导视图
  */
-- (void)_initMenuGuide
-{
-    [[GuideRefreshView sharedInstance] removeAllSubviews];
-    [[GuideRefreshView sharedInstance] removeGestureRecognizer:_tap];
-    [[GuideRefreshView sharedInstance] removeGestureRecognizer:_swipe];
-    __weak typeof(self) weakSelf = self;
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        _menuView = [[UIImageView alloc] initWithFrame:CGRectMake(3, 58, 242, 79)];
-        _menuView.contentMode = UIViewContentModeScaleAspectFit;
-        _menuView.image = [UIImage imageNamed:@"guide_menu"];
-        _menuView.alpha = 0;
-        [_guideView addSubview:_menuView];
-        
-        UIButton *menuButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        menuButton.frame = CGRectMake(0, 0, 60, 70);
-        [menuButton addTarget:weakSelf action:@selector(menuAction) forControlEvents:UIControlEventTouchUpInside];
-        [_guideView addSubview:menuButton];
-        
-        [UIView animateWithDuration:.3 animations:^{
-            _menuView.alpha = 1;
-        }];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [UIView animateWithDuration:.3 animations:^{
-                _menuView.alpha = 0;
-            } completion:^(BOOL finished) {
-                DEF_PERSISTENT_SET_OBJECT(SS_GuideHomeKey, @1);
-                [[GuideRefreshView sharedInstance] removeFromSuperview];
-                _guideView = nil;
-            }];
-        });
-    });
-}
+//- (void)_initMenuGuide
+//{
+//    [[GuideRefreshView sharedInstance] removeAllSubviews];
+//    [[GuideRefreshView sharedInstance] removeGestureRecognizer:_tap];
+//    [[GuideRefreshView sharedInstance] removeGestureRecognizer:_swipe];
+//    __weak typeof(self) weakSelf = self;
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        _menuView = [[UIImageView alloc] initWithFrame:CGRectMake(3, 58, 242, 79)];
+//        _menuView.contentMode = UIViewContentModeScaleAspectFit;
+//        _menuView.image = [UIImage imageNamed:@"guide_menu"];
+//        _menuView.alpha = 0;
+//        [_guideView addSubview:_menuView];
+//        
+//        UIButton *menuButton = [UIButton buttonWithType:UIButtonTypeCustom];
+//        menuButton.frame = CGRectMake(0, 0, 60, 70);
+//        [menuButton addTarget:weakSelf action:@selector(menuAction) forControlEvents:UIControlEventTouchUpInside];
+//        [_guideView addSubview:menuButton];
+//        
+//        [UIView animateWithDuration:.3 animations:^{
+//            _menuView.alpha = 1;
+//        }];
+//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//            [UIView animateWithDuration:.3 animations:^{
+//                _menuView.alpha = 0;
+//            } completion:^(BOOL finished) {
+//                DEF_PERSISTENT_SET_OBJECT(SS_GuideHomeKey, @1);
+//                [[GuideRefreshView sharedInstance] removeFromSuperview];
+//                _guideView = nil;
+//            }];
+//        });
+//    });
+//}
 
 /**
  *  拉伸图片方法
@@ -165,10 +165,10 @@ static GuideRefreshView *_guideView = nil;
             [UIView animateWithDuration:.3 animations:^{
                 [GuideRefreshView sharedInstance].backgroundColor = [UIColor clearColor];
             } completion:^(BOOL finished) {
-                [[GuideRefreshView sharedInstance] _initMenuGuide];
-//                DEF_PERSISTENT_SET_OBJECT(SS_GuideHomeKey, @1);
-//                [[GuideRefreshView sharedInstance] removeFromSuperview];
-//                _guideView = nil;
+//                [[GuideRefreshView sharedInstance] _initMenuGuide];
+                DEF_PERSISTENT_SET_OBJECT(SS_GuideHomeKey, @1);
+                [[GuideRefreshView sharedInstance] removeFromSuperview];
+                _guideView = nil;
             }];
         });
     }
