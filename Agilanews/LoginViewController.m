@@ -316,6 +316,7 @@
 
 - (void)signIn:(GIDSignIn *)signIn presentViewController:(UIViewController *)viewController
 {
+    [SVProgressHUD dismiss];
     [self presentViewController:viewController animated:YES completion:nil];
 }
 
