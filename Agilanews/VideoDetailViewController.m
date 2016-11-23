@@ -731,7 +731,7 @@
         [params setObject:cell.model.commentID forKey:@"comment_id"];
         [[SSHttpRequest sharedInstance] post:kHomeUrl_CommentLike params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
             NSNumber *likeNum = responseObj[@"liked"];
-            if (likeNum.integerValue > 0) {
+            if (likeNum && likeNum.integerValue > 0) {
                 cell.model.liked = likeNum;
                 cell.model.device_liked = @1;
                 [button setTitle:[NSString stringWithFormat:@"%@",likeNum] forState:UIControlStateNormal];
