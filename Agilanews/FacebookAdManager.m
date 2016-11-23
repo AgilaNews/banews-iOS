@@ -46,8 +46,9 @@ static FacebookAdManager *_manager = nil;
     
     // When testing on a device, add its hashed ID to force test ads.
     // The hash ID is printed to console when running on a device.
+#if DEBUG
     [FBAdSettings addTestDevice:@"e94e40bf9ef497a17ada25682e65ef02d18e23ae"];
-    
+#endif
     // Initiate a request to load an ad.
     [nativeAd loadAd];
 }
