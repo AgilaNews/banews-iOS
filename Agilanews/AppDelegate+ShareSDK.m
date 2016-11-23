@@ -57,7 +57,7 @@
              case SSDKPlatformTypeFacebook:
                  [appInfo SSDKSetupFacebookByApiKey:@"1188655531159250"
                                           appSecret:@"fa3aaac3805c9b004bfec6dac06d0e7d"
-                                           authType:SSDKAuthTypeWeb];
+                                           authType:SSDKAuthTypeBoth];
                  break;
              case SSDKPlatformTypeTwitter:
                  [appInfo SSDKSetupTwitterByConsumerKey:@"AYjlOtTLN2fsKfuqgjPYh76IK"
