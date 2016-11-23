@@ -42,10 +42,8 @@
 @property (nonatomic, strong) UILabel *blankLabel;
 @property (nonatomic, strong) UIImageView *failureView;
 @property (nonatomic, strong) NSMutableArray *tasks;
+@property (nonatomic, strong) NSMutableArray *playerPath;
 @property (nonatomic, assign) long long enterTime;      // 文章进入时间
-@property (nonatomic, assign) long long playStartTime;
-@property (nonatomic, assign) long long playTimeCount;
-@property (nonatomic, assign) BOOL isAutoPlaying;
 @property (nonatomic, assign) BOOL isContentOpen;
 @property (nonatomic, assign) BOOL isOther;
 @property (nonatomic, assign) BOOL isPushEnter;

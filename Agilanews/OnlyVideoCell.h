@@ -26,8 +26,7 @@
 @property (nonatomic, strong) UIImageView *commentView;     // 评论视图
 @property (nonatomic, strong) UILabel *commentLabel;
 @property (nonatomic, strong) UIButton *shareButton;        // 分享按钮
-@property (nonatomic, assign) long long playStartTime;
-@property (nonatomic, assign) long long playTimeCount;
+@property (nonatomic, strong) NSMutableArray *playerPath;
 @property (nonatomic, assign) BOOL isPlay;
 @property (nonatomic, assign) BOOL isMove;
 

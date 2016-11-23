@@ -90,6 +90,8 @@
     UIPanGestureRecognizer *gestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
     [self.view addGestureRecognizer:gestureRecognizer];
     
+    _playerPath = [NSMutableArray array];
+    
     if (_playerView) {
         [self.view addSubview:_playerView];
         self.playerView.delegate = self;
@@ -161,11 +163,17 @@
     }
     // 判断播放器状态
     if (self.playerView.playerState == kYTPlayerStatePaused || self.playerView.playerState == kYTPlayerStateEnded) {
-        if (self.playerView.playerState == kYTPlayerStatePaused) {
-            _isAutoPlaying = YES;
+        if (_fromCell && _fromCell.playerPath.count > 0) {
+            _playerPath = [NSMutableArray arrayWithArray:_fromCell.playerPath];
+            [_fromCell.playerPath removeAllObjects];
         }
         [self.playerView playVideo];
-    } else if (self.playerView.playerState != kYTPlayerStatePlaying) {
+    } else if (self.playerView.playerState == kYTPlayerStatePlaying) {
+        if (_fromCell && _fromCell.playerPath.count > 0) {
+            _playerPath = [NSMutableArray arrayWithArray:_fromCell.playerPath];
+            [_fromCell.playerPath removeAllObjects];
+        }
+    } else {
         VideoModel *model = _model.videos.firstObject;
         [self.playerView loadWithVideoId:model.youtube_id playerVars:_playerVars];
         _holderView = [[UIView alloc] initWithFrame:_playerView.bounds];
@@ -206,22 +214,14 @@
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-    long long duration = 0;
-    if (_isOther) {
-        duration = _playTimeCount;
-        // 播放结束打点
-        [self uploadOverPlayingVideo];
-    } else {
-        duration = [[NSDate date] timeIntervalSince1970] * 1000 - _playStartTime + _playTimeCount;
-    }
     if (_isNoModel || !_indexPath) {
         return;
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_RecoverVideo
                                                         object:@{@"index":_indexPath,
                                                                  @"playerView":_playerView,
-                                                                 @"stop":_isOther ? @1 : @0,
-                                                                 @"duration":[NSNumber numberWithLongLong:duration]}];
+                                                                 @"stop":_isOther ? @1 : @0
+                                                                 }];
 }
 
 - (void)dealloc
@@ -232,6 +232,10 @@
     }
     [_tasks removeAllObjects];
     
+    // 播放结束打点
+    [_playerPath addObject:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time", @"5" , @"type", nil]];
+    [self uploadOverPlayingVideo];
+
     // 服务器打点-详情页返回-020201
     NSMutableDictionary *eventDic = [NSMutableDictionary dictionary];
     [eventDic setObject:@"020201" forKey:@"id"];
@@ -737,36 +741,17 @@
  */
 - (void)uploadOverPlayingVideo
 {
-    long long duration = 0;
-    if (_fromCell.playStartTime > 0 && _playStartTime == 0) {
-        // 在列表中开始播放
-        if (self.playerView.playerState == kYTPlayerStatePlaying || self.playerView.playerState == kYTPlayerStateUnknown) {
-            duration = ([[NSDate date] timeIntervalSince1970] * 1000 - _fromCell.playStartTime + _fromCell.playTimeCount + _playTimeCount) / 1000;
-        } else {
-            duration = (_fromCell.playTimeCount + _playTimeCount) / 1000;
-        }
-    } else if (_playStartTime > 0) {
-        // 在当前页开始播放
-        if (self.playerView.playerState == kYTPlayerStatePlaying || self.playerView.playerState == kYTPlayerStateUnknown) {
-            duration = ([[NSDate date] timeIntervalSince1970] * 1000 - _playStartTime + _playTimeCount) / 1000;
-        } else {
-            duration = _playTimeCount / 1000;
-        }
-    }
-    _fromCell.playStartTime = 0;
-    _fromCell.playTimeCount = 0;
-    _playStartTime = 0;
-    _playTimeCount = 0;
-    if (duration > 0 && duration < 7200) {
-        // 服务器打点-视频播放完毕-020302
+    if (_playerPath.count > 0) {
+        // 服务器打点-视频播放完毕-020303
         NSMutableDictionary *eventDic = [NSMutableDictionary dictionary];
-        [eventDic setObject:@"020302" forKey:@"id"];
+        [eventDic setObject:@"020303" forKey:@"id"];
         [eventDic setObject:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970] * 1000] forKey:@"time"];
         [eventDic setObject:_model.news_id forKey:@"news_id"];
         VideoModel *model = _model.videos.firstObject;
         [eventDic setObject:model.youtube_id forKey:@"youtube_video_id"];
         [eventDic setObject:@"1" forKey:@"play_type"];
-        [eventDic setObject:[NSString stringWithFormat:@"%lld",duration] forKey:@"duration"];
+        [eventDic setObject:[NSArray arrayWithArray:_playerPath] forKey:@"path"];
+        [_playerPath removeAllObjects];
         [eventDic setObject:[NetType getNetType] forKey:@"net"];
         if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
             [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) forKey:@"lng"];
@@ -779,19 +764,9 @@
         if (abflag && abflag.length > 0) {
             [eventDic setObject:abflag forKey:@"abflag"];
         }
-        NSDictionary *sessionDic = [NSDictionary dictionaryWithObjectsAndKeys:
-                                    DEF_PERSISTENT_GET_OBJECT(@"UUID"), @"id",
-                                    [NSArray arrayWithObject:eventDic], @"events",
-                                    nil];
-        NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObject:[NSArray arrayWithObject:sessionDic] forKey:@"sessions"];
-        [[SSHttpRequest sharedInstance] post:@"" params:params contentType:JsonType serverType:NetServer_Log success:^(id responseObj) {
-            // 打点成功
-        } failure:^(NSError *error) {
-            // 打点失败
-            [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
-            AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-            [appDelegate.eventArray addObject:eventDic];
-        } isShowHUD:NO];
+        [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
+        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        [appDelegate.eventArray addObject:eventDic];
     }
 }
 
@@ -1713,6 +1688,7 @@
                 [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
                 self.isRecommendShow = NO;
                 // 播放结束打点
+                [_playerPath addObject:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time", @"4" , @"type", nil]];
                 [self uploadOverPlayingVideo];
                 // 新闻推荐网络请求
                 [self recommendWithNewsID:model.news_id AppDelegate:appDelegate];
@@ -2048,6 +2024,7 @@
         [_holderView removeFromSuperview];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self.playerView playVideo];
+            [self uploadStartPlayVideo];
         });
     } else {
         NSString *message = @"You are playing video using traffic, whether to continue playing?";
@@ -2058,6 +2035,7 @@
         UIAlertAction *continueAction = [UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
             [_holderView removeFromSuperview];
             [weakSelf.playerView playVideo];
+            [weakSelf uploadStartPlayVideo];
         }];
         [playingAlert addAction:stopAction];
         [playingAlert addAction:continueAction];
@@ -2070,61 +2048,63 @@
     switch (state) {
         case kYTPlayerStatePlaying:
         {
-            if (_isAutoPlaying) {
-                // 暂停状态自动播放不打点
-                return;
-            }
-            // 服务器打点-视频播放-020301
-            _playStartTime = [[NSDate date] timeIntervalSince1970] * 1000;
-            if (_playTimeCount == 0) {
-                NSMutableDictionary *eventDic = [NSMutableDictionary dictionary];
-                [eventDic setObject:@"020301" forKey:@"id"];
-                [eventDic setObject:[NSNumber numberWithLongLong:_playStartTime] forKey:@"time"];
-                [eventDic setObject:_model.news_id forKey:@"news_id"];
-                VideoModel *model = _model.videos.firstObject;
-                [eventDic setObject:model.youtube_id forKey:@"youtube_video_id"];
-                [eventDic setObject:@"1" forKey:@"play_type"];
-                [eventDic setObject:[NetType getNetType] forKey:@"net"];
-                if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
-                    [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) forKey:@"lng"];
-                    [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) forKey:@"lat"];
-                } else {
-                    [eventDic setObject:@"" forKey:@"lng"];
-                    [eventDic setObject:@"" forKey:@"lat"];
-                }
-                NSString *abflag = DEF_PERSISTENT_GET_OBJECT(@"abflag");
-                if (abflag && abflag.length > 0) {
-                    [eventDic setObject:abflag forKey:@"abflag"];
-                }
-                NSDictionary *sessionDic = [NSDictionary dictionaryWithObjectsAndKeys:
-                                            DEF_PERSISTENT_GET_OBJECT(@"UUID"), @"id",
-                                            [NSArray arrayWithObject:eventDic], @"events",
-                                            nil];
-                NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObject:[NSArray arrayWithObject:sessionDic] forKey:@"sessions"];
-                [[SSHttpRequest sharedInstance] post:@"" params:params contentType:JsonType serverType:NetServer_Log success:^(id responseObj) {
-                    // 打点成功
-                } failure:^(NSError *error) {
-                    // 打点失败
-                    [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
-                    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-                    [appDelegate.eventArray addObject:eventDic];
-                } isShowHUD:NO];
-            }
+            // 服务器打点参数
+            [_playerPath addObject:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time", @"2" , @"type", nil]];
             break;
         }
         case kYTPlayerStatePaused:
         {
-            _playTimeCount += [[NSDate date] timeIntervalSince1970] * 1000 - _playStartTime;
+            // 服务器打点参数
+            [_playerPath addObject:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time", @"3" , @"type", nil]];
             break;
         }
         case kYTPlayerStateEnded:
         {
-            // 播放结束打点
-            [self uploadOverPlayingVideo];
+            // 服务器打点参数
+            [_playerPath addObject:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time", @"4" , @"type", nil]];
         }
         default:
             break;
     }
+}
+
+- (void)uploadStartPlayVideo
+{
+    // 服务器打点参数
+    [_playerPath addObject:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time", @"1" , @"type", nil]];
+    // 服务器打点-视频播放-020301
+    NSMutableDictionary *eventDic = [NSMutableDictionary dictionary];
+    [eventDic setObject:@"020301" forKey:@"id"];
+    [eventDic setObject:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970] * 1000] forKey:@"time"];
+    [eventDic setObject:_model.news_id forKey:@"news_id"];
+    VideoModel *model = _model.videos.firstObject;
+    [eventDic setObject:model.youtube_id forKey:@"youtube_video_id"];
+    [eventDic setObject:@"1" forKey:@"play_type"];
+    [eventDic setObject:[NetType getNetType] forKey:@"net"];
+    if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
+        [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) forKey:@"lng"];
+        [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) forKey:@"lat"];
+    } else {
+        [eventDic setObject:@"" forKey:@"lng"];
+        [eventDic setObject:@"" forKey:@"lat"];
+    }
+    NSString *abflag = DEF_PERSISTENT_GET_OBJECT(@"abflag");
+    if (abflag && abflag.length > 0) {
+        [eventDic setObject:abflag forKey:@"abflag"];
+    }
+    NSDictionary *sessionDic = [NSDictionary dictionaryWithObjectsAndKeys:
+                                DEF_PERSISTENT_GET_OBJECT(@"UUID"), @"id",
+                                [NSArray arrayWithObject:eventDic], @"events",
+                                nil];
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObject:[NSArray arrayWithObject:sessionDic] forKey:@"sessions"];
+    [[SSHttpRequest sharedInstance] post:@"" params:params contentType:JsonType serverType:NetServer_Log success:^(id responseObj) {
+        // 打点成功
+    } failure:^(NSError *error) {
+        // 打点失败
+        [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
+        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        [appDelegate.eventArray addObject:eventDic];
+    } isShowHUD:NO];
 }
 
 #pragma mark - UINavigationControllerDelegate

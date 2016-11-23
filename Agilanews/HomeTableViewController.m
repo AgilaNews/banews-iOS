@@ -1352,8 +1352,6 @@
             OnlyVideoCell *videoCell = (OnlyVideoCell *)cell;
             [videoCell setNeedsLayout];
             if (videoCell.isMove) {
-                NSNumber *duration = dic[@"duration"];
-                videoCell.playTimeCount += duration.longLongValue;
                 [videoCell.contentView addSubview:playerView];
                 [videoCell.contentView bringSubviewToFront:videoCell.titleImageView];
                 videoCell.isMove = NO;
