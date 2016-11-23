@@ -539,6 +539,14 @@
     } else if (_detailModel && _model) {
         // 新闻详情本地缓存
         NSString *time = [NSString stringWithFormat:@"%@",[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]]];
+        if (_isPushEnter) {
+            _model = [[NewsModel alloc] init];
+            _model.imgs = _detailModel.imgs;
+            _model.news_id = _detailModel.news_id;
+            _model.public_time = _detailModel.public_time;
+            _model.source = _detailModel.source;
+            _model.title = _detailModel.title;
+        }
         [[CoreDataManager sharedInstance] addLocalFavoriteWithNewsID:_model.news_id DetailModel:_detailModel CollectTime:time NewsModel:_model];
         button.selected = YES;
         [SVProgressHUD showSuccessWithStatus:@"Save the news and read it later by entering 'Favorites'"];
