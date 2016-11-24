@@ -258,8 +258,8 @@
 		5F17B48D1DB5BEB5008EBD51 /* YTPlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YTPlayerView.m; sourceTree = "<group>"; };
 		5F17B4911DB861F5008EBD51 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		5F17B4BD1DB86883008EBD51 /* Agila.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Agila.xcdatamodel; sourceTree = "<group>"; };
-		5F17B4D91DB87682008EBD51 /* CoreDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreDataManager.h; sourceTree = "<group>"; };
-		5F17B4DA1DB87682008EBD51 /* CoreDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataManager.m; sourceTree = "<group>"; };
+		5F17B4D91DB87682008EBD51 /* CoreDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoreDataManager.h; path = Agilanews/CoreDataManager.h; sourceTree = SOURCE_ROOT; };
+		5F17B4DA1DB87682008EBD51 /* CoreDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CoreDataManager.m; path = Agilanews/CoreDataManager.m; sourceTree = SOURCE_ROOT; };
 		5F17B4DC1DB8B430008EBD51 /* AccountFavorite+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AccountFavorite+CoreDataClass.h"; sourceTree = "<group>"; };
 		5F17B4DD1DB8B430008EBD51 /* AccountFavorite+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AccountFavorite+CoreDataClass.m"; sourceTree = "<group>"; };
 		5F17B4DE1DB8B430008EBD51 /* AccountFavorite+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AccountFavorite+CoreDataProperties.h"; sourceTree = "<group>"; };
@@ -745,6 +745,8 @@
 		5F17B4D21DB87574008EBD51 /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
+				5F17B4D91DB87682008EBD51 /* CoreDataManager.h */,
+				5F17B4DA1DB87682008EBD51 /* CoreDataManager.m */,
 				5F17B4FA1DB9E45B008EBD51 /* LocalFavorite+CoreDataClass.h */,
 				5F17B4FB1DB9E45C008EBD51 /* LocalFavorite+CoreDataClass.m */,
 				5F17B4FC1DB9E45C008EBD51 /* LocalFavorite+CoreDataProperties.h */,
@@ -1284,8 +1286,6 @@
 				5F571F741D589BEF00604CDD /* NetType.m */,
 				5F571FD91D62DE0500604CDD /* FJSWaveProgress.h */,
 				5F571FDA1D62DE0500604CDD /* FJSWaveProgress.m */,
-				5F17B4D91DB87682008EBD51 /* CoreDataManager.h */,
-				5F17B4DA1DB87682008EBD51 /* CoreDataManager.m */,
 			);
 			name = Base;
 			sourceTree = "<group>";
