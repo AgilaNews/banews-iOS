@@ -224,6 +224,7 @@
         _replyContentLabel = [[UILabel alloc] init];
         _replyContentLabel.font = [UIFont systemFontOfSize:13];
         _replyContentLabel.textColor = kGrayColor;
+        _replyContentLabel.numberOfLines = 0;
     }
     return _replyContentLabel;
 }
