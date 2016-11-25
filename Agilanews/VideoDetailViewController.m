@@ -1524,8 +1524,8 @@
                             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
                         }
                         if (cell.contentView.subviews.count <= 0) {
-                            RecommendedView *recommendedView = [[RecommendedView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 30) titleImage:[UIImage imageNamed:@"icon_newcomment"] titleText:@"New Comments" HaveLoading:NO];
-                            [cell.contentView addSubview:recommendedView];
+                            _recommentsView = [[RecommendedView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 30) titleImage:[UIImage imageNamed:@"icon_newcomment"] titleText:@"New Comments" HaveLoading:YES];
+                            [cell.contentView addSubview:_recommentsView];
                         }
                         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
                         return cell;
@@ -1563,8 +1563,8 @@
                         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
                     }
                     if (cell.contentView.subviews.count <= 0) {
-                        RecommendedView *recommendedView = [[RecommendedView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 30) titleImage:[UIImage imageNamed:@"icon_newcomment"] titleText:@"New Comments" HaveLoading:NO];
-                        [cell.contentView addSubview:recommendedView];
+                        _recommentsView = [[RecommendedView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 30) titleImage:[UIImage imageNamed:@"icon_newcomment"] titleText:@"New Comments" HaveLoading:YES];
+                        [cell.contentView addSubview:_recommentsView];
                     }
                     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
                     return cell;
