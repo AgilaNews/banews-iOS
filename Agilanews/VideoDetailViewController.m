@@ -363,7 +363,7 @@
     [params setObject:newsID forKey:@"news_id"];
     [params setObject:@"later" forKey:@"prefer"];
     [params setObject:@3 forKey:@"pn"];
-    NSURLSessionDataTask *task = [[SSHttpRequest sharedInstance] get:kHomeUrl_VideoRecommend params:params contentType:UrlencodedType serverType:NetServer_V3 success:^(id responseObj) {
+    NSURLSessionDataTask *task = [[SSHttpRequest sharedInstance] get:kHomeUrl_VideoComment params:params contentType:UrlencodedType serverType:NetServer_V3 success:^(id responseObj) {
         [_recommentsView stopAnimation];
         NSArray *newArray = responseObj[@"new"];
         NSMutableArray *newModels = [NSMutableArray array];
@@ -465,7 +465,7 @@
         return;
     }
     [params setObject:commentModel.commentID forKey:@"last_id"];
-    NSURLSessionDataTask *task = [[SSHttpRequest sharedInstance] get:kHomeUrl_VideoRecommend params:params contentType:UrlencodedType serverType:NetServer_V3 success:^(id responseObj) {
+    NSURLSessionDataTask *task = [[SSHttpRequest sharedInstance] get:kHomeUrl_VideoComment params:params contentType:UrlencodedType serverType:NetServer_V3 success:^(id responseObj) {
         [_tableView.footer endRefreshing];
         NSArray *array = responseObj[@"new"];
         if (array.count > 0) {
