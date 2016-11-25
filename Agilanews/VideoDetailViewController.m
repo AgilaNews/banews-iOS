@@ -219,14 +219,15 @@
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_RecoverVideo
                                                         object:@{@"index":_indexPath,
-                                                                 @"playerView":_playerView,
-                                                                 @"stop":_isOther ? @1 : @0
+                                                                 @"playerView":_playerView
                                                                  }];
 }
 
 - (void)dealloc
 {
+    [self.playerView stopVideo];
     self.playerView.delegate = nil;
+    
     for (NSURLSessionDataTask *task in _tasks) {
         [task cancel];
     }

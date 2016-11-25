@@ -1346,18 +1346,16 @@
         NSDictionary *dic = notif.object;
         YTPlayerView *playerView = dic[@"playerView"];
         NSIndexPath *indexPath = dic[@"index"];
-//        NSNumber *isPlay = dic[@"stop"];
         UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
         if ([cell isKindOfClass:[OnlyVideoCell class]]) {
             OnlyVideoCell *videoCell = (OnlyVideoCell *)cell;
-            [videoCell setNeedsLayout];
             if (videoCell.isMove) {
                 [videoCell.contentView addSubview:playerView];
                 [videoCell.contentView bringSubviewToFront:videoCell.titleImageView];
                 videoCell.isMove = NO;
                 videoCell.isPlay = NO;
-//                if ([isPlay isEqualToNumber:@1]) {
-//                }
+                [videoCell.playerView stopVideo];
+                [videoCell setNeedsLayout];
             }
         }
     }
