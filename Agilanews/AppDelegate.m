@@ -920,12 +920,18 @@
 - (void)cacheAllData
 {
     @autoreleasepool {
+        NSString *newsFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/news.data"];
+        // 取旧新闻数据
+        NSDictionary *oldNewsData = [NSKeyedUnarchiver unarchiveObjectWithFile:newsFilePath];
+        NSNumber *oldNewsDataKey = oldNewsData.allKeys.firstObject;
+
         UINavigationController *navCtrl = (UINavigationController *)_window.rootViewController;
         HomeViewController *homeVC = navCtrl.viewControllers.firstObject;
         // 缓存新闻列表
         NSMutableDictionary *newsDic = [NSMutableDictionary dictionary];
         for (HomeTableViewController *homeTabVC in homeVC.segmentVC.subViewControllers) {
             if (homeTabVC.dataList.count > 0) {
+                // 有新数据
                 NSInteger length = 30;
                 if (homeTabVC.dataList.count > length) {
                     NSMutableArray *listArray = [NSMutableArray arrayWithArray:[homeTabVC.dataList subarrayWithRange:NSMakeRange(0, length)]];
@@ -944,9 +950,12 @@
                     }
                     [newsDic setObject:listArray forKey:homeTabVC.model.channelID];
                 }
+            } else {
+                // 无新数据
+                NSArray *dataList = oldNewsData[oldNewsDataKey][homeTabVC.model.channelID];
+                [newsDic setObject:dataList forKey:homeTabVC.model.channelID];
             }
         }
-        NSString *newsFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/news.data"];
         NSDictionary *newsData = [NSDictionary dictionaryWithObject:newsDic forKey:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]]];
         [NSKeyedArchiver archiveRootObject:newsData toFile:newsFilePath];
         // 缓存点赞记录
