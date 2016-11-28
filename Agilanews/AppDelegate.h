@@ -27,7 +27,6 @@
 @property (strong, nonatomic) NSMutableDictionary *checkDic;        // 新闻查看记录
 @property (strong, nonatomic) NSMutableArray *eventArray;           // 打点记录
 @property (strong, nonatomic) NSMutableDictionary *refreshTimeDic;  // 刷新时间
-@property (assign, nonatomic) BOOL isStart;
 
 @end
 

@@ -2077,8 +2077,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.banews.agila;
 				PRODUCT_NAME = Agila;
-				PROVISIONING_PROFILE = "4e635bc1-2af2-452a-823a-edcd205fbd05";
-				PROVISIONING_PROFILE_SPECIFIER = "iOS Distribution_AdHoc";
+				PROVISIONING_PROFILE = "c21df7c4-82d9-470e-9443-2334ffbd104e";
+				PROVISIONING_PROFILE_SPECIFIER = "Agila Distribution_AdHoc";
 				SWIFT_OBJC_BRIDGING_HEADER = "Agila-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 				VALID_ARCHS = "arm64 armv7s armv7";

@@ -127,9 +127,6 @@
     }
     [self.tableView setContentOffset:CGPointMake(self.tableView.contentOffset.x, .5)];
     
-    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    NSNumber *refreshNum = appDelegate.refreshTimeDic[_model.channelID];
-    _refreshTime = refreshNum.longLongValue;
     @autoreleasepool {
         NSString *newsFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/news.data"];
         NSDictionary *newsData = [NSKeyedUnarchiver unarchiveObjectWithFile:newsFilePath];
