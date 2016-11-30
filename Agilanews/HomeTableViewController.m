@@ -142,7 +142,7 @@
             if (model && [model isKindOfClass:[NewsModel class]]) {
                 refreshTime = model.public_time.longLongValue;
             }
-            if ([[NSDate date] timeIntervalSince1970] - refreshTime < 3600) {
+            if ([[NSDate date] timeIntervalSince1970] - refreshTime > 3600) {
                 [self requestDataWithChannelID:_model.channelID isLater:YES isShowHUD:NO isShowBanner:NO];
             }
         }
@@ -825,11 +825,8 @@
             [_dataList addObjectsFromArray:models];
             [weakSelf tableViewDidFinishTriggerHeader:NO reload:YES];
         }
-        if (showHUD) {
-            NSInteger count = models.count;
-            if (showBanner) {
-                count -= 1;
-            }
+        if (showBanner) {
+            NSInteger count = models.count - 1;
             if (count > 0) {
                 [[BannerView sharedInstance] showBannerWithText:DEF_banner((long)count) superView:weakSelf.tableView];
             } else {

@@ -295,10 +295,10 @@
                         isHave = YES;
                         break;
                     }
-                    if (!isHave) {
-                        // 发现删除频道
-                        [deleteArray addObject:model];
-                    }
+                }
+                if (!isHave) {
+                    // 发现删除频道
+                    [deleteArray addObject:model];
                 }
             }
             // 删除频道
@@ -309,6 +309,18 @@
             }
             if (newArray.count > 0 || deleteArray.count > 0) {
                 [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Categories object:version];
+                return;
+            }
+            // 判断是否有调整顺序
+            if (_categoriesArray.count == categoryArray.count) {
+                for (int i = 0; i < _categoriesArray.count; i++) {
+                    CategoriesModel *model = _categoriesArray[i];
+                    CategoriesModel *newModel = categoryArray[i];
+                    if (![model.channelID isEqualToNumber:newModel.channelID]) {
+                        _categoriesArray = categoryArray;
+                        [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Categories object:version];
+                    }
+                }
             }
         }
     } failure:^(NSError *error) {
