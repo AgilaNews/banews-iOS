@@ -90,9 +90,7 @@
         _playerView = [[YTPlayerView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, videoHeight)];
         [self.view addSubview:_playerView];
         self.playerView.delegate = self;
-        _holderView = [[UIView alloc] initWithFrame:_playerView.bounds];
-        _holderView.backgroundColor = [UIColor blackColor];
-        [self.playerView addSubview:_holderView];
+        [self.playerView addSubview:self.holderView];
     }
     
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, _playerView.bottom, kScreenWidth, kScreenHeight - _playerView.bottom - 50) style:UITableViewStyleGrouped];
@@ -151,6 +149,12 @@
     if (_isNoModel) {
         return;
     }
+    if ([_playerView.superview.superview isKindOfClass:[UITableViewCell class]]) {
+        _playerView = [[YTPlayerView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, videoHeight)];
+        [self.view addSubview:_playerView];
+        self.playerView.delegate = self;
+        [self.playerView addSubview:self.holderView];
+    }
     // 判断播放器状态
     if (self.playerView.playerState == kYTPlayerStatePaused || self.playerView.playerState == kYTPlayerStateEnded) {
         if (_fromCell && _fromCell.playerPath.count > 0) {
@@ -166,9 +170,7 @@
     } else {
         VideoModel *model = _model.videos.firstObject;
         [self.playerView loadWithVideoId:model.youtube_id playerVars:_playerVars];
-        _holderView = [[UIView alloc] initWithFrame:_playerView.bounds];
-        _holderView.backgroundColor = [UIColor blackColor];
-        [self.playerView addSubview:_holderView];
+        [self.playerView addSubview:self.holderView];
     }
     
     _enterTime = [[NSDate date] timeIntervalSince1970];
@@ -339,11 +341,7 @@
             }
         }
         weakSelf.hotCommentArray = [NSMutableArray arrayWithArray:hotModels];
-        if (weakSelf.hotCommentArray.count > 0) {
-            [weakSelf.tableView reloadData];
-        } else {
-            [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationFade];
-        }
+        [weakSelf.tableView reloadData];
     } failure:^(NSError *error) {
         [_recommentsView stopAnimation];
         _recommentsView.retryLabel.hidden = NO;
@@ -1599,11 +1597,7 @@
                 }
                 VideoModel *videoModel = model.videos.firstObject;
                 [self.playerView loadWithVideoId:videoModel.youtube_id playerVars:_playerVars];
-                if (!_holderView) {
-                    _holderView = [[UIView alloc] initWithFrame:_playerView.bounds];
-                    _holderView.backgroundColor = [UIColor blackColor];
-                }
-                [self.playerView addSubview:_holderView];
+                [self.playerView addSubview:self.holderView];
                 _isOther = YES;
                 if (model.news_id.length <= 0) {
                     return;
@@ -1656,8 +1650,8 @@
                 _model = model;
                 _recommend_news = [NSMutableArray array];
                 _commentArray = [NSMutableArray array];
-                [self.tableView reloadData];
                 [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+                [self.tableView reloadData];
                 self.isRecommendShow = NO;
                 // 播放结束打点
                 [_playerPath addObject:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time", @"4" , @"type", nil]];
@@ -2077,6 +2071,15 @@
         AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
         [appDelegate.eventArray addObject:eventDic];
     } isShowHUD:NO];
+}
+
+- (UIView *)holderView
+{
+    if (_holderView == nil) {
+        _holderView = [[UIView alloc] initWithFrame:_playerView.bounds];
+        _holderView.backgroundColor = [UIColor blackColor];
+    }
+    return _holderView;
 }
 
 - (void)didReceiveMemoryWarning {
