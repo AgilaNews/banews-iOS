@@ -569,8 +569,7 @@
             videoDetailVC.playerView = cell.playerView;
             videoDetailVC.indexPath = indexPath;
             videoDetailVC.fromCell = cell;
-            cell.isPlay = YES;
-            cell.titleImageView.hidden = YES;
+            cell.isMove = YES;
             [self.navigationController pushViewController:videoDetailVC animated:YES];
         } else {
             NewsDetailViewController *newsDetailVC = [[NewsDetailViewController alloc] init];
@@ -691,12 +690,13 @@
     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
     if ([cell isKindOfClass:[OnlyVideoCell class]]) {
         OnlyVideoCell *videoCell = (OnlyVideoCell *)cell;
-        [videoCell setNeedsLayout];
         if (videoCell.isMove) {
             [videoCell.contentView addSubview:playerView];
             [videoCell.contentView bringSubviewToFront:videoCell.titleImageView];
             videoCell.isMove = NO;
             videoCell.isPlay = NO;
+            [videoCell.playerView stopVideo];
+            [videoCell setNeedsLayout];
         }
     }
 }
