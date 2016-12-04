@@ -76,16 +76,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    if (IOS_VERSION_CODE <= 8) {
-        __weak typeof(self.navigationController.delegate) weakDelegate = self.navigationController.delegate;
-        if (weakDelegate != self) {
-            weakDelegate = self;
-        }
-    } else {
-        if (self.navigationController.delegate != self) {
-            self.navigationController.delegate = self;
-        }
-    }
+
     // 打点-页面进入-011501
     [Flurry logEvent:@"ReplyComments_Enter"];
 #if DEBUG
@@ -113,9 +104,7 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    if (self.navigationController.delegate == self) {
-        self.navigationController.delegate = nil;
-    }
+
 }
 
 - (void)dealloc
@@ -709,18 +698,6 @@
             videoCell.isMove = NO;
             videoCell.isPlay = NO;
         }
-    }
-}
-
-#pragma mark - UINavigationControllerDelegate
-- (id<UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController animationControllerForOperation:(UINavigationControllerOperation)operation fromViewController:(UIViewController *)fromVC toViewController:(UIViewController *)toVC
-{
-    // && [_model.channelID isEqualToNumber:@30001]
-    if(operation == UINavigationControllerOperationPush) {
-        PushTransitionAnimate *pushTransition = [[PushTransitionAnimate alloc] init];
-        return pushTransition;
-    } else {
-        return nil;
     }
 }
 

@@ -236,8 +236,8 @@
 - (void)saveImage
 {
     // 打点-长按图片点击下载-010008
-    UINavigationController *navCtrl = (UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
-    HomeViewController *homeVC = navCtrl.viewControllers.firstObject;
+    JTNavigationController *navCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+    HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
     HomeTableViewController *homeTBC = homeVC.segmentVC.subViewControllers[homeVC.segmentVC.selectIndex - 10000];
     NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
                                    homeTBC.model.name, @"channel",
@@ -278,8 +278,8 @@
 {
     [[[[UIApplication sharedApplication] keyWindow] rootViewController] presentViewController:self animated:NO completion:nil];
     // 打点-图片全屏展示页页面进入-010009
-    UINavigationController *navCtrl = (UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
-    HomeViewController *homeVC = navCtrl.viewControllers.firstObject;
+    JTNavigationController *navCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+    HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
     HomeTableViewController *homeTBC = homeVC.segmentVC.subViewControllers[homeVC.segmentVC.selectIndex - 10000];
     NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
                                    homeTBC.model.name, @"channel",

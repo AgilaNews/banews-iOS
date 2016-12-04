@@ -175,9 +175,11 @@
         LeftView *leftView = (LeftView *)self.superview;
         leftView.isShow = NO;
     }
-    BaseNavigationController *navCtrl = nil;
-    if ([[UIApplication sharedApplication].keyWindow.rootViewController isKindOfClass:[BaseNavigationController class]]) {
-        navCtrl = (BaseNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+
+    HomeViewController *homeVC = nil;
+    if ([[UIApplication sharedApplication].keyWindow.rootViewController isKindOfClass:[JTNavigationController class]]) {
+        JTNavigationController *navCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+        homeVC = navCtrl.jt_viewControllers.firstObject;
     } else {
         return;
     }
@@ -220,7 +222,7 @@
             } isShowHUD:NO];
             // 点击Notification
             NotificationViewController *notifVC = [[NotificationViewController alloc] init];
-            [navCtrl pushViewController:notifVC animated:YES];
+            [homeVC.navigationController pushViewController:notifVC animated:YES];
             break;
         }
         case 1:
@@ -232,7 +234,7 @@
 #endif
             // 点击Channels
             ChannelViewController *channelVC = [[ChannelViewController alloc] init];
-            [navCtrl pushViewController:channelVC animated:YES];
+            [homeVC.navigationController pushViewController:channelVC animated:YES];
             break;
         }
         case 2:
@@ -244,7 +246,7 @@
 #endif
             // 点击Favorites
             FavoritesViewController *favoritesVC = [[FavoritesViewController alloc] init];
-            [navCtrl pushViewController:favoritesVC animated:YES];            
+            [homeVC.navigationController pushViewController:favoritesVC animated:YES];
             break;
         }
         case 3:
@@ -256,7 +258,7 @@
 #endif
             // 点击Feedback
             FeedbackViewController *feedbackVC = [[FeedbackViewController alloc] init];
-            [navCtrl pushViewController:feedbackVC animated:YES];
+            [homeVC.navigationController pushViewController:feedbackVC animated:YES];
             break;
         }
         case 4:
@@ -268,7 +270,7 @@
 #endif
             // 点击Settings
             SettingsViewController *settingsVC = [[SettingsViewController alloc] init];
-            [navCtrl pushViewController:settingsVC animated:YES];
+            [homeVC.navigationController pushViewController:settingsVC animated:YES];
             break;
         }
         default:
@@ -290,7 +292,10 @@
 {
     LeftView *leftView = (LeftView *)self.superview;
     leftView.isShow = NO;
-    BaseNavigationController *navCtrl = (BaseNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+    
+    JTNavigationController *navCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+    HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
+
     if (_appDelegate.model) {
         // 打点-点击头像-010701
         [Flurry logEvent:@"Info_Icon_Click"];
@@ -299,7 +304,7 @@
 #endif
         UserInfoViewController *userInfoVC = [[UserInfoViewController alloc] init];
         userInfoVC.model = _appDelegate.model;
-        [navCtrl pushViewController:userInfoVC animated:YES];
+        [homeVC.navigationController pushViewController:userInfoVC animated:YES];
     } else {
         // 打点-点击登陆-010402
         [Flurry logEvent:@"Menu_LoginButton_Click"];
@@ -307,7 +312,7 @@
         [iConsole info:@"Menu_LoginButton_Click",nil];
 #endif
         LoginViewController *loginVC = [[LoginViewController alloc] init];
-        [navCtrl pushViewController:loginVC animated:YES];
+        [homeVC.navigationController pushViewController:loginVC animated:YES];
     }
 }
 

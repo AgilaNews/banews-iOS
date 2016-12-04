@@ -42,12 +42,12 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [self changeCanSideBack];
+//    [self changeCanSideBack];
 }
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-    [self changeCanSideBack];
+//    [self changeCanSideBack];
 }
 
 /**
@@ -121,9 +121,9 @@
 - (void)backAction:(UIButton *)button
 {
     [SVProgressHUD dismiss];
-    if (self.navigationController.viewControllers.count > 1) {
-        [self.navigationController popViewControllerAnimated:YES];
-    }
+    [self.navigationController popViewControllerAnimated:YES];
+//    if (self.navigationController.viewControllers.count > 1) {
+//    }
 }
 
 #pragma mark - backAction关闭按钮点击事件

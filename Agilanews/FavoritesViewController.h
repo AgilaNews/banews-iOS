@@ -8,7 +8,7 @@
 
 #import "BaseViewController.h"
 
-@interface FavoritesViewController : BaseViewController <UITableViewDataSource, UITableViewDelegate, FBSDKSharingDelegate, UINavigationControllerDelegate>
+@interface FavoritesViewController : BaseViewController <UITableViewDataSource, UITableViewDelegate, FBSDKSharingDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *dataList;

@@ -155,16 +155,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    if (IOS_VERSION_CODE <= 8) {
-        __weak typeof(self.navigationController.delegate) weakDelegate = self.navigationController.delegate;
-        if (weakDelegate != self) {
-            weakDelegate = self;
-        }
-    } else {
-        if (self.navigationController.delegate != self) {
-            self.navigationController.delegate = self;
-        }
-    }
+
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -187,9 +178,7 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    if (self.navigationController.delegate == self) {
-        self.navigationController.delegate = nil;
-    }
+
 }
 
 - (void)dealloc
@@ -546,8 +535,7 @@
         videoDetailVC.playerView = cell.playerView;
         videoDetailVC.indexPath = indexPath;
         videoDetailVC.fromCell = cell;
-        cell.isPlay = YES;
-        cell.titleImageView.hidden = YES;
+        cell.isMove = YES;
         [self.navigationController pushViewController:videoDetailVC animated:YES];
         return;
     }
@@ -1331,7 +1319,7 @@
  */
 - (void)recoverVideo:(NSNotification *)notif
 {
-    if ([_model.channelID isEqualToNumber:@30001] || [_model.channelID isEqualToNumber:@10001]) {
+    if ([_model.channelID isEqualToNumber:@30001]) {
         NSDictionary *dic = notif.object;
         YTPlayerView *playerView = dic[@"playerView"];
         NSIndexPath *indexPath = dic[@"index"];
@@ -1372,18 +1360,6 @@
                                                 delegate:self];
             });
         }
-    }
-}
-
-#pragma mark - UINavigationControllerDelegate
-- (id<UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController animationControllerForOperation:(UINavigationControllerOperation)operation fromViewController:(UIViewController *)fromVC toViewController:(UIViewController *)toVC
-{
-    // && [_model.channelID isEqualToNumber:@30001]
-    if(operation == UINavigationControllerOperationPush) {
-        PushTransitionAnimate *pushTransition = [[PushTransitionAnimate alloc] init];
-        return pushTransition;
-    } else {
-        return nil;
     }
 }
 

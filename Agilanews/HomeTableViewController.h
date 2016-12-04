@@ -11,7 +11,7 @@
 #import "ImageModel.h"
 #import "GuideRefreshView.h"
 
-@interface HomeTableViewController : EaseRefreshTableViewController<UITableViewDataSource, UITableViewDelegate, FBSDKSharingDelegate, UINavigationControllerDelegate>
+@interface HomeTableViewController : EaseRefreshTableViewController<UITableViewDataSource, UITableViewDelegate, FBSDKSharingDelegate>
 
 @property (nonatomic, strong) CategoriesModel *model;
 @property (nonatomic, strong) NSMutableArray *dataList;

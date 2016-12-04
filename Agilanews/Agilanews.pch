@@ -74,6 +74,8 @@
 #import "CoreDataManager.h"
 #import <FBAudienceNetwork/FBAudienceNetwork.h>
 #import "FacebookAdManager.h"
+#import "JTNavigationController.h"
+#import "UIViewController+JTNavigationExtension.h"
 
 
 ////////////////////////////////////////

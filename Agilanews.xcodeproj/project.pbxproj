@@ -141,6 +141,8 @@
 		5F64627A1D474CD3008EEDEC /* CommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F6462791D474CD3008EEDEC /* CommentCell.m */; };
 		5F64627D1D4855F7008EEDEC /* CommentTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F64627C1D4855F7008EEDEC /* CommentTextField.m */; };
 		5F6462801D48AD3A008EEDEC /* CommentTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F64627F1D48AD3A008EEDEC /* CommentTextView.m */; };
+		5F6FAEAE1DF11D02006E4A1C /* JTNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F6FAEAB1DF11D02006E4A1C /* JTNavigationController.m */; };
+		5F6FAEAF1DF11D02006E4A1C /* UIViewController+JTNavigationExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F6FAEAD1DF11D02006E4A1C /* UIViewController+JTNavigationExtension.m */; };
 		5F767A5D1D9A44C900822BAC /* RefreshCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F767A5C1D9A44C800822BAC /* RefreshCell.m */; };
 		5F767A601D9BB6EA00822BAC /* ChannelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F767A5F1D9BB6EA00822BAC /* ChannelViewController.m */; };
 		5F767A641D9BBD4E00822BAC /* XWDragCellCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F767A631D9BBD4E00822BAC /* XWDragCellCollectionView.m */; };
@@ -473,6 +475,10 @@
 		5F64627C1D4855F7008EEDEC /* CommentTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentTextField.m; sourceTree = "<group>"; };
 		5F64627E1D48AD3A008EEDEC /* CommentTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentTextView.h; sourceTree = "<group>"; };
 		5F64627F1D48AD3A008EEDEC /* CommentTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentTextView.m; sourceTree = "<group>"; };
+		5F6FAEAA1DF11D02006E4A1C /* JTNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JTNavigationController.h; sourceTree = "<group>"; };
+		5F6FAEAB1DF11D02006E4A1C /* JTNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JTNavigationController.m; sourceTree = "<group>"; };
+		5F6FAEAC1DF11D02006E4A1C /* UIViewController+JTNavigationExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+JTNavigationExtension.h"; sourceTree = "<group>"; };
+		5F6FAEAD1DF11D02006E4A1C /* UIViewController+JTNavigationExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+JTNavigationExtension.m"; sourceTree = "<group>"; };
 		5F767A5B1D9A44C800822BAC /* RefreshCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RefreshCell.h; sourceTree = "<group>"; };
 		5F767A5C1D9A44C800822BAC /* RefreshCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RefreshCell.m; sourceTree = "<group>"; };
 		5F767A5E1D9BB6EA00822BAC /* ChannelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChannelViewController.h; sourceTree = "<group>"; };
@@ -1278,6 +1284,10 @@
 				5F635CB61D3E14F8006AAE3D /* BaseViewController.m */,
 				5FF4B6EF1D372A9300CC6704 /* BaseNavigationController.h */,
 				5FF4B6F01D372A9300CC6704 /* BaseNavigationController.m */,
+				5F6FAEAA1DF11D02006E4A1C /* JTNavigationController.h */,
+				5F6FAEAB1DF11D02006E4A1C /* JTNavigationController.m */,
+				5F6FAEAC1DF11D02006E4A1C /* UIViewController+JTNavigationExtension.h */,
+				5F6FAEAD1DF11D02006E4A1C /* UIViewController+JTNavigationExtension.m */,
 				5FF4B6F21D372B5500CC6704 /* UINavigationBar+Awesome.h */,
 				5FF4B6F31D372B5500CC6704 /* UINavigationBar+Awesome.m */,
 				5F635CA51D3CFA58006AAE3D /* TimeStampToString.h */,
@@ -1679,6 +1689,7 @@
 				5F64627D1D4855F7008EEDEC /* CommentTextField.m in Sources */,
 				5F17B4871DAB78A0008EBD51 /* GuideChannelView.m in Sources */,
 				5F42C0891D34E41D00B89651 /* SDWebImageManager.m in Sources */,
+				5F6FAEAE1DF11D02006E4A1C /* JTNavigationController.m in Sources */,
 				5F42C0A71D34E43A00B89651 /* SSBaseRequest.m in Sources */,
 				5F635EDE1D437034006AAE3D /* WebViewController.m in Sources */,
 				5F42C0841D34E41D00B89651 /* SDImageCache.m in Sources */,
@@ -1717,6 +1728,7 @@
 				5F42BFF71D34E3D500B89651 /* AFSecurityPolicy.m in Sources */,
 				5FF4B7B21D38F7B200CC6704 /* MASViewConstraint.m in Sources */,
 				5F42C0861D34E41D00B89651 /* SDWebImageDecoder.m in Sources */,
+				5F6FAEAF1DF11D02006E4A1C /* UIViewController+JTNavigationExtension.m in Sources */,
 				5F907AC31DDAD9F200DD9748 /* NotificationViewController.m in Sources */,
 				5F5342C11DC32870005D78F1 /* PopTransitionAnimate.m in Sources */,
 				5F8D85AA1D76A99700FF4019 /* WebViewJavascriptBridge.m in Sources */,

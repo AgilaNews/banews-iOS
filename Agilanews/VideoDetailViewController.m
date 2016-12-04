@@ -49,6 +49,7 @@
             }
         }
     }
+    
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.isBackButton = YES;
     
@@ -70,14 +71,6 @@
                                                  name:KNOTIFICATION_TouchFavorite
                                                object:nil];
     
-    NSString *deviceModel = [NetType getCurrentDeviceModel];
-    if ([deviceModel isEqualToString:@"iPhone7"] || [deviceModel isEqualToString:@"iPhone7Plus"]) {
-        UIImage *image = [self imageFromView:[UIApplication sharedApplication].keyWindow];
-        _toView = [[UIImageView alloc] initWithImage:image];
-    } else {
-        _toView = [[UIApplication sharedApplication].keyWindow snapshotViewAfterScreenUpdates:NO];
-    }
-    
     UIButton *shareBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     shareBtn.frame = CGRectMake(0, 0, 40, 40);
     [shareBtn setImage:[UIImage imageNamed:@"icon_article_share_default"] forState:UIControlStateNormal];
@@ -87,14 +80,12 @@
     negativeSpacer.width = -10;
     self.navigationItem.rightBarButtonItems = @[negativeSpacer, shareItem];
     
-    UIPanGestureRecognizer *gestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
-    [self.view addGestureRecognizer:gestureRecognizer];
-    
     _playerPath = [NSMutableArray array];
     
     if (_playerView) {
         [self.view addSubview:_playerView];
         self.playerView.delegate = self;
+        self.fromCell.isPlay = NO;
     } else {
         _playerView = [[YTPlayerView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, videoHeight)];
         [self.view addSubview:_playerView];
@@ -142,10 +133,9 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    if (self.navigationController.delegate != self) {
-        self.navigationController.delegate = self;
-    }
+
     [[UIApplication sharedApplication] setStatusBarHidden:YES];
+
     if ([UIDevice currentDevice].systemVersion.floatValue >= 10.0) {
         [self.navigationController.navigationBar setBarTintColor:[UIColor clearColor]];
         UIView *barBgView = self.navigationController.navigationBar.subviews.firstObject;
@@ -203,12 +193,26 @@
     }
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    if ([UIDevice currentDevice].systemVersion.floatValue >= 10.0) {
+        [self.navigationController.navigationBar setBarTintColor:[UIColor clearColor]];
+        UIView *barBgView = self.navigationController.navigationBar.subviews.firstObject;
+        for (UIView *subview in barBgView.subviews) {
+            if([subview isKindOfClass:[UIVisualEffectView class]]) {
+                subview.backgroundColor = [UIColor clearColor];
+                [subview removeAllSubviews];
+            }
+        }
+    }
+}
+
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    if (self.navigationController.delegate == self) {
-        self.navigationController.delegate = nil;
-    }
+
+    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationNone];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -270,54 +274,6 @@
     UIImage *targetImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return targetImage;
-}
-
-/**
- 左滑返回手势
-
- @param gestureRecognizer 手势对象
- */
-- (void)handlePan:(UIPanGestureRecognizer *)gestureRecognizer {
-    /*调用UIPercentDrivenInteractiveTransition的updateInteractiveTransition:方法可以控制转场动画进行到哪了，
-     当用户的下拉手势完成时，调用finishInteractiveTransition或者cancelInteractiveTransition，UIKit会自动执行剩下的一半动画，
-     或者让动画回到最开始的状态。*/
-    // 左滑返回区域判断
-    float offsetX = [gestureRecognizer locationInView:self.view].x;
-    if (offsetX <= 0 || offsetX > 100) {
-        return;
-    }
-    if([gestureRecognizer translationInView:self.view].x >= 0)
-    {
-        //手势滑动的比例
-        CGFloat per = [gestureRecognizer translationInView:self.view].x / (self.view.bounds.size.width);
-        per = MIN(1.0,(MAX(0.0, per)));
-        if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
-            self.interactiveTransition = [UIPercentDrivenInteractiveTransition new];
-            [self.navigationController popViewControllerAnimated:YES];
-        } else if (gestureRecognizer.state == UIGestureRecognizerStateChanged) {
-            if([gestureRecognizer translationInView:self.view].x == 0) {
-                [self.interactiveTransition updateInteractiveTransition:0.01];
-            } else {
-                [self.interactiveTransition updateInteractiveTransition:per];
-            }
-        }else if (gestureRecognizer.state == UIGestureRecognizerStateEnded || gestureRecognizer.state == UIGestureRecognizerStateCancelled){
-            if([gestureRecognizer translationInView:self.view].x == 0)
-            {
-                [self.interactiveTransition cancelInteractiveTransition];
-                self.interactiveTransition = nil;
-            } else if (per > 0.5) {
-                [self.interactiveTransition finishInteractiveTransition];
-            } else {
-                [self.interactiveTransition cancelInteractiveTransition];
-            }
-            self.interactiveTransition = nil;
-        }
-    } else if (gestureRecognizer.state == UIGestureRecognizerStateChanged) {
-        [self.interactiveTransition updateInteractiveTransition:0.01];
-        [self.interactiveTransition cancelInteractiveTransition];
-    } else if ((gestureRecognizer.state == UIGestureRecognizerStateEnded || gestureRecognizer.state == UIGestureRecognizerStateCancelled)) {
-        self.interactiveTransition = nil;
-    }
 }
 
 #pragma mark - Network
@@ -2115,18 +2071,6 @@
         AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
         [appDelegate.eventArray addObject:eventDic];
     } isShowHUD:NO];
-}
-
-#pragma mark - UINavigationControllerDelegate
-- (id<UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController animationControllerForOperation:(UINavigationControllerOperation)operation fromViewController:(UIViewController *)fromVC toViewController:(UIViewController *)toVC
-{
-    if (operation == UINavigationControllerOperationPop) {
-        _fromCell.isMove = YES;
-        PopTransitionAnimate *popTransition = [[PopTransitionAnimate alloc] initWithToView:_toView];
-        return popTransition;
-    }else{
-        return nil;
-    }
 }
 
 - (void)didReceiveMemoryWarning {

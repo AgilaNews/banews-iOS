@@ -97,8 +97,8 @@
          NSString *type = data[@"type"];
          if ([type isEqualToString:@"video"]) {
              // 打点-点击播放-010226
-             UINavigationController *navCtrl = (UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
-             HomeViewController *homeVC = navCtrl.viewControllers.firstObject;
+             JTNavigationController *navCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+             HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
              NSString *channelName = homeVC.segmentVC.titleArray[homeVC.segmentVC.selectIndex - 10000];
              NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
                                             [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",

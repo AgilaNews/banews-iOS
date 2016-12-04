@@ -8,7 +8,7 @@
 
 #import "BaseViewController.h"
 
-@interface NotificationViewController : BaseViewController<UINavigationControllerDelegate, UITableViewDataSource, UITableViewDelegate>
+@interface NotificationViewController : BaseViewController<UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *dataList;

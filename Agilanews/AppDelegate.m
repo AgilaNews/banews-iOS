@@ -54,7 +54,7 @@
 #endif
     [_window makeKeyAndVisible];
     HomeViewController *homeVC = [[HomeViewController alloc] init];
-    BaseNavigationController *navCtrl = [[BaseNavigationController alloc] initWithRootViewController:homeVC];
+    JTNavigationController *navCtrl = [[JTNavigationController alloc] initWithRootViewController:homeVC];
     // 设置根控制器
     _window.rootViewController = navCtrl;
     
@@ -99,8 +99,8 @@
     // 记录进入后台时间
     DEF_PERSISTENT_SET_OBJECT(@"BackgroundTime", [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]]);
     // 打点-退出APP-010002
-    UINavigationController *navCtrl = (UINavigationController *)_window.rootViewController;
-    HomeViewController *homeVC = navCtrl.viewControllers.firstObject;
+    JTNavigationController *navCtrl = (JTNavigationController *)_window.rootViewController;
+    HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
     NSInteger index = homeVC.segmentVC.selectIndex - 10000;
     NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
                                    [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
@@ -573,7 +573,9 @@
         videoDetailVC.model = model;
         videoDetailVC.isPushEnter = YES;
         videoDetailVC.isNoModel = YES;
-        [(UINavigationController *)_window.rootViewController pushViewController:videoDetailVC animated:NO];
+        JTNavigationController *navCtrl = (JTNavigationController *)_window.rootViewController;
+        HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
+        [homeVC.navigationController pushViewController:videoDetailVC animated:NO];
         return;
     }
     
@@ -581,7 +583,9 @@
     NewsDetailViewController *newsDetailVC = [[NewsDetailViewController alloc] init];
     newsDetailVC.model = model;
     newsDetailVC.isPushEnter = YES;
-    [(UINavigationController *)_window.rootViewController pushViewController:newsDetailVC animated:NO];
+    JTNavigationController *navCtrl = (JTNavigationController *)_window.rootViewController;
+    HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
+    [homeVC.navigationController pushViewController:newsDetailVC animated:NO];
 }
 #pragma mark - 监听网络状态
 /**
@@ -860,8 +864,8 @@
         NSDictionary *oldNewsData = [NSKeyedUnarchiver unarchiveObjectWithFile:newsFilePath];
         NSNumber *oldNewsDataKey = oldNewsData.allKeys.firstObject;
 
-        UINavigationController *navCtrl = (UINavigationController *)_window.rootViewController;
-        HomeViewController *homeVC = navCtrl.viewControllers.firstObject;
+        JTNavigationController *navCtrl = (JTNavigationController *)_window.rootViewController;
+        HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
         // 缓存新闻列表
         NSMutableDictionary *newsDic = [NSMutableDictionary dictionary];
         for (HomeTableViewController *homeTabVC in homeVC.segmentVC.subViewControllers) {

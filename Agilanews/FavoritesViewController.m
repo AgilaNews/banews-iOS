@@ -103,16 +103,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    if (IOS_VERSION_CODE <= 8) {
-        __weak typeof(self.navigationController.delegate) weakDelegate = self.navigationController.delegate;
-        if (weakDelegate != self) {
-            weakDelegate = self;
-        }
-    } else {
-        if (self.navigationController.delegate != self) {
-            self.navigationController.delegate = self;
-        }
-    }
 
     // 打点-页面进入-010501
     [Flurry logEvent:@"Favor_Enter"];
@@ -171,9 +161,6 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    if (self.navigationController.delegate == self) {
-        self.navigationController.delegate = nil;
-    }
 }
 
 - (void)dealloc
@@ -823,9 +810,7 @@
         [self.tableView setEditing:NO animated:YES];
         return;
     }
-    if (self.navigationController.viewControllers.count > 1) {
-        [self.navigationController popToRootViewControllerAnimated:YES];
-    }
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 - (void)editAction:(UIButton *)button
@@ -871,7 +856,7 @@
 #if DEBUG
     [iConsole info:@"Menu_LoginButton_Click",nil];
 #endif
-    BaseNavigationController *navCtrl = (BaseNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+    JTNavigationController *navCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
     LoginViewController *loginVC = [[LoginViewController alloc] init];
     [navCtrl pushViewController:loginVC animated:YES];
 }
@@ -879,18 +864,6 @@
 - (void)tableViewDidTriggerFooterRefresh
 {
     [self requestDataWithIsFooter:YES];
-}
-
-#pragma mark - UINavigationControllerDelegate
-- (id<UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController animationControllerForOperation:(UINavigationControllerOperation)operation fromViewController:(UIViewController *)fromVC toViewController:(UIViewController *)toVC
-{
-    // && [_model.channelID isEqualToNumber:@30001]
-    if(operation == UINavigationControllerOperationPush) {
-        PushTransitionAnimate *pushTransition = [[PushTransitionAnimate alloc] init];
-        return pushTransition;
-    } else {
-        return nil;
-    }
 }
 
 - (void)didReceiveMemoryWarning {

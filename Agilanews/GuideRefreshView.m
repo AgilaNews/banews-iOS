@@ -155,8 +155,8 @@ static GuideRefreshView *_guideView = nil;
             [[GuideRefreshView sharedInstance] _initChannelGuide];
         }];
     } else {
-        UINavigationController *navCtrl = (UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
-        HomeViewController *homeVC = navCtrl.viewControllers.firstObject;
+        JTNavigationController *navCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+        HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
         [homeVC.segmentVC.headerView setContentOffset:CGPointMake(kScreenWidth * .5, homeVC.segmentVC.headerView.top) animated:YES];
 //        UIButton *button = [UIButton new];
 //        button.tag = 10001;
@@ -206,8 +206,8 @@ static GuideRefreshView *_guideView = nil;
 
 - (void)menuAction
 {
-    UINavigationController *navCtrl = (UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
-    HomeViewController *homeVC = navCtrl.viewControllers.firstObject;
+    JTNavigationController *navCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+    HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
     [UIView animateWithDuration:.3 animations:^{
         _menuView.alpha = 0;
     } completion:^(BOOL finished) {

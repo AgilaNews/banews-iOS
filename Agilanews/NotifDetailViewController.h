@@ -11,7 +11,7 @@
 #import "NotifDetailModel.h"
 #import "CommentTextView.h"
 
-@interface NotifDetailViewController : BaseViewController<UINavigationControllerDelegate, UITableViewDataSource, UITableViewDelegate, FBSDKSharingDelegate, UITextViewDelegate>
+@interface NotifDetailViewController : BaseViewController<UITableViewDataSource, UITableViewDelegate, FBSDKSharingDelegate, UITextViewDelegate>
 
 @property (nonatomic, strong) NSNumber *notify_id;      // 通知ID
 @property (nonatomic, strong) UITableView *tableView;
