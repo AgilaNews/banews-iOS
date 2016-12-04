@@ -254,9 +254,7 @@
 #endif
     if (_isNotification) {
         [SVProgressHUD dismiss];
-        if (self.navigationController.viewControllers.count > 1) {
-            [self.navigationController popToRootViewControllerAnimated:YES];
-        }
+        [self.navigationController popToRootViewControllerAnimated:YES];
     } else {
         [super backAction:button];
     }

@@ -368,7 +368,6 @@
     NSDictionary *dic = notif.object;
     YTPlayerView *playerView = dic[@"playerView"];
     NSIndexPath *indexPath = dic[@"index"];
-    NSNumber *isPlay = dic[@"stop"];
     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
     if ([cell isKindOfClass:[OnlyVideoCell class]]) {
         OnlyVideoCell *videoCell = (OnlyVideoCell *)cell;
@@ -376,9 +375,9 @@
             [videoCell.contentView addSubview:playerView];
             [videoCell.contentView bringSubviewToFront:videoCell.titleImageView];
             videoCell.isMove = NO;
-            if ([isPlay isEqualToNumber:@1]) {
-                videoCell.isPlay = NO;
-            }
+            videoCell.isPlay = NO;
+            [videoCell.playerView stopVideo];
+            [videoCell setNeedsLayout];
         }
     }
 }
@@ -434,6 +433,10 @@
             return 12 + 68 + 12;
         }
         case NEWS_OnlyVideo:
+        {
+            return videoHeight + 42;
+        }
+        case NEWS_HotVideo:
         {
             return videoHeight + 42;
         }
@@ -531,6 +534,19 @@
             [cell setNeedsLayout];
             return cell;
         }
+        case NEWS_HotVideo:
+        {
+            // 视频cell
+            static NSString *cellID = @"OnlyVideoCell";
+            OnlyVideoCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+            if (cell == nil) {
+                cell = [[OnlyVideoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
+                [cell.shareButton addTarget:self action:@selector(shareToFacebook:) forControlEvents:UIControlEventTouchUpInside];
+            }
+            cell.model = model;
+            [cell setNeedsLayout];
+            return cell;
+        }
         default:
         {
             ImageModel *imageModel = model.imgs.firstObject;
@@ -570,7 +586,7 @@
         [iConsole info:@"Favor_List_Click",nil];
 #endif
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
-        if (model.tpl.integerValue == NEWS_OnlyVideo) {
+        if (model.tpl.integerValue == NEWS_OnlyVideo || model.tpl.integerValue == NEWS_HotVideo) {
             VideoDetailViewController *videoDetailVC = [[VideoDetailViewController alloc] init];
             videoDetailVC.model = model;
             videoDetailVC.channelName = @"Video";
@@ -578,7 +594,7 @@
             videoDetailVC.playerView = cell.playerView;
             videoDetailVC.indexPath = indexPath;
             videoDetailVC.fromCell = cell;
-            cell.isPlay = YES;
+            cell.isMove = YES;
             [self.navigationController pushViewController:videoDetailVC animated:YES];
             return;
         }

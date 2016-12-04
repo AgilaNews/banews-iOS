@@ -370,9 +370,13 @@
             [weakSelf.playerView loadWithVideoId:model.youtube_id playerVars:_playerVars];
         }
         weakSelf.detailModel = [NewsDetailModel mj_objectWithKeyValues:responseObj];
-        if (![_detailModel.collect_id isEqualToString:@"0"]) {
+        if ([_detailModel.collect_id isEqualToString:@"1"]) {
             UIButton *button = [weakSelf.commentsView viewWithTag:301];
             button.selected = YES;
+            _collectID = _detailModel.collect_id;
+        } else {
+            UIButton *button = [weakSelf.commentsView viewWithTag:301];
+            button.selected = NO;
             _collectID = _detailModel.collect_id;
         }
     } failure:^(NSError *error) {
@@ -1595,8 +1599,10 @@
                 }
                 VideoModel *videoModel = model.videos.firstObject;
                 [self.playerView loadWithVideoId:videoModel.youtube_id playerVars:_playerVars];
-                _holderView = [[UIView alloc] initWithFrame:_playerView.bounds];
-                _holderView.backgroundColor = [UIColor blackColor];
+                if (!_holderView) {
+                    _holderView = [[UIView alloc] initWithFrame:_playerView.bounds];
+                    _holderView.backgroundColor = [UIColor blackColor];
+                }
                 [self.playerView addSubview:_holderView];
                 _isOther = YES;
                 if (model.news_id.length <= 0) {
