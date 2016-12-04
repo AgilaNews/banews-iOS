@@ -27,13 +27,13 @@ typedef enum {
 
 #if DEBUG
 #define kHomeUrl        @"http://api.agilanews.info/v2"
-#define kLogUrl         @"http://log.agilanews.info"
+#define kLogUrl         @"http://log.agilanews.info/v3"
 #define kMonUrl         @"http://mon.agilanews.info"
 #define kReferrerUrl    @"http://api.agilanews.info/referrer"
 #define kV3Url          @"http://api.agilanews.info/v3"
 #else
 #define kHomeUrl        @"http://api.agilanews.today/v2"
-#define kLogUrl         @"http://log.agilanews.today"
+#define kLogUrl         @"http://log.agilanews.today/v3"
 #define kMonUrl         @"http://mon.agilanews.today"
 #define kReferrerUrl    @"http://api.agilanews.today/referrer"
 #define kV3Url          @"http://api.agilanews.today/v3"

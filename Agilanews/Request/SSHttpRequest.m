@@ -132,31 +132,8 @@ static SSHttpRequest *_manager = nil;
                                                               kCFStringEncodingUTF8));
     [_manager.requestSerializer setValue:dateString forHTTPHeaderField:@"Date"];
     // 添加默认参数
-    // 网络运营商
-    CTTelephonyNetworkInfo *networInfo = [[CTTelephonyNetworkInfo alloc] init];
-    CTCarrier *carrier = [networInfo subscriberCellularProvider];
-    if ([carrier carrierName] == nil) {
-        [params setObject:@"" forKey:@"isp"];
-    } else {
-        NSString *carrierName = (NSString *)
-        CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
-                                                                  (CFStringRef)[carrier carrierName],
-                                                                  NULL,
-                                                                  (CFStringRef)@"!*'();:@&=+$,/?%#[]",
-                                                                  kCFStringEncodingUTF8));
-        [params setObject:carrierName forKey:@"isp"];
-    }
     // 网络情况
     [params setObject:[NetType getNetType] forKey:@"net"];
-    // 时区设置
-    NSString *zone = [NSString stringWithFormat:@"%@",[NSTimeZone systemTimeZone]];
-    zone = (NSString *)
-    CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
-                                                              (CFStringRef)zone,
-                                                              NULL,
-                                                              (CFStringRef)@"!*'();:@&=+$,/?%#[]",
-                                                              kCFStringEncodingUTF8));
-    [params setObject:zone forKey:@"tz"];
     // 经纬度
     if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
         [params setObject:DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) forKey:@"lng"];
@@ -199,8 +176,10 @@ static SSHttpRequest *_manager = nil;
     // 签名所需参数
     NSMutableArray *paramArray = [NSMutableArray array];
     for (NSString *key in params.allKeys) {
-        NSString *paramString = [NSString stringWithFormat:@"%@:%@\n",key,params[key]];
-        [paramArray addObject:paramString];
+        if (![key isEqualToString:@"Date"]) {
+            NSString *paramString = [NSString stringWithFormat:@"%@:%@\n",key,params[key]];
+            [paramArray addObject:paramString];
+        }
     }
     // 排序
     NSArray * paramStrings = [paramArray sortedArrayUsingSelector:@selector(compare:)];
@@ -272,31 +251,8 @@ static SSHttpRequest *_manager = nil;
     
     NSMutableDictionary *baseParams = [NSMutableDictionary dictionary];
     // 添加默认参数
-    // 网络运营商
-    CTTelephonyNetworkInfo *networInfo = [[CTTelephonyNetworkInfo alloc] init];
-    CTCarrier *carrier = [networInfo subscriberCellularProvider];
-    if ([carrier carrierName] == nil) {
-        [baseParams setObject:@"" forKey:@"isp"];
-    } else {
-        NSString *carrierName = (NSString *)
-        CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
-                                                                  (CFStringRef)[carrier carrierName],
-                                                                  NULL,
-                                                                  (CFStringRef)@"!*'();:@&=+$,/?%#[]",
-                                                                  kCFStringEncodingUTF8));
-        [baseParams setObject:carrierName forKey:@"isp"];
-    }
     // 网络情况
     [baseParams setObject:[NetType getNetType] forKey:@"net"];
-    // 时区设置
-    NSString *zone = [NSString stringWithFormat:@"%@",[NSTimeZone systemTimeZone]];
-    zone = (NSString *)
-    CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
-                                                              (CFStringRef)zone,
-                                                              NULL,
-                                                              (CFStringRef)@"!*'();:@&=+$,/?%#[]",
-                                                              kCFStringEncodingUTF8));
-    [baseParams setObject:zone forKey:@"tz"];
     // 经纬度
     if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
         [baseParams setObject:DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) forKey:@"lng"];
@@ -424,8 +380,10 @@ static SSHttpRequest *_manager = nil;
     // 签名所需参数
     NSMutableArray *paramArray = [NSMutableArray array];
     for (NSString *key in baseParams.allKeys) {
-        NSString *paramString = [NSString stringWithFormat:@"%@:%@\n",key,baseParams[key]];
-        [paramArray addObject:paramString];
+        if (![key isEqualToString:@"Date"]) {
+            NSString *paramString = [NSString stringWithFormat:@"%@:%@\n",key,baseParams[key]];
+            [paramArray addObject:paramString];
+        }
     }
     // 排序
     NSString * signParam = [NSString string];
@@ -568,31 +526,8 @@ static SSHttpRequest *_manager = nil;
     [_manager.requestSerializer setValue:dateString forHTTPHeaderField:@"Date"];
     
     // 添加默认参数
-    // 网络运营商
-    CTTelephonyNetworkInfo *networInfo = [[CTTelephonyNetworkInfo alloc] init];
-    CTCarrier *carrier = [networInfo subscriberCellularProvider];
-    if ([carrier carrierName] == nil) {
-        [params setObject:@"" forKey:@"isp"];
-    } else {
-        NSString *carrierName = (NSString *)
-        CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
-                                                                  (CFStringRef)[carrier carrierName],
-                                                                  NULL,
-                                                                  (CFStringRef)@"!*'();:@&=+$,/?%#[]",
-                                                                  kCFStringEncodingUTF8));
-        [params setObject:carrierName forKey:@"isp"];
-    }
     // 网络情况
     [params setObject:[NetType getNetType] forKey:@"net"];
-    // 时区设置
-    NSString *zone = [NSString stringWithFormat:@"%@",[NSTimeZone systemTimeZone]];
-    zone = (NSString *)
-    CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
-                                                              (CFStringRef)zone,
-                                                              NULL,
-                                                              (CFStringRef)@"!*'();:@&=+$,/?%#[]",
-                                                              kCFStringEncodingUTF8));
-    [params setObject:zone forKey:@"tz"];
     // 经纬度
     if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
         [params setObject:DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) forKey:@"lng"];
@@ -636,8 +571,10 @@ static SSHttpRequest *_manager = nil;
     // 签名所需参数
     NSMutableArray *paramArray = [NSMutableArray array];
     for (NSString *key in params.allKeys) {
-        NSString *paramString = [NSString stringWithFormat:@"%@:%@\n",key,params[key]];
-        [paramArray addObject:paramString];
+        if (![key isEqualToString:@"Date"]) {
+            NSString *paramString = [NSString stringWithFormat:@"%@:%@\n",key,params[key]];
+            [paramArray addObject:paramString];
+        }
     }
     // 排序
     NSArray * paramStrings = [paramArray sortedArrayUsingSelector:@selector(compare:)];
