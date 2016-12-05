@@ -143,6 +143,8 @@
 		5F6462801D48AD3A008EEDEC /* CommentTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F64627F1D48AD3A008EEDEC /* CommentTextView.m */; };
 		5F6FAEAE1DF11D02006E4A1C /* JTNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F6FAEAB1DF11D02006E4A1C /* JTNavigationController.m */; };
 		5F6FAEAF1DF11D02006E4A1C /* UIViewController+JTNavigationExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F6FAEAD1DF11D02006E4A1C /* UIViewController+JTNavigationExtension.m */; };
+		5F6FAEB81DF52BBA006E4A1C /* CAEmitterLayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F6FAEB71DF52BBA006E4A1C /* CAEmitterLayerView.m */; };
+		5F6FAEBB1DF52C22006E4A1C /* SnowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F6FAEBA1DF52C22006E4A1C /* SnowView.m */; };
 		5F767A5D1D9A44C900822BAC /* RefreshCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F767A5C1D9A44C800822BAC /* RefreshCell.m */; };
 		5F767A601D9BB6EA00822BAC /* ChannelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F767A5F1D9BB6EA00822BAC /* ChannelViewController.m */; };
 		5F767A641D9BBD4E00822BAC /* XWDragCellCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F767A631D9BBD4E00822BAC /* XWDragCellCollectionView.m */; };
@@ -479,6 +481,10 @@
 		5F6FAEAB1DF11D02006E4A1C /* JTNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JTNavigationController.m; sourceTree = "<group>"; };
 		5F6FAEAC1DF11D02006E4A1C /* UIViewController+JTNavigationExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+JTNavigationExtension.h"; sourceTree = "<group>"; };
 		5F6FAEAD1DF11D02006E4A1C /* UIViewController+JTNavigationExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+JTNavigationExtension.m"; sourceTree = "<group>"; };
+		5F6FAEB61DF52BBA006E4A1C /* CAEmitterLayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAEmitterLayerView.h; sourceTree = "<group>"; };
+		5F6FAEB71DF52BBA006E4A1C /* CAEmitterLayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CAEmitterLayerView.m; sourceTree = "<group>"; };
+		5F6FAEB91DF52C22006E4A1C /* SnowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SnowView.h; sourceTree = "<group>"; };
+		5F6FAEBA1DF52C22006E4A1C /* SnowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SnowView.m; sourceTree = "<group>"; };
 		5F767A5B1D9A44C800822BAC /* RefreshCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RefreshCell.h; sourceTree = "<group>"; };
 		5F767A5C1D9A44C800822BAC /* RefreshCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RefreshCell.m; sourceTree = "<group>"; };
 		5F767A5E1D9BB6EA00822BAC /* ChannelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChannelViewController.h; sourceTree = "<group>"; };
@@ -1223,6 +1229,17 @@
 			path = MJExtension;
 			sourceTree = "<group>";
 		};
+		5F86EDC71DF5379C00F3C35B /* EmitterAnimation */ = {
+			isa = PBXGroup;
+			children = (
+				5F6FAEB61DF52BBA006E4A1C /* CAEmitterLayerView.h */,
+				5F6FAEB71DF52BBA006E4A1C /* CAEmitterLayerView.m */,
+				5F6FAEB91DF52C22006E4A1C /* SnowView.h */,
+				5F6FAEBA1DF52C22006E4A1C /* SnowView.m */,
+			);
+			name = EmitterAnimation;
+			sourceTree = "<group>";
+		};
 		5F8D85A11D76A99700FF4019 /* WebViewJavascriptBridge */ = {
 			isa = PBXGroup;
 			children = (
@@ -1275,6 +1292,7 @@
 		5FF4B6E71D36458900CC6704 /* Base */ = {
 			isa = PBXGroup;
 			children = (
+				5F86EDC71DF5379C00F3C35B /* EmitterAnimation */,
 				5F5342BB1DC32832005D78F1 /* CustomTransition */,
 				5FF4B7031D373E2200CC6704 /* EaseRefreshTableViewController.h */,
 				5FF4B7041D373E2200CC6704 /* EaseRefreshTableViewController.m */,
@@ -1655,6 +1673,7 @@
 				5FF4B76F1D37BD2C00CC6704 /* NSObject+UhouAddition.m in Sources */,
 				5FF4B7051D373E2200CC6704 /* EaseRefreshTableViewController.m in Sources */,
 				5F767A601D9BB6EA00822BAC /* ChannelViewController.m in Sources */,
+				5F6FAEBB1DF52C22006E4A1C /* SnowView.m in Sources */,
 				5F42C0831D34E41D00B89651 /* NSData+ImageContentType.m in Sources */,
 				5FF4B7AE1D38F7B200CC6704 /* MASConstraint.m in Sources */,
 				5FF4B6EA1D3645A100CC6704 /* BaseModel.m in Sources */,
@@ -1709,6 +1728,7 @@
 				5F907ACC1DDB0CB200DD9748 /* NotifDetailViewController.m in Sources */,
 				5F5AE9761D54364E00A5A8B7 /* GuideRefreshView.m in Sources */,
 				5FF4B7711D37BD2C00CC6704 /* NSTimer+UhouAdditions.m in Sources */,
+				5F6FAEB81DF52BBA006E4A1C /* CAEmitterLayerView.m in Sources */,
 				5F767A811D9CE82E00822BAC /* MJFoundation.m in Sources */,
 				5F767A671D9BC30000822BAC /* ChannelCell.m in Sources */,
 				5FF4B76C1D37BD2C00CC6704 /* NSDate+UhouAdditions.m in Sources */,
