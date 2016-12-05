@@ -717,6 +717,12 @@
         [eventDic setObject:_model.news_id forKey:@"news_id"];
         VideoModel *model = _model.videos.firstObject;
         [eventDic setObject:model.youtube_id forKey:@"youtube_video_id"];
+        if (_model.issuedID.length) {
+            [eventDic setObject:_model.issuedID forKey:@"dispatch_id"];
+        } else {
+            [eventDic setObject:@"" forKey:@"dispatch_id"];
+        }
+        [eventDic setObject:_channelName forKey:@"channel_id"];
         [eventDic setObject:@"1" forKey:@"play_type"];
         [eventDic setObject:[NSArray arrayWithArray:_playerPath] forKey:@"path"];
         [_playerPath removeAllObjects];
@@ -2045,6 +2051,12 @@
     [eventDic setObject:_model.news_id forKey:@"news_id"];
     VideoModel *model = _model.videos.firstObject;
     [eventDic setObject:model.youtube_id forKey:@"youtube_video_id"];
+    if (_model.issuedID.length) {
+        [eventDic setObject:_model.issuedID forKey:@"dispatch_id"];
+    } else {
+        [eventDic setObject:@"" forKey:@"dispatch_id"];
+    }
+    [eventDic setObject:_channelName forKey:@"channel_id"];
     [eventDic setObject:@"1" forKey:@"play_type"];
     [eventDic setObject:[NetType getNetType] forKey:@"net"];
     if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {

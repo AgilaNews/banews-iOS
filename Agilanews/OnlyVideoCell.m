@@ -10,6 +10,9 @@
 #import "ImageModel.h"
 #import "VideoModel.h"
 #import "AppDelegate.h"
+#import "HomeViewController.h"
+#import "NotifDetailViewController.h"
+#import "FavoritesViewController.h"
 
 #define titleFont_Normal        [UIFont systemFontOfSize:17]
 #define titleFont_ExtraLarge    [UIFont systemFontOfSize:21]
@@ -64,6 +67,22 @@
         [eventDic setObject:_model.news_id forKey:@"news_id"];
         VideoModel *model = _model.videos.firstObject;
         [eventDic setObject:model.youtube_id forKey:@"youtube_video_id"];
+        if (_model.issuedID.length) {
+            [eventDic setObject:_model.issuedID forKey:@"dispatch_id"];
+        } else {
+            [eventDic setObject:@"" forKey:@"dispatch_id"];
+        }
+        UIViewController *viewCtrl = self.ViewController;
+        if ([viewCtrl isKindOfClass:[HomeViewController class]]) {
+            HomeViewController *homeVC = (HomeViewController *)viewCtrl;
+            AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+            CategoriesModel *model = appDelegate.categoriesArray[homeVC.segmentVC.selectIndex - 10000];
+            [eventDic setObject:model.channelID forKey:@"channel_id"];
+        } else if ([viewCtrl isKindOfClass:[NotifDetailViewController class]]) {
+            [eventDic setObject:@"Notification" forKey:@"channel_id"];
+        } else if ([viewCtrl isKindOfClass:[FavoritesViewController class]]) {
+            [eventDic setObject:@"Favorite" forKey:@"channel_id"];
+        }
         [eventDic setObject:@"0" forKey:@"play_type"];
         [eventDic setObject:[NSArray arrayWithArray:_playerPath] forKey:@"path"];
         [_playerPath removeAllObjects];
@@ -480,6 +499,22 @@
             VideoModel *model = _model.videos.firstObject;
             [eventDic setObject:model.youtube_id forKey:@"youtube_video_id"];
             [eventDic setObject:@"0" forKey:@"play_type"];
+            if (_model.issuedID.length) {
+                [eventDic setObject:_model.issuedID forKey:@"dispatch_id"];
+            } else {
+                [eventDic setObject:@"" forKey:@"dispatch_id"];
+            }
+            UIViewController *viewCtrl = self.ViewController;
+            if ([viewCtrl isKindOfClass:[HomeViewController class]]) {
+                HomeViewController *homeVC = (HomeViewController *)viewCtrl;
+                AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+                CategoriesModel *model = appDelegate.categoriesArray[homeVC.segmentVC.selectIndex - 10000];
+                [eventDic setObject:model.channelID forKey:@"channel_id"];
+            } else if ([viewCtrl isKindOfClass:[NotifDetailViewController class]]) {
+                [eventDic setObject:@"Notification" forKey:@"channel_id"];
+            } else if ([viewCtrl isKindOfClass:[FavoritesViewController class]]) {
+                [eventDic setObject:@"Favorite" forKey:@"channel_id"];
+            }
             [eventDic setObject:[NetType getNetType] forKey:@"net"];
             if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
                 [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) forKey:@"lng"];
@@ -523,6 +558,22 @@
                 [eventDic setObject:_model.news_id forKey:@"news_id"];
                 VideoModel *model = _model.videos.firstObject;
                 [eventDic setObject:model.youtube_id forKey:@"youtube_video_id"];
+                if (_model.issuedID.length) {
+                    [eventDic setObject:_model.issuedID forKey:@"dispatch_id"];
+                } else {
+                    [eventDic setObject:@"" forKey:@"dispatch_id"];
+                }
+                UIViewController *viewCtrl = self.ViewController;
+                if ([viewCtrl isKindOfClass:[HomeViewController class]]) {
+                    HomeViewController *homeVC = (HomeViewController *)viewCtrl;
+                    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+                    CategoriesModel *model = appDelegate.categoriesArray[homeVC.segmentVC.selectIndex - 10000];
+                    [eventDic setObject:model.channelID forKey:@"channel_id"];
+                } else if ([viewCtrl isKindOfClass:[NotifDetailViewController class]]) {
+                    [eventDic setObject:@"Notification" forKey:@"channel_id"];
+                } else if ([viewCtrl isKindOfClass:[FavoritesViewController class]]) {
+                    [eventDic setObject:@"Favorite" forKey:@"channel_id"];
+                }
                 [eventDic setObject:@"0" forKey:@"play_type"];
                 [eventDic setObject:[NSArray arrayWithArray:_playerPath] forKey:@"path"];
                 [_playerPath removeAllObjects];
