@@ -13,6 +13,7 @@
 #import "AppDelegate.h"
 #import "CommentTextView.h"
 #import "FacebookAdView.h"
+#import "LSEmojiFly.h"
 
 @interface NewsDetailViewController : BaseViewController <UIWebViewDelegate, UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, UITextViewDelegate, FBSDKSharingDelegate>
 
@@ -45,5 +46,7 @@
 @property (nonatomic, assign) BOOL isHaveAd;
 @property (nonatomic, strong) NSDictionary *adInfo;
 @property (nonatomic, strong) FacebookAdView *facebookAdView;
+@property (strong, nonatomic) LSEmojiFly *emojiFlay;
+
 
 @end

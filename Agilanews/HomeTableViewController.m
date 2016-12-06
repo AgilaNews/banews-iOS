@@ -36,7 +36,7 @@
 
 #define imageHeight 162 * kScreenWidth / 320.0
 #define videoHeight 180 * kScreenWidth / 320.0
-#define topHeight   104 * kScreenWidth / 375.0
+#define topHeight   130 * kScreenWidth / 375.0
 
 @import SafariServices;
 @interface HomeTableViewController ()

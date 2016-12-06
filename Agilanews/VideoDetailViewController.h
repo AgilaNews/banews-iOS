@@ -11,6 +11,7 @@
 #import "OnlyVideoCell.h"
 #import "RecommendedView.h"
 #import "CommentTextView.h"
+#import "LSEmojiFly.h"
 
 @interface VideoDetailViewController : BaseViewController<FBSDKSharingDelegate, YTPlayerViewDelegate, UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, UITextViewDelegate>
 
@@ -46,6 +47,7 @@
 @property (nonatomic, assign) BOOL isOther;
 @property (nonatomic, assign) BOOL isPushEnter;
 @property (nonatomic, assign) BOOL isNoModel;
+@property (strong, nonatomic) LSEmojiFly *emojiFlay;
 
 
 

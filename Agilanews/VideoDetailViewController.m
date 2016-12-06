@@ -505,6 +505,19 @@
     }
     [[SSHttpRequest sharedInstance] post:kHomeUrl_Comment params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
         _commentTextView.sendButton.enabled = YES;
+        NSNumber *animation = responseObj[@"Animation"];
+        if (animation && [animation isEqualToNumber:@1]) {
+            if (!self.emojiFlay) {
+                self.emojiFlay = [LSEmojiFly emojiFly];
+                NSArray *imageNames = @[@"ChristmasTrees",@"donut",@"FatherChristmas",@"socks",@"wapiti"];
+                NSInteger imageIndex = arc4random() % 5;
+                [self.emojiFlay startFlyWithEmojiImage:[UIImage imageNamed:imageNames[imageIndex]] onView:self.view];
+            }
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(8 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self.emojiFlay endFly];
+                self.emojiFlay = nil;
+            });
+        }
         CommentModel *model = [CommentModel mj_objectWithKeyValues:responseObj];
         AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
         model.user_id = appDelegate.model.user_id;

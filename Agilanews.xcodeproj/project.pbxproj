@@ -162,6 +162,7 @@
 		5F767A891D9CE82E00822BAC /* NSString+MJExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F767A7E1D9CE82E00822BAC /* NSString+MJExtension.m */; };
 		5F7CD8231DCB352F00879BC5 /* SingleVideoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F7CD8221DCB352F00879BC5 /* SingleVideoCell.m */; };
 		5F86EDCA1DF585AE00F3C35B /* TopCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F86EDC91DF585AE00F3C35B /* TopCell.m */; };
+		5F86EDCD1DF66DCD00F3C35B /* LSEmojiFly.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F86EDCC1DF66DCD00F3C35B /* LSEmojiFly.m */; };
 		5F8D85AA1D76A99700FF4019 /* WebViewJavascriptBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F8D85A31D76A99700FF4019 /* WebViewJavascriptBridge.m */; };
 		5F8D85AB1D76A99700FF4019 /* WebViewJavascriptBridge_JS.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F8D85A51D76A99700FF4019 /* WebViewJavascriptBridge_JS.m */; };
 		5F8D85AC1D76A99700FF4019 /* WebViewJavascriptBridgeBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F8D85A71D76A99700FF4019 /* WebViewJavascriptBridgeBase.m */; };
@@ -520,6 +521,8 @@
 		5F7CD8221DCB352F00879BC5 /* SingleVideoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SingleVideoCell.m; sourceTree = "<group>"; };
 		5F86EDC81DF585AE00F3C35B /* TopCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopCell.h; sourceTree = "<group>"; };
 		5F86EDC91DF585AE00F3C35B /* TopCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TopCell.m; sourceTree = "<group>"; };
+		5F86EDCB1DF66DCC00F3C35B /* LSEmojiFly.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSEmojiFly.h; sourceTree = "<group>"; };
+		5F86EDCC1DF66DCD00F3C35B /* LSEmojiFly.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSEmojiFly.m; sourceTree = "<group>"; };
 		5F8D85A21D76A99700FF4019 /* WebViewJavascriptBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewJavascriptBridge.h; sourceTree = "<group>"; };
 		5F8D85A31D76A99700FF4019 /* WebViewJavascriptBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewJavascriptBridge.m; sourceTree = "<group>"; };
 		5F8D85A41D76A99700FF4019 /* WebViewJavascriptBridge_JS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewJavascriptBridge_JS.h; sourceTree = "<group>"; };
@@ -1239,6 +1242,8 @@
 				5F6FAEB71DF52BBA006E4A1C /* CAEmitterLayerView.m */,
 				5F6FAEB91DF52C22006E4A1C /* SnowView.h */,
 				5F6FAEBA1DF52C22006E4A1C /* SnowView.m */,
+				5F86EDCB1DF66DCC00F3C35B /* LSEmojiFly.h */,
+				5F86EDCC1DF66DCD00F3C35B /* LSEmojiFly.m */,
 			);
 			name = EmitterAnimation;
 			sourceTree = "<group>";
@@ -1786,6 +1791,7 @@
 				5F6462711D45F64A008EEDEC /* FavoritesViewController.m in Sources */,
 				5FF4B7D61D3A174900CC6704 /* MJRefreshLegendHeader.m in Sources */,
 				5FF4B76E1D37BD2C00CC6704 /* NSMutableDictionary+UhouAdditions.m in Sources */,
+				5F86EDCD1DF66DCD00F3C35B /* LSEmojiFly.m in Sources */,
 				5F2E0A1E1D87B47A00FEC0AC /* HZPhotoBrowser.m in Sources */,
 				5F767A801D9CE82E00822BAC /* MJExtensionConst.m in Sources */,
 				5F42C0871D34E41D00B89651 /* SDWebImageDownloader.m in Sources */,
@@ -1979,7 +1985,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.banews.agila;
 				PRODUCT_NAME = Agila;
-				PROVISIONING_PROFILE = "617d1ffd-5d76-4ff6-b6e9-864c02bf0153";
+				PROVISIONING_PROFILE = "8d8b817d-7b59-411e-a8fe-198fc4a71122";
 				PROVISIONING_PROFILE_SPECIFIER = iOS_Development;
 				SWIFT_OBJC_BRIDGING_HEADER = "Agila-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";

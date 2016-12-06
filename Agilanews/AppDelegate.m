@@ -216,6 +216,9 @@
     [Flurry logEvent:@"App_Lanch" withParameters:articleParams];
 #if DEBUG
     [iConsole info:[NSString stringWithFormat:@"App_Lanch:%@",articleParams],nil];
+    if (!isFirst) {
+        [SVProgressHUD showInfoWithStatus:@"沙盒环境模式"];
+    }
 #endif
     // 设置IDFA（广告标识符）
     NSString *IDFA = DEF_PERSISTENT_GET_OBJECT(@"IDFA");

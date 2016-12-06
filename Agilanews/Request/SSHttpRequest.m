@@ -47,7 +47,6 @@ static SSHttpRequest *_manager = nil;
     if (url.length < 1) {
 #if DEBUG
         _urlString = @"http://api.agilanews.info/";
-        [SVProgressHUD showInfoWithStatus:@"沙盒环境模式"];
 #else
         _urlString = @"http://api.agilanews.today/";
 #endif
