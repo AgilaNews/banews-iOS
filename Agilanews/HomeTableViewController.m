@@ -150,7 +150,7 @@
         }
     }
     if (![DEF_PERSISTENT_GET_OBJECT(SS_GuideHomeKey) isEqualToNumber:@1] && [_model.channelID isEqualToNumber:@10001]) {
-        [[UIApplication sharedApplication].keyWindow addSubview:[GuideRefreshView sharedInstance]];
+        [[UIApplication sharedApplication].keyWindow.rootViewController.view addSubview:[GuideRefreshView sharedInstance]];
     }
 }
 
