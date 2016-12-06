@@ -872,9 +872,8 @@
 #if DEBUG
     [iConsole info:@"Menu_LoginButton_Click",nil];
 #endif
-    JTNavigationController *navCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
     LoginViewController *loginVC = [[LoginViewController alloc] init];
-    [navCtrl pushViewController:loginVC animated:YES];
+    [self.navigationController pushViewController:loginVC animated:YES];
 }
 
 - (void)tableViewDidTriggerFooterRefresh
