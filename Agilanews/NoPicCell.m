@@ -176,12 +176,12 @@
             make.width.mas_equalTo(12);
             make.height.mas_equalTo(11);
         }];
-        CGSize commentViewSize = [timeString calculateSize:CGSizeMake(80, 13) font:self.commentLabel.font];
+        CGSize commentLabelSize = [_model.commentCount.stringValue calculateSize:CGSizeMake(80, 13) font:self.commentLabel.font];
         [self.commentLabel mas_updateConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(weakSelf.commentView.mas_right).offset(5);
             make.centerY.mas_equalTo(weakSelf.sourceLabel.mas_centerY);
-            make.width.mas_equalTo(commentViewSize.width);
-            make.height.mas_equalTo(commentViewSize.height);
+            make.width.mas_equalTo(commentLabelSize.width);
+            make.height.mas_equalTo(commentLabelSize.height);
         }];
         self.commentView.hidden = NO;
         self.commentLabel.hidden = NO;
