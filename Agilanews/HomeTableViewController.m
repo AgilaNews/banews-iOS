@@ -27,6 +27,7 @@
 #import "VideoDetailViewController.h"
 #import "PushTransitionAnimate.h"
 #import "FacebookAdCell.h"
+#import "TopCell.h"
 
 #define titleFont_Normal        [UIFont systemFontOfSize:16]
 #define titleFont_ExtraLarge    [UIFont systemFontOfSize:20]
@@ -35,6 +36,7 @@
 
 #define imageHeight 162 * kScreenWidth / 320.0
 #define videoHeight 180 * kScreenWidth / 320.0
+#define topHeight   104 * kScreenWidth / 375.0
 
 @import SafariServices;
 @interface HomeTableViewController ()
@@ -271,6 +273,10 @@
         {
             return 12 + 68 + 12;
         }
+        case Top_List:
+        {
+            return topHeight;
+        }
         default:
             return 50;
     }
@@ -430,6 +436,19 @@
                 FacebookAdCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
                 if (cell == nil) {
                     cell = [[FacebookAdCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+                }
+                cell.model = model;
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                [cell setNeedsLayout];
+                return cell;
+            }
+            case Top_List:
+            {
+                // 广告cell
+                static NSString *cellID = @"TopCellID";
+                TopCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+                if (cell == nil) {
+                    cell = [[TopCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
                 }
                 cell.model = model;
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -794,6 +813,9 @@
             NSArray *dataList = [_dataList copy];
             for (id object in dataList) {
                 if ([object isKindOfClass:[NSString class]]) {
+                    [_dataList removeObject:object];
+                } else if ([object isKindOfClass:[NewsModel class]] && ((NewsModel *)object).tpl.integerValue == Top_List) {
+                    // 删除活动页面
                     [_dataList removeObject:object];
                 }
             }

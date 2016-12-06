@@ -161,6 +161,7 @@
 		5F767A881D9CE82E00822BAC /* NSObject+MJProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F767A7C1D9CE82E00822BAC /* NSObject+MJProperty.m */; };
 		5F767A891D9CE82E00822BAC /* NSString+MJExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F767A7E1D9CE82E00822BAC /* NSString+MJExtension.m */; };
 		5F7CD8231DCB352F00879BC5 /* SingleVideoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F7CD8221DCB352F00879BC5 /* SingleVideoCell.m */; };
+		5F86EDCA1DF585AE00F3C35B /* TopCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F86EDC91DF585AE00F3C35B /* TopCell.m */; };
 		5F8D85AA1D76A99700FF4019 /* WebViewJavascriptBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F8D85A31D76A99700FF4019 /* WebViewJavascriptBridge.m */; };
 		5F8D85AB1D76A99700FF4019 /* WebViewJavascriptBridge_JS.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F8D85A51D76A99700FF4019 /* WebViewJavascriptBridge_JS.m */; };
 		5F8D85AC1D76A99700FF4019 /* WebViewJavascriptBridgeBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F8D85A71D76A99700FF4019 /* WebViewJavascriptBridgeBase.m */; };
@@ -517,6 +518,8 @@
 		5F767A7E1D9CE82E00822BAC /* NSString+MJExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MJExtension.m"; sourceTree = "<group>"; };
 		5F7CD8211DCB352F00879BC5 /* SingleVideoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SingleVideoCell.h; sourceTree = "<group>"; };
 		5F7CD8221DCB352F00879BC5 /* SingleVideoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SingleVideoCell.m; sourceTree = "<group>"; };
+		5F86EDC81DF585AE00F3C35B /* TopCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopCell.h; sourceTree = "<group>"; };
+		5F86EDC91DF585AE00F3C35B /* TopCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TopCell.m; sourceTree = "<group>"; };
 		5F8D85A21D76A99700FF4019 /* WebViewJavascriptBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewJavascriptBridge.h; sourceTree = "<group>"; };
 		5F8D85A31D76A99700FF4019 /* WebViewJavascriptBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewJavascriptBridge.m; sourceTree = "<group>"; };
 		5F8D85A41D76A99700FF4019 /* WebViewJavascriptBridge_JS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewJavascriptBridge_JS.h; sourceTree = "<group>"; };
@@ -1403,6 +1406,8 @@
 				5F5C63921D950AB4005D3578 /* LoadingView.m */,
 				5F5342C81DC717C3005D78F1 /* VideoDetailCell.h */,
 				5F5342C91DC717C3005D78F1 /* VideoDetailCell.m */,
+				5F86EDC81DF585AE00F3C35B /* TopCell.h */,
+				5F86EDC91DF585AE00F3C35B /* TopCell.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1665,6 +1670,7 @@
 				5FF4B7D01D3A174900CC6704 /* MJRefreshConst.m in Sources */,
 				5F767A871D9CE82E00822BAC /* NSObject+MJKeyValue.m in Sources */,
 				5FF4B7B41D38F7B200CC6704 /* NSLayoutConstraint+MASDebugAdditions.m in Sources */,
+				5F86EDCA1DF585AE00F3C35B /* TopCell.m in Sources */,
 				5FF4B7841D38DE7800CC6704 /* ManyPicCell.m in Sources */,
 				5FF4B7D41D3A174900CC6704 /* MJRefreshHeader.m in Sources */,
 				5F5342B71DBF3CD8005D78F1 /* DetailPlayerViewController.m in Sources */,
