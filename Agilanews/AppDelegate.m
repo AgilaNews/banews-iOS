@@ -78,8 +78,13 @@
     [launchView addSubview:snowView];
     [snowView show];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [snowView removeFromSuperview];
-        [launchView removeFromSuperview];
+        [UIView animateWithDuration:.5 animations:^{
+            launchView.alpha = 0;
+            snowView.alpha = 0;
+        } completion:^(BOOL finished) {
+            [snowView removeFromSuperview];
+            [launchView removeFromSuperview];
+        }];
     });
     
     
