@@ -608,7 +608,7 @@
                 NSInteger imageIndex = arc4random() % 5;
                 [self.emojiFlay startFlyWithEmojiImage:[UIImage imageNamed:imageNames[imageIndex]] onView:self.view];
             }
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(8 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 [self.emojiFlay endFly];
                 self.emojiFlay = nil;
             });
