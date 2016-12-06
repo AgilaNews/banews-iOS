@@ -63,7 +63,7 @@ typedef enum {
 #define kHomeUrl_Channel    @"/channel"
 // 新闻推荐接口
 #define kHomeUrl_Recommend  @"/news/recommend"
-// 新闻推荐接口
+// 视频评论接口
 #define kHomeUrl_VideoComment   @"/comment"
 // 评论点赞接口
 #define kHomeUrl_CommentLike      @"/comment/like"

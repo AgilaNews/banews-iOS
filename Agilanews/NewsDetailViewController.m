@@ -600,7 +600,12 @@
     }
     [[SSHttpRequest sharedInstance] post:kHomeUrl_Comment params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
         _commentTextView.sendButton.enabled = YES;
-        CommentModel *model = [CommentModel mj_objectWithKeyValues:responseObj[@"comment"]];
+        CommentModel *model = [CommentModel mj_objectWithKeyValues:responseObj];
+        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        model.user_id = appDelegate.model.user_id;
+        model.user_name = appDelegate.model.name;
+        model.user_portrait_url = appDelegate.model.portrait;
+        model.comment = _commentTextView.textView.text;
         for (CommentModel *commentModel in _commentArray) {
             if (_commentID && [commentModel.commentID isEqualToNumber:_commentID]) {
                 model.reply = commentModel;

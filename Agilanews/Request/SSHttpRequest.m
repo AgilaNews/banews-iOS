@@ -308,14 +308,6 @@ static SSHttpRequest *_manager = nil;
             } else {
                 _urlString = [NSString stringWithFormat:@"%@%@",kLogUrl,url];
             }
-            _urlString = [_urlString stringByAppendingString:@"?"];
-            @autoreleasepool {
-                for (NSString *key in baseParams.allKeys) {
-                    _urlString = [_urlString stringByAppendingString:[NSString stringWithFormat:@"%@=%@&",key,baseParams[key]]];
-                }
-            }
-            _urlString = [_urlString substringToIndex:_urlString.length - 1];
-            _urlString = [_urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         }
             break;
         case NetServer_Mon:
@@ -339,6 +331,15 @@ static SSHttpRequest *_manager = nil;
         default:
             break;
     }
+    _urlString = [_urlString stringByAppendingString:@"?"];
+    @autoreleasepool {
+        for (NSString *key in baseParams.allKeys) {
+            _urlString = [_urlString stringByAppendingString:[NSString stringWithFormat:@"%@=%@&",key,baseParams[key]]];
+        }
+    }
+    _urlString = [_urlString substringToIndex:_urlString.length - 1];
+    _urlString = [_urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+
     // User-A
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     NSString *userA = nil;
