@@ -15,7 +15,8 @@
 #define Default_ButtonHeight        40
 #define Default_TitleColor          [UIColor blackColor]
 #define Default_HeadViewBackgroundColor  [UIColor whiteColor]
-#define Default_FontSize            17
+#define Default_FontSize            15
+#define Selected_FontSize           17
 #define MainScreenWidth             [[UIScreen mainScreen]bounds].size.width
 #define MainScreenHeight            [[UIScreen mainScreen]bounds].size.height
 
@@ -86,7 +87,7 @@
         segmentBtn.frame = CGRectMake(width, 0, [sizeArray[index] floatValue], self.buttonHeight);
         [segmentBtn setTitle:titleArray[index] forState:UIControlStateNormal];
         segmentBtn.titleLabel.font = [UIFont boldSystemFontOfSize:self.fontSize];
-        segmentBtn.titleLabel.backgroundColor = SSColor(235, 235, 235);
+        segmentBtn.titleLabel.backgroundColor = [UIColor whiteColor];
         segmentBtn.tag = index + HEADBTN_TAG;
         [segmentBtn setTitleColor:self.titleColor forState:UIControlStateNormal];
         [segmentBtn setTitleColor:self.titleSelectedColor forState:UIControlStateSelected];
@@ -95,8 +96,14 @@
         if (index == 0) {
             segmentBtn.selected = YES;
             self.selectIndex = segmentBtn.tag;
+            segmentBtn.titleLabel.font = [UIFont boldSystemFontOfSize:Selected_FontSize];
         }
     }
+    
+    UIView *baseLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.buttonHeight - 1, self.headerView.contentSize.width, 1)];
+    baseLine.backgroundColor = SSColor_RGB(235);
+    [self.headerView addSubview:baseLine];
+    
     _lineView = [[UIView alloc] initWithFrame:CGRectMake(0, self.buttonHeight - self.bottomLineHeight, [[sizeArray firstObject] floatValue], self.bottomLineHeight)];
     _lineView.backgroundColor = self.bottomLineColor;
     [self.headerView addSubview:_lineView];
@@ -171,9 +178,12 @@
 {
     UIButton *btn = (UIButton *)[self.view viewWithTag:self.selectIndex];
     btn.selected = NO;
+    btn.titleLabel.font = [UIFont boldSystemFontOfSize:Default_FontSize];
     self.selectIndex = index;
     UIButton *currentSelectBtn = (UIButton *)[self.view viewWithTag:index];
     currentSelectBtn.selected = YES;
+    currentSelectBtn.titleLabel.font = [UIFont boldSystemFontOfSize:Selected_FontSize];
+
     // 记录选中按钮位置
     _buttonX = currentSelectBtn.left - (kScreenWidth - currentSelectBtn.width) * .5;
     CGRect rect = self.lineView.frame;
@@ -263,7 +273,7 @@
 - (UIColor *)titleColor
 {
     if (_titleColor == nil) {
-        _titleColor = Default_TitleColor;
+        _titleColor = SSColor_RGB(102);
     }
     return _titleColor;
 }
@@ -271,7 +281,7 @@
 - (UIColor *)titleSelectedColor
 {
     if (_titleSelectedColor == nil) {
-        _titleSelectedColor = Default_TitleColor;
+        _titleSelectedColor = kOrangeColor;
     }
     return _titleSelectedColor;
 }

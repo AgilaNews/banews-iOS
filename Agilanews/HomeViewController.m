@@ -89,7 +89,7 @@ static CGFloat const ButtonHeight = 40;
     // 设置尺寸
     _segmentVC.buttonWidth = 80;
     _segmentVC.buttonHeight = ButtonHeight;
-    _segmentVC.headViewBackgroundColor = SSColor(235, 235, 235);
+    _segmentVC.headViewBackgroundColor = [UIColor whiteColor];
     // 添加标题
     NSMutableArray *titleArray = [NSMutableArray array];
     if (appDelegate.categoriesArray.count > 0) {
@@ -161,7 +161,7 @@ static CGFloat const ButtonHeight = 40;
         appDelegate.categoriesArray = [NSMutableArray arrayWithArray:models];
     }
     _segmentVC.titleArray = titleArray;
-    _segmentVC.titleColor = [UIColor blackColor];
+    _segmentVC.titleColor = SSColor_RGB(102);
     _segmentVC.titleSelectedColor = kOrangeColor;
     // 添加表视图控制器
     NSMutableArray *controlArray = [NSMutableArray array];
