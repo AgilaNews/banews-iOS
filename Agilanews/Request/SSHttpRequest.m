@@ -188,7 +188,7 @@ static SSHttpRequest *_manager = nil;
     }
     NSURL *homeUrl = [NSURL URLWithString:_urlString];
     // 签名算法
-    NSString *string = [NSString stringWithFormat:@"GET\n\n%@\n%@\n%@%@\n%@",contentType == UrlencodedType ? @"APPLICATION/X-WWW-FORM-URLENCODED" : @"APPLICATION/JSON", [dateString uppercaseString], [signHeader uppercaseString], [homeUrl.path uppercaseString], [signParam uppercaseString]];
+    NSString *string = [NSString stringWithFormat:@"GET\n\n%@\n%@%@\n%@",contentType == UrlencodedType ? @"APPLICATION/X-WWW-FORM-URLENCODED" : @"APPLICATION/JSON", [signHeader uppercaseString], [homeUrl.path uppercaseString], [signParam uppercaseString]];
     string = [string substringToIndex:string.length - 1];
     SSLog(@"签名字符串------%@",string);
     NSString *signString = [Signature hmacsha1:string key:@"7intJWbSmtjkrIrb"];
@@ -401,7 +401,7 @@ static SSHttpRequest *_manager = nil;
     paramsString = [paramsString stringByReplacingOccurrencesOfString:@"\n" withString:@""];
     NSString *md5String = [NSString md5:paramsString];
     // 签名算法
-    NSString *string = [NSString stringWithFormat:@"POST\n%@\n%@\n%@\n%@%@\n%@", [md5String uppercaseString], contentType == UrlencodedType ? @"APPLICATION/X-WWW-FORM-URLENCODED" : @"APPLICATION/JSON", [dateString uppercaseString], [signHeader uppercaseString], [homeUrl.path uppercaseString], [signParam uppercaseString]];
+    NSString *string = [NSString stringWithFormat:@"POST\n%@\n%@\n%@%@\n%@", [md5String uppercaseString], contentType == UrlencodedType ? @"APPLICATION/X-WWW-FORM-URLENCODED" : @"APPLICATION/JSON", [signHeader uppercaseString], [homeUrl.path uppercaseString], [signParam uppercaseString]];
     string = [string substringToIndex:string.length - 1];
     SSLog(@"签名字符串------%@",string);
     NSString *signString = [Signature hmacsha1:string key:@"7intJWbSmtjkrIrb"];
@@ -584,7 +584,7 @@ static SSHttpRequest *_manager = nil;
     }
     NSURL *homeUrl = [NSURL URLWithString:_urlString];
     // 签名算法
-    NSString *string = [NSString stringWithFormat:@"GET\n\n%@\nDate:%@\n%@%@\n%@",contentType == UrlencodedType ? @"APPLICATION/X-WWW-FORM-URLENCODED" : @"APPLICATION/JSON", [dateString uppercaseString], [signHeader uppercaseString], [homeUrl.path uppercaseString], [signParam uppercaseString]];
+    NSString *string = [NSString stringWithFormat:@"GET\n\n%@\n%@%@\n%@",contentType == UrlencodedType ? @"APPLICATION/X-WWW-FORM-URLENCODED" : @"APPLICATION/JSON", [signHeader uppercaseString], [homeUrl.path uppercaseString], [signParam uppercaseString]];
     string = [string substringToIndex:string.length - 1];
     SSLog(@"签名字符串------%@",string);
     NSString *signString = [Signature hmacsha1:string key:@"7intJWbSmtjkrIrb"];
