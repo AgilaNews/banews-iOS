@@ -198,7 +198,8 @@
         }];
     }
     // 观看量布局
-    CGSize watchLabelSize = [_model.views.stringValue calculateSize:CGSizeMake(100, 14) font:self.watchLabel.font];
+    NSString *views = [TimeStampToString getViewsStringWithNumber:_model.views];
+    CGSize watchLabelSize = [views calculateSize:CGSizeMake(100, 14) font:self.watchLabel.font];
     [self.watchLabel mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(weakSelf.watchView.mas_right).offset(5);
         make.centerY.mas_equalTo(weakSelf.watchView.mas_centerY);
@@ -236,7 +237,7 @@
     }
     self.tagLabel.text = _model.tag;
     self.durationLabel.text = durationString;
-    self.watchLabel.text = _model.views.stringValue;
+    self.watchLabel.text = views;
     if (_model.commentCount.integerValue > 0) {
         self.commentLabel.text = _model.commentCount.stringValue;
     } else {

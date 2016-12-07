@@ -49,7 +49,7 @@
             }
         }
     }
-    
+    self.navigationController.navigationBar.shadowImage = [UIImage new];
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.isBackButton = YES;
     
