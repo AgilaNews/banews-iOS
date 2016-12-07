@@ -24,10 +24,8 @@
 
     // 添加导航栏右侧按钮
     _sendButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    _sendButton.frame = CGRectMake(0, 0, 80, 40);
-    _sendButton.titleLabel.font = [UIFont systemFontOfSize:17];
-    [_sendButton setTitle:@"Send" forState:UIControlStateNormal];
-    [_sendButton setTitleColor:[UIColor colorWithRed:1 green:1 blue:1 alpha:.4] forState:UIControlStateDisabled];
+    _sendButton.frame = CGRectMake(0, 0, 60, 40);
+    [_sendButton setImage:[UIImage imageNamed:@"icon_send"] forState:UIControlStateNormal];
     [_sendButton addTarget:self action:@selector(sendAction:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *sendItem = [[UIBarButtonItem alloc]initWithCustomView:_sendButton];
     if ([UIDevice currentDevice].systemVersion.floatValue >= 7.0) {
