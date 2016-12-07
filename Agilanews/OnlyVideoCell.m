@@ -541,7 +541,9 @@
                 [appDelegate.eventArray addObject:eventDic];
             } isShowHUD:NO];
         } else {
-            [self.playerView stopVideo];
+            if (!_isMove) {
+                [self.playerView stopVideo];
+            }
             self.shadowView.hidden = NO;
             self.titleLabel.hidden = NO;
             self.durationLabel.hidden = NO;
