@@ -31,8 +31,6 @@
     [Flurry startSession:@"ZBQNRB8P9XRTS7T7W2ZC"];
 #endif
     [Flurry setAppVersion:[NSString stringWithFormat:@"v%@",[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]]];
-    // 注册ShareSDK
-    [self registerShareSDK];
     // 注册Twitter/Crashlytics
     [Fabric with:@[[Twitter class], [Crashlytics class]]];
     // 注册firebase
@@ -44,6 +42,8 @@
     // 注册AppsFlyer
     [AppsFlyerTracker sharedTracker].appsFlyerDevKey = @"vKsiczVKraASChBxaENvbe";
     [AppsFlyerTracker sharedTracker].appleAppID = @"1146695204";
+    // 注册ShareSDK
+    [self registerShareSDK];
 #if DEBUG
     _window = [[iConsoleWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     _window.backgroundColor = SSColor(0, 0, 0);
@@ -101,7 +101,7 @@
     // 创建图片文件夹
     [self createImageFolderAtPath];
     // 消除小红点
-    UILocalNotification *notification=[[UILocalNotification alloc]init];
+    UILocalNotification *notification = [[UILocalNotification alloc] init];
     notification.applicationIconBadgeNumber = -1;
     [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
 //    // 启动上报打点
