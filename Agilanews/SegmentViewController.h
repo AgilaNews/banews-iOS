@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PullDownListView.h"
+
 typedef NS_ENUM(NSInteger, SegmentHeaderType) {
     SegmentHeaderTypeScroll, //标签栏可滚动
     SegmentHeaderTypeFixed   //标签栏固定
@@ -52,6 +54,10 @@ typedef NS_ENUM(NSInteger, SegmentControlStyle) {
 @property (nonatomic, assign) NSInteger currentIndex;
 // 顶部标签滑动视图
 @property (nonatomic, strong) UIScrollView *headerView;
+// 是否显示下拉列表
+@property (nonatomic, assign) BOOL isPullDownListShow;
+@property (nonatomic, strong) UIButton *pullDownButton;
+@property (nonatomic, strong) PullDownListView *pullDownListView;
 
 //初始化方法
 - (void)initSegment;

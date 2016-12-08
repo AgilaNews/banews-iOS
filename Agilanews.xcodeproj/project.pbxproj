@@ -163,6 +163,7 @@
 		5F7CD8231DCB352F00879BC5 /* SingleVideoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F7CD8221DCB352F00879BC5 /* SingleVideoCell.m */; };
 		5F86EDCA1DF585AE00F3C35B /* TopCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F86EDC91DF585AE00F3C35B /* TopCell.m */; };
 		5F86EDCD1DF66DCD00F3C35B /* LSEmojiFly.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F86EDCC1DF66DCD00F3C35B /* LSEmojiFly.m */; };
+		5F86EDD01DF94B1400F3C35B /* PullDownListView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F86EDCF1DF94B1400F3C35B /* PullDownListView.m */; };
 		5F8D85AA1D76A99700FF4019 /* WebViewJavascriptBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F8D85A31D76A99700FF4019 /* WebViewJavascriptBridge.m */; };
 		5F8D85AB1D76A99700FF4019 /* WebViewJavascriptBridge_JS.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F8D85A51D76A99700FF4019 /* WebViewJavascriptBridge_JS.m */; };
 		5F8D85AC1D76A99700FF4019 /* WebViewJavascriptBridgeBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F8D85A71D76A99700FF4019 /* WebViewJavascriptBridgeBase.m */; };
@@ -523,6 +524,8 @@
 		5F86EDC91DF585AE00F3C35B /* TopCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TopCell.m; sourceTree = "<group>"; };
 		5F86EDCB1DF66DCC00F3C35B /* LSEmojiFly.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSEmojiFly.h; sourceTree = "<group>"; };
 		5F86EDCC1DF66DCD00F3C35B /* LSEmojiFly.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSEmojiFly.m; sourceTree = "<group>"; };
+		5F86EDCE1DF94B1400F3C35B /* PullDownListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PullDownListView.h; sourceTree = "<group>"; };
+		5F86EDCF1DF94B1400F3C35B /* PullDownListView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PullDownListView.m; sourceTree = "<group>"; };
 		5F8D85A21D76A99700FF4019 /* WebViewJavascriptBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewJavascriptBridge.h; sourceTree = "<group>"; };
 		5F8D85A31D76A99700FF4019 /* WebViewJavascriptBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewJavascriptBridge.m; sourceTree = "<group>"; };
 		5F8D85A41D76A99700FF4019 /* WebViewJavascriptBridge_JS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewJavascriptBridge_JS.h; sourceTree = "<group>"; };
@@ -1413,6 +1416,8 @@
 				5F5342C91DC717C3005D78F1 /* VideoDetailCell.m */,
 				5F86EDC81DF585AE00F3C35B /* TopCell.h */,
 				5F86EDC91DF585AE00F3C35B /* TopCell.m */,
+				5F86EDCE1DF94B1400F3C35B /* PullDownListView.h */,
+				5F86EDCF1DF94B1400F3C35B /* PullDownListView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1691,6 +1696,7 @@
 				5F6462801D48AD3A008EEDEC /* CommentTextView.m in Sources */,
 				5F42C0911D34E41D00B89651 /* UIView+WebCacheOperation.m in Sources */,
 				5FF4B7B51D38F7B200CC6704 /* View+MASAdditions.m in Sources */,
+				5F86EDD01DF94B1400F3C35B /* PullDownListView.m in Sources */,
 				5F42C09D1D34E42A00B89651 /* SVIndefiniteAnimatedView.m in Sources */,
 				5F2E0A1F1D87B47A00FEC0AC /* HZPhotoBrowserView.m in Sources */,
 				5FF4B7B61D38F7B200CC6704 /* ViewController+MASAdditions.m in Sources */,

@@ -60,7 +60,7 @@
     NSMutableArray *sizeArray = [NSMutableArray array];
     for (NSString *title in titleArray) {
         CGSize size = [title calculateSize:CGSizeMake(1000, 40) font:[UIFont boldSystemFontOfSize:Default_FontSize]];
-        [sizeArray addObject:[NSNumber numberWithInt:MAX(size.width, 40) + 20]];
+        [sizeArray addObject:[NSNumber numberWithInt:MAX(size.width, 35) + 16]];
     }
     _sizeArray = sizeArray;
     self.headerView.frame = CGRectMake(0, 0, MainScreenWidth, self.buttonHeight + 10);
@@ -70,9 +70,8 @@
             width += [size_x floatValue];
         }
 //        self.headerView.contentSize = CGSizeMake(self.buttonWidth * titleArray.count, self.buttonHeight);
-        self.headerView.contentSize = CGSizeMake(width, self.buttonHeight);
-    }
-    else {
+        self.headerView.contentSize = CGSizeMake(width + 34, self.buttonHeight);
+    } else {
         self.headerView.contentSize = CGSizeMake(MainScreenWidth, self.buttonHeight);
     }
     [self.view addSubview:self.headerView];
@@ -107,6 +106,22 @@
     _lineView = [[UIView alloc] initWithFrame:CGRectMake(0, self.buttonHeight - self.bottomLineHeight, [[sizeArray firstObject] floatValue], self.bottomLineHeight)];
     _lineView.backgroundColor = self.bottomLineColor;
     [self.headerView addSubview:_lineView];
+    
+    UIView *gradientView = [[UIView alloc] initWithFrame:CGRectMake(kScreenWidth - 54, self.headerView.top, 54, self.buttonHeight)];
+    [self.view addSubview:gradientView];
+    CAGradientLayer *gradientLayer = [CAGradientLayer layer];
+    gradientLayer.colors = @[(__bridge id)[UIColor colorWithWhite:1 alpha:.1].CGColor, (__bridge id)[UIColor whiteColor].CGColor, (__bridge id)[UIColor whiteColor].CGColor];
+    gradientLayer.locations = @[@0, @0.4, @1.0];
+    gradientLayer.startPoint = CGPointMake(0, 0);
+    gradientLayer.endPoint = CGPointMake(1.0, 0);
+    gradientLayer.frame = gradientView.bounds;
+    [gradientView.layer addSublayer:gradientLayer];
+    _pullDownButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    _pullDownButton.frame = CGRectMake(kScreenWidth - 34, self.headerView.top, 34, self.buttonHeight);
+    [_pullDownButton setImage:[UIImage imageNamed:@"icon_arrow_down"] forState:UIControlStateNormal];
+    [_pullDownButton setImage:[UIImage imageNamed:@"icon_arrow_up"] forState:UIControlStateSelected];
+    [_pullDownButton addTarget:self action:@selector(pullDownAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:_pullDownButton];
 }
 
 /*!
@@ -216,6 +231,53 @@
 #if DEBUG
     [iConsole info:[NSString stringWithFormat:@"%@_Enter:%@",channelName,articleParams],nil];
 #endif
+}
+
+- (void)pullDownAction:(UIButton *)button
+{
+    if (button.selected) {
+        self.isPullDownListShow = NO;
+    } else {
+        self.isPullDownListShow = YES;
+    }
+    button.selected = !button.selected;
+}
+
+- (void)setIsPullDownListShow:(BOOL)isPullDownListShow
+{
+    if (_isPullDownListShow != isPullDownListShow) {
+        _isPullDownListShow = isPullDownListShow;
+        
+        if (isPullDownListShow) {
+            [self.view addSubview:self.pullDownListView];
+            self.pullDownListView.alpha = 0;
+            [UIView animateWithDuration:.3 animations:^{
+                self.pullDownListView.alpha = 1;
+            }];
+        } else {
+            [UIView animateWithDuration:.3 animations:^{
+                self.pullDownListView.alpha = 0;
+            } completion:^(BOOL finished) {
+                [self.pullDownListView removeFromSuperview];
+            }];
+        }
+    }
+}
+
+- (PullDownListView *)pullDownListView
+{
+    if (!_pullDownListView) {
+        _pullDownListView = [[PullDownListView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight - 64)];
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(removePullDown)];
+        [_pullDownListView addGestureRecognizer:tap];
+    }
+    return _pullDownListView;
+}
+
+- (void)removePullDown
+{
+    self.isPullDownListShow = NO;
+    _pullDownButton.selected = NO;
 }
 
 #pragma mark - ScrollViewDelegate

@@ -927,7 +927,9 @@
             } else {
                 // 无新数据
                 NSArray *dataList = oldNewsData[oldNewsDataKey][homeTabVC.model.channelID];
-                [newsDic setObject:dataList forKey:homeTabVC.model.channelID];
+                if (dataList.count) {
+                    [newsDic setObject:dataList forKey:homeTabVC.model.channelID];
+                }
             }
         }
         NSDictionary *newsData = [NSDictionary dictionaryWithObject:newsDic forKey:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]]];
