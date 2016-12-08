@@ -721,7 +721,9 @@
             NSString *likeFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/like.data"];
             NSDictionary *likeData = [NSKeyedUnarchiver unarchiveObjectWithFile:likeFilePath];
             NSNumber *likeKey = likeData.allKeys.firstObject;
-            _likedDic = likeData[likeKey];
+            if (likeData) {
+                _likedDic = likeData[likeKey];
+            }
             // 加载新闻查看记录
             _checkDic = [NSMutableDictionary dictionary];
             NSString *checkFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/check.data"];
