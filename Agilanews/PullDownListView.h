@@ -10,4 +10,6 @@
 
 @interface PullDownListView : UIView
 
+@property (nonatomic, strong) UIView *whiteView;
+
 @end

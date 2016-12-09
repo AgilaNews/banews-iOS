@@ -24,18 +24,18 @@
         } else {
             count = appDelegate.categoriesArray.count / 3 + 1;
         }
-        UIView *whiteView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 40 + count * 40 + 10)];
-        whiteView.backgroundColor = [UIColor whiteColor];
-        whiteView.alpha = .98;
-        [self addSubview:whiteView];
+        _whiteView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 40 + count * 40 + 10)];
+        _whiteView.backgroundColor = [UIColor whiteColor];
+        _whiteView.alpha = .98;
+        [self addSubview:_whiteView];
         
         UIButton *upButton = [UIButton buttonWithType:UIButtonTypeCustom];
         upButton.frame = CGRectMake(kScreenWidth - 34, 0, 34, 40);
         [upButton setImage:[UIImage imageNamed:@"icon_arrow_up"] forState:UIControlStateNormal];
         upButton.userInteractionEnabled = NO;
-        [whiteView addSubview:upButton];
+        [_whiteView addSubview:upButton];
         
-        UIView *blackView = [[UIView alloc] initWithFrame:CGRectMake(0, whiteView.bottom, kScreenWidth, self.height - whiteView.height)];
+        UIView *blackView = [[UIView alloc] initWithFrame:CGRectMake(0, _whiteView.bottom, kScreenWidth, self.height - _whiteView.height)];
         blackView.backgroundColor = [UIColor blackColor];
         blackView.alpha = .4;
         [self addSubview:blackView];
@@ -61,10 +61,26 @@
             button.layer.cornerRadius = itemHeight * .5;
             button.layer.masksToBounds = YES;
             [button addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
-            [whiteView addSubview:button];
+            [_whiteView addSubview:button];
         }
     }
     return self;
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    for (int i = 0; i < appDelegate.categoriesArray.count; i++) {
+        CategoriesModel *model = appDelegate.categoriesArray[i];
+        UIButton *button = [_whiteView viewWithTag:10000 + i];
+        [button setTitle:model.name forState:UIControlStateNormal];
+        if ([model.name isEqualToString:@"Entertainment"]) {
+            button.titleLabel.font = [UIFont systemFontOfSize:12];
+        } else {
+            button.titleLabel.font = [UIFont systemFontOfSize:14];
+        }
+    }
 }
 
 - (void)buttonAction:(UIButton *)button

@@ -250,6 +250,7 @@
         
         if (isPullDownListShow) {
             [self.view addSubview:self.pullDownListView];
+            [self.pullDownListView setNeedsLayout];
             self.pullDownListView.alpha = 0;
             [UIView animateWithDuration:.3 animations:^{
                 self.pullDownListView.alpha = 1;
