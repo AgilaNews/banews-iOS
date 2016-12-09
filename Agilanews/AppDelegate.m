@@ -721,7 +721,9 @@
             NSString *likeFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/like.data"];
             NSDictionary *likeData = [NSKeyedUnarchiver unarchiveObjectWithFile:likeFilePath];
             NSNumber *likeKey = likeData.allKeys.firstObject;
-            _likedDic = likeData[likeKey];
+            if (likeData) {
+                _likedDic = likeData[likeKey];
+            }
             // 加载新闻查看记录
             _checkDic = [NSMutableDictionary dictionary];
             NSString *checkFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/check.data"];
@@ -925,7 +927,9 @@
             } else {
                 // 无新数据
                 NSArray *dataList = oldNewsData[oldNewsDataKey][homeTabVC.model.channelID];
-                [newsDic setObject:dataList forKey:homeTabVC.model.channelID];
+                if (dataList.count) {
+                    [newsDic setObject:dataList forKey:homeTabVC.model.channelID];
+                }
             }
         }
         NSDictionary *newsData = [NSDictionary dictionaryWithObject:newsDic forKey:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]]];
