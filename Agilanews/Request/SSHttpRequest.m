@@ -96,9 +96,9 @@ static SSHttpRequest *_manager = nil;
             case NetServer_Check:
             {
 #if DEBUG
-                _urlString = [NSString stringWithFormat:@"http://api.agilanews.info/%@",url];
+                _urlString = [NSString stringWithFormat:@"http://api.agilanews.info%@",url];
 #else
-                _urlString = [NSString stringWithFormat:@"http://api.agilanews.today/%@",url];
+                _urlString = [NSString stringWithFormat:@"http://api.agilanews.today%@",url];
 #endif
                 break;
             }
