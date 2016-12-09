@@ -120,6 +120,7 @@
     _pullDownButton.frame = CGRectMake(kScreenWidth - 34, self.headerView.top, 34, self.buttonHeight);
     [_pullDownButton setImage:[UIImage imageNamed:@"icon_arrow_down"] forState:UIControlStateNormal];
     [_pullDownButton setImage:[UIImage imageNamed:@"icon_arrow_up"] forState:UIControlStateSelected];
+    [_pullDownButton setAdjustsImageWhenHighlighted:NO];
     [_pullDownButton addTarget:self action:@selector(pullDownAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_pullDownButton];
 }

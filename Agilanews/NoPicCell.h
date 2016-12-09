@@ -19,6 +19,8 @@
 @property (nonatomic, strong) UILabel *timeLabel;           // 发布时间
 @property (nonatomic, strong) UIImageView *commentView;     // 评论
 @property (nonatomic, strong) UILabel *commentLabel;        // 评论数
+@property (nonatomic, strong) UIButton *dislikeButton;      // 不喜欢按钮
+
 @property (nonatomic, strong) UIColor *bgColor;
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier bgColor:(UIColor *)bgColor;

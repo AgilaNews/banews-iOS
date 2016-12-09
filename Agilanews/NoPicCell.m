@@ -47,6 +47,7 @@
     [self.contentView addSubview:self.timeLabel];
     [self.contentView addSubview:self.commentView];
     [self.contentView addSubview:self.commentLabel];
+    [self.contentView addSubview:self.dislikeButton];
     
     __weak typeof(self) weakSelf = self;
     // 标题布局
@@ -100,6 +101,13 @@
         make.centerY.mas_equalTo(weakSelf.sourceLabel.mas_centerY);
         make.width.mas_equalTo(50);
         make.height.mas_equalTo(13);
+    }];
+    // 不喜欢布局
+    [self.dislikeButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.mas_equalTo(0);
+        make.centerY.mas_equalTo(weakSelf.sourceLabel.mas_centerY);
+        make.width.mas_equalTo(34);
+        make.height.mas_equalTo(34);
     }];
 }
 
@@ -190,6 +198,13 @@
         self.commentView.hidden = YES;
         self.commentLabel.hidden = YES;
     }
+    // 不喜欢布局
+    [self.dislikeButton mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.right.mas_equalTo(0);
+        make.centerY.mas_equalTo(weakSelf.sourceLabel.mas_centerY);
+        make.width.mas_equalTo(34);
+        make.height.mas_equalTo(34);
+    }];
     [super updateConstraints];
     
     // 设置内容
@@ -310,6 +325,16 @@
         _commentLabel.hidden = YES;
     }
     return _commentLabel;
+}
+
+- (UIButton *)dislikeButton
+{
+    if (_dislikeButton == nil) {
+        _dislikeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_dislikeButton setImage:[UIImage imageNamed:@"icon_dislike"] forState:UIControlStateNormal];
+        [_dislikeButton setAdjustsImageWhenHighlighted:NO];
+    }
+    return _dislikeButton;
 }
 
 - (void)fontChange

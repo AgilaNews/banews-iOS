@@ -50,9 +50,9 @@
     [self.contentView addSubview:self.imageViewOne];
     [self.contentView addSubview:self.imageViewTwo];
     [self.contentView addSubview:self.imageViewThree];
+    [self.contentView addSubview:self.dislikeButton];
     
     __weak typeof(self) weakSelf = self;
-    
     // 标题布局
     CGSize titleLabelSize = [_model.title calculateSize:CGSizeMake(kScreenWidth - 22, 40) font:self.titleLabel.font];
     [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -125,6 +125,13 @@
         make.centerY.mas_equalTo(weakSelf.sourceLabel.mas_centerY);
         make.width.mas_equalTo(50);
         make.height.mas_equalTo(13);
+    }];
+    // 不喜欢布局
+    [self.dislikeButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.mas_equalTo(0);
+        make.centerY.mas_equalTo(weakSelf.sourceLabel.mas_centerY);
+        make.width.mas_equalTo(34);
+        make.height.mas_equalTo(34);
     }];
 }
 
@@ -231,6 +238,13 @@
         self.commentView.hidden = YES;
         self.commentLabel.hidden = YES;
     }
+    // 不喜欢布局
+    [self.dislikeButton mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.right.mas_equalTo(0);
+        make.centerY.mas_equalTo(weakSelf.sourceLabel.mas_centerY);
+        make.width.mas_equalTo(34);
+        make.height.mas_equalTo(34);
+    }];
     [super updateConstraints];
     
     self.titleLabel.text = _model.title;
@@ -435,6 +449,16 @@
         _commentLabel.hidden = YES;
     }
     return _commentLabel;
+}
+
+- (UIButton *)dislikeButton
+{
+    if (_dislikeButton == nil) {
+        _dislikeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_dislikeButton setImage:[UIImage imageNamed:@"icon_dislike"] forState:UIControlStateNormal];
+        [_dislikeButton setAdjustsImageWhenHighlighted:NO];
+    }
+    return _dislikeButton;
 }
 
 - (void)fontChange

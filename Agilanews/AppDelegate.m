@@ -374,9 +374,7 @@
         }];
     }
     [[UIApplication sharedApplication] registerForRemoteNotifications];
-    UIUserNotificationType notificationTypes = UIUserNotificationTypeBadge |
-    UIUserNotificationTypeSound |
-    UIUserNotificationTypeAlert;
+    UIUserNotificationType notificationTypes = UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
     UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:notificationTypes categories:nil];
     [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
     

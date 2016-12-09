@@ -1251,6 +1251,56 @@
 			name = EmitterAnimation;
 			sourceTree = "<group>";
 		};
+		5F86EDD11DFAAEE300F3C35B /* Detail */ = {
+			isa = PBXGroup;
+			children = (
+				5F7CD8211DCB352F00879BC5 /* SingleVideoCell.h */,
+				5F7CD8221DCB352F00879BC5 /* SingleVideoCell.m */,
+				5F6462751D4715DB008EEDEC /* RecommendedView.h */,
+				5F6462761D4715DB008EEDEC /* RecommendedView.m */,
+				5F6462781D474CD3008EEDEC /* CommentCell.h */,
+				5F6462791D474CD3008EEDEC /* CommentCell.m */,
+				5F64627B1D4855F7008EEDEC /* CommentTextField.h */,
+				5F64627C1D4855F7008EEDEC /* CommentTextField.m */,
+				5F64627E1D48AD3A008EEDEC /* CommentTextView.h */,
+				5F64627F1D48AD3A008EEDEC /* CommentTextView.m */,
+				5F5342C81DC717C3005D78F1 /* VideoDetailCell.h */,
+				5F5342C91DC717C3005D78F1 /* VideoDetailCell.m */,
+			);
+			name = Detail;
+			sourceTree = "<group>";
+		};
+		5F86EDD21DFAAEE600F3C35B /* List */ = {
+			isa = PBXGroup;
+			children = (
+				5FF4B7821D38DE7800CC6704 /* ManyPicCell.h */,
+				5FF4B7831D38DE7800CC6704 /* ManyPicCell.m */,
+				5FF4B7851D38DE9300CC6704 /* SinglePicCell.h */,
+				5FF4B7861D38DE9300CC6704 /* SinglePicCell.m */,
+				5F8E264C1D7428E100B48130 /* BigPicCell.h */,
+				5F8E264D1D7428E100B48130 /* BigPicCell.m */,
+				5FF4B7881D38DEA400CC6704 /* NoPicCell.h */,
+				5FF4B7891D38DEA400CC6704 /* NoPicCell.m */,
+				5FF4B78B1D38DEC000CC6704 /* OnlyPicCell.h */,
+				5FF4B78C1D38DEC000CC6704 /* OnlyPicCell.m */,
+				5FF4B78E1D38DEE400CC6704 /* GifPicCell.h */,
+				5FF4B78F1D38DEE400CC6704 /* GifPicCell.m */,
+				5F5342B21DBDF30E005D78F1 /* OnlyVideoCell.h */,
+				5F5342B31DBDF30E005D78F1 /* OnlyVideoCell.m */,
+				5F767A5B1D9A44C800822BAC /* RefreshCell.h */,
+				5F767A5C1D9A44C800822BAC /* RefreshCell.m */,
+				5F5AE96F1D5353B400A5A8B7 /* BannerView.h */,
+				5F5AE9701D5353B400A5A8B7 /* BannerView.m */,
+				5F5C63911D950AB4005D3578 /* LoadingView.h */,
+				5F5C63921D950AB4005D3578 /* LoadingView.m */,
+				5F86EDC81DF585AE00F3C35B /* TopCell.h */,
+				5F86EDC91DF585AE00F3C35B /* TopCell.m */,
+				5F86EDCE1DF94B1400F3C35B /* PullDownListView.h */,
+				5F86EDCF1DF94B1400F3C35B /* PullDownListView.m */,
+			);
+			name = List;
+			sourceTree = "<group>";
+		};
 		5F8D85A11D76A99700FF4019 /* WebViewJavascriptBridge */ = {
 			isa = PBXGroup;
 			children = (
@@ -1382,42 +1432,8 @@
 		5FF4B6F91D372BEF00CC6704 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				5FF4B7821D38DE7800CC6704 /* ManyPicCell.h */,
-				5FF4B7831D38DE7800CC6704 /* ManyPicCell.m */,
-				5FF4B7851D38DE9300CC6704 /* SinglePicCell.h */,
-				5FF4B7861D38DE9300CC6704 /* SinglePicCell.m */,
-				5F8E264C1D7428E100B48130 /* BigPicCell.h */,
-				5F8E264D1D7428E100B48130 /* BigPicCell.m */,
-				5FF4B7881D38DEA400CC6704 /* NoPicCell.h */,
-				5FF4B7891D38DEA400CC6704 /* NoPicCell.m */,
-				5FF4B78B1D38DEC000CC6704 /* OnlyPicCell.h */,
-				5FF4B78C1D38DEC000CC6704 /* OnlyPicCell.m */,
-				5FF4B78E1D38DEE400CC6704 /* GifPicCell.h */,
-				5FF4B78F1D38DEE400CC6704 /* GifPicCell.m */,
-				5F5342B21DBDF30E005D78F1 /* OnlyVideoCell.h */,
-				5F5342B31DBDF30E005D78F1 /* OnlyVideoCell.m */,
-				5F7CD8211DCB352F00879BC5 /* SingleVideoCell.h */,
-				5F7CD8221DCB352F00879BC5 /* SingleVideoCell.m */,
-				5F767A5B1D9A44C800822BAC /* RefreshCell.h */,
-				5F767A5C1D9A44C800822BAC /* RefreshCell.m */,
-				5F6462751D4715DB008EEDEC /* RecommendedView.h */,
-				5F6462761D4715DB008EEDEC /* RecommendedView.m */,
-				5F6462781D474CD3008EEDEC /* CommentCell.h */,
-				5F6462791D474CD3008EEDEC /* CommentCell.m */,
-				5F64627B1D4855F7008EEDEC /* CommentTextField.h */,
-				5F64627C1D4855F7008EEDEC /* CommentTextField.m */,
-				5F64627E1D48AD3A008EEDEC /* CommentTextView.h */,
-				5F64627F1D48AD3A008EEDEC /* CommentTextView.m */,
-				5F5AE96F1D5353B400A5A8B7 /* BannerView.h */,
-				5F5AE9701D5353B400A5A8B7 /* BannerView.m */,
-				5F5C63911D950AB4005D3578 /* LoadingView.h */,
-				5F5C63921D950AB4005D3578 /* LoadingView.m */,
-				5F5342C81DC717C3005D78F1 /* VideoDetailCell.h */,
-				5F5342C91DC717C3005D78F1 /* VideoDetailCell.m */,
-				5F86EDC81DF585AE00F3C35B /* TopCell.h */,
-				5F86EDC91DF585AE00F3C35B /* TopCell.m */,
-				5F86EDCE1DF94B1400F3C35B /* PullDownListView.h */,
-				5F86EDCF1DF94B1400F3C35B /* PullDownListView.m */,
+				5F86EDD21DFAAEE600F3C35B /* List */,
+				5F86EDD11DFAAEE300F3C35B /* Detail */,
 			);
 			name = Views;
 			sourceTree = "<group>";

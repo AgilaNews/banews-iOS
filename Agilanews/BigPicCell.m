@@ -51,6 +51,7 @@
     [self.contentView addSubview:self.commentLabel];
     [self.contentView addSubview:self.titleImageView];
     [self.contentView addSubview:self.haveVideoView];
+    [self.contentView addSubview:self.dislikeButton];
     
     __weak typeof(self) weakSelf = self;
     // 标题布局
@@ -118,6 +119,13 @@
         make.centerY.mas_equalTo(weakSelf.titleImageView.mas_centerY);
         make.width.mas_equalTo(45);
         make.height.mas_equalTo(45);
+    }];
+    // 不喜欢布局
+    [self.dislikeButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.mas_equalTo(0);
+        make.centerY.mas_equalTo(weakSelf.sourceLabel.mas_centerY);
+        make.width.mas_equalTo(34);
+        make.height.mas_equalTo(34);
     }];
 }
 
@@ -225,7 +233,13 @@
         make.width.mas_equalTo(45);
         make.height.mas_equalTo(45);
     }];
-    
+    // 不喜欢布局
+    [self.dislikeButton mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.right.mas_equalTo(0);
+        make.centerY.mas_equalTo(weakSelf.sourceLabel.mas_centerY);
+        make.width.mas_equalTo(34);
+        make.height.mas_equalTo(34);
+    }];
     [super updateConstraints];
     
     // 设置内容
@@ -265,8 +279,10 @@
     }];
     if (self.isHaveVideo) {
         self.haveVideoView.hidden = NO;
+        self.dislikeButton.hidden = YES;
     } else {
         self.haveVideoView.hidden = YES;
+        self.dislikeButton.hidden = NO;
     }
 }
 
@@ -394,6 +410,16 @@
         _haveVideoView.hidden = YES;
     }
     return _haveVideoView;
+}
+
+- (UIButton *)dislikeButton
+{
+    if (_dislikeButton == nil) {
+        _dislikeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_dislikeButton setImage:[UIImage imageNamed:@"icon_dislike"] forState:UIControlStateNormal];
+        [_dislikeButton setAdjustsImageWhenHighlighted:NO];
+    }
+    return _dislikeButton;
 }
 
 - (void)fontChange
