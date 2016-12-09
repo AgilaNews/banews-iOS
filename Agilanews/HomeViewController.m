@@ -208,7 +208,7 @@ static CGFloat const ButtonHeight = 40;
         [titleArray addObject:model.name];
     }
     _segmentVC.titleArray = titleArray;
-    _segmentVC.titleColor = [UIColor blackColor];
+    _segmentVC.titleColor = SSColor_RGB(102);
     _segmentVC.titleSelectedColor = kOrangeColor;
     // 添加表视图控制器
     NSMutableArray *controlArray = [NSMutableArray array];

@@ -111,7 +111,7 @@
     [self.view addSubview:gradientView];
     CAGradientLayer *gradientLayer = [CAGradientLayer layer];
     gradientLayer.colors = @[(__bridge id)[UIColor colorWithWhite:1 alpha:.1].CGColor, (__bridge id)[UIColor whiteColor].CGColor, (__bridge id)[UIColor whiteColor].CGColor];
-    gradientLayer.locations = @[@0, @0.4, @1.0];
+    gradientLayer.locations = @[@0, @0.5, @1.0];
     gradientLayer.startPoint = CGPointMake(0, 0);
     gradientLayer.endPoint = CGPointMake(1.0, 0);
     gradientLayer.frame = gradientView.bounds;
