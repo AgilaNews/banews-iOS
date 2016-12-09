@@ -404,18 +404,6 @@
     SSLog(@"InstanceID token: %@", refreshedToken);
     // Connect to FCM since connection may have failed when attempted before having a token.
     [self connectToFcm];
-    // 取消注册topics
-    [[FIRMessaging messaging] unsubscribeFromTopic:@"/topics/ios_v1.1.5"];
-    [[FIRMessaging messaging] unsubscribeFromTopic:@"/topics/ios_v1.1.6"];
-    [[FIRMessaging messaging] unsubscribeFromTopic:@"/topics/ios_v1.1.7"];
-    [[FIRMessaging messaging] unsubscribeFromTopic:@"/topics/ios_v1.1.8"];
-    [[FIRMessaging messaging] unsubscribeFromTopic:@"/topics/ios_v1.1.9"];
-    [[FIRMessaging messaging] unsubscribeFromTopic:@"/topics/ios_v1.2.0"];
-    [[FIRMessaging messaging] unsubscribeFromTopic:@"/topics/ios_v1.2.1"];
-    // 注册topics
-    [[FIRMessaging messaging] subscribeToTopic:@"/topics/notification"];
-    NSString * version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-    [[FIRMessaging messaging] subscribeToTopic:[NSString stringWithFormat:@"/topics/ios_v%@",version]];
     if (refreshedToken.length) {
         DEF_PERSISTENT_SET_OBJECT(@"refreshToken", refreshedToken);
         [self uploadRefreshedToken:refreshedToken];
@@ -437,16 +425,33 @@
  */
 - (void)uploadRefreshedToken:(NSString *)refreshedToken
 {
-    __weak typeof(self) weakSelf = self;
+    NSString * version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
-    [params setObject:refreshedToken forKey:@"token"];
-    [params setObject:@"ios" forKey:@"os"];
-    [params setObject:@"apple" forKey:@"vendor"];
-    [params setObject:DEF_PERSISTENT_GET_OBJECT(@"IDFA") forKey:@"ios_did"];
-    [params setObject:[NSString stringWithFormat:@"%@",[[UIDevice currentDevice] systemVersion]] forKey:@"os_version"];
-    [[SSHttpRequest sharedInstance] post:kHomeUrl_Push params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
-        if ([responseObj[@"message"] isEqualToString:@"ok"]) {
-            DEF_PERSISTENT_SET_OBJECT(@"refreshToken", @"");
+    [params setObject:[NSString stringWithFormat:@"v%@",version] forKey:@"client_version"];
+    __weak typeof(self) weakSelf = self;
+    [[SSHttpRequest sharedInstance] get:kHomeUrl_CheckEarlier params:params contentType:JsonType serverType:NetServer_Check success:^(id responseObj) {
+        NSArray *versions = responseObj[@"belows"];
+        if (versions.count > 0) {
+            // 取消注册topics
+            for (NSString *subVersion in versions) {
+                [[FIRMessaging messaging] unsubscribeFromTopic:[NSString stringWithFormat:@"/topics/ios_%@",subVersion]];
+            }
+            // 注册topics
+            [[FIRMessaging messaging] subscribeToTopic:@"/topics/notification"];
+            [[FIRMessaging messaging] subscribeToTopic:[NSString stringWithFormat:@"/topics/ios_v%@",version]];
+            NSMutableDictionary *params = [NSMutableDictionary dictionary];
+            [params setObject:refreshedToken forKey:@"token"];
+            [params setObject:@"ios" forKey:@"os"];
+            [params setObject:@"apple" forKey:@"vendor"];
+            [params setObject:DEF_PERSISTENT_GET_OBJECT(@"IDFA") forKey:@"ios_did"];
+            [params setObject:[NSString stringWithFormat:@"%@",[[UIDevice currentDevice] systemVersion]] forKey:@"os_version"];
+            [[SSHttpRequest sharedInstance] post:kHomeUrl_Push params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
+                DEF_PERSISTENT_SET_OBJECT(@"refreshToken", @"");
+            } failure:^(NSError *error) {
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(60 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [weakSelf uploadRefreshedToken:refreshedToken];
+                });
+            } isShowHUD:NO];
         }
     } failure:^(NSError *error) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(60 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
