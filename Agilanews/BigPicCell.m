@@ -74,7 +74,7 @@
         make.left.mas_equalTo(weakSelf.titleLabel.mas_left);
         make.bottom.mas_equalTo(-6);
         make.width.mas_equalTo(tagLabelSize.width + 9);
-        make.height.mas_equalTo(tagLabelSize.height + 1);
+        make.height.mas_equalTo(15);
     }];
     // 来源布局
     CGSize sourceLabelSize = [_model.source calculateSize:CGSizeMake(kScreenWidth - 22 - 11 - 60, 12) font:self.sourceLabel.font];
@@ -141,13 +141,18 @@
     }];
     if (_model.tag.length > 0) {
         self.tagLabel.hidden = NO;
+        if (_isHaveVideo) {
+            self.tagLabel.backgroundColor = kOrangeColor;
+        } else {
+            self.tagLabel.backgroundColor = SSColor(255, 91, 54);
+        }
         // 标签布局
         CGSize tagLabelSize = [_model.tag calculateSize:CGSizeMake(100, 13) font:self.tagLabel.font];
         [self.tagLabel mas_updateConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(weakSelf.titleLabel.mas_left);
             make.bottom.mas_equalTo(-6);
             make.width.mas_equalTo(tagLabelSize.width + 9);
-            make.height.mas_equalTo(tagLabelSize.height + 1);
+            make.height.mas_equalTo(15);
         }];
         // 来源布局
         CGSize sourceLabelSize = [_model.source calculateSize:CGSizeMake(kScreenWidth - 22 - 11 - 60 - tagLabelSize.width - 16, 12) font:self.sourceLabel.font];
@@ -313,13 +318,12 @@
 {
     if (_tagLabel == nil) {
         _tagLabel = [[UILabel alloc] init];
-        _tagLabel.font = [UIFont systemFontOfSize:11];
-        _tagLabel.backgroundColor = _bgColor;
-        _tagLabel.textColor = kOrangeColor;
+        _tagLabel.font = [UIFont systemFontOfSize:10];
+        _tagLabel.backgroundColor = SSColor(255, 91, 54);
+        _tagLabel.textColor = [UIColor whiteColor];
         _tagLabel.textAlignment = NSTextAlignmentCenter;
-        _tagLabel.layer.borderColor = kOrangeColor.CGColor;
-        _tagLabel.layer.borderWidth = .5;
-        _tagLabel.layer.cornerRadius = 2;
+        _tagLabel.layer.cornerRadius = 7.5;
+        _tagLabel.layer.masksToBounds = YES;
         _tagLabel.hidden = YES;
     }
     return _tagLabel;
