@@ -164,6 +164,7 @@
 		5F86EDCA1DF585AE00F3C35B /* TopCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F86EDC91DF585AE00F3C35B /* TopCell.m */; };
 		5F86EDCD1DF66DCD00F3C35B /* LSEmojiFly.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F86EDCC1DF66DCD00F3C35B /* LSEmojiFly.m */; };
 		5F86EDD01DF94B1400F3C35B /* PullDownListView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F86EDCF1DF94B1400F3C35B /* PullDownListView.m */; };
+		5F86EDD51DFABC1A00F3C35B /* DislikeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F86EDD41DFABC1A00F3C35B /* DislikeView.m */; };
 		5F8D85AA1D76A99700FF4019 /* WebViewJavascriptBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F8D85A31D76A99700FF4019 /* WebViewJavascriptBridge.m */; };
 		5F8D85AB1D76A99700FF4019 /* WebViewJavascriptBridge_JS.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F8D85A51D76A99700FF4019 /* WebViewJavascriptBridge_JS.m */; };
 		5F8D85AC1D76A99700FF4019 /* WebViewJavascriptBridgeBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F8D85A71D76A99700FF4019 /* WebViewJavascriptBridgeBase.m */; };
@@ -526,6 +527,8 @@
 		5F86EDCC1DF66DCD00F3C35B /* LSEmojiFly.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSEmojiFly.m; sourceTree = "<group>"; };
 		5F86EDCE1DF94B1400F3C35B /* PullDownListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PullDownListView.h; sourceTree = "<group>"; };
 		5F86EDCF1DF94B1400F3C35B /* PullDownListView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PullDownListView.m; sourceTree = "<group>"; };
+		5F86EDD31DFABC1A00F3C35B /* DislikeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DislikeView.h; sourceTree = "<group>"; };
+		5F86EDD41DFABC1A00F3C35B /* DislikeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DislikeView.m; sourceTree = "<group>"; };
 		5F8D85A21D76A99700FF4019 /* WebViewJavascriptBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewJavascriptBridge.h; sourceTree = "<group>"; };
 		5F8D85A31D76A99700FF4019 /* WebViewJavascriptBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewJavascriptBridge.m; sourceTree = "<group>"; };
 		5F8D85A41D76A99700FF4019 /* WebViewJavascriptBridge_JS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewJavascriptBridge_JS.h; sourceTree = "<group>"; };
@@ -1297,6 +1300,8 @@
 				5F86EDC91DF585AE00F3C35B /* TopCell.m */,
 				5F86EDCE1DF94B1400F3C35B /* PullDownListView.h */,
 				5F86EDCF1DF94B1400F3C35B /* PullDownListView.m */,
+				5F86EDD31DFABC1A00F3C35B /* DislikeView.h */,
+				5F86EDD41DFABC1A00F3C35B /* DislikeView.m */,
 			);
 			name = List;
 			sourceTree = "<group>";
@@ -1769,6 +1774,7 @@
 				5F500B451DE3F2A600E88198 /* FacebookAdView.m in Sources */,
 				5F42C08A1D34E41D00B89651 /* SDWebImagePrefetcher.m in Sources */,
 				5F635CE71D3E4209006AAE3D /* AppDelegate+ShareSDK.m in Sources */,
+				5F86EDD51DFABC1A00F3C35B /* DislikeView.m in Sources */,
 				5F42C0821D34E41D00B89651 /* MKAnnotationView+WebCache.m in Sources */,
 				5FF4B7021D373BD900CC6704 /* SegmentViewController.m in Sources */,
 				5F64627A1D474CD3008EEDEC /* CommentCell.m in Sources */,

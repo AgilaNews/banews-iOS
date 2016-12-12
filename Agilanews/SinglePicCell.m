@@ -132,7 +132,7 @@
 {
     [super layoutSubviews];
     __weak typeof(self) weakSelf = self;
-    
+
     // 标题布局
     CGSize titleLabelSize = [_model.title calculateSize:CGSizeMake(kScreenWidth - 22 - 108 - 9, 60) font:self.titleLabel.font];
     [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -141,9 +141,9 @@
     }];
     float sourceLabelMinWidth = 0;
     if (_model.commentCount.integerValue > 0) {
-        sourceLabelMinWidth = kScreenWidth - 22 - 9 - 108 - 50 - 22 - 50;
+        sourceLabelMinWidth = kScreenWidth - 22 - 9 - 108 - 50 - 22 - 50 - (_bgColor == [UIColor whiteColor] ? 5 : 0);
     } else {
-        sourceLabelMinWidth = kScreenWidth - 22 - 9 - 108 - 50 - 22;
+        sourceLabelMinWidth = kScreenWidth - 22 - 9 - 108 - 50 - 22 - (_bgColor == [UIColor whiteColor] ? 5 : 0);
     }
     if (_model.tag.length > 0 && _bgColor == [UIColor whiteColor]) {
         self.tagLabel.hidden = NO;
@@ -266,6 +266,11 @@
         } else {
             _titleLabel.textColor = SSColor(68, 68, 68);
         }
+    }
+    if (_bgColor == [UIColor whiteColor]) {
+        self.dislikeButton.hidden = NO;
+    } else {
+        self.dislikeButton.hidden = YES;
     }
     self.tagLabel.text = _model.tag;
     self.sourceLabel.text = _model.source;

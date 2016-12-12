@@ -219,6 +219,11 @@
             _titleLabel.textColor = SSColor(68, 68, 68);
         }
     }
+    if (_bgColor == [UIColor whiteColor]) {
+        self.dislikeButton.hidden = NO;
+    } else {
+        self.dislikeButton.hidden = YES;
+    }
     self.tagLabel.text = _model.tag;
     self.sourceLabel.text = _model.source;
     self.timeLabel.text = timeString;

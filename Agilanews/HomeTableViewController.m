@@ -28,6 +28,7 @@
 #import "PushTransitionAnimate.h"
 #import "FacebookAdCell.h"
 #import "TopCell.h"
+#import "DislikeView.h"
 
 #define titleFont_Normal        [UIFont systemFontOfSize:16]
 #define titleFont_ExtraLarge    [UIFont systemFontOfSize:20]
@@ -316,6 +317,7 @@
                 ManyPicCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
                 if (cell == nil) {
                     cell = [[ManyPicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
+                    [cell.dislikeButton addTarget:self action:@selector(dislikeAction:) forControlEvents:UIControlEventTouchUpInside];
                 }
                 cell.model = model;
                 [cell setNeedsLayout];
@@ -328,6 +330,7 @@
                 SinglePicCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
                 if (cell == nil) {
                     cell = [[SinglePicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
+                    [cell.dislikeButton addTarget:self action:@selector(dislikeAction:) forControlEvents:UIControlEventTouchUpInside];
                 }
                 cell.model = model;
                 cell.isHaveVideo = NO;
@@ -341,6 +344,7 @@
                 NoPicCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
                 if (cell == nil) {
                     cell = [[NoPicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
+                    [cell.dislikeButton addTarget:self action:@selector(dislikeAction:) forControlEvents:UIControlEventTouchUpInside];
                 }
                 cell.model = model;
                 [cell setNeedsLayout];
@@ -353,6 +357,7 @@
                 BigPicCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
                 if (cell == nil) {
                     cell = [[BigPicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
+                    [cell.dislikeButton addTarget:self action:@selector(dislikeAction:) forControlEvents:UIControlEventTouchUpInside];
                 }
                 cell.model = model;
                 cell.isHaveVideo = NO;
@@ -396,6 +401,7 @@
                 SinglePicCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
                 if (cell == nil) {
                     cell = [[SinglePicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
+                    [cell.dislikeButton addTarget:self action:@selector(dislikeAction:) forControlEvents:UIControlEventTouchUpInside];
                 }
                 cell.model = model;
                 cell.isHaveVideo = YES;
@@ -423,6 +429,7 @@
                 BigPicCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
                 if (cell == nil) {
                     cell = [[BigPicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
+                    [cell.dislikeButton addTarget:self action:@selector(dislikeAction:) forControlEvents:UIControlEventTouchUpInside];
                 }
                 cell.model = model;
                 cell.isHaveVideo = YES;
@@ -1006,6 +1013,27 @@
     [((OnlyPicCell *)cell) setNeedsLayout];
 }
 
+- (void)dislikeAction:(UIButton *)button
+{
+    CGRect rect = [button.superview convertRect:button.frame toView:[UIApplication sharedApplication].keyWindow];
+    DislikeView *dislikeView = [[DislikeView alloc] initWithRect:rect];
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(removeDislikeView:)];
+    [dislikeView addGestureRecognizer:tap];
+    [[UIApplication sharedApplication].keyWindow addSubview:dislikeView];
+    dislikeView.alpha = 0;
+    [UIView animateWithDuration:.3 animations:^{
+        dislikeView.alpha = 1;
+    }];
+}
+
+- (void)removeDislikeView:(UITapGestureRecognizer *)tap
+{
+    [UIView animateWithDuration:.3 animations:^{
+        tap.view.alpha = 0;
+    } completion:^(BOOL finished) {
+        [tap.view removeFromSuperview];
+    }];
+}
 
 /**
  分享到Facebook
