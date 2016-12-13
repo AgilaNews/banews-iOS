@@ -246,7 +246,11 @@
         make.height.mas_equalTo(34);
     }];
     [super updateConstraints];
-    
+    if (self.ViewController.jt_navigationController.viewControllers.count == 1) {
+        self.dislikeButton.hidden = NO;
+    } else {
+        self.dislikeButton.hidden = YES;
+    }
     self.titleLabel.text = _model.title;
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     if ([[appDelegate.checkDic valueForKey:_model.news_id] isEqualToNumber:@1]) {

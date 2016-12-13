@@ -282,7 +282,11 @@
         self.dislikeButton.hidden = YES;
     } else {
         self.haveVideoView.hidden = YES;
-        self.dislikeButton.hidden = NO;
+        if (self.ViewController.jt_navigationController.viewControllers.count == 1) {
+            self.dislikeButton.hidden = NO;
+        } else {
+            self.dislikeButton.hidden = YES;
+        }
     }
 }
 
