@@ -18,11 +18,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
+
     self.title = @"Settings";
     self.isBackButton = YES;
     
-    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight) style:UITableViewStylePlain];
+    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight - 64) style:UITableViewStylePlain];
     _tableView.backgroundColor = kWhiteBgColor;
     _tableView.showsVerticalScrollIndicator = NO;
     _tableView.showsHorizontalScrollIndicator = NO;
@@ -38,6 +38,11 @@
             [_tableView reloadData];
         });
     });
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(fontChange)
+                                                 name:KNOTIFICATION_FontSize_Change
+                                               object:nil];
 }
 
 #pragma mark - UITableViewDataSource
@@ -350,66 +355,49 @@
  */
 - (void)showFontSizeAlert
 {
-    UIAlertController *sheetAlert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-    UIAlertAction *extraLarge = [UIAlertAction actionWithTitle:@"Extra Large" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        // 打点-选择字体大小-010902
-        NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
-                                       @"Extra Large", @"text_size",
-                                       nil];
-        [Flurry logEvent:@"Set_FontSize_Set_Click" withParameters:articleParams];
-#if DEBUG
-        [iConsole info:[NSString stringWithFormat:@"Set_FontSize_Set_Click:%@",articleParams],nil];
-#endif
-        DEF_PERSISTENT_SET_OBJECT(SS_FontSize, @1);
-        [_tableView reloadData];
-        [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_FontSize_Change object:nil];
+    UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
+    bgView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.4];
+    bgView.alpha = 0;
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(removeBgView:)];
+    [bgView addGestureRecognizer:tap];
+    [[UIApplication sharedApplication].keyWindow addSubview:bgView];
+    if (!self.fontSizeView) {
+        self.fontSizeView = [[FontSizeView alloc] init];
+        [self.fontSizeView.cancelButton addTarget:self action:@selector(removeBgView:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    [bgView addSubview:self.fontSizeView];
+    self.fontSizeView.top = kScreenHeight;
+    [UIView animateWithDuration:.3 animations:^{
+        bgView.alpha = 1;
+        self.fontSizeView.bottom = kScreenHeight;
     }];
-    UIAlertAction *large = [UIAlertAction actionWithTitle:@"Large" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        // 打点-选择字体大小-010902
-        NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
-                                       @"Large", @"text_size",
-                                       nil];
-        [Flurry logEvent:@"Set_FontSize_Set_Click" withParameters:articleParams];
-#if DEBUG
-        [iConsole info:[NSString stringWithFormat:@"Set_FontSize_Set_Click:%@",articleParams],nil];
-#endif
-        DEF_PERSISTENT_SET_OBJECT(SS_FontSize, @2);
-        [_tableView reloadData];
-        [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_FontSize_Change object:nil];
-    }];
-    UIAlertAction *normal = [UIAlertAction actionWithTitle:@"Normal" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        // 打点-选择字体大小-010902
-        NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
-                                       @"Normal", @"text_size",
-                                       nil];
-        [Flurry logEvent:@"Set_FontSize_Set_Click" withParameters:articleParams];
-#if DEBUG
-        [iConsole info:[NSString stringWithFormat:@"Set_FontSize_Set_Click:%@",articleParams],nil];
-#endif
-        DEF_PERSISTENT_SET_OBJECT(SS_FontSize, @0);
-        [_tableView reloadData];
-        [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_FontSize_Change object:nil];
-    }];
-    UIAlertAction *small = [UIAlertAction actionWithTitle:@"Small" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        // 打点-选择字体大小-010902
-        NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
-                                       @"Small", @"text_size",
-                                       nil];
-        [Flurry logEvent:@"Set_FontSize_Set_Click" withParameters:articleParams];
-#if DEBUG
-        [iConsole info:[NSString stringWithFormat:@"Set_FontSize_Set_Click:%@",articleParams],nil];
-#endif
-        DEF_PERSISTENT_SET_OBJECT(SS_FontSize, @3);
-        [_tableView reloadData];
-        [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_FontSize_Change object:nil];
-    }];
-    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
-    [sheetAlert addAction:extraLarge];
-    [sheetAlert addAction:large];
-    [sheetAlert addAction:normal];
-    [sheetAlert addAction:small];
-    [sheetAlert addAction:cancel];
-    [self presentViewController:sheetAlert animated:YES completion:nil];
+}
+
+// 移除字体控件
+- (void)removeBgView:(id)sender
+{
+    if ([sender isKindOfClass:[UITapGestureRecognizer class]]) {
+        UITapGestureRecognizer *tap = (UITapGestureRecognizer *)sender;
+        if ([tap locationInView:tap.view].y > kScreenHeight - self.fontSizeView.height) {
+            return;
+        }
+        [UIView animateWithDuration:.3 animations:^{
+            tap.view.alpha = 0;
+            self.fontSizeView.top = kScreenHeight;
+        } completion:^(BOOL finished) {
+            [self.fontSizeView removeFromSuperview];
+            [tap.view removeFromSuperview];
+        }];
+    } else {
+        UIButton *button = (UIButton *)sender;
+        [UIView animateWithDuration:.3 animations:^{
+            button.superview.superview.alpha = 0;
+            self.fontSizeView.top = kScreenHeight;
+        } completion:^(BOOL finished) {
+            [self.fontSizeView removeFromSuperview];
+            [button.superview.superview removeFromSuperview];
+        }];
+    }
 }
 
 /**
@@ -554,6 +542,11 @@
 - (void)clearCachSuccess
 {
     self.cacheSize = @"0B";
+}
+
+- (void)fontChange
+{
+    [self.tableView reloadData];
 }
 
 - (void)didReceiveMemoryWarning {

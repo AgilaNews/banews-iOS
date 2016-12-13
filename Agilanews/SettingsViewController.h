@@ -7,6 +7,7 @@
 //
 
 #import "BaseViewController.h"
+#import "FontSizeView.h"
 
 typedef NS_ENUM(NSInteger, FontSizeType) {
     Normal = 0,
@@ -18,6 +19,7 @@ typedef NS_ENUM(NSInteger, FontSizeType) {
 @interface SettingsViewController : BaseViewController <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) FontSizeView *fontSizeView;
 @property (nonatomic, strong) UISwitch *textOnlySwith;
 @property (nonatomic, strong) NSString *cacheSize;
 

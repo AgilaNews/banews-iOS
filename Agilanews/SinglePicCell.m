@@ -267,7 +267,7 @@
             _titleLabel.textColor = SSColor(68, 68, 68);
         }
     }
-    if (_bgColor == [UIColor whiteColor]) {
+    if (_bgColor == [UIColor whiteColor] && self.ViewController.jt_navigationController.viewControllers.count == 1) {
         self.dislikeButton.hidden = NO;
     } else {
         self.dislikeButton.hidden = YES;
