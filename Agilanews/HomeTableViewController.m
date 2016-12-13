@@ -10,6 +10,7 @@
 #import "BaseNavigationController.h"
 #import "NewsDetailViewController.h"
 #import "NewsModel.h"
+#import "FilterModel.h"
 #import "ManyPicCell.h"
 #import "SinglePicCell.h"
 #import "NoPicCell.h"
@@ -1013,17 +1014,29 @@
     [((OnlyPicCell *)cell) setNeedsLayout];
 }
 
+// 点击不喜欢
 - (void)dislikeAction:(UIButton *)button
 {
-    CGRect rect = [button.superview convertRect:button.frame toView:[UIApplication sharedApplication].keyWindow];
-    DislikeView *dislikeView = [[DislikeView alloc] initWithRect:rect];
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(removeDislikeView:)];
-    [dislikeView addGestureRecognizer:tap];
-    [[UIApplication sharedApplication].keyWindow addSubview:dislikeView];
-    dislikeView.alpha = 0;
-    [UIView animateWithDuration:.3 animations:^{
-        dislikeView.alpha = 1;
-    }];
+    UITableViewCell *cell = (UITableViewCell *)button.superview.superview;
+    if ([cell isKindOfClass:[UITableViewCell class]]) {
+        NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+        if (indexPath.row >= _dataList.count) {
+            return;
+        }
+        NewsModel *model = _dataList[indexPath.row];
+        if (model && model.filter_tags.count > 0) {
+            CGRect rect = [button.superview convertRect:button.frame toView:[UIApplication sharedApplication].keyWindow];
+            DislikeView *dislikeView = [[DislikeView alloc] initWithRect:rect FilterTags:model.filter_tags Index:indexPath];
+            [dislikeView.okButton addTarget:self action:@selector(okAction:) forControlEvents:UIControlEventTouchUpInside];
+            UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(removeDislikeView:)];
+            [dislikeView addGestureRecognizer:tap];
+            [[UIApplication sharedApplication].keyWindow addSubview:dislikeView];
+            dislikeView.alpha = 0;
+            [UIView animateWithDuration:.3 animations:^{
+                dislikeView.alpha = 1;
+            }];
+        }
+    }
 }
 
 - (void)removeDislikeView:(UITapGestureRecognizer *)tap
@@ -1033,6 +1046,35 @@
     } completion:^(BOOL finished) {
         [tap.view removeFromSuperview];
     }];
+}
+
+// 不喜欢-点击OK
+- (void)okAction:(UIButton *)button
+{
+    id view = button.superview;
+    do {
+        if ([view isKindOfClass:[DislikeView class]]) {
+            break;
+        }
+        view = ((UIView *)view).superview;
+    } while (view != nil);
+    DislikeView *dislikeView = (DislikeView *)view;
+    [UIView animateWithDuration:.3 animations:^{
+        dislikeView.alpha = 0;
+    } completion:^(BOOL finished) {
+        [dislikeView removeFromSuperview];
+    }];
+    NSArray *reasons = [FilterModel mj_keyValuesArrayWithObjectArray:dislikeView.reasons];
+    if (reasons.count) {
+        NewsModel *model = [[NewsModel alloc] init];
+        model = [self.dataList objectAtIndex:dislikeView.indexPath.row];
+        NSMutableDictionary *params = [NSMutableDictionary dictionary];
+        [params setObject:model.news_id forKey:@"news_id"];
+        [params setObject:reasons forKey:@"reasons"];
+        [[SSHttpRequest sharedInstance] post:kHomeUrl_NewsDislike params:params contentType:JsonType serverType:NetServer_Home success:nil failure:nil isShowHUD:NO];
+    }
+    [self.dataList removeObjectAtIndex:dislikeView.indexPath.row];
+    [self.tableView deleteRowsAtIndexPaths:@[dislikeView.indexPath] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 /**

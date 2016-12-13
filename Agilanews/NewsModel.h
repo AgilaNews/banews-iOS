@@ -29,5 +29,6 @@
 @property (nonatomic, strong) NSNumber *channel_id; // 频道id
 @property (nonatomic, strong) FBNativeAd *nativeAd; // facebook广告
 @property (nonatomic, strong) NSNumber *ad_id;      // 广告id
+@property (nonatomic, strong) NSArray *filter_tags; // 不喜欢标签
 
 @end

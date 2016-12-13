@@ -77,6 +77,9 @@ typedef enum {
 #define kHomeUrl_NotifRead        @"/notification/read"
 // 历史版本接口
 #define kHomeUrl_CheckEarlier     @"/check/earlier"
+// 点赞接口
+#define kHomeUrl_NewsDislike      @"/user/unlike"
+
 
 
 

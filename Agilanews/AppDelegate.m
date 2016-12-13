@@ -979,6 +979,7 @@
     //        return UIInterfaceOrientationMaskAll;
     //    }
     if ([NSStringFromClass([window.subviews.firstObject.subviews.firstObject class]) isEqualToString:@"AVPlayerView"]) {
+        [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
         return UIInterfaceOrientationMaskAll;
     }
     return UIInterfaceOrientationMaskPortrait;

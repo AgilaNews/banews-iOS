@@ -9,6 +9,7 @@
 #import "NewsModel.h"
 #import "ImageModel.h"
 #import "VideoModel.h"
+#import "FilterModel.h"
 
 @implementation NewsModel
 
@@ -34,6 +35,7 @@ MJCodingImplementation
              @"views":@"views",
              @"channel_id":@"channel_id",
              @"ad_id":@"ad_id",
+             @"filter_tags":@"FilterModel"
              };
 }
 

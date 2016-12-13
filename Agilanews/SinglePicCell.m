@@ -141,9 +141,9 @@
     }];
     float sourceLabelMinWidth = 0;
     if (_model.commentCount.integerValue > 0) {
-        sourceLabelMinWidth = kScreenWidth - 22 - 9 - 108 - 50 - 22 - 50 - (_bgColor == [UIColor whiteColor] ? 5 : 0);
+        sourceLabelMinWidth = kScreenWidth - 22 - 9 - 108 - 50 - 22 - 50 - (_bgColor == [UIColor whiteColor] ? 10 : 0);
     } else {
-        sourceLabelMinWidth = kScreenWidth - 22 - 9 - 108 - 50 - 22 - (_bgColor == [UIColor whiteColor] ? 5 : 0);
+        sourceLabelMinWidth = kScreenWidth - 22 - 9 - 108 - 50 - 22 - (_bgColor == [UIColor whiteColor] ? 10 : 0);
     }
     if (_model.tag.length > 0 && _bgColor == [UIColor whiteColor]) {
         self.tagLabel.hidden = NO;

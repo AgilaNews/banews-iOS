@@ -10,6 +10,11 @@
 
 @interface DislikeView : UIView
 
-- (instancetype)initWithRect:(CGRect)rect;
+- (instancetype)initWithRect:(CGRect)rect FilterTags:(NSArray *)filterTags Index:(NSIndexPath *)index;
+
+@property (nonatomic, strong) NSArray *filterTags;
+@property (nonatomic, strong) NSMutableArray *reasons;
+@property (nonatomic, strong) NSIndexPath *indexPath;
+@property (nonatomic, strong) UIButton *okButton;
 
 @end
