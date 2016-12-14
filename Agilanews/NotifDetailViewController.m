@@ -15,7 +15,6 @@
 #import "CommentCell.h"
 #import "ImageModel.h"
 #import "AppDelegate.h"
-#import "LoginViewController.h"
 #import "NewsDetailViewController.h"
 #import "VideoDetailViewController.h"
 #import "PushTransitionAnimate.h"
@@ -55,10 +54,6 @@
     [self requestData];
     
     // 注册通知
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(loginSuccess:)
-                                                 name:KNOTIFICATION_Login_Success
-                                               object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillShow:)
                                                  name:UIKeyboardWillShowNotification
@@ -612,36 +607,17 @@
     NewsModel *newsModel = ((OnlyVideoCell *)cell).model;
     
     __weak typeof(self) weakSelf = self;
-//    // 打点-分享至facebook-010219
-//    NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
-//                                   [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
-//                                   _model.name, @"channel",
-//                                   newsModel.news_id, @"article",
-//                                   nil];
-//    [Flurry logEvent:@"Home_List_Share_FacebookClick" withParameters:articleParams];
-//#if DEBUG
-//    [iConsole info:[NSString stringWithFormat:@"Home_List_Share_FacebookClick:%@",articleParams],nil];
-//#endif
-    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    if (appDelegate.model) {
-        FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
-        NSString *shareString = newsModel.share_url;
-        shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"facebook"];
-        content.contentURL = [NSURL URLWithString:shareString];
-        content.contentTitle = newsModel.title;
-        ImageModel *imageModel = newsModel.imgs.firstObject;
-        content.imageURL = [NSURL URLWithString:imageModel.src];
-        [FBSDKShareDialog showFromViewController:weakSelf
-                                     withContent:content
-                                        delegate:weakSelf];
-    } else {
-        // 登录后分享
-        LoginViewController *loginVC = [[LoginViewController alloc] init];
-        loginVC.isShareFacebook = YES;
-        loginVC.shareModel = newsModel;
-        UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:loginVC];
-        [weakSelf.navigationController presentViewController:navCtrl animated:YES completion:nil];
-    }
+
+    FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
+    NSString *shareString = newsModel.share_url;
+    shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"facebook"];
+    content.contentURL = [NSURL URLWithString:shareString];
+    content.contentTitle = newsModel.title;
+    ImageModel *imageModel = newsModel.imgs.firstObject;
+    content.imageURL = [NSURL URLWithString:imageModel.src];
+    [FBSDKShareDialog showFromViewController:weakSelf
+                                 withContent:content
+                                    delegate:weakSelf];
 }
 
 #pragma mark - FBSDKSharingDelegate
@@ -659,31 +635,6 @@
 }
 
 #pragma mark - Notification
-/**
- *  点击收藏/评论后登录成功
- */
-- (void)loginSuccess:(NSNotification *)notif
-{
-    if ([notif.object[@"isShareFacebook"] isEqualToNumber:@1]) {
-        // 分享Facebook
-        NewsModel *model = notif.object[@"shareModel"];
-        if (model) {
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
-                NSString *shareString = model.share_url;
-                shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"facebook"];
-                content.contentURL = [NSURL URLWithString:shareString];
-                content.contentTitle = model.title;
-                ImageModel *imageModel = model.imgs.firstObject;
-                content.imageURL = [NSURL URLWithString:imageModel.src];
-                [FBSDKShareDialog showFromViewController:self
-                                             withContent:content
-                                                delegate:self];
-            });
-        }
-    }
-}
-
 /**
  视频从详情回位
  */

@@ -16,11 +16,11 @@
 #import "OnlyVideoCell.h"
 #import "NewsDetailViewController.h"
 #import "AppDelegate.h"
-#import "LoginViewController.h"
 #import "BaseNavigationController.h"
 #import "LocalFavorite+CoreDataClass.h"
 #import "VideoDetailViewController.h"
 #import "PushTransitionAnimate.h"
+#import "LoginView.h"
 
 #define titleFont_Normal        [UIFont systemFontOfSize:16]
 #define titleFont_ExtraLarge    [UIFont systemFontOfSize:20]
@@ -71,6 +71,10 @@
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(recoverVideo:)
                                                  name:KNOTIFICATION_RecoverVideo
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(loginSuccess)
+                                                 name:KNOTIFICATION_Login_Success
                                                object:nil];
     
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
@@ -360,6 +364,7 @@
     } isShowHUD:NO];
 }
 
+#pragma mark - Notification
 /**
  视频从详情回位
  */
@@ -379,6 +384,23 @@
             [videoCell.playerView stopVideo];
             [videoCell setNeedsLayout];
         }
+    }
+}
+
+/**
+ 登录成功
+ */
+- (void)loginSuccess
+{
+    _tableView.tableHeaderView = nil;
+    NSArray *dataList = [[CoreDataManager sharedInstance] getLocalFavoriteModelList];
+    
+    if ([dataList isKindOfClass:[NSArray class]] && dataList.count > 0) {
+        // 同步本地收藏
+        [SVProgressHUD show];
+        [self uploadFavoritesWithDataList:[dataList mutableCopy]];
+    } else {
+        [self requestDataWithIsFooter:NO];
     }
 }
 
@@ -678,7 +700,6 @@
     } while (cell != nil);
     NewsModel *newsModel = ((OnlyVideoCell *)cell).model;
     
-    __weak typeof(self) weakSelf = self;
     // 打点-分享至facebook-010219
     NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
                                    [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
@@ -688,25 +709,18 @@
 #if DEBUG
     [iConsole info:[NSString stringWithFormat:@"Home_List_Share_FacebookClick:%@",articleParams],nil];
 #endif
-    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    if (appDelegate.model) {
-        FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
-        NSString *shareString = newsModel.share_url;
-        shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"facebook"];
-        content.contentURL = [NSURL URLWithString:shareString];
-        content.contentTitle = newsModel.title;
-        ImageModel *imageModel = newsModel.imgs.firstObject;
-        content.imageURL = [NSURL URLWithString:imageModel.src];
-        [FBSDKShareDialog showFromViewController:weakSelf
-                                     withContent:content
-                                        delegate:weakSelf];
-    } else {
-        // 登录后分享
-        LoginViewController *loginVC = [[LoginViewController alloc] init];
-        loginVC.isShareFacebook = YES;
-        UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:loginVC];
-        [weakSelf.navigationController presentViewController:navCtrl animated:YES completion:nil];
-    }
+    
+    __weak typeof(self) weakSelf = self;
+    FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
+    NSString *shareString = newsModel.share_url;
+    shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"facebook"];
+    content.contentURL = [NSURL URLWithString:shareString];
+    content.contentTitle = newsModel.title;
+    ImageModel *imageModel = newsModel.imgs.firstObject;
+    content.imageURL = [NSURL URLWithString:imageModel.src];
+    [FBSDKShareDialog showFromViewController:weakSelf
+                                 withContent:content
+                                    delegate:weakSelf];
 }
 
 #pragma mark - FBSDKSharingDelegate
@@ -872,8 +886,8 @@
 #if DEBUG
     [iConsole info:@"Menu_LoginButton_Click",nil];
 #endif
-    LoginViewController *loginVC = [[LoginViewController alloc] init];
-    [self.navigationController pushViewController:loginVC animated:YES];
+    LoginView *loginView = [[LoginView alloc] init];
+    [[UIApplication sharedApplication].keyWindow addSubview:loginView];
 }
 
 - (void)tableViewDidTriggerFooterRefresh

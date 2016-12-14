@@ -9,12 +9,12 @@
 #import "NotificationViewController.h"
 #import "NotificationModel.h"
 #import "AppDelegate.h"
-#import "LoginViewController.h"
 #import "NotificationCell.h"
 #import "NotifDetailViewController.h"
 #import "NewsDetailViewController.h"
 #import "VideoDetailViewController.h"
 #import "PushTransitionAnimate.h"
+#import "LoginView.h"
 
 @interface NotificationViewController ()
 
@@ -62,9 +62,8 @@
     
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     if (!appDelegate.model) {
-        LoginViewController *loginVC = [[LoginViewController alloc] init];
-        loginVC.isNotification = YES;
-        [self.navigationController pushViewController:loginVC animated:NO];
+        LoginView *loginView = [[LoginView alloc] init];
+        [[UIApplication sharedApplication].keyWindow addSubview:loginView];
     }
     // 打点-页面进入-011401
     [Flurry logEvent:@"Notification_Enter"];
@@ -273,9 +272,7 @@
 #pragma mark - Notification
 - (void)loginSuccess:(NSNotification *)notif
 {
-    if ([notif.object[@"isNotification"] isEqualToNumber:@1]) {
-        [self requestDataIsFooter:NO];
-    }
+    [self requestDataIsFooter:NO];
 }
 
 - (void)didReceiveMemoryWarning {

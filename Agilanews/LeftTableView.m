@@ -11,13 +11,13 @@
 #import "LeftView.h"
 #import "BaseNavigationController.h"
 #import "HomeViewController.h"
-#import "LoginViewController.h"
 #import "UserInfoViewController.h"
 #import "SettingsViewController.h"
 #import "FavoritesViewController.h"
 #import "FeedbackViewController.h"
 #import "ChannelViewController.h"
 #import "NotificationViewController.h"
+#import "LoginView.h"
 
 @implementation LeftTableView
 
@@ -311,8 +311,8 @@
 #if DEBUG
         [iConsole info:@"Menu_LoginButton_Click",nil];
 #endif
-        LoginViewController *loginVC = [[LoginViewController alloc] init];
-        [homeVC.navigationController pushViewController:loginVC animated:YES];
+        LoginView *loginView = [[LoginView alloc] init];
+        [[UIApplication sharedApplication].keyWindow addSubview:loginView];
     }
 }
 

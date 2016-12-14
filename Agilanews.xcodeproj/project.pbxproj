@@ -167,6 +167,7 @@
 		5F86EDD81DFEA2D700F3C35B /* FilterModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F86EDD71DFEA2D700F3C35B /* FilterModel.m */; };
 		5F86EDDB1DFFBC8900F3C35B /* FontSizeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F86EDDA1DFFBC8900F3C35B /* FontSizeView.m */; };
 		5F86EDDE1DFFCDB900F3C35B /* FontSizeSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F86EDDD1DFFCDB900F3C35B /* FontSizeSlider.m */; };
+		5F86EDE11E0114F700F3C35B /* LoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F86EDE01E0114F700F3C35B /* LoginView.m */; };
 		5F8D85AA1D76A99700FF4019 /* WebViewJavascriptBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F8D85A31D76A99700FF4019 /* WebViewJavascriptBridge.m */; };
 		5F8D85AB1D76A99700FF4019 /* WebViewJavascriptBridge_JS.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F8D85A51D76A99700FF4019 /* WebViewJavascriptBridge_JS.m */; };
 		5F8D85AC1D76A99700FF4019 /* WebViewJavascriptBridgeBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F8D85A71D76A99700FF4019 /* WebViewJavascriptBridgeBase.m */; };
@@ -536,6 +537,8 @@
 		5F86EDDA1DFFBC8900F3C35B /* FontSizeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FontSizeView.m; sourceTree = "<group>"; };
 		5F86EDDC1DFFCDB900F3C35B /* FontSizeSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FontSizeSlider.h; sourceTree = "<group>"; };
 		5F86EDDD1DFFCDB900F3C35B /* FontSizeSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FontSizeSlider.m; sourceTree = "<group>"; };
+		5F86EDDF1E0114F700F3C35B /* LoginView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginView.h; sourceTree = "<group>"; };
+		5F86EDE01E0114F700F3C35B /* LoginView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginView.m; sourceTree = "<group>"; };
 		5F8D85A21D76A99700FF4019 /* WebViewJavascriptBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewJavascriptBridge.h; sourceTree = "<group>"; };
 		5F8D85A31D76A99700FF4019 /* WebViewJavascriptBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewJavascriptBridge.m; sourceTree = "<group>"; };
 		5F8D85A41D76A99700FF4019 /* WebViewJavascriptBridge_JS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewJavascriptBridge_JS.h; sourceTree = "<group>"; };
@@ -1209,6 +1212,8 @@
 			children = (
 				5F635ED01D3F94C0006AAE3D /* LoginButton.h */,
 				5F635ED11D3F94C0006AAE3D /* LoginButton.m */,
+				5F86EDDF1E0114F700F3C35B /* LoginView.h */,
+				5F86EDE01E0114F700F3C35B /* LoginView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1854,6 +1859,7 @@
 				5FF4B7D71D3A174900CC6704 /* UIScrollView+MJExtension.m in Sources */,
 				5FF4B6F41D372B5500CC6704 /* UINavigationBar+Awesome.m in Sources */,
 				5FE722201D506CD70026BFC3 /* FeedbackTextField.m in Sources */,
+				5F86EDE11E0114F700F3C35B /* LoginView.m in Sources */,
 				5F767A881D9CE82E00822BAC /* NSObject+MJProperty.m in Sources */,
 				5F767A861D9CE82E00822BAC /* NSObject+MJCoding.m in Sources */,
 				5FF4B78D1D38DEC000CC6704 /* OnlyPicCell.m in Sources */,
