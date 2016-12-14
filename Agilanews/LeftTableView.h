@@ -9,9 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "AppDelegate.h"
 
-@interface LeftTableView : UITableView<UITableViewDataSource, UITableViewDelegate>
+@interface LeftTableView : UITableView<UITableViewDataSource, UITableViewDelegate, GIDSignInDelegate, GIDSignInUIDelegate>
 
-@property (nonatomic, strong) UIImageView *headerViewAvatar;
+@property (nonatomic, strong) UIButton *avatarButton;
+@property (nonatomic, strong) UIView *headerView;
 @property (nonatomic, strong) UILabel *loginLabel;
 @property (nonatomic, strong) AppDelegate *appDelegate;
 
