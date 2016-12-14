@@ -12,7 +12,7 @@
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *dataList;
-
+@property (nonatomic, strong) UITapGestureRecognizer *tap;
 
 @property (nonatomic, assign) BOOL showBlankView;
 @property (nonatomic, strong) UIView *blankView;

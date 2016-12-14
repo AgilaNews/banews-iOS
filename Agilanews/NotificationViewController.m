@@ -40,6 +40,9 @@
     _tableView.tableFooterView = [UIView new];
     [self.view addSubview:_tableView];
     
+    _tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showLoginView)];
+    [_tableView addGestureRecognizer:_tap];
+    
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     if (appDelegate.model) {
         // 请求数据
@@ -108,6 +111,14 @@
 #if DEBUG
     [iConsole info:@"Notification_BackButton_Click",nil];
 #endif
+}
+
+- (void)showLoginView
+{
+    if (!self.dataList.count) {
+        LoginView *loginView = [[LoginView alloc] init];
+        [[UIApplication sharedApplication].keyWindow addSubview:loginView];
+    }
 }
 
 #pragma mark - Network
@@ -256,6 +267,9 @@
 - (void)setDataList:(NSMutableArray *)dataList
 {
     _dataList = dataList;
+    if (dataList.count) {
+        [self.tableView removeGestureRecognizer:_tap];
+    }
     NotificationModel *model = dataList.firstObject;
     DEF_PERSISTENT_SET_OBJECT(kLastNotifID, model.notify_id);
 
