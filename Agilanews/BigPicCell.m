@@ -9,6 +9,7 @@
 #import "BigPicCell.h"
 #import "ImageModel.h"
 #import "AppDelegate.h"
+#import "HomeTableViewController.h"
 
 #define titleFont_Normal        [UIFont systemFontOfSize:16]
 #define titleFont_ExtraLarge    [UIFont systemFontOfSize:20]
@@ -282,7 +283,7 @@
         self.dislikeButton.hidden = YES;
     } else {
         self.haveVideoView.hidden = YES;
-        if (self.ViewController.jt_navigationController.viewControllers.count == 1) {
+        if ([self.ViewController isKindOfClass:[HomeTableViewController class]]) {
             self.dislikeButton.hidden = NO;
         } else {
             self.dislikeButton.hidden = YES;

@@ -27,7 +27,6 @@
 		5F2E0A1D1D87B47A00FEC0AC /* HZIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F2E0A161D87B47A00FEC0AC /* HZIndicatorView.m */; };
 		5F2E0A1E1D87B47A00FEC0AC /* HZPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F2E0A181D87B47A00FEC0AC /* HZPhotoBrowser.m */; };
 		5F2E0A1F1D87B47A00FEC0AC /* HZPhotoBrowserView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F2E0A1B1D87B47A00FEC0AC /* HZPhotoBrowserView.m */; };
-		5F2E0A201D87B47A00FEC0AC /* whiteplaceholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 5F2E0A1C1D87B47A00FEC0AC /* whiteplaceholder.png */; };
 		5F42BFB51D34E2F000B89651 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F42BFB41D34E2F000B89651 /* main.m */; };
 		5F42BFB81D34E2F000B89651 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F42BFB71D34E2F000B89651 /* AppDelegate.m */; };
 		5F42BFC01D34E2F000B89651 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5F42BFBF1D34E2F000B89651 /* Assets.xcassets */; };
@@ -288,7 +287,6 @@
 		5F2E0A191D87B47A00FEC0AC /* HZPhotoBrowserConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HZPhotoBrowserConfig.h; sourceTree = "<group>"; };
 		5F2E0A1A1D87B47A00FEC0AC /* HZPhotoBrowserView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HZPhotoBrowserView.h; sourceTree = "<group>"; };
 		5F2E0A1B1D87B47A00FEC0AC /* HZPhotoBrowserView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HZPhotoBrowserView.m; sourceTree = "<group>"; };
-		5F2E0A1C1D87B47A00FEC0AC /* whiteplaceholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = whiteplaceholder.png; sourceTree = "<group>"; };
 		5F42BFB01D34E2F000B89651 /* Agila.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Agila.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5F42BFB41D34E2F000B89651 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		5F42BFB61D34E2F000B89651 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -802,7 +800,6 @@
 				5F2E0A191D87B47A00FEC0AC /* HZPhotoBrowserConfig.h */,
 				5F2E0A1A1D87B47A00FEC0AC /* HZPhotoBrowserView.h */,
 				5F2E0A1B1D87B47A00FEC0AC /* HZPhotoBrowserView.m */,
-				5F2E0A1C1D87B47A00FEC0AC /* whiteplaceholder.png */,
 			);
 			path = HZPhotoBrowser;
 			sourceTree = "<group>";
@@ -1661,7 +1658,6 @@
 				5F42C09F1D34E42A00B89651 /* SVProgressHUD.bundle in Resources */,
 				5F635ED81D41EB51006AAE3D /* webView.css in Resources */,
 				5F635CCE1D3E3EDF006AAE3D /* ShareSDKUI.bundle in Resources */,
-				5F2E0A201D87B47A00FEC0AC /* whiteplaceholder.png in Resources */,
 				5F571FE41D64057500604CDD /* webView.js in Resources */,
 				5F767A7F1D9CE82E00822BAC /* Info.plist in Resources */,
 				5FF4B7AC1D38F7B200CC6704 /* Info.plist in Resources */,

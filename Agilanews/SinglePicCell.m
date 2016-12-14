@@ -10,6 +10,7 @@
 #import "ImageModel.h"
 #import "AppDelegate.h"
 #import "FavoritesViewController.h"
+#import "HomeTableViewController.h"
 
 #define titleFont_Normal        [UIFont systemFontOfSize:16]
 #define titleFont_ExtraLarge    [UIFont systemFontOfSize:20]
@@ -267,7 +268,7 @@
             _titleLabel.textColor = SSColor(68, 68, 68);
         }
     }
-    if (_bgColor == [UIColor whiteColor] && self.ViewController.jt_navigationController.viewControllers.count == 1) {
+    if (_bgColor == [UIColor whiteColor] && [self.ViewController isKindOfClass:[HomeTableViewController class]]) {
         self.dislikeButton.hidden = NO;
     } else {
         self.dislikeButton.hidden = YES;

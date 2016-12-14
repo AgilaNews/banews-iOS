@@ -9,6 +9,7 @@
 #import "ManyPicCell.h"
 #import "ImageModel.h"
 #import "AppDelegate.h"
+#import "HomeTableViewController.h"
 
 #define titleFont_Normal        [UIFont systemFontOfSize:16]
 #define titleFont_ExtraLarge    [UIFont systemFontOfSize:20]
@@ -246,7 +247,7 @@
         make.height.mas_equalTo(34);
     }];
     [super updateConstraints];
-    if (self.ViewController.jt_navigationController.viewControllers.count == 1) {
+    if ([self.ViewController isKindOfClass:[HomeTableViewController class]]) {
         self.dislikeButton.hidden = NO;
     } else {
         self.dislikeButton.hidden = YES;
