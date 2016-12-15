@@ -37,17 +37,11 @@
         self.delegate = self;
         self.separatorStyle = UITableViewCellSeparatorStyleNone;
         
-        [GIDSignIn sharedInstance].clientID = [FIRApp defaultApp].options.clientID;
-        [GIDSignIn sharedInstance].scopes = @[@"profile", @"email"];
-        [GIDSignIn sharedInstance].delegate = self;
-        [GIDSignIn sharedInstance].uiDelegate = self;
-        [GIDSignIn sharedInstance].shouldFetchBasicProfile = YES;
-        
         _headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.width, kScreenHeight * .28)];
         _headerView.backgroundColor = [UIColor whiteColor];
 
         _avatarButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _avatarButton.frame = CGRectMake(12, 50, 57, 57);
+        _avatarButton.frame = CGRectMake(12, (_headerView.height - 9 - 18 - 57) * .5, 57, 57);
         _avatarButton.layer.cornerRadius = 57 * .5;
         _avatarButton.layer.borderColor = SSColor_RGB(235).CGColor;
         _avatarButton.layer.borderWidth = 1;
@@ -57,7 +51,7 @@
         
         for (int i = 0; i < 3; i++) {
             UIButton *loginButton = [UIButton buttonWithType:UIButtonTypeCustom];
-            loginButton.frame = CGRectMake(12 + (50 + 18) * i, 52, 50, 50);
+            loginButton.frame = CGRectMake(12 + (50 + 18) * i, (_headerView.height - 9 - 18 - 50) * .5, 50, 50);
             loginButton.tag = 200 + i;
             [loginButton addTarget:self action:@selector(loginAction:) forControlEvents:UIControlEventTouchUpInside];
             [_headerView addSubview:loginButton];
@@ -438,6 +432,11 @@
             [iConsole info:@"Login_Google_Click",nil];
 #endif
             button.enabled = NO;
+            [GIDSignIn sharedInstance].clientID = [FIRApp defaultApp].options.clientID;
+            [GIDSignIn sharedInstance].scopes = @[@"profile", @"email"];
+            [GIDSignIn sharedInstance].delegate = self;
+            [GIDSignIn sharedInstance].uiDelegate = self;
+            [GIDSignIn sharedInstance].shouldFetchBasicProfile = YES;
             [[GIDSignIn sharedInstance] signIn];
             break;
         }
@@ -527,6 +526,8 @@
         [self loginWithUserData:loginUser LoginType:GooglePuls];
     } else {
         [SVProgressHUD dismiss];
+        LeftView *leftView = (LeftView *)self.superview;
+        leftView.alpha = 1;
         // 打点-登陆Google＋失败-010610
         [Flurry logEvent:@"Login_Google_Click_N"];
 #if DEBUG
@@ -544,12 +545,16 @@
 - (void)signIn:(GIDSignIn *)signIn presentViewController:(UIViewController *)viewController
 {
     [SVProgressHUD dismiss];
-    [self.ViewController presentViewController:viewController animated:YES completion:nil];
+    LeftView *leftView = (LeftView *)self.superview;
+    leftView.alpha = 0;
+    [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:viewController animated:YES completion:nil];
 }
 
 - (void)signIn:(GIDSignIn *)signIn dismissViewController:(UIViewController *)viewController
 {
-    [self.ViewController dismissViewControllerAnimated:YES completion:nil];
+    LeftView *leftView = (LeftView *)self.superview;
+    leftView.alpha = 1;
+    [[UIApplication sharedApplication].keyWindow.rootViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 /**

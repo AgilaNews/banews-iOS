@@ -280,12 +280,7 @@
         appDelegate.model = [LoginModel mj_objectWithKeyValues:responseObj];
         NSString *loginFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/userinfo.data"];
         [NSKeyedArchiver archiveRootObject:appDelegate.model toFile:loginFilePath];
-        NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                    [NSNumber numberWithBool:_isNotification], @"isNotification",
-                                    [NSNumber numberWithBool:_isCollect], @"isCollect",
-                                    [NSNumber numberWithBool:_isComment], @"isComment",
-                                    nil];
-        [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Login_Success object:dic];
+        [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Login_Success object:nil];
         [weakSelf removeAction];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [SVProgressHUD showSuccessWithStatus:@"Successful"];
@@ -323,6 +318,7 @@
         [self loginWithUserData:loginUser LoginType:GooglePuls];
     } else {
         [SVProgressHUD dismiss];
+        self.alpha = 1;
         // 打点-登陆Google＋失败-010610
         [Flurry logEvent:@"Login_Google_Click_N"];
 #if DEBUG
@@ -340,12 +336,14 @@
 - (void)signIn:(GIDSignIn *)signIn presentViewController:(UIViewController *)viewController
 {
     [SVProgressHUD dismiss];
-    [self.ViewController presentViewController:viewController animated:YES completion:nil];
+    self.alpha = 0;
+    [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:viewController animated:YES completion:nil];
 }
 
 - (void)signIn:(GIDSignIn *)signIn dismissViewController:(UIViewController *)viewController
 {
-    [self.ViewController dismissViewControllerAnimated:YES completion:nil];
+    self.alpha = 1;
+    [[UIApplication sharedApplication].keyWindow.rootViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 

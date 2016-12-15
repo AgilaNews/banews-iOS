@@ -166,7 +166,7 @@
     
     // 注册通知
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(loginSuccess:)
+                                             selector:@selector(loginSuccess)
                                                  name:KNOTIFICATION_Login_Success
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -1586,19 +1586,19 @@
 /**
  *  点击收藏/评论后登录成功
  */
-- (void)loginSuccess:(NSNotification *)notif
+- (void)loginSuccess
 {
-    if ([notif.object[@"isComment"] isEqualToNumber:@1]) {
-        // 评论
-        _commentTextView = [[CommentTextView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
-        _commentTextView.news_id = _model.news_id;
-        UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
-        [keyWindow addSubview:_commentTextView];
-        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
-        _commentTextView.textView.delegate = self;
-        [_commentTextView.cancelButton addTarget:self action:@selector(cancelAction) forControlEvents:UIControlEventTouchUpInside];
-        [_commentTextView.sendButton addTarget:self action:@selector(sendAction) forControlEvents:UIControlEventTouchUpInside];
-    }
+    // 评论
+    _commentTextView = [[CommentTextView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
+    _commentTextView.news_id = _model.news_id;
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(cancelAction)];
+    [_commentTextView.shadowView addGestureRecognizer:tap];
+    UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+    [keyWindow addSubview:_commentTextView];
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
+    _commentTextView.textView.delegate = self;
+    [_commentTextView.cancelButton addTarget:self action:@selector(cancelAction) forControlEvents:UIControlEventTouchUpInside];
+    [_commentTextView.sendButton addTarget:self action:@selector(sendAction) forControlEvents:UIControlEventTouchUpInside];
 }
 
 /**
@@ -1743,7 +1743,6 @@
     } else {
         // 登录后评论
         LoginView *loginView = [[LoginView alloc] init];
-        loginView.isComment = YES;
         [[UIApplication sharedApplication].keyWindow addSubview:loginView];
     }
 }

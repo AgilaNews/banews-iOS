@@ -51,7 +51,7 @@
 
     // 注册通知
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(loginSuccess:)
+                                             selector:@selector(loginSuccess)
                                                  name:KNOTIFICATION_Login_Success
                                                object:nil];
     // 发送通知
@@ -284,7 +284,7 @@
 }
 
 #pragma mark - Notification
-- (void)loginSuccess:(NSNotification *)notif
+- (void)loginSuccess
 {
     [self requestDataIsFooter:NO];
 }
