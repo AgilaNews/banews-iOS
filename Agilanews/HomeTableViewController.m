@@ -97,6 +97,10 @@
                                                  name:UIApplicationWillEnterForegroundNotification
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(applicationWillResignActive)
+                                                 name:UIApplicationWillResignActiveNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(recoverVideo:)
                                                  name:KNOTIFICATION_RecoverVideo
                                                object:nil];
@@ -1331,6 +1335,15 @@
             [self.tableView.header beginRefreshing];
         }
     }
+}
+
+
+/**
+ 程序即将进入后台通知
+ */
+- (void)applicationWillResignActive
+{
+    [self.tableView.header endRefreshing];
 }
 
 // 从推送退出到列表页通知

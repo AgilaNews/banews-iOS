@@ -297,6 +297,12 @@
 //                [iConsole info:@"Menu_FeedbackButton_Click",nil];
 //#endif
                 // 点击Follow
+                NSURL *facebookURL = [NSURL URLWithString:@"fb://profile/1037705142944222"];
+                if ([[UIApplication sharedApplication] canOpenURL:facebookURL]) {
+                    [[UIApplication sharedApplication] openURL:facebookURL];
+                } else {
+                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://www.facebook.com/AgilaBuzz/?fref=ts"]];
+                }
                 break;
             }
             default:
