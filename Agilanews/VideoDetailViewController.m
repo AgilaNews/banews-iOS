@@ -169,7 +169,9 @@
         }
     } else {
         VideoModel *model = _model.videos.firstObject;
-        [self.playerView loadWithVideoId:model.youtube_id playerVars:_playerVars];
+        if (_playerVars && model.youtube_id) {
+            [self.playerView loadWithVideoId:model.youtube_id playerVars:_playerVars];
+        }
         [self.playerView addSubview:self.holderView];
     }
     
