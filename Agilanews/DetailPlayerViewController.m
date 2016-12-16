@@ -35,7 +35,9 @@
                                  @"modestbranding" : @1,    // 将参数值设为1可以阻止YouTube徽标显示在控件栏中。
                                  @"origin" : @"http://www.youtube.com",
                                  @"showinfo" : @0};         // 播放器是否显示视频标题和上传者等信息。  0:不显示  1:显示
-    [self.playerView loadWithVideoId:_videoid playerVars:playerVars];
+    if (_videoid && playerVars) {
+        [self.playerView loadWithVideoId:_videoid playerVars:playerVars];
+    }
     self.playerView.delegate = self;
     
     _holderView = [[UIImageView alloc] initWithFrame:self.playerView.bounds];

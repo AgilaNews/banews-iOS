@@ -367,7 +367,9 @@
             weakSelf.model = [NewsModel mj_objectWithKeyValues:responseObj];
             [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
             VideoModel *model = weakSelf.model.videos.firstObject;
-            [weakSelf.playerView loadWithVideoId:model.youtube_id playerVars:_playerVars];
+            if (model.youtube_id && _playerVars) {
+                [weakSelf.playerView loadWithVideoId:model.youtube_id playerVars:_playerVars];
+            }
         }
         weakSelf.detailModel = [NewsDetailModel mj_objectWithKeyValues:responseObj];
         if ([_detailModel.collect_id isEqualToString:@"1"]) {
@@ -1548,7 +1550,9 @@
                     _commentsLabel.hidden = YES;
                 }
                 VideoModel *videoModel = model.videos.firstObject;
-                [self.playerView loadWithVideoId:videoModel.youtube_id playerVars:_playerVars];
+                if (videoModel.youtube_id && _playerVars) {
+                    [self.playerView loadWithVideoId:videoModel.youtube_id playerVars:_playerVars];
+                }
                 [self.playerView addSubview:self.holderView];
                 _isOther = YES;
                 if (model.news_id.length <= 0) {

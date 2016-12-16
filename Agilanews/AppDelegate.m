@@ -611,7 +611,7 @@
         videoDetailVC.isNoModel = YES;
         JTNavigationController *navCtrl = (JTNavigationController *)_window.rootViewController;
         HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
-        [homeVC.navigationController pushViewController:videoDetailVC animated:NO];
+        [homeVC.navigationController pushViewController:videoDetailVC animated:YES];
         return;
     }
     

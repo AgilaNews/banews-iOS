@@ -388,7 +388,9 @@
     if (manager.networkReachabilityStatus == AFNetworkReachabilityStatusReachableViaWiFi) {
         if (model.youtube_id) {
             self.isPlay = YES;
-            [self.playerView loadWithVideoId:model.youtube_id playerVars:_playerVars];
+            if (model.youtube_id && _playerVars) {
+                [self.playerView loadWithVideoId:model.youtube_id playerVars:_playerVars];
+            }
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 if (self.playerView.playerState == kYTPlayerStateQueued) {
                     [self.playerView playVideo];
@@ -413,7 +415,9 @@
 //            [iConsole info:@"LowDataTips_YES_Click",nil];
 //#endif
             weakSelf.isPlay = YES;
-            [weakSelf.playerView loadWithVideoId:model.youtube_id playerVars:_playerVars];
+            if (model.youtube_id && _playerVars) {
+                [weakSelf.playerView loadWithVideoId:model.youtube_id playerVars:_playerVars];
+            }
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 if (weakSelf.playerView.playerState == kYTPlayerStateQueued) {
                     [weakSelf.playerView playVideo];
