@@ -37,6 +37,8 @@
     [self.navigationController.navigationBar setTitleTextAttributes:
      @{NSFontAttributeName:[UIFont boldSystemFontOfSize:18],
        NSForegroundColorAttributeName:[UIColor whiteColor]}];
+    
+    self.jt_fullScreenPopGestureEnabled = YES;
 }
 
 - (void)viewDidAppear:(BOOL)animated
