@@ -210,7 +210,6 @@ static NSValue *jt_tabBarRectValue;
 }
 
 #pragma mark - Getter
-
 - (NSArray *)jt_viewControllers {
     NSMutableArray *viewControllers = [NSMutableArray array];
     for (JTWrapViewController *wrapViewController in self.viewControllers) {

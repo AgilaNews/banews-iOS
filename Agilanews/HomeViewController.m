@@ -292,11 +292,13 @@ static CGFloat const ButtonHeight = 40;
 
 - (void)showBackToTopView
 {
-    [self.view addSubview:self.backToTop];
-    self.backToTop.alpha = 0;
-    [UIView animateWithDuration:.3 animations:^{
-        self.backToTop.alpha = 1;
-    }];
+    if (![self.backToTop.superview isEqual:self.view]) {
+        [self.view addSubview:self.backToTop];
+        self.backToTop.alpha = 0;
+        [UIView animateWithDuration:.3 animations:^{
+            self.backToTop.alpha = 1;
+        }];
+    }
 }
 
 - (void)removeBackToTopView
