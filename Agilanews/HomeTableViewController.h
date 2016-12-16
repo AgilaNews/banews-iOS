@@ -18,7 +18,6 @@
 @property (nonatomic, strong) UIViewController *segmentVC;
 @property (nonatomic, strong) GuideRefreshView *guideView;
 @property (nonatomic, assign) float scrollY;
-@property (nonatomic, assign) BOOL isDecelerating;          // 正在减速
 @property (nonatomic, assign) long long beginScrollTime;    // 开始滚动时间
 @property (nonatomic, assign) long long refreshTime;        // 刷新时间
 @property (nonatomic, assign) BOOL isFailure;               // 进入失败页面

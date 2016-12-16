@@ -76,11 +76,19 @@ static CGFloat const ButtonHeight = 40;
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(checkNewNotif)
+                                                 name:KNOTIFICATION_CheckNewNotif
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(removeBackToTopView)
+                                                 name:KNOTIFICATION_Refresh
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(selectChannelAction)
                                                  name:KNOTIFICATION_Secect_Channel
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(checkNewNotif)
-                                                 name:KNOTIFICATION_CheckNewNotif
+                                             selector:@selector(removeBackToTopView)
+                                                 name:KNOTIFICATION_Scroll_Channel
                                                object:nil];
     
     // 添加分段控制器
@@ -282,6 +290,55 @@ static CGFloat const ButtonHeight = 40;
     [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Refresh object:homeTBC.model.channelID];
 }
 
+- (void)showBackToTopView
+{
+    [self.view addSubview:self.backToTop];
+    self.backToTop.alpha = 0;
+    [UIView animateWithDuration:.3 animations:^{
+        self.backToTop.alpha = 1;
+    }];
+}
+
+- (void)removeBackToTopView
+{
+    [UIView animateWithDuration:.3 animations:^{
+        self.backToTop.alpha = 0;
+    } completion:^(BOOL finished) {
+        [self.backToTop removeFromSuperview];
+    }];
+}
+
+#pragma mark - setter/getter
+- (UIView *)backToTop
+{
+    if (_backToTop == nil) {
+        _backToTop = [[UIView alloc] initWithFrame:CGRectMake(0, kScreenHeight - 64 - 43, kScreenWidth, 43)];
+        _backToTop.backgroundColor = [UIColor colorWithRed:78 / 255.0 green:173 / 255.0 blue:240 / 255.0 alpha:.95];
+        _backToTop.userInteractionEnabled = YES;
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backToTopAction)];
+        [_backToTop addGestureRecognizer:tap];
+        NSString *toTopString = @"Get the latest stories";
+        CGSize toTopSize = [toTopString calculateSize:CGSizeMake(300, 16) font:[UIFont systemFontOfSize:15]];
+        UIImageView *toTopView = [[UIImageView alloc] initWithFrame:CGRectMake((kScreenWidth - 13 - 8 - toTopSize.width) * .5, (_backToTop.height - 11) * .5, 13, 11)];
+        toTopView.contentMode = UIViewContentModeScaleAspectFit;
+        toTopView.image = [UIImage imageNamed:@"icon_arrow_top"];
+        [_backToTop addSubview:toTopView];
+        UILabel *toTopLabel = [[UILabel alloc] initWithFrame:CGRectMake(toTopView.right + 8, (_backToTop.height - toTopSize.height) * .5, toTopSize.width, toTopSize.height)];
+        toTopLabel.font = [UIFont systemFontOfSize:15];
+        toTopLabel.textColor = [UIColor whiteColor];
+        toTopLabel.text = toTopString;
+        [_backToTop addSubview:toTopLabel];
+    }
+    return _backToTop;
+}
+
+- (void)backToTopAction
+{
+    HomeTableViewController *homeTBC = _segmentVC.subViewControllers[_segmentVC.selectIndex - 10000];
+    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Refresh object:homeTBC.model.channelID];
+}
+
+#pragma mark - Notification
 /**
  *  刷新成功
  */
@@ -350,6 +407,16 @@ static CGFloat const ButtonHeight = 40;
     } failure:^(NSError *error) {
         
     } isShowHUD:NO];
+}
+
+
+/**
+ 选择频道通知
+ */
+- (void)selectChannelAction
+{
+    [self removeBackToTopView];
+    [self checkNewNotif];
 }
 
 // 添加小红点

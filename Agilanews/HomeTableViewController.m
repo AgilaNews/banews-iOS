@@ -589,7 +589,6 @@
     [self.navigationController pushViewController:newsDetailVC animated:YES];
 }
 
-
 /**
  cell不显示在tableView中
 
@@ -617,6 +616,11 @@
         [self.tableView setContentOffset:CGPointMake(self.tableView.contentOffset.x, 0.5)];
         _scrollY = 0.5;
     }
+    if (scrollView.contentOffset.y > _scrollY) {
+        JTNavigationController *navCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+        HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
+        [homeVC removeBackToTopView];
+    }
 }
 
 // 滑动视图开始拖拽
@@ -639,58 +643,62 @@
         [iConsole info:[NSString stringWithFormat:@"Home_List_UpScroll:%@",articleParams],nil];
 #endif
     }
-    _scrollY = scrollView.contentOffset.y;
-    __weak typeof(self) weakSelf = self;
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if (!_isDecelerating) {
-            UITableViewCell *cell = weakSelf.tableView.visibleCells.lastObject;
-            NSIndexPath *indexPath = [weakSelf.tableView indexPathForCell:cell];
-            if (_dataList.count <= indexPath.row) {
-                return;
-            }
-            if ([_dataList[indexPath.row] isKindOfClass:[NSString class]]) {
-                return;
-            }
-            NewsModel *model = _dataList[indexPath.row];
-            if (!model.news_id) {
-                return;
-            }
-            // 服务器打点-列表页滑动-020101
-            NSMutableDictionary *eventDic = [NSMutableDictionary dictionary];
-            [eventDic setObject:@"020101" forKey:@"id"];
-            [eventDic setObject:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970] * 1000] forKey:@"time"];
-            [eventDic setObject:_model.channelID forKey:@"channel"];
-            [eventDic setObject:model.news_id forKey:@"last_id"];
-            long long duration = [[NSDate date] timeIntervalSince1970] * 1000 - _beginScrollTime;
-            [eventDic setObject:[NSString stringWithFormat:@"%.1f",duration / 1000.0] forKey:@"duration"];
-            [eventDic setObject:[NetType getNetType] forKey:@"net"];
-            if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
-                [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) forKey:@"lng"];
-                [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) forKey:@"lat"];
-            } else {
-                [eventDic setObject:@"" forKey:@"lng"];
-                [eventDic setObject:@"" forKey:@"lat"];
-            }
-            NSString *abflag = DEF_PERSISTENT_GET_OBJECT(@"abflag");
-            if (abflag && abflag.length > 0) {
-                [eventDic setObject:abflag forKey:@"abflag"];
-            }
-            [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
-            AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-            [appDelegate.eventArray addObject:eventDic];
+    if (!decelerate) {
+        // 下拉出现底部返回视图
+        if (scrollView.contentOffset.y < _scrollY && scrollView.contentOffset.y > kScreenHeight && self.tableView.footer.state == MJRefreshFooterStateIdle) {
+            JTNavigationController *navCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+            HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
+            [homeVC showBackToTopView];
         }
-    });
+
+        UITableViewCell *cell = self.tableView.visibleCells.lastObject;
+        NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+        if (_dataList.count <= indexPath.row) {
+            return;
+        }
+        if ([_dataList[indexPath.row] isKindOfClass:[NSString class]]) {
+            return;
+        }
+        NewsModel *model = _dataList[indexPath.row];
+        if (!model.news_id) {
+            return;
+        }
+        // 服务器打点-列表页滑动-020101
+        NSMutableDictionary *eventDic = [NSMutableDictionary dictionary];
+        [eventDic setObject:@"020101" forKey:@"id"];
+        [eventDic setObject:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970] * 1000] forKey:@"time"];
+        [eventDic setObject:_model.channelID forKey:@"channel"];
+        [eventDic setObject:model.news_id forKey:@"last_id"];
+        long long duration = [[NSDate date] timeIntervalSince1970] * 1000 - _beginScrollTime;
+        [eventDic setObject:[NSString stringWithFormat:@"%.1f",duration / 1000.0] forKey:@"duration"];
+        [eventDic setObject:[NetType getNetType] forKey:@"net"];
+        if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
+            [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) forKey:@"lng"];
+            [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) forKey:@"lat"];
+        } else {
+            [eventDic setObject:@"" forKey:@"lng"];
+            [eventDic setObject:@"" forKey:@"lat"];
+        }
+        NSString *abflag = DEF_PERSISTENT_GET_OBJECT(@"abflag");
+        if (abflag && abflag.length > 0) {
+            [eventDic setObject:abflag forKey:@"abflag"];
+        }
+        [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
+        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        [appDelegate.eventArray addObject:eventDic];
+    }
+    _scrollY = scrollView.contentOffset.y;
 }
 
-// 滑动视图开始惯性滚动
-- (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView
-{
-    _isDecelerating = YES;
-}
 // 滑动视图停止惯性滚动
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
-    _isDecelerating = NO;
+    // 下拉出现底部返回视图
+    if (scrollView.contentOffset.y < _scrollY && scrollView.contentOffset.y > kScreenHeight && self.tableView.footer.state == MJRefreshFooterStateIdle) {
+        JTNavigationController *navCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+        HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
+        [homeVC showBackToTopView];
+    }
     _scrollY = scrollView.contentOffset.y;
     UITableViewCell *cell = self.tableView.visibleCells.lastObject;
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
@@ -1323,6 +1331,7 @@
  */
 - (void)applicationWillEnterForeground
 {
+    [self.tableView.header endRefreshing];
     NewsModel *model = _dataList.firstObject;
     long long refreshTime = 0;
     if (model && [model isKindOfClass:[NewsModel class]]) {
@@ -1336,7 +1345,6 @@
         }
     }
 }
-
 
 /**
  程序即将进入后台通知
