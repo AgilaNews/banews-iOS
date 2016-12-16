@@ -722,46 +722,6 @@
     }
 }
 
-/**
- 播放结束打点
- */
-- (void)uploadOverPlayingVideo
-{
-    if (_playerPath.count > 0) {
-        // 服务器打点-视频播放完毕-020303
-        NSMutableDictionary *eventDic = [NSMutableDictionary dictionary];
-        [eventDic setObject:@"020303" forKey:@"id"];
-        [eventDic setObject:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970] * 1000] forKey:@"time"];
-        [eventDic setObject:_model.news_id forKey:@"news_id"];
-        VideoModel *model = _model.videos.firstObject;
-        [eventDic setObject:model.youtube_id forKey:@"youtube_video_id"];
-        if (_model.issuedID.length) {
-            [eventDic setObject:_model.issuedID forKey:@"dispatch_id"];
-        } else {
-            [eventDic setObject:@"" forKey:@"dispatch_id"];
-        }
-        [eventDic setObject:_channelName forKey:@"channel_id"];
-        [eventDic setObject:@"1" forKey:@"play_type"];
-        [eventDic setObject:[NSArray arrayWithArray:_playerPath] forKey:@"path"];
-        [_playerPath removeAllObjects];
-        [eventDic setObject:[NetType getNetType] forKey:@"net"];
-        if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
-            [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) forKey:@"lng"];
-            [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) forKey:@"lat"];
-        } else {
-            [eventDic setObject:@"" forKey:@"lng"];
-            [eventDic setObject:@"" forKey:@"lat"];
-        }
-        NSString *abflag = DEF_PERSISTENT_GET_OBJECT(@"abflag");
-        if (abflag && abflag.length > 0) {
-            [eventDic setObject:abflag forKey:@"abflag"];
-        }
-        [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
-        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-        [appDelegate.eventArray addObject:eventDic];
-    }
-}
-
 #pragma mark - 按钮点击事件
 /**
  *  点赞按钮点击事件
@@ -1971,13 +1931,21 @@
     [eventDic setObject:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970] * 1000] forKey:@"time"];
     [eventDic setObject:_model.news_id forKey:@"news_id"];
     VideoModel *model = _model.videos.firstObject;
-    [eventDic setObject:model.youtube_id forKey:@"youtube_video_id"];
+    if (model.youtube_id) {
+        [eventDic setObject:model.youtube_id forKey:@"youtube_video_id"];
+    } else {
+        [eventDic setObject:@"" forKey:@"youtube_video_id"];
+    }
     if (_model.issuedID.length) {
         [eventDic setObject:_model.issuedID forKey:@"dispatch_id"];
     } else {
         [eventDic setObject:@"" forKey:@"dispatch_id"];
     }
-    [eventDic setObject:_channelName forKey:@"channel_id"];
+    if (_channelName) {
+        [eventDic setObject:_channelName forKey:@"channel_id"];
+    } else {
+        [eventDic setObject:@"" forKey:@"channel_id"];
+    }
     [eventDic setObject:@"1" forKey:@"play_type"];
     [eventDic setObject:[NetType getNetType] forKey:@"net"];
     if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
@@ -2004,6 +1972,54 @@
         AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
         [appDelegate.eventArray addObject:eventDic];
     } isShowHUD:NO];
+}
+
+/**
+ 播放结束打点
+ */
+- (void)uploadOverPlayingVideo
+{
+    if (_playerPath.count > 0) {
+        // 服务器打点-视频播放完毕-020303
+        NSMutableDictionary *eventDic = [NSMutableDictionary dictionary];
+        [eventDic setObject:@"020303" forKey:@"id"];
+        [eventDic setObject:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970] * 1000] forKey:@"time"];
+        [eventDic setObject:_model.news_id forKey:@"news_id"];
+        VideoModel *model = _model.videos.firstObject;
+        if (model.youtube_id) {
+            [eventDic setObject:model.youtube_id forKey:@"youtube_video_id"];
+        } else {
+            [eventDic setObject:@"" forKey:@"youtube_video_id"];
+        }
+        if (_model.issuedID.length) {
+            [eventDic setObject:_model.issuedID forKey:@"dispatch_id"];
+        } else {
+            [eventDic setObject:@"" forKey:@"dispatch_id"];
+        }
+        if (_channelName) {
+            [eventDic setObject:_channelName forKey:@"channel_id"];
+        } else {
+            [eventDic setObject:@"" forKey:@"channel_id"];
+        }
+        [eventDic setObject:@"1" forKey:@"play_type"];
+        [eventDic setObject:[NSArray arrayWithArray:_playerPath] forKey:@"path"];
+        [_playerPath removeAllObjects];
+        [eventDic setObject:[NetType getNetType] forKey:@"net"];
+        if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
+            [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) forKey:@"lng"];
+            [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) forKey:@"lat"];
+        } else {
+            [eventDic setObject:@"" forKey:@"lng"];
+            [eventDic setObject:@"" forKey:@"lat"];
+        }
+        NSString *abflag = DEF_PERSISTENT_GET_OBJECT(@"abflag");
+        if (abflag && abflag.length > 0) {
+            [eventDic setObject:abflag forKey:@"abflag"];
+        }
+        [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
+        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        [appDelegate.eventArray addObject:eventDic];
+    }
 }
 
 - (UIView *)holderView
