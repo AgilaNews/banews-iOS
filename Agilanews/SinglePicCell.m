@@ -123,7 +123,7 @@
     // 不喜欢布局
     [self.dislikeButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.mas_equalTo(weakSelf.titleImageView.mas_left).offset(5);
-        make.bottom.mas_equalTo(weakSelf.titleImageView.mas_bottom).offset(12);
+        make.centerY.mas_equalTo(weakSelf.sourceLabel.mas_centerY);
         make.width.mas_equalTo(34);
         make.height.mas_equalTo(34);
     }];
@@ -250,7 +250,7 @@
     // 不喜欢布局
     [self.dislikeButton mas_updateConstraints:^(MASConstraintMaker *make) {
         make.right.mas_equalTo(weakSelf.titleImageView.mas_left).offset(5);
-        make.bottom.mas_equalTo(weakSelf.titleImageView.mas_bottom).offset(12);
+        make.centerY.mas_equalTo(weakSelf.sourceLabel.mas_centerY);
         make.width.mas_equalTo(34);
         make.height.mas_equalTo(34);
     }];
