@@ -166,6 +166,8 @@
 		5F86EDDB1DFFBC8900F3C35B /* FontSizeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F86EDDA1DFFBC8900F3C35B /* FontSizeView.m */; };
 		5F86EDDE1DFFCDB900F3C35B /* FontSizeSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F86EDDD1DFFCDB900F3C35B /* FontSizeSlider.m */; };
 		5F86EDE11E0114F700F3C35B /* LoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F86EDE01E0114F700F3C35B /* LoginView.m */; };
+		5F86EDE51E039B1300F3C35B /* SearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F86EDE41E039B1200F3C35B /* SearchBar.m */; };
+		5F86EDEC1E03F74700F3C35B /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F86EDEB1E03F74700F3C35B /* SearchViewController.m */; };
 		5F8D85AA1D76A99700FF4019 /* WebViewJavascriptBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F8D85A31D76A99700FF4019 /* WebViewJavascriptBridge.m */; };
 		5F8D85AB1D76A99700FF4019 /* WebViewJavascriptBridge_JS.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F8D85A51D76A99700FF4019 /* WebViewJavascriptBridge_JS.m */; };
 		5F8D85AC1D76A99700FF4019 /* WebViewJavascriptBridgeBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F8D85A71D76A99700FF4019 /* WebViewJavascriptBridgeBase.m */; };
@@ -533,6 +535,10 @@
 		5F86EDDD1DFFCDB900F3C35B /* FontSizeSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FontSizeSlider.m; sourceTree = "<group>"; };
 		5F86EDDF1E0114F700F3C35B /* LoginView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginView.h; sourceTree = "<group>"; };
 		5F86EDE01E0114F700F3C35B /* LoginView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginView.m; sourceTree = "<group>"; };
+		5F86EDE31E039B1200F3C35B /* SearchBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchBar.h; sourceTree = "<group>"; };
+		5F86EDE41E039B1200F3C35B /* SearchBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchBar.m; sourceTree = "<group>"; };
+		5F86EDEA1E03F74600F3C35B /* SearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchViewController.h; sourceTree = "<group>"; };
+		5F86EDEB1E03F74700F3C35B /* SearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchViewController.m; sourceTree = "<group>"; };
 		5F8D85A21D76A99700FF4019 /* WebViewJavascriptBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewJavascriptBridge.h; sourceTree = "<group>"; };
 		5F8D85A31D76A99700FF4019 /* WebViewJavascriptBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewJavascriptBridge.m; sourceTree = "<group>"; };
 		5F8D85A41D76A99700FF4019 /* WebViewJavascriptBridge_JS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewJavascriptBridge_JS.h; sourceTree = "<group>"; };
@@ -1281,6 +1287,28 @@
 		5F86EDD21DFAAEE600F3C35B /* List */ = {
 			isa = PBXGroup;
 			children = (
+				5F86EDE21E039ACB00F3C35B /* NewsCell */,
+				5F767A5B1D9A44C800822BAC /* RefreshCell.h */,
+				5F767A5C1D9A44C800822BAC /* RefreshCell.m */,
+				5F5AE96F1D5353B400A5A8B7 /* BannerView.h */,
+				5F5AE9701D5353B400A5A8B7 /* BannerView.m */,
+				5F5C63911D950AB4005D3578 /* LoadingView.h */,
+				5F5C63921D950AB4005D3578 /* LoadingView.m */,
+				5F86EDC81DF585AE00F3C35B /* TopCell.h */,
+				5F86EDC91DF585AE00F3C35B /* TopCell.m */,
+				5F86EDCE1DF94B1400F3C35B /* PullDownListView.h */,
+				5F86EDCF1DF94B1400F3C35B /* PullDownListView.m */,
+				5F86EDD31DFABC1A00F3C35B /* DislikeView.h */,
+				5F86EDD41DFABC1A00F3C35B /* DislikeView.m */,
+				5F86EDE31E039B1200F3C35B /* SearchBar.h */,
+				5F86EDE41E039B1200F3C35B /* SearchBar.m */,
+			);
+			name = List;
+			sourceTree = "<group>";
+		};
+		5F86EDE21E039ACB00F3C35B /* NewsCell */ = {
+			isa = PBXGroup;
+			children = (
 				5FF4B7821D38DE7800CC6704 /* ManyPicCell.h */,
 				5FF4B7831D38DE7800CC6704 /* ManyPicCell.m */,
 				5FF4B7851D38DE9300CC6704 /* SinglePicCell.h */,
@@ -1295,18 +1323,38 @@
 				5FF4B78F1D38DEE400CC6704 /* GifPicCell.m */,
 				5F5342B21DBDF30E005D78F1 /* OnlyVideoCell.h */,
 				5F5342B31DBDF30E005D78F1 /* OnlyVideoCell.m */,
-				5F767A5B1D9A44C800822BAC /* RefreshCell.h */,
-				5F767A5C1D9A44C800822BAC /* RefreshCell.m */,
-				5F5AE96F1D5353B400A5A8B7 /* BannerView.h */,
-				5F5AE9701D5353B400A5A8B7 /* BannerView.m */,
-				5F5C63911D950AB4005D3578 /* LoadingView.h */,
-				5F5C63921D950AB4005D3578 /* LoadingView.m */,
-				5F86EDC81DF585AE00F3C35B /* TopCell.h */,
-				5F86EDC91DF585AE00F3C35B /* TopCell.m */,
-				5F86EDCE1DF94B1400F3C35B /* PullDownListView.h */,
-				5F86EDCF1DF94B1400F3C35B /* PullDownListView.m */,
-				5F86EDD31DFABC1A00F3C35B /* DislikeView.h */,
-				5F86EDD41DFABC1A00F3C35B /* DislikeView.m */,
+			);
+			name = NewsCell;
+			sourceTree = "<group>";
+		};
+		5F86EDE81E03F64F00F3C35B /* Detail */ = {
+			isa = PBXGroup;
+			children = (
+				5F635CB21D3E12C3006AAE3D /* NewsDetailViewController.h */,
+				5F635CB31D3E12C3006AAE3D /* NewsDetailViewController.m */,
+				5F5342B51DBF3CD8005D78F1 /* DetailPlayerViewController.h */,
+				5F5342B61DBF3CD8005D78F1 /* DetailPlayerViewController.m */,
+				5F5342B81DC21C7E005D78F1 /* VideoDetailViewController.h */,
+				5F5342B91DC21C7E005D78F1 /* VideoDetailViewController.m */,
+				5F635ED71D41EB51006AAE3D /* webView.css */,
+				5F571FE31D64057500604CDD /* webView.js */,
+				5FE722211D50B5B70026BFC3 /* textonly.png */,
+				5F8D85D11D7D1AA800FF4019 /* placeholder.png */,
+			);
+			name = Detail;
+			sourceTree = "<group>";
+		};
+		5F86EDE91E03F65100F3C35B /* List */ = {
+			isa = PBXGroup;
+			children = (
+				5FF4B6FD1D372E5700CC6704 /* HomeViewController.h */,
+				5FF4B6FE1D372E5700CC6704 /* HomeViewController.m */,
+				5FF4B7001D373BD900CC6704 /* SegmentViewController.h */,
+				5FF4B7011D373BD900CC6704 /* SegmentViewController.m */,
+				5FF4B7291D37400D00CC6704 /* HomeTableViewController.h */,
+				5FF4B72A1D37400D00CC6704 /* HomeTableViewController.m */,
+				5F86EDEA1E03F74600F3C35B /* SearchViewController.h */,
+				5F86EDEB1E03F74700F3C35B /* SearchViewController.m */,
 			);
 			name = List;
 			sourceTree = "<group>";
@@ -1421,22 +1469,8 @@
 		5FF4B6F81D372BEF00CC6704 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				5FF4B6FD1D372E5700CC6704 /* HomeViewController.h */,
-				5FF4B6FE1D372E5700CC6704 /* HomeViewController.m */,
-				5FF4B7001D373BD900CC6704 /* SegmentViewController.h */,
-				5FF4B7011D373BD900CC6704 /* SegmentViewController.m */,
-				5FF4B7291D37400D00CC6704 /* HomeTableViewController.h */,
-				5FF4B72A1D37400D00CC6704 /* HomeTableViewController.m */,
-				5F635CB21D3E12C3006AAE3D /* NewsDetailViewController.h */,
-				5F635CB31D3E12C3006AAE3D /* NewsDetailViewController.m */,
-				5F5342B51DBF3CD8005D78F1 /* DetailPlayerViewController.h */,
-				5F5342B61DBF3CD8005D78F1 /* DetailPlayerViewController.m */,
-				5F5342B81DC21C7E005D78F1 /* VideoDetailViewController.h */,
-				5F5342B91DC21C7E005D78F1 /* VideoDetailViewController.m */,
-				5F635ED71D41EB51006AAE3D /* webView.css */,
-				5F571FE31D64057500604CDD /* webView.js */,
-				5FE722211D50B5B70026BFC3 /* textonly.png */,
-				5F8D85D11D7D1AA800FF4019 /* placeholder.png */,
+				5F86EDE91E03F65100F3C35B /* List */,
+				5F86EDE81E03F64F00F3C35B /* Detail */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -1705,6 +1739,7 @@
 				5FF4B7B11D38F7B200CC6704 /* MASViewAttribute.m in Sources */,
 				5F42C0881D34E41D00B89651 /* SDWebImageDownloaderOperation.m in Sources */,
 				5F42C0AE1D34E9BF00B89651 /* UIView+Additions.m in Sources */,
+				5F86EDEC1E03F74700F3C35B /* SearchViewController.m in Sources */,
 				5FF4B7D01D3A174900CC6704 /* MJRefreshConst.m in Sources */,
 				5F767A871D9CE82E00822BAC /* NSObject+MJKeyValue.m in Sources */,
 				5FF4B7B41D38F7B200CC6704 /* NSLayoutConstraint+MASDebugAdditions.m in Sources */,
@@ -1722,6 +1757,7 @@
 				5FF4B7AE1D38F7B200CC6704 /* MASConstraint.m in Sources */,
 				5FF4B6EA1D3645A100CC6704 /* BaseModel.m in Sources */,
 				5F6462801D48AD3A008EEDEC /* CommentTextView.m in Sources */,
+				5F86EDE51E039B1300F3C35B /* SearchBar.m in Sources */,
 				5F42C0911D34E41D00B89651 /* UIView+WebCacheOperation.m in Sources */,
 				5FF4B7B51D38F7B200CC6704 /* View+MASAdditions.m in Sources */,
 				5F86EDD01DF94B1400F3C35B /* PullDownListView.m in Sources */,

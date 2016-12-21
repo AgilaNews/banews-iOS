@@ -29,6 +29,7 @@
 #import "FacebookAdCell.h"
 #import "TopCell.h"
 #import "DislikeView.h"
+#import "SearchBar.h"
 
 #define titleFont_Normal        [UIFont systemFontOfSize:16]
 #define titleFont_ExtraLarge    [UIFont systemFontOfSize:20]
@@ -125,6 +126,8 @@
     self.showRefreshFooter = YES;
     if ([_model.channelID isEqualToNumber:@10001]) {
         self.tableView.scrollsToTop = YES;
+        UIView *searchBar = [[SearchBar alloc] init];
+        self.tableView.tableHeaderView = searchBar;
     } else {
         self.tableView.scrollsToTop = NO;
     }
@@ -845,6 +848,11 @@
             [_dataList insertObjects:models atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, models.count)]];
             [weakSelf tableViewDidFinishTriggerHeader:YES reload:YES];
             weakSelf.refreshTime = [[NSDate date] timeIntervalSince1970];
+            if ([_model.channelID isEqualToNumber:@10001]) {
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [weakSelf.tableView setContentOffset:CGPointMake(weakSelf.tableView.contentOffset.x, 44) animated:YES];
+                });
+            }
         } else {
             // 打点-上拉加载成功-010110
             NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -861,9 +869,9 @@
         if (showBanner) {
             NSInteger count = models.count - 1;
             if (count > 0) {
-                [[BannerView sharedInstance] showBannerWithText:DEF_banner((long)count) superView:weakSelf.tableView];
+                [[BannerView sharedInstance] showBannerWithText:DEF_banner((long)count) superView:weakSelf.view];
             } else {
-                [[BannerView sharedInstance] showBannerWithText:@"Sorry, no more news, please try later" superView:weakSelf.tableView];
+                [[BannerView sharedInstance] showBannerWithText:@"Sorry, no more news, please try later" superView:weakSelf.view];
             }
         }
         [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Refresh_Success object:nil];

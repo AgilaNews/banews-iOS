@@ -29,6 +29,7 @@
 @property (nonatomic, strong) NSMutableArray *playerPath;
 @property (nonatomic, assign) BOOL isPlay;
 @property (nonatomic, assign) BOOL isMove;
+@property (nonatomic, assign) BOOL isSearch;            
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier bgColor:(UIColor *)bgColor;
 

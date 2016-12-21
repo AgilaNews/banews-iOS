@@ -102,6 +102,18 @@ static SSHttpRequest *_manager = nil;
 #endif
                 break;
             }
+#if DEBUG
+            case NetServer_API1:
+            {
+                _urlString = [NSString stringWithFormat:@"%@%@",kAPI1,url];
+                break;
+            }
+            case NetServer_API2:
+            {
+                _urlString = [NSString stringWithFormat:@"%@%@",kAPI2,url];
+                break;
+            }
+#endif
             default:
                 break;
         }
@@ -298,8 +310,8 @@ static SSHttpRequest *_manager = nil;
             } else {
                 _urlString = [NSString stringWithFormat:@"%@%@",kHomeUrl,url];
             }
-        }
             break;
+        }
         case NetServer_Log:
         {
             if (DEF_PERSISTENT_GET_OBJECT(Server_Log) != nil) {
@@ -307,8 +319,8 @@ static SSHttpRequest *_manager = nil;
             } else {
                 _urlString = [NSString stringWithFormat:@"%@%@",kLogUrl,url];
             }
-        }
             break;
+        }
         case NetServer_Mon:
         {
             if (DEF_PERSISTENT_GET_OBJECT(Server_Mon) != nil) {
@@ -316,8 +328,8 @@ static SSHttpRequest *_manager = nil;
             } else {
                 _urlString = [NSString stringWithFormat:@"%@%@",kMonUrl,url];
             }
-        }
             break;
+        }
         case NetServer_Referrer:
         {
             if (DEF_PERSISTENT_GET_OBJECT(Server_Referrer) != nil) {
@@ -325,8 +337,20 @@ static SSHttpRequest *_manager = nil;
             } else {
                 _urlString = [NSString stringWithFormat:@"%@%@",kReferrerUrl,url];
             }
-        }
             break;
+        }
+#if DEBUG
+        case NetServer_API1:
+        {
+            _urlString = [NSString stringWithFormat:@"%@%@",kAPI1,url];
+            break;
+        }
+        case NetServer_API2:
+        {
+            _urlString = [NSString stringWithFormat:@"%@%@",kAPI2,url];
+            break;
+        }
+#endif
         default:
             break;
     }

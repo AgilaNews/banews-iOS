@@ -41,7 +41,7 @@
     self.title = @"Favorites";
     self.isBackButton = YES;
     self.view.backgroundColor = kWhiteBgColor;
-
+    self.jt_fullScreenPopGestureEnabled = NO;
     // 添加导航栏右侧按钮
     _editBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     _editBtn.frame = CGRectMake(0, 0, 80, 40);

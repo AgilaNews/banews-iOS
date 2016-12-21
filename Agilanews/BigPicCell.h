@@ -25,6 +25,7 @@
 @property (nonatomic, strong) UIColor *bgColor;
 @property (nonatomic, assign) BOOL isHaveVideo;
 @property (nonatomic, strong) UIImageView *haveVideoView;
+@property (nonatomic, assign) BOOL isSearch;            
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier bgColor:(UIColor *)bgColor;
 

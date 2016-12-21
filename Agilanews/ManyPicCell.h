@@ -24,6 +24,7 @@
 @property (nonatomic, strong) UIImageView *commentView;     // 评论
 @property (nonatomic, strong) UILabel *commentLabel;        // 评论数
 @property (nonatomic, strong) UIButton *dislikeButton;      // 不喜欢按钮
+@property (nonatomic, assign) BOOL isSearch;            
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier bgColor:(UIColor *)bgColor;
 

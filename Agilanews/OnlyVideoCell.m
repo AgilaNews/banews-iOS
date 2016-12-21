@@ -338,7 +338,35 @@
     
     [super updateConstraints];
 
-    self.titleLabel.text = _model.title;
+    if (_isSearch) {
+        NSString *titleString = [_model.title stringByReplacingOccurrencesOfString:@"<font>" withString:@"<font color=\"#ff8800\">"];
+        titleString = [NSString stringWithFormat:@"%@%@",@"<font color=\"#3b3b3b\">",titleString];
+        titleString = [titleString stringByAppendingString:@"</font>"];
+        NSAttributedString *attrStr = [[NSAttributedString alloc] initWithData:[titleString dataUsingEncoding:NSUnicodeStringEncoding]
+                                                                       options:@{NSDocumentTypeDocumentAttribute:NSHTMLTextDocumentType}
+                                                            documentAttributes:nil
+                                                                         error:nil];
+        self.titleLabel.attributedText = attrStr;
+        switch ([DEF_PERSISTENT_GET_OBJECT(SS_FontSize) integerValue]) {
+            case 0:
+                _titleLabel.font = titleFont_Normal;
+                break;
+            case 1:
+                _titleLabel.font = titleFont_ExtraLarge;
+                break;
+            case 2:
+                _titleLabel.font = titleFont_Large;
+                break;
+            case 3:
+                _titleLabel.font = titleFont_Small;
+                break;
+            default:
+                _titleLabel.font = titleFont_Normal;
+                break;
+        }
+    } else {
+        self.titleLabel.text = _model.title;
+    }
     self.durationLabel.text = durationString;
     self.watchLabel.text = views;
     if (_model.commentCount.integerValue > 0) {

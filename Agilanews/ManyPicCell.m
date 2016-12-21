@@ -252,15 +252,43 @@
     } else {
         self.dislikeButton.hidden = YES;
     }
-    self.titleLabel.text = _model.title;
-    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    if ([[appDelegate.checkDic valueForKey:_model.news_id] isEqualToNumber:@1]) {
-        self.titleLabel.textColor = kGrayColor;
+    if (_isSearch) {
+        NSString *titleString = [_model.title stringByReplacingOccurrencesOfString:@"<font>" withString:@"<font color=\"#ff8800\">"];
+        titleString = [NSString stringWithFormat:@"%@%@",@"<font color=\"#3b3b3b\">",titleString];
+        titleString = [titleString stringByAppendingString:@"</font>"];
+        NSAttributedString *attrStr = [[NSAttributedString alloc] initWithData:[titleString dataUsingEncoding:NSUnicodeStringEncoding]
+                                                                       options:@{NSDocumentTypeDocumentAttribute:NSHTMLTextDocumentType}
+                                                            documentAttributes:nil
+                                                                         error:nil];
+        self.titleLabel.attributedText = attrStr;
+        switch ([DEF_PERSISTENT_GET_OBJECT(SS_FontSize) integerValue]) {
+            case 0:
+                _titleLabel.font = titleFont_Normal;
+                break;
+            case 1:
+                _titleLabel.font = titleFont_ExtraLarge;
+                break;
+            case 2:
+                _titleLabel.font = titleFont_Large;
+                break;
+            case 3:
+                _titleLabel.font = titleFont_Small;
+                break;
+            default:
+                _titleLabel.font = titleFont_Normal;
+                break;
+        }
     } else {
-        if (_bgColor == [UIColor whiteColor]) {
-            _titleLabel.textColor = kBlackColor;
+        self.titleLabel.text = _model.title;
+        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        if ([[appDelegate.checkDic valueForKey:_model.news_id] isEqualToNumber:@1]) {
+            self.titleLabel.textColor = kGrayColor;
         } else {
-            _titleLabel.textColor = SSColor(68, 68, 68);
+            if (_bgColor == [UIColor whiteColor]) {
+                _titleLabel.textColor = kBlackColor;
+            } else {
+                _titleLabel.textColor = SSColor(68, 68, 68);
+            }
         }
     }
     self.tagLabel.text = _model.tag;
