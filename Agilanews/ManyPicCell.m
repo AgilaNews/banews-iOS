@@ -205,7 +205,7 @@
     }];
     // 时间布局
     NSString *timeString = nil;
-    if (_bgColor == [UIColor whiteColor]) {
+    if (_bgColor == [UIColor whiteColor] && !_isSearch) {
         timeString = [TimeStampToString getNewsStringWhitTimeStamp:[_model.public_time longLongValue]];
     } else {
         timeString = [TimeStampToString getRecommendedNewsStringWhitTimeStamp:[_model.public_time longLongValue]];
@@ -514,6 +514,14 @@
             break;
     }
     [self setNeedsLayout];
+}
+
+- (void)setModel:(NewsModel *)model
+{
+    if (_model != model) {
+        model.title = [model.title stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+        _model = model;
+    }
 }
 
 - (void)awakeFromNib {

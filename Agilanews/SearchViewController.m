@@ -131,7 +131,8 @@
             }
         }
         if (isFooter) {
-            if (((NSArray *)responseObj).count <= 0) {
+            NSArray *news = responseObj[@"news"];
+            if (!news.count) {
                 weakSelf.tableView.footer.state = MJRefreshFooterStateNoMoreData;
                 return;
             }
