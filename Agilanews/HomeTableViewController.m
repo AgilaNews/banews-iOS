@@ -18,6 +18,7 @@
 #import "OnlyPicCell.h"
 #import "GifPicCell.h"
 #import "OnlyVideoCell.h"
+#import "TopicCell.h"
 #import "RefreshCell.h"
 #import "AppDelegate.h"
 #import "BannerView.h"
@@ -25,11 +26,11 @@
 #import "HomeViewController.h"
 #import "ImageModel.h"
 #import "VideoDetailViewController.h"
-#import "PushTransitionAnimate.h"
 #import "FacebookAdCell.h"
 #import "TopCell.h"
 #import "DislikeView.h"
 #import "SearchBar.h"
+#import "TopicViewController.h"
 
 #define titleFont_Normal        [UIFont systemFontOfSize:16]
 #define titleFont_ExtraLarge    [UIFont systemFontOfSize:20]
@@ -281,6 +282,10 @@
         {
             return topHeight;
         }
+        case NEWS_Topics:
+        {
+            return imageHeight + 18 + 15;
+        }
         default:
             return 50;
     }
@@ -454,11 +459,25 @@
             }
             case Top_List:
             {
-                // 广告cell
+                // 活动cell
                 static NSString *cellID = @"TopCellID";
                 TopCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
                 if (cell == nil) {
                     cell = [[TopCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+                }
+                cell.model = model;
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                [cell setNeedsLayout];
+                return cell;
+            }
+            case NEWS_Topics:
+            {
+                // 专题cell
+                static NSString *cellID = @"TopicCellID";
+                TopicCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+                if (cell == nil) {
+                    cell = [[TopicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+                    [cell.dislikeButton addTarget:self action:@selector(dislikeAction:) forControlEvents:UIControlEventTouchUpInside];
                 }
                 cell.model = model;
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -544,6 +563,14 @@
         [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
         [appDelegate.eventArray addObject:eventDic];
     } isShowHUD:NO];
+    
+    // 点击专题
+    if (model.tpl.integerValue == NEWS_Topics) {
+        TopicViewController *topicVC = [[TopicViewController alloc] init];
+        topicVC.model = model;
+        [self.navigationController pushViewController:topicVC animated:YES];
+        return;
+    }
     
     if ([_model.channelID isEqualToNumber:@30001] || model.tpl.integerValue == NEWS_OnlyVideo) {
         // 打点-点击视频列表-010131
@@ -767,7 +794,8 @@
     if ([_model.channelID isEqualToNumber:@30001]) {
         type = NetServer_V3;
     } else {
-        type = NetServer_Home;
+//        type = NetServer_Home;
+        type = NetServer_API2;
     }
     [[SSHttpRequest sharedInstance] get:kHomeUrl_NewsList params:params contentType:UrlencodedType serverType:type success:^(id responseObj) {
         [SVProgressHUD dismiss];

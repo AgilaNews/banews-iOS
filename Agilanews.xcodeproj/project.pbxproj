@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5F120E3C1E0A766A00F27094 /* TopicCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F120E3B1E0A766900F27094 /* TopicCell.m */; };
+		5F120E3F1E0B7FB700F27094 /* TopicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F120E3E1E0B7FB700F27094 /* TopicViewController.m */; };
 		5F17B4581DA8A594008EBD51 /* GoogleSignIn.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5F17B4561DA8A594008EBD51 /* GoogleSignIn.bundle */; };
 		5F17B4591DA8A594008EBD51 /* GoogleSignIn.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F17B4571DA8A594008EBD51 /* GoogleSignIn.framework */; };
 		5F17B45B1DA8A5C1008EBD51 /* GoogleAppUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F17B45A1DA8A5C1008EBD51 /* GoogleAppUtilities.framework */; };
@@ -256,6 +258,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5F120E3A1E0A766900F27094 /* TopicCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopicCell.h; sourceTree = "<group>"; };
+		5F120E3B1E0A766900F27094 /* TopicCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TopicCell.m; sourceTree = "<group>"; };
+		5F120E3D1E0B7FB700F27094 /* TopicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopicViewController.h; sourceTree = "<group>"; };
+		5F120E3E1E0B7FB700F27094 /* TopicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TopicViewController.m; sourceTree = "<group>"; };
 		5F17B4561DA8A594008EBD51 /* GoogleSignIn.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = GoogleSignIn.bundle; sourceTree = "<group>"; };
 		5F17B4571DA8A594008EBD51 /* GoogleSignIn.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleSignIn.framework; sourceTree = "<group>"; };
 		5F17B45A1DA8A5C1008EBD51 /* GoogleAppUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleAppUtilities.framework; sourceTree = "<group>"; };
@@ -1323,6 +1329,8 @@
 				5FF4B78F1D38DEE400CC6704 /* GifPicCell.m */,
 				5F5342B21DBDF30E005D78F1 /* OnlyVideoCell.h */,
 				5F5342B31DBDF30E005D78F1 /* OnlyVideoCell.m */,
+				5F120E3A1E0A766900F27094 /* TopicCell.h */,
+				5F120E3B1E0A766900F27094 /* TopicCell.m */,
 			);
 			name = NewsCell;
 			sourceTree = "<group>";
@@ -1355,6 +1363,8 @@
 				5FF4B72A1D37400D00CC6704 /* HomeTableViewController.m */,
 				5F86EDEA1E03F74600F3C35B /* SearchViewController.h */,
 				5F86EDEB1E03F74700F3C35B /* SearchViewController.m */,
+				5F120E3D1E0B7FB700F27094 /* TopicViewController.h */,
+				5F120E3E1E0B7FB700F27094 /* TopicViewController.m */,
 			);
 			name = List;
 			sourceTree = "<group>";
@@ -1832,6 +1842,7 @@
 				5F6FAEAF1DF11D02006E4A1C /* UIViewController+JTNavigationExtension.m in Sources */,
 				5F907AC31DDAD9F200DD9748 /* NotificationViewController.m in Sources */,
 				5F5342C11DC32870005D78F1 /* PopTransitionAnimate.m in Sources */,
+				5F120E3F1E0B7FB700F27094 /* TopicViewController.m in Sources */,
 				5F8D85AA1D76A99700FF4019 /* WebViewJavascriptBridge.m in Sources */,
 				5FF4B6E31D362F0000CC6704 /* base64.m in Sources */,
 				5F767A831D9CE82E00822BAC /* MJPropertyKey.m in Sources */,
@@ -1855,6 +1866,7 @@
 				5FF4B6F11D372A9300CC6704 /* BaseNavigationController.m in Sources */,
 				5F17B4901DB5BEB5008EBD51 /* YTPlayerView.m in Sources */,
 				5F767A891D9CE82E00822BAC /* NSString+MJExtension.m in Sources */,
+				5F120E3C1E0A766A00F27094 /* TopicCell.m in Sources */,
 				5F17B4FF1DB9E45C008EBD51 /* LocalFavorite+CoreDataProperties.m in Sources */,
 				5F767A641D9BBD4E00822BAC /* XWDragCellCollectionView.m in Sources */,
 				5FF4B78A1D38DEA400CC6704 /* NoPicCell.m in Sources */,

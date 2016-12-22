@@ -87,6 +87,8 @@ typedef enum {
 #define kHomeUrl_NewsSearch       @"/search"
 // 热词接口
 #define kHomeUrl_NewsHotwords     @"/search/hotwords"
+// 专题详情接口
+#define kHomeUrl_TopicDetail      @"/topic/detail"
 
 
 
