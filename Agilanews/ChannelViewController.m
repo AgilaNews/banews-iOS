@@ -21,33 +21,54 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-//    self.title = @"Channels";
-    self.view.backgroundColor = SSColor(235, 235, 235);
-    self.isBackButton = YES;
+
+    self.view.backgroundColor = [UIColor whiteColor];
     self.automaticallyAdjustsScrollViewInsets = NO;
+    self.isBackButton = YES;
+    [self.backButton setImage:[UIImage imageNamed:@"icon_arrow_left_gary"] forState:UIControlStateNormal];
+    if ([self.navigationController.navigationBar respondsToSelector:@selector(setBackgroundImage:forBarMetrics:)]) {
+        NSArray *list = self.navigationController.navigationBar.subviews;
+        for (id obj in list) {
+            if ([UIDevice currentDevice].systemVersion.integerValue >= 10) {
+                UIView *view = (UIView *)obj;
+                for (id obj2 in view.subviews) {
+                    if ([obj2 isKindOfClass:[UIImageView class]]) {
+                        UIImageView *image = (UIImageView *)obj2;
+                        image.hidden = YES;
+                    }
+                }
+            } else {
+                self.navigationController.navigationBar.shadowImage = [UIImage new];
+            }
+        }
+    }
+    if ([UIDevice currentDevice].systemVersion.floatValue >= 10.0) {
+        [self.navigationController.navigationBar setBarTintColor:[UIColor whiteColor]];
+        UIView *barBgView = self.navigationController.navigationBar.subviews.firstObject;
+        for (UIView *subview in barBgView.subviews) {
+            if([subview isKindOfClass:[UIVisualEffectView class]]) {
+                subview.backgroundColor = [UIColor whiteColor];
+                [subview removeAllSubviews];
+            }
+        }
+    } else {
+        [self.navigationController.navigationBar lt_setBackgroundColor:[UIColor whiteColor]];
+    }
     
     // 打点-页面进入-011201
     [Flurry logEvent:@"Channels_Enter"];
 #if DEBUG
     [iConsole info:@"Channels_Enter",nil];
 #endif
-    
-    // 添加导航栏右侧按钮
-    _okButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    _okButton.frame = CGRectMake(0, 0, 60, 40);
-    _okButton.titleLabel.font = [UIFont systemFontOfSize:17];
-    [_okButton setTitle:@"OK" forState:UIControlStateNormal];
-    [_okButton setTitleColor:[UIColor colorWithRed:1 green:1 blue:1 alpha:.4] forState:UIControlStateDisabled];
-    [_okButton addTarget:self action:@selector(okAction) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *okItem = [[UIBarButtonItem alloc]initWithCustomView:_okButton];
-    UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-    negativeSpacer.width = -20;
-    self.navigationItem.rightBarButtonItems = @[negativeSpacer, okItem];
-    _okButton.enabled = NO;
 
-    CGFloat topInset = 64 + 25 + 20 + 16 + 32 + 25;
+    CGFloat topInset = 0;
+    if (iPhone4) {
+        topInset = 64 + 25 + 20 + 16 + 20;
+    } else {
+        topInset = 64 + 25 + 20 + 16 + 32 + 25;
+    }
     UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake(0, topInset, kScreenWidth, kScreenHeight - topInset)];
-    bgView.backgroundColor = SSColor(246, 246, 246);
+    bgView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:bgView];
     
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
@@ -88,8 +109,8 @@
     [_collectionView registerClass:[ChannelCell class] forCellWithReuseIdentifier:@"ChannelCell"];
     [self.view addSubview:_collectionView];
     
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 64 + 25, kScreenWidth, 20)];
-    titleLabel.backgroundColor = SSColor(235, 235, 235);
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, iPhone4 ? (64 + 10) : (64 + 25), kScreenWidth, 20)];
+    titleLabel.backgroundColor = [UIColor whiteColor];
     titleLabel.textAlignment = NSTextAlignmentCenter;
     titleLabel.font = [UIFont boldSystemFontOfSize:19];
     titleLabel.textColor = kBlackColor;
@@ -97,7 +118,7 @@
     [_collectionView addSubview:titleLabel];
     
     UILabel *contentLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, titleLabel.bottom + 16, kScreenWidth - 40, 32)];
-    contentLabel.backgroundColor = SSColor(235, 235, 235);
+    contentLabel.backgroundColor = [UIColor whiteColor];
     contentLabel.textAlignment = NSTextAlignmentCenter;
     contentLabel.font = [UIFont systemFontOfSize:13];
     contentLabel.textColor = SSColor(102, 102, 102);
@@ -105,10 +126,34 @@
     contentLabel.text = @"To reorder the channel，please long press and drag the following tags";
     [_collectionView addSubview:contentLabel];
     
+    // 添加OK按钮
+    _okButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    _okButton.frame = CGRectMake(15, _collectionView.height - 45 - 15, kScreenWidth - 30, 45);
+    _okButton.titleLabel.font = [UIFont systemFontOfSize:20];
+    [_okButton setBackgroundColor:kOrangeColor forState:UIControlStateNormal];
+    [_okButton setTitle:@"OK" forState:UIControlStateNormal];
+    [_okButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    _okButton.layer.cornerRadius = 4;
+    _okButton.layer.masksToBounds = YES;
+    [_okButton addTarget:self action:@selector(okAction) forControlEvents:UIControlEventTouchUpInside];
+    [_collectionView addSubview:_okButton];
+    
     if (![DEF_PERSISTENT_GET_OBJECT(SS_GuideCnlKey) isEqualToNumber:@1]) {
         [[UIApplication sharedApplication].keyWindow addSubview:[GuideChannelView sharedInstance]];
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_CleanNewChannel object:nil];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
 }
 
 - (void)dealloc

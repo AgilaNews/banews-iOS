@@ -75,13 +75,13 @@
         _isBackButton = isBackButton;
         
         // 创建返回按钮
-        UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        backButton.frame = CGRectMake(0, 0, 50, 44);
-        [backButton setImage:[UIImage imageNamed:@"icon_arrow_left"] forState:UIControlStateNormal];
-        [backButton addTarget:self action:@selector(backAction:) forControlEvents:UIControlEventTouchUpInside];
+        _backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _backButton.frame = CGRectMake(0, 0, 50, 44);
+        [_backButton setImage:[UIImage imageNamed:@"icon_arrow_left"] forState:UIControlStateNormal];
+        [_backButton addTarget:self action:@selector(backAction:) forControlEvents:UIControlEventTouchUpInside];
         
         // 设置导航栏左侧按钮
-        [self setLeftBarButtonItemWithButton:backButton andBool:isBackButton];
+        [self setLeftBarButtonItemWithButton:_backButton andBool:isBackButton];
     }
 }
 
@@ -124,8 +124,6 @@
 {
     [SVProgressHUD dismiss];
     [self.navigationController popViewControllerAnimated:YES];
-//    if (self.navigationController.viewControllers.count > 1) {
-//    }
 }
 
 #pragma mark - backAction关闭按钮点击事件

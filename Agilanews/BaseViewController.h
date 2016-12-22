@@ -10,6 +10,7 @@
 
 @interface BaseViewController : UIViewController
 
+@property (nonatomic, strong) UIButton *backButton;
 @property (nonatomic, assign) BOOL isBackButton;
 @property (nonatomic, assign) BOOL isDismissButton;
 
