@@ -17,6 +17,7 @@
 #import "FeedbackViewController.h"
 #import "ChannelViewController.h"
 #import "NotificationViewController.h"
+#import "InterestsViewController.h"
 #import "LoginView.h"
 #import "UIButton+WebCache.h"
 
@@ -135,12 +136,17 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == 0) {
-        return 4;
+        return 5;
     }
     return 2;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 6;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
     return 6;
 }
@@ -152,6 +158,13 @@
     UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.width, 1)];
     lineView.backgroundColor = SSColor_RGB(217);
     [view addSubview:lineView];
+    return view;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 6)];
+    view.backgroundColor = [UIColor whiteColor];
     return view;
 }
 
@@ -174,17 +187,21 @@
                 }
                 break;
             case 1:
+                cell.titleImageView.image = [UIImage imageNamed:@"icon_sidebar_interest"];
+                cell.titleLabel.text = @"Interests";
+                break;
+            case 2:
                 cell.titleImageView.image = [UIImage imageNamed:@"icon_sidebar_channel"];
                 cell.titleLabel.text = @"Channels";
                 if ([DEF_PERSISTENT_GET_OBJECT(kHaveNewChannel) isEqual:@1]) {
                     [self addRedPointWithLable:cell.titleLabel Index:indexPath.row];
                 }
                 break;
-            case 2:
+            case 3:
                 cell.titleImageView.image = [UIImage imageNamed:@"icon_sidebar_favorites"];
                 cell.titleLabel.text = @"Favorites";
                 break;
-            case 3:
+            case 4:
                 cell.titleImageView.image = [UIImage imageNamed:@"icon_facebook"];
                 cell.titleLabel.text = @"Follow us on Facebook";
                 break;
@@ -267,6 +284,13 @@
             }
             case 1:
             {
+                // 点击兴趣
+                InterestsViewController *interestVC = [[InterestsViewController alloc] init];
+                [homeVC.navigationController pushViewController:interestVC animated:YES];
+                break;
+            }
+            case 2:
+            {
                 // 打点-点击频道-010407
                 [Flurry logEvent:@"Menu_Channels_Click"];
 #if DEBUG
@@ -277,7 +301,7 @@
                 [homeVC.navigationController pushViewController:channelVC animated:YES];
                 break;
             }
-            case 2:
+            case 3:
             {
                 // 打点-点击收藏-010403
                 [Flurry logEvent:@"Info_Icon_Click"];
@@ -289,13 +313,8 @@
                 [homeVC.navigationController pushViewController:favoritesVC animated:YES];
                 break;
             }
-            case 3:
+            case 4:
             {
-//                // 打点-点击反馈-010404
-//                [Flurry logEvent:@"Menu_FeedbackButton_Click"];
-//#if DEBUG
-//                [iConsole info:@"Menu_FeedbackButton_Click",nil];
-//#endif
                 // 点击Follow
                 NSURL *facebookURL = [NSURL URLWithString:@"fb://profile/1037705142944222"];
                 if ([[UIApplication sharedApplication] canOpenURL:facebookURL]) {

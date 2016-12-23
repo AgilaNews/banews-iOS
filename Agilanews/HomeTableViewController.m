@@ -30,7 +30,9 @@
 #import "TopCell.h"
 #import "DislikeView.h"
 #import "SearchBar.h"
+#import "InterestCell.h"
 #import "TopicViewController.h"
+#import "InterestsViewController.h"
 
 #define titleFont_Normal        [UIFont systemFontOfSize:16]
 #define titleFont_ExtraLarge    [UIFont systemFontOfSize:20]
@@ -151,6 +153,8 @@
             }
             if ([[NSDate date] timeIntervalSince1970] - refreshTime > 3600) {
                 [self requestDataWithChannelID:_model.channelID isLater:YES isShowHUD:NO isShowBanner:NO];
+            } else {
+                [self.tableView setContentOffset:CGPointMake(self.tableView.contentOffset.x, 44) animated:NO];
             }
         }
     }
@@ -285,6 +289,10 @@
         case NEWS_Topics:
         {
             return imageHeight + 18 + 15;
+        }
+        case NEWS_Interest:
+        {
+            return 44;
         }
         default:
             return 50;
@@ -484,6 +492,17 @@
                 [cell setNeedsLayout];
                 return cell;
             }
+            case NEWS_Interest:
+            {
+                // 兴趣cell
+                static NSString *cellID = @"InterestCellID";
+                InterestCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+                if (cell == nil) {
+                    cell = [[InterestCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+                }
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                return cell;
+            }
             default:
                 break;
         }
@@ -523,7 +542,16 @@
         // 点击图片频道和GIF频道
         return;
     }
+    
     NewsModel *model = _dataList[indexPath.row];
+    // 点击兴趣
+    if (model.tpl.integerValue == NEWS_Interest) {
+        InterestsViewController *interestsVC = [[InterestsViewController alloc] init];
+        interestsVC.isSkip = YES;
+        [self.navigationController pushViewController:interestsVC animated:YES];
+        return;
+    }
+    
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     if (!model.news_id.length) {
         return;

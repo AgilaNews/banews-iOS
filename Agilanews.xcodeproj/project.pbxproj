@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		5F120E3C1E0A766A00F27094 /* TopicCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F120E3B1E0A766900F27094 /* TopicCell.m */; };
 		5F120E3F1E0B7FB700F27094 /* TopicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F120E3E1E0B7FB700F27094 /* TopicViewController.m */; };
+		5F120E421E0BACAA00F27094 /* InterestsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F120E411E0BACAA00F27094 /* InterestsViewController.m */; };
+		5F120E451E0BEF1A00F27094 /* InterestCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F120E441E0BEF1A00F27094 /* InterestCell.m */; };
 		5F17B4581DA8A594008EBD51 /* GoogleSignIn.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5F17B4561DA8A594008EBD51 /* GoogleSignIn.bundle */; };
 		5F17B4591DA8A594008EBD51 /* GoogleSignIn.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F17B4571DA8A594008EBD51 /* GoogleSignIn.framework */; };
 		5F17B45B1DA8A5C1008EBD51 /* GoogleAppUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F17B45A1DA8A5C1008EBD51 /* GoogleAppUtilities.framework */; };
@@ -262,6 +264,10 @@
 		5F120E3B1E0A766900F27094 /* TopicCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TopicCell.m; sourceTree = "<group>"; };
 		5F120E3D1E0B7FB700F27094 /* TopicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopicViewController.h; sourceTree = "<group>"; };
 		5F120E3E1E0B7FB700F27094 /* TopicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TopicViewController.m; sourceTree = "<group>"; };
+		5F120E401E0BACAA00F27094 /* InterestsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InterestsViewController.h; sourceTree = "<group>"; };
+		5F120E411E0BACAA00F27094 /* InterestsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InterestsViewController.m; sourceTree = "<group>"; };
+		5F120E431E0BEF1A00F27094 /* InterestCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InterestCell.h; sourceTree = "<group>"; };
+		5F120E441E0BEF1A00F27094 /* InterestCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InterestCell.m; sourceTree = "<group>"; };
 		5F17B4561DA8A594008EBD51 /* GoogleSignIn.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = GoogleSignIn.bundle; sourceTree = "<group>"; };
 		5F17B4571DA8A594008EBD51 /* GoogleSignIn.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleSignIn.framework; sourceTree = "<group>"; };
 		5F17B45A1DA8A5C1008EBD51 /* GoogleAppUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleAppUtilities.framework; sourceTree = "<group>"; };
@@ -1123,6 +1129,8 @@
 				5F907AC21DDAD9F200DD9748 /* NotificationViewController.m */,
 				5F907ACA1DDB0CB200DD9748 /* NotifDetailViewController.h */,
 				5F907ACB1DDB0CB200DD9748 /* NotifDetailViewController.m */,
+				5F120E401E0BACAA00F27094 /* InterestsViewController.h */,
+				5F120E411E0BACAA00F27094 /* InterestsViewController.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -1308,6 +1316,8 @@
 				5F86EDD41DFABC1A00F3C35B /* DislikeView.m */,
 				5F86EDE31E039B1200F3C35B /* SearchBar.h */,
 				5F86EDE41E039B1200F3C35B /* SearchBar.m */,
+				5F120E431E0BEF1A00F27094 /* InterestCell.h */,
+				5F120E441E0BEF1A00F27094 /* InterestCell.m */,
 			);
 			name = List;
 			sourceTree = "<group>";
@@ -1776,6 +1786,7 @@
 				5FF4B7B61D38F7B200CC6704 /* ViewController+MASAdditions.m in Sources */,
 				5F42BFB81D34E2F000B89651 /* AppDelegate.m in Sources */,
 				5F8D85AB1D76A99700FF4019 /* WebViewJavascriptBridge_JS.m in Sources */,
+				5F120E421E0BACAA00F27094 /* InterestsViewController.m in Sources */,
 				5F42C0851D34E41D00B89651 /* SDWebImageCompat.m in Sources */,
 				5F42C08D1D34E41D00B89651 /* UIImage+MultiFormat.m in Sources */,
 				5F42BFF61D34E3D500B89651 /* AFNetworkReachabilityManager.m in Sources */,
@@ -1811,6 +1822,7 @@
 				5FF4B7751D37BD2C00CC6704 /* UIButton+UhouAdditions.m in Sources */,
 				5F6462771D4715DB008EEDEC /* RecommendedView.m in Sources */,
 				5FF4B72B1D37400D00CC6704 /* HomeTableViewController.m in Sources */,
+				5F120E451E0BEF1A00F27094 /* InterestCell.m in Sources */,
 				5FF4B7D81D3A174900CC6704 /* UIScrollView+MJRefresh.m in Sources */,
 				5FF4B7AF1D38F7B200CC6704 /* MASConstraintMaker.m in Sources */,
 				5F42C09E1D34E42A00B89651 /* SVProgressAnimatedView.m in Sources */,
@@ -2033,7 +2045,6 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Agila.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: zhendong Wang (4PX74E3WFB)";
@@ -2083,7 +2094,6 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Agila.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: zhendong Wang (CA8M4AL9S7)";
@@ -2173,7 +2183,6 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Agila.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: zhendong Wang (CA8M4AL9S7)";

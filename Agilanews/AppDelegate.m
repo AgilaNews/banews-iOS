@@ -60,32 +60,32 @@
     _window.rootViewController = navCtrl;
     
 
-    NSString *launchImage = nil;
-    if (iPhone4) {
-        launchImage = @"LaunchImage-700";
-    } else if (iPhone5) {
-        launchImage = @"LaunchImage-700-568h";
-    } else if (iPhone6) {
-        launchImage = @"LaunchImage-800-667h";
-    } else if (iPhone6Plus) {
-        launchImage = @"LaunchImage-800-Portrait-736h";
-    }
-    UIImageView *launchView = [[UIImageView alloc] initWithFrame:self.window.bounds];
-    launchView.image = [UIImage imageNamed:launchImage];
-    launchView.contentMode = UIViewContentModeScaleAspectFit;
-    [self.window addSubview:launchView];
-    SnowView *snowView = [[SnowView alloc] initWithFrame:self.window.bounds];
-    [launchView addSubview:snowView];
-    [snowView show];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [UIView animateWithDuration:.5 animations:^{
-            launchView.alpha = 0;
-            snowView.alpha = 0;
-        } completion:^(BOOL finished) {
-            [snowView removeFromSuperview];
-            [launchView removeFromSuperview];
-        }];
-    });
+//    NSString *launchImage = nil;
+//    if (iPhone4) {
+//        launchImage = @"LaunchImage-700";
+//    } else if (iPhone5) {
+//        launchImage = @"LaunchImage-700-568h";
+//    } else if (iPhone6) {
+//        launchImage = @"LaunchImage-800-667h";
+//    } else if (iPhone6Plus) {
+//        launchImage = @"LaunchImage-800-Portrait-736h";
+//    }
+//    UIImageView *launchView = [[UIImageView alloc] initWithFrame:self.window.bounds];
+//    launchView.image = [UIImage imageNamed:launchImage];
+//    launchView.contentMode = UIViewContentModeScaleAspectFit;
+//    [self.window addSubview:launchView];
+//    SnowView *snowView = [[SnowView alloc] initWithFrame:self.window.bounds];
+//    [launchView addSubview:snowView];
+//    [snowView show];
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        [UIView animateWithDuration:.5 animations:^{
+//            launchView.alpha = 0;
+//            snowView.alpha = 0;
+//        } completion:^(BOOL finished) {
+//            [snowView removeFromSuperview];
+//            [launchView removeFromSuperview];
+//        }];
+//    });
     
     
     // 读取用户登录信息/配置信息
@@ -112,7 +112,7 @@
 //    }
     _eventArray = [NSMutableArray array];
     //设置启动页面时间
-//    [NSThread sleepForTimeInterval:2.0];
+    [NSThread sleepForTimeInterval:2.0];
     return YES;
 }
 
