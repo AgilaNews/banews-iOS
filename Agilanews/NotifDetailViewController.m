@@ -74,9 +74,9 @@
 
     // 打点-页面进入-011501
     [Flurry logEvent:@"ReplyComments_Enter"];
-#if DEBUG
-    [iConsole info:@"ReplyComments_Enter",nil];
-#endif
+//#if DEBUG
+//    [iConsole info:@"ReplyComments_Enter",nil];
+//#endif
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -106,9 +106,9 @@
 {
     // 打点-页面进入-011501
     [Flurry logEvent:@"ReplyComments_BackButton_Click"];
-#if DEBUG
-    [iConsole info:@"ReplyComments_BackButton_Click",nil];
-#endif
+//#if DEBUG
+//    [iConsole info:@"ReplyComments_BackButton_Click",nil];
+//#endif
 }
 
 #pragma mark - Network
@@ -142,9 +142,9 @@
                                    [NetType getNetType], @"network",
                                    nil];
     [Flurry logEvent:@"ReplyComments_Like_Click" withParameters:articleParams];
-#if DEBUG
-    [iConsole info:[NSString stringWithFormat:@"ReplyComments_Like_Click:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//    [iConsole info:[NSString stringWithFormat:@"ReplyComments_Like_Click:%@",articleParams],nil];
+//#endif
     if (button.selected == YES) {
         return;
     }
@@ -223,9 +223,9 @@
                                        _model.related_news.news_id, @"article",
                                        nil];
         [Flurry logEvent:@"Article_Comments_Send_Y" withParameters:articleParams];
-#if DEBUG
-        [iConsole info:[NSString stringWithFormat:@"Article_Comments_Send_Y:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//        [iConsole info:[NSString stringWithFormat:@"Article_Comments_Send_Y:%@",articleParams],nil];
+//#endif
     } failure:^(NSError *error) {
         _commentTextView.sendButton.enabled = YES;
         // 打点-评论失败-010211
@@ -235,9 +235,9 @@
                                        _model.related_news.news_id, @"article",
                                        nil];
         [Flurry logEvent:@"Article_Comments_Send_N" withParameters:articleParams];
-#if DEBUG
-        [iConsole info:[NSString stringWithFormat:@"Article_Comments_Send_N:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//        [iConsole info:[NSString stringWithFormat:@"Article_Comments_Send_N:%@",articleParams],nil];
+//#endif
     } isShowHUD:YES];
 }
 
@@ -258,9 +258,9 @@
                                            [NetType getNetType], @"network",
                                            nil];
             [Flurry logEvent:@"ReplyComments_Reply_Click" withParameters:articleParams];
-#if DEBUG
-            [iConsole info:[NSString stringWithFormat:@"ReplyComments_Reply_Click:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//            [iConsole info:[NSString stringWithFormat:@"ReplyComments_Reply_Click:%@",articleParams],nil];
+//#endif
         }
     } else {
         _commentID = nil;
@@ -272,9 +272,9 @@
                                        [NetType getNetType], @"network",
                                        nil];
         [Flurry logEvent:@"ReplyComments_Comment_Click" withParameters:articleParams];
-#if DEBUG
-        [iConsole info:[NSString stringWithFormat:@"ReplyComments_Comment_Click:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//        [iConsole info:[NSString stringWithFormat:@"ReplyComments_Comment_Click:%@",articleParams],nil];
+//#endif
     }
     // 评论
     _commentTextView = [[CommentTextView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
@@ -318,9 +318,9 @@
                                    _model.related_news.news_id, @"article",
                                    nil];
     [Flurry logEvent:@"Article_Comments_Send" withParameters:articleParams];
-#if DEBUG
-    [iConsole info:[NSString stringWithFormat:@"Article_Comments_Send:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//    [iConsole info:[NSString stringWithFormat:@"Article_Comments_Send:%@",articleParams],nil];
+//#endif
     [self postComment];
 }
 
@@ -557,9 +557,9 @@
                                        [NetType getNetType], @"network",
                                        nil];
         [Flurry logEvent:@"ReplyComments_Article_Click" withParameters:articleParams];
-#if DEBUG
-        [iConsole info:[NSString stringWithFormat:@"ReplyComments_Article_Click:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//        [iConsole info:[NSString stringWithFormat:@"ReplyComments_Article_Click:%@",articleParams],nil];
+//#endif
         NewsModel *model = _model.related_news;
         if (model.tpl.integerValue == NEWS_OnlyVideo) {
             VideoDetailViewController *videoDetailVC = [[VideoDetailViewController alloc] init];

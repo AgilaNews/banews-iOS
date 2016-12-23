@@ -105,14 +105,14 @@
                                            nil];
             if ([channelName isEqualToString:@"Video"]) {
                 [Flurry logEvent:@"Video_Comment_Input" withParameters:articleParams];
-#if DEBUG
-                [iConsole info:[NSString stringWithFormat:@"Video_Comment_Input:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//                [iConsole info:[NSString stringWithFormat:@"Video_Comment_Input:%@",articleParams],nil];
+//#endif
             } else {
                 [Flurry logEvent:@"Article_Comments_Input" withParameters:articleParams];
-#if DEBUG
-                [iConsole info:[NSString stringWithFormat:@"Article_Comments_Input:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//                [iConsole info:[NSString stringWithFormat:@"Article_Comments_Input:%@",articleParams],nil];
+//#endif
             }
         }
     }

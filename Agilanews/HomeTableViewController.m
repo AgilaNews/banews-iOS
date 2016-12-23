@@ -530,9 +530,9 @@
                                        [NetType getNetType], @"network",
                                        nil];
         [Flurry logEvent:@"Home_LocationRemindBar_Click" withParameters:articleParams];
-#if DEBUG
-        [iConsole info:[NSString stringWithFormat:@"Home_LocationRemindBar_Click:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//        [iConsole info:[NSString stringWithFormat:@"Home_LocationRemindBar_Click:%@",articleParams],nil];
+//#endif
         [self.tableView setContentOffset:self.tableView.contentOffset animated:NO];
         _isShowBanner = YES;
         [self.tableView.header beginRefreshing];
@@ -608,9 +608,9 @@
                                        [NetType getNetType], @"network",
                                        nil];
         [Flurry logEvent:@"Home_Videolist_Click" withParameters:articleParams];
-#if DEBUG
-        [iConsole info:[NSString stringWithFormat:@"Home_Videolist_Click:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//        [iConsole info:[NSString stringWithFormat:@"Home_Videolist_Click:%@",articleParams],nil];
+//#endif
         [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_PausedVideo object:model.news_id];
         VideoDetailViewController *videoDetailVC = [[VideoDetailViewController alloc] init];
         videoDetailVC.model = model;
@@ -629,9 +629,9 @@
                                    _model.name, @"channel",
                                    nil];
     [Flurry logEvent:@"Home_List_Click" withParameters:articleParams];
-#if DEBUG
-    [iConsole info:[NSString stringWithFormat:@"Home_List_Click:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//    [iConsole info:[NSString stringWithFormat:@"Home_List_Click:%@",articleParams],nil];
+//#endif
     [appDelegate.checkDic setObject:@1 forKey:model.news_id];
     
     if (model.tpl.integerValue == NEWS_HotVideo) {
@@ -697,9 +697,9 @@
                                        _model.name, @"channel",
                                        nil];
         [Flurry logEvent:@"Home_List_UpScroll" withParameters:articleParams];
-#if DEBUG
-        [iConsole info:[NSString stringWithFormat:@"Home_List_UpScroll:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//        [iConsole info:[NSString stringWithFormat:@"Home_List_UpScroll:%@",articleParams],nil];
+//#endif
     }
     if (!decelerate) {
         // 下拉出现底部返回视图
@@ -881,9 +881,9 @@
                                            _model.name, @"channel",
                                            nil];
             [Flurry logEvent:@"Home_List_DownRefresh_Y" withParameters:articleParams];
-#if DEBUG
-            [iConsole info:[NSString stringWithFormat:@"Home_List_DownRefresh_Y:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//            [iConsole info:[NSString stringWithFormat:@"Home_List_DownRefresh_Y:%@",articleParams],nil];
+//#endif
             NewsModel *firstModel = _dataList.firstObject;
             long long refreshTime = 0;
             if (firstModel && [firstModel isKindOfClass:[NewsModel class]]) {
@@ -916,9 +916,9 @@
                                            _model.name, @"channel",
                                            nil];
             [Flurry logEvent:@"Home_List_UpLoad_Y" withParameters:articleParams];
-#if DEBUG
-            [iConsole info:[NSString stringWithFormat:@"Home_List_UpLoad_Y:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//            [iConsole info:[NSString stringWithFormat:@"Home_List_UpLoad_Y:%@",articleParams],nil];
+//#endif
             [_dataList addObjectsFromArray:models];
             [weakSelf tableViewDidFinishTriggerHeader:NO reload:YES];
         }
@@ -940,9 +940,9 @@
                                            _model.name, @"channel",
                                            nil];
             [Flurry logEvent:@"Home_List_DownRefresh_N" withParameters:articleParams];
-#if DEBUG
-            [iConsole info:[NSString stringWithFormat:@"Home_List_DownRefresh_N:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//            [iConsole info:[NSString stringWithFormat:@"Home_List_DownRefresh_N:%@",articleParams],nil];
+//#endif
             [weakSelf tableViewDidFinishTriggerHeader:YES reload:NO];
         } else {
             // 打点-上拉加载失败-010111
@@ -951,17 +951,17 @@
                                            _model.name, @"channel",
                                            nil];
             [Flurry logEvent:@"Home_List_UpLoad_N" withParameters:articleParams];
-#if DEBUG
-            [iConsole info:[NSString stringWithFormat:@"Home_List_UpLoad_N:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//            [iConsole info:[NSString stringWithFormat:@"Home_List_UpLoad_N:%@",articleParams],nil];
+//#endif
             [weakSelf tableViewDidFinishTriggerHeader:NO reload:NO];
         }
         if (_dataList.count <= 0) {
             // 打点-页面进入-011001
             [Flurry logEvent:@"NetFailure_Enter"];
-#if DEBUG
-            [iConsole info:@"NetFailure_Enter",nil];
-#endif
+//#if DEBUG
+//            [iConsole info:@"NetFailure_Enter",nil];
+//#endif
             weakSelf.showTableBlankView = YES;
             weakSelf.blankView.userInteractionEnabled = YES;
             UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchFailureView)];
@@ -990,9 +990,9 @@
                                    _model.name, @"channel",
                                    nil];
     [Flurry logEvent:@"Home_List_DownRefresh" withParameters:articleParams];
-#if DEBUG
-    [iConsole info:[NSString stringWithFormat:@"Home_List_DownRefresh:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//    [iConsole info:[NSString stringWithFormat:@"Home_List_DownRefresh:%@",articleParams],nil];
+//#endif
     [self requestDataWithChannelID:_model.channelID isLater:YES isShowHUD:YES isShowBanner:_isShowBanner];
 }
 
@@ -1021,9 +1021,9 @@
                                    _model.name, @"channel",
                                    nil];
     [Flurry logEvent:@"Home_List_UpLoad" withParameters:articleParams];
-#if DEBUG
-    [iConsole info:[NSString stringWithFormat:@"Home_List_UpLoad:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//    [iConsole info:[NSString stringWithFormat:@"Home_List_UpLoad:%@",articleParams],nil];
+//#endif
     [self requestDataWithChannelID:_model.channelID isLater:NO isShowHUD:YES isShowBanner:NO];
 }
 
@@ -1071,9 +1071,9 @@
                                    newsModel.news_id, @"article",
                                    nil];
     [Flurry logEvent:@"Home_List_Like_Click" withParameters:articleParams];
-#if DEBUG
-    [iConsole info:[NSString stringWithFormat:@"Home_List_Like_Click:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//    [iConsole info:[NSString stringWithFormat:@"Home_List_Like_Click:%@",articleParams],nil];
+//#endif
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     if (button.selected) {
         if (button.titleLabel.text.intValue > 1) {
@@ -1180,9 +1180,9 @@
                                    newsModel.news_id, @"article",
                                    nil];
     [Flurry logEvent:@"Home_List_Share_FacebookClick" withParameters:articleParams];
-#if DEBUG
-    [iConsole info:[NSString stringWithFormat:@"Home_List_Share_FacebookClick:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//    [iConsole info:[NSString stringWithFormat:@"Home_List_Share_FacebookClick:%@",articleParams],nil];
+//#endif
 
     FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
     NSString *shareString = newsModel.share_url;
@@ -1226,9 +1226,9 @@
                                        newsModel.news_id, @"article",
                                        nil];
         [Flurry logEvent:@"Home_List_Share_FacebookClick" withParameters:articleParams];
-#if DEBUG
-        [iConsole info:[NSString stringWithFormat:@"Home_List_Share_FacebookClick:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//        [iConsole info:[NSString stringWithFormat:@"Home_List_Share_FacebookClick:%@",articleParams],nil];
+//#endif
 
         FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
         NSString *shareString = newsModel.share_url;
@@ -1251,9 +1251,9 @@
                                        newsModel.news_id, @"article",
                                        nil];
         [Flurry logEvent:@"Home_List_Share_TwitterClick" withParameters:articleParams];
-#if DEBUG
-        [iConsole info:[NSString stringWithFormat:@"Home_List_Share_TwitterClick:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//        [iConsole info:[NSString stringWithFormat:@"Home_List_Share_TwitterClick:%@",articleParams],nil];
+//#endif
 
         NSString *shareString = newsModel.share_url;
         shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"twitter"];
@@ -1285,9 +1285,9 @@
                                        newsModel.news_id, @"article",
                                        nil];
         [Flurry logEvent:@"Home_List_Share_Google+Click" withParameters:articleParams];
-#if DEBUG
-        [iConsole info:[NSString stringWithFormat:@"Home_List_Share_Google+Click:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//        [iConsole info:[NSString stringWithFormat:@"Home_List_Share_Google+Click:%@",articleParams],nil];
+//#endif
 
         NSString *shareString = newsModel.share_url;
         shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"googleplus"];

@@ -70,9 +70,9 @@
     }
     // 打点-页面进入-011401
     [Flurry logEvent:@"Notification_Enter"];
-#if DEBUG
-    [iConsole info:@"Notification_Enter",nil];
-#endif
+//#if DEBUG
+//    [iConsole info:@"Notification_Enter",nil];
+//#endif
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -108,9 +108,9 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     // 打点-点击返回-011403
     [Flurry logEvent:@"Notification_BackButton_Click"];
-#if DEBUG
-    [iConsole info:@"Notification_BackButton_Click",nil];
-#endif
+//#if DEBUG
+//    [iConsole info:@"Notification_BackButton_Click",nil];
+//#endif
 }
 
 - (void)showLoginView
@@ -203,9 +203,9 @@
 {
     // 打点-点击评论通知消息-011402
     [Flurry logEvent:@"Notification_ReplyComment_Click"];
-#if DEBUG
-    [iConsole info:@"Notification_ReplyComment_Click",nil];
-#endif
+//#if DEBUG
+//    [iConsole info:@"Notification_ReplyComment_Click",nil];
+//#endif
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NotificationModel *model = _dataList[indexPath.row];
     model.status = @1;

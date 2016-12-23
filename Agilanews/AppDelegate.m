@@ -44,13 +44,13 @@
     [AppsFlyerTracker sharedTracker].appleAppID = @"1146695204";
     // 注册ShareSDK
     [self registerShareSDK];
+    _window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
 #if DEBUG
-    _window = [[iConsoleWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+//    _window = [[iConsoleWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     _window.backgroundColor = SSColor(0, 0, 0);
-    [iConsole sharedConsole].delegate = self;
+//    [iConsole sharedConsole].delegate = self;
 //    [iConsole sharedConsole].logSubmissionEmail = @"1164063991@qq.com";
 #else
-    _window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     _window.backgroundColor = SSColor(255, 255, 255);
 #endif
     [_window makeKeyAndVisible];
@@ -137,9 +137,9 @@
                                    homeVC.segmentVC.titleArray[index], @"channel",
                                    nil];
     [Flurry logEvent:@"App_Exit" withParameters:articleParams];
-    #if DEBUG
-    [iConsole info:[NSString stringWithFormat:@"App_Exit:%@",articleParams],nil];
-    #endif
+//    #if DEBUG
+//    [iConsole info:[NSString stringWithFormat:@"App_Exit:%@",articleParams],nil];
+//    #endif
     // 服务端打点上报
     [self serverLogWithEventArray:_eventArray];
     
@@ -220,7 +220,7 @@
                                    nil];
     [Flurry logEvent:@"App_Lanch" withParameters:articleParams];
 #if DEBUG
-    [iConsole info:[NSString stringWithFormat:@"App_Lanch:%@",articleParams],nil];
+//    [iConsole info:[NSString stringWithFormat:@"App_Lanch:%@",articleParams],nil];
     if (!isFirst) {
         [SVProgressHUD showInfoWithStatus:@"沙盒环境模式"];
     }
@@ -780,16 +780,16 @@
     UIAlertAction *noAction = [UIAlertAction actionWithTitle:@"No,Thanks" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         // 打点-点击无图模式提醒对话框No选项-010011
         [Flurry logEvent:@"LowDataTips_No_Click"];
-#if DEBUG
-        [iConsole info:@"LowDataTips_No_Click",nil];
-#endif
+//#if DEBUG
+//        [iConsole info:@"LowDataTips_No_Click",nil];
+//#endif
     }];
     UIAlertAction *yesAction = [UIAlertAction actionWithTitle:@"Yes,Please" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
         // 打点-点击无图模式提醒对话框中YES选项-010010
         [Flurry logEvent:@"LowDataTips_YES_Click"];
-#if DEBUG
-        [iConsole info:@"LowDataTips_YES_Click",nil];
-#endif
+//#if DEBUG
+//        [iConsole info:@"LowDataTips_YES_Click",nil];
+//#endif
         DEF_PERSISTENT_SET_OBJECT(SS_textOnlyMode, @1);
         [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_TextOnly_ON object:nil];
     }];
@@ -866,19 +866,19 @@
     } isShowHUD:NO];
 }
 
-- (void)handleConsoleCommand:(NSString *)command
-{
-    if ([command isEqualToString:@"version"])
-    {
-        [iConsole info:@"%@ version %@",
-         [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleName"],
-         [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]];
-    }
-    else
-    {
-        [iConsole error:@"unrecognised command, try 'version' instead"];
-    }
-}
+//- (void)handleConsoleCommand:(NSString *)command
+//{
+//    if ([command isEqualToString:@"version"])
+//    {
+//        [iConsole info:@"%@ version %@",
+//         [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleName"],
+//         [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]];
+//    }
+//    else
+//    {
+//        [iConsole error:@"unrecognised command, try 'version' instead"];
+//    }
+//}
 #pragma mark - 缓存管理
 // 内存警告
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application

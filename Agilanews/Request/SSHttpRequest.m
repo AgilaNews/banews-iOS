@@ -231,9 +231,9 @@ static SSHttpRequest *_manager = nil;
             }
             // 打点-页面进入-011001
             [Flurry logEvent:@"NetFailure_Enter"];
-#if DEBUG
-            [iConsole info:@"NetFailure_Enter",nil];
-#endif
+//#if DEBUG
+//            [iConsole info:@"NetFailure_Enter",nil];
+//#endif
             if ([AFNetworkReachabilityManager sharedManager].networkReachabilityStatus == AFNetworkReachabilityStatusNotReachable)
             {
                 [SVProgressHUD showErrorWithStatus:@"Please check your network connection"];
@@ -456,9 +456,9 @@ static SSHttpRequest *_manager = nil;
             }
             // 打点-页面进入-011001
             [Flurry logEvent:@"NetFailure_Enter"];
-#if DEBUG
-            [iConsole info:@"NetFailure_Enter",nil];
-#endif
+//#if DEBUG
+//            [iConsole info:@"NetFailure_Enter",nil];
+//#endif
             if ([AFNetworkReachabilityManager sharedManager].networkReachabilityStatus == AFNetworkReachabilityStatusNotReachable)
             {
                 [SVProgressHUD showErrorWithStatus:@"Please check your network connection"];
@@ -637,9 +637,9 @@ static SSHttpRequest *_manager = nil;
             }
             // 打点-页面进入-011001
             [Flurry logEvent:@"NetFailure_Enter"];
-#if DEBUG
-            [iConsole info:@"NetFailure_Enter",nil];
-#endif
+//#if DEBUG
+//            [iConsole info:@"NetFailure_Enter",nil];
+//#endif
             if ([AFNetworkReachabilityManager sharedManager].networkReachabilityStatus == AFNetworkReachabilityStatusNotReachable)
             {
                 [SVProgressHUD showErrorWithStatus:@"Please check your network connection"];

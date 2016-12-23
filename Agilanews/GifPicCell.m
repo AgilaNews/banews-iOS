@@ -393,9 +393,9 @@
                                    [NetType getNetType], @"network",
                                    nil];
     [Flurry logEvent:@"Home_List_Play_Click" withParameters:articleParams];
-#if DEBUG
-    [iConsole info:[NSString stringWithFormat:@"Home_List_Play_Click:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//    [iConsole info:[NSString stringWithFormat:@"Home_List_Play_Click:%@",articleParams],nil];
+//#endif
     [self createImageFolderAtPath];
     self.playButton.hidden = YES;
     VideoModel *videoModel = _model.videos.firstObject;
@@ -432,9 +432,9 @@
                                                [NetType getNetType], @"network",
                                                nil];
                 [Flurry logEvent:@"Home_List_Play_Failure" withParameters:articleParams];
-#if DEBUG
-                [iConsole info:[NSString stringWithFormat:@"Home_List_Play_Failure:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//                [iConsole info:[NSString stringWithFormat:@"Home_List_Play_Failure:%@",articleParams],nil];
+//#endif
                 if ([AFNetworkReachabilityManager sharedManager].networkReachabilityStatus == AFNetworkReachabilityStatusNotReachable)
                 {
                     [SVProgressHUD showErrorWithStatus:@"Please check your network connection"];
@@ -499,9 +499,9 @@
                                    [NetType getNetType], @"network",
                                    nil];
     [Flurry logEvent:@"Home_List_Play_End" withParameters:articleParams];
-#if DEBUG
-    [iConsole info:[NSString stringWithFormat:@"Home_List_Play_End:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//    [iConsole info:[NSString stringWithFormat:@"Home_List_Play_End:%@",articleParams],nil];
+//#endif
     [self.playerLayer removeFromSuperlayer];
     _isPlay = NO;
 //    [self removeObserverFromPlayerItem:self.player.currentItem];

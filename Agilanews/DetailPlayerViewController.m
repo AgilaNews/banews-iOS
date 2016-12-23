@@ -139,9 +139,9 @@
                                        [NetType getNetType], @"network",
                                        nil];
         [Flurry logEvent:@"Article_Play_Failure" withParameters:articleParams];
-#if DEBUG
-        [iConsole info:[NSString stringWithFormat:@"Article_Play_Failure:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//        [iConsole info:[NSString stringWithFormat:@"Article_Play_Failure:%@",articleParams],nil];
+//#endif
     }
 }
 

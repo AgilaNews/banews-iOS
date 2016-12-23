@@ -66,9 +66,9 @@
 {
     // 打点-点击提交-010804
     [Flurry logEvent:@"FeedB_Submit_Click"];
-#if DEBUG
-    [iConsole info:@"FeedB_Submit_Click",nil];
-#endif
+//#if DEBUG
+//    [iConsole info:@"FeedB_Submit_Click",nil];
+//#endif
     [SVProgressHUD show];
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setObject:_textView.feedbackTextView.text forKey:@"fb_detail"];
@@ -82,9 +82,9 @@
         } else {
             // 打点-提交失败-010806
             [Flurry logEvent:@"FeedB_Submit_Click_N"];
-#if DEBUG
-            [iConsole info:@"FeedB_Submit_Click_N",nil];
-#endif
+//#if DEBUG
+//            [iConsole info:@"FeedB_Submit_Click_N",nil];
+//#endif
             [SVProgressHUD showErrorWithStatus:@"Please input right email address"];
             return;
         }
@@ -92,17 +92,17 @@
     [[SSHttpRequest sharedInstance] post:kHomeUrl_Feedback params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
         // 打点-提交成功-010805
         [Flurry logEvent:@"FeedB_Submit_Click_Y"];
-#if DEBUG
-        [iConsole info:@"FeedB_Submit_Click_Y",nil];
-#endif
+//#if DEBUG
+//        [iConsole info:@"FeedB_Submit_Click_Y",nil];
+//#endif
         [SVProgressHUD showSuccessWithStatus:@"Successful"];
         [self.navigationController popViewControllerAnimated:YES];
     } failure:^(NSError *error) {
         // 打点-提交失败-010806
         [Flurry logEvent:@"FeedB_Submit_Click_N"];
-#if DEBUG
-        [iConsole info:@"FeedB_Submit_Click_N",nil];
-#endif
+//#if DEBUG
+//        [iConsole info:@"FeedB_Submit_Click_N",nil];
+//#endif
     } isShowHUD:YES];
 }
 
@@ -110,9 +110,9 @@
 {
     // 打点-点击反馈页返回按钮-010807
     [Flurry logEvent:@"FeedB_BackButton_Click"];
-#if DEBUG
-    [iConsole info:@"FeedB_BackButton_Click",nil];
-#endif
+//#if DEBUG
+//    [iConsole info:@"FeedB_BackButton_Click",nil];
+//#endif
     [super backAction:button];
 }
 

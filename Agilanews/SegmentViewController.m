@@ -229,9 +229,9 @@
                                    nil];
     // mor(频道名称)_Enter
     [Flurry logEvent:[NSString stringWithFormat:@"%@_Enter",channelName] withParameters:articleParams];
-#if DEBUG
-    [iConsole info:[NSString stringWithFormat:@"%@_Enter:%@",channelName,articleParams],nil];
-#endif
+//#if DEBUG
+//    [iConsole info:[NSString stringWithFormat:@"%@_Enter:%@",channelName,articleParams],nil];
+//#endif
 }
 
 - (void)pullDownAction:(UIButton *)button

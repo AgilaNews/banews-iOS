@@ -110,9 +110,9 @@
 
     // 打点-页面进入-010501
     [Flurry logEvent:@"Favor_Enter"];
-#if DEBUG
-    [iConsole info:@"Favor_Enter",nil];
-#endif
+//#if DEBUG
+//    [iConsole info:@"Favor_Enter",nil];
+//#endif
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     if (appDelegate.model) {
         _tableView.tableHeaderView = nil;
@@ -223,9 +223,9 @@
 {
     // 打点-点击删除-010504
     [Flurry logEvent:@"Favor_DelButton_Click"];
-#if DEBUG
-    [iConsole info:@"Favor_DelButton_Click",nil];
-#endif
+//#if DEBUG
+//    [iConsole info:@"Favor_DelButton_Click",nil];
+//#endif
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     if (appDelegate.model) {
         __weak typeof(self) weakSelf = self;
@@ -240,9 +240,9 @@
         [[SSHttpRequest sharedInstance] DELETE:kHomeUrl_Collect params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
             // 打点-删除成功-010505
             [Flurry logEvent:@"Favor_DelButton_Click_Y"];
-#if DEBUG
-            [iConsole info:@"Favor_DelButton_Click_Y",nil];
-#endif
+//#if DEBUG
+//            [iConsole info:@"Favor_DelButton_Click_Y",nil];
+//#endif
             [weakSelf.dataList removeObjectsInArray:_selectedList];
             [[CoreDataManager sharedInstance] removeAccountFavoriteModelWithCollectIDs:collectIDs];
             if (_dataList.count == 0) {
@@ -252,9 +252,9 @@
         } failure:^(NSError *error) {
             // 打点-删除失败-010506
             [Flurry logEvent:@"Favor_DelButton_Click_N"];
-#if DEBUG
-            [iConsole info:@"Favor_DelButton_Click_N",nil];
-#endif
+//#if DEBUG
+//            [iConsole info:@"Favor_DelButton_Click_N",nil];
+//#endif
         } isShowHUD:NO];
     } else {
         [self.dataList removeObjectsInArray:_selectedList];
@@ -269,9 +269,9 @@
         [_tableView reloadData];
         // 打点-删除成功-010505
         [Flurry logEvent:@"Favor_DelButton_Click_Y"];
-#if DEBUG
-        [iConsole info:@"Favor_DelButton_Click_Y",nil];
-#endif
+//#if DEBUG
+//        [iConsole info:@"Favor_DelButton_Click_Y",nil];
+//#endif
     }
 }
 
@@ -284,9 +284,9 @@
 {
     // 打点-点击删除-010504
     [Flurry logEvent:@"Favor_DelButton_Click"];
-#if DEBUG
-    [iConsole info:@"Favor_DelButton_Click",nil];
-#endif
+//#if DEBUG
+//    [iConsole info:@"Favor_DelButton_Click",nil];
+//#endif
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     if (appDelegate.model) {
         __weak typeof(self) weakSelf = self;
@@ -295,9 +295,9 @@
         [[SSHttpRequest sharedInstance] DELETE:kHomeUrl_Collect params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
             // 打点-删除成功-010505
             [Flurry logEvent:@"Favor_DelButton_Click_Y"];
-#if DEBUG
-            [iConsole info:@"Favor_DelButton_Click_Y",nil];
-#endif
+//#if DEBUG
+//            [iConsole info:@"Favor_DelButton_Click_Y",nil];
+//#endif
             [[CoreDataManager sharedInstance] removeAccountFavoriteModelWithCollectIDs:[NSArray arrayWithObject:model.collect_id]];
             if (_dataList.count == 0) {
                 weakSelf.showBlankView = YES;
@@ -305,9 +305,9 @@
         } failure:^(NSError *error) {
             // 打点-删除失败-010506
             [Flurry logEvent:@"Favor_DelButton_Click_N"];
-#if DEBUG
-            [iConsole info:@"Favor_DelButton_Click_N",nil];
-#endif
+//#if DEBUG
+//            [iConsole info:@"Favor_DelButton_Click_N",nil];
+//#endif
         } isShowHUD:NO];
     } else {
         [[CoreDataManager sharedInstance] removeLocalFavoriteModelWithNewsIDs:[NSArray arrayWithObject:model.news_id]];
@@ -316,9 +316,9 @@
         }
         // 打点-删除成功-010505
         [Flurry logEvent:@"Favor_DelButton_Click_Y"];
-#if DEBUG
-        [iConsole info:@"Favor_DelButton_Click_Y",nil];
-#endif
+//#if DEBUG
+//        [iConsole info:@"Favor_DelButton_Click_Y",nil];
+//#endif
     }
 }
 
@@ -604,9 +604,9 @@
     if (!_tableView.editing) {
         // 打点-点击列表文章-010502
         [Flurry logEvent:@"Favor_List_Click"];
-#if DEBUG
-        [iConsole info:@"Favor_List_Click",nil];
-#endif
+//#if DEBUG
+//        [iConsole info:@"Favor_List_Click",nil];
+//#endif
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
         if (model.tpl.integerValue == NEWS_OnlyVideo || model.tpl.integerValue == NEWS_HotVideo) {
             VideoDetailViewController *videoDetailVC = [[VideoDetailViewController alloc] init];
@@ -706,9 +706,9 @@
                                    newsModel.news_id, @"article",
                                    nil];
     [Flurry logEvent:@"Home_List_Share_FacebookClick" withParameters:articleParams];
-#if DEBUG
-    [iConsole info:[NSString stringWithFormat:@"Home_List_Share_FacebookClick:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//    [iConsole info:[NSString stringWithFormat:@"Home_List_Share_FacebookClick:%@",articleParams],nil];
+//#endif
     
     __weak typeof(self) weakSelf = self;
     FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
@@ -831,9 +831,9 @@
 {
     // 打点-点击收藏页返回按钮-010507
     [Flurry logEvent:@"Favor_BackButton_Click"];
-#if DEBUG
-    [iConsole info:@"Favor_BackButton_Click",nil];
-#endif
+//#if DEBUG
+//    [iConsole info:@"Favor_BackButton_Click",nil];
+//#endif
     if (self.tableView.editing) {
         self.isEdit = NO;
         _editBtn.selected = NO;
@@ -871,9 +871,9 @@
         
         // 打点-点击编辑-010503
         [Flurry logEvent:@"Favor_EditButton_Click"];
-#if DEBUG
-        [iConsole info:@"Favor_EditButton_Click",nil];
-#endif
+//#if DEBUG
+//        [iConsole info:@"Favor_EditButton_Click",nil];
+//#endif
     }
     button.selected = !button.selected;
 }
@@ -883,9 +883,9 @@
 {
     // 打点-点击登录-010508
     [Flurry logEvent:@"Menu_LoginButton_Click"];
-#if DEBUG
-    [iConsole info:@"Menu_LoginButton_Click",nil];
-#endif
+//#if DEBUG
+//    [iConsole info:@"Menu_LoginButton_Click",nil];
+//#endif
     LoginView *loginView = [[LoginView alloc] init];
     [[UIApplication sharedApplication].keyWindow addSubview:loginView];
 }

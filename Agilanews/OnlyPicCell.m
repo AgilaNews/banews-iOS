@@ -303,9 +303,9 @@
                                    textOnlyMode.integerValue ? @"YES" : @"NO", @"state",
                                    nil];
     [Flurry logEvent:@"Home_PhotoList_Click" withParameters:articleParams];
-#if DEBUG
-    [iConsole info:[NSString stringWithFormat:@"Home_PhotoList_Click:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//    [iConsole info:[NSString stringWithFormat:@"Home_PhotoList_Click:%@",articleParams],nil];
+//#endif
     if ([textOnlyMode integerValue] == 1) {
         return;
     }

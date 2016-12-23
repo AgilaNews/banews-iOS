@@ -57,9 +57,9 @@
     
     // 打点-页面进入-011201
     [Flurry logEvent:@"Channels_Enter"];
-#if DEBUG
-    [iConsole info:@"Channels_Enter",nil];
-#endif
+//#if DEBUG
+//    [iConsole info:@"Channels_Enter",nil];
+//#endif
 
     CGFloat topInset = 0;
     if (iPhone4) {
@@ -210,9 +210,9 @@
 {
     // 打点-长按频道-011204
     [Flurry logEvent:@"Channels_Channel_LongPress"];
-#if DEBUG
-    [iConsole info:@"Channels_Channel_LongPress",nil];
-#endif
+//#if DEBUG
+//    [iConsole info:@"Channels_Channel_LongPress",nil];
+//#endif
 }
 
 #pragma mark - 按钮点击事件
@@ -220,9 +220,9 @@
 {
     // 打点-点击返回-011202
     [Flurry logEvent:@"Channels_BackButton_Click"];
-#if DEBUG
-    [iConsole info:@"Channels_BackButton_Click",nil];
-#endif
+//#if DEBUG
+//    [iConsole info:@"Channels_BackButton_Click",nil];
+//#endif
     [self okAction];
     [super backAction:button];
 }

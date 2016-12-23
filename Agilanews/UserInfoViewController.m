@@ -169,9 +169,9 @@
 {
     // 打点-点击logout-010702
     [Flurry logEvent:@"Info_Logout_Click"];
-#if DEBUG
-    [iConsole info:@"Info_Logout_Click",nil];
-#endif
+//#if DEBUG
+//    [iConsole info:@"Info_Logout_Click",nil];
+//#endif
     NSString *title = @"Logout Confirmation";
     NSString *message = @"If you log out, you will not be able to post comments, are you sure to exit?";
     UIAlertController *logoutAlert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
@@ -187,9 +187,9 @@
     UIAlertAction *yesAction = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
         // 打点-logout成功-010703
         [Flurry logEvent:@"Info_Logout_Click_Y"];
-#if DEBUG
-        [iConsole info:@"Info_Logout_Click_Y",nil];
-#endif
+//#if DEBUG
+//        [iConsole info:@"Info_Logout_Click_Y",nil];
+//#endif
         // 点击确定退出
         NSFileManager *fileManager = [NSFileManager defaultManager];
         NSError *error = nil;
@@ -208,9 +208,9 @@
 {
     // 打点-点击用户信息页返回按钮-010704
     [Flurry logEvent:@"Info_BackButton_Click"];
-#if DEBUG
-    [iConsole info:@"Info_BackButton_Click",nil];
-#endif
+//#if DEBUG
+//    [iConsole info:@"Info_BackButton_Click",nil];
+//#endif
     [super backAction:button];
 }
 

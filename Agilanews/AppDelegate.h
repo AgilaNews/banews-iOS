@@ -12,13 +12,13 @@
 #import "iConsole.h"
 #import <UserNotifications/UserNotifications.h>
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate,CLLocationManagerDelegate,iConsoleDelegate,UNUserNotificationCenterDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate, CLLocationManagerDelegate, UNUserNotificationCenterDelegate>
 
-#if DEBUG
-@property (strong, nonatomic) iConsoleWindow *window; //这是关键，必须使用iConsoleWindow
-#else
+//#if DEBUG
+//@property (strong, nonatomic) iConsoleWindow *window; //这是关键，必须使用iConsoleWindow
+//#else
+//#endif
 @property (strong, nonatomic) UIWindow *window;
-#endif
 
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) NSMutableArray *categoriesArray;

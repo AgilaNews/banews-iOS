@@ -185,15 +185,15 @@
     if (_isPushEnter) {
         // 打点-推送新闻详情页进入-010007
         [Flurry logEvent:@"PushArticle_Enter" withParameters:articleParams];
-#if DEBUG
-        [iConsole info:[NSString stringWithFormat:@"PushArticle_Enter:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//        [iConsole info:[NSString stringWithFormat:@"PushArticle_Enter:%@",articleParams],nil];
+//#endif
     } else {
         // 打点-视频详情页进入-011601
         [Flurry logEvent:@"Video_Enter" withParameters:articleParams];
-#if DEBUG
-        [iConsole info:[NSString stringWithFormat:@"Video_Enter:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//        [iConsole info:[NSString stringWithFormat:@"Video_Enter:%@",articleParams],nil];
+//#endif
     }
 }
 
@@ -402,9 +402,9 @@
                                        [NetType getNetType], @"network",
                                        nil];
         [Flurry logEvent:@"Comments_Enter" withParameters:articleParams];
-#if DEBUG
-        [iConsole info:[NSString stringWithFormat:@"Comments_Enter:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//        [iConsole info:[NSString stringWithFormat:@"Comments_Enter:%@",articleParams],nil];
+//#endif
     } else {
         // 打点-上拉加载-010302
         NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -413,9 +413,9 @@
                                        _model.news_id, @"article",
                                        nil];
         [Flurry logEvent:@"Comments_List_UpLoad" withParameters:articleParams];
-#if DEBUG
-        [iConsole info:[NSString stringWithFormat:@"Comments_List_UpLoad:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//        [iConsole info:[NSString stringWithFormat:@"Comments_List_UpLoad:%@",articleParams],nil];
+//#endif
     }
     
     __weak typeof(self) weakSelf = self;
@@ -451,9 +451,9 @@
                                            _model.news_id, @"article",
                                            nil];
             [Flurry logEvent:@"Comments_List_UpLoad_Y" withParameters:articleParams];
-#if DEBUG
-            [iConsole info:[NSString stringWithFormat:@"Comments_List_UpLoad_Y:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//            [iConsole info:[NSString stringWithFormat:@"Comments_List_UpLoad_Y:%@",articleParams],nil];
+//#endif
         }
     } failure:^(NSError *error) {
         [_tableView.footer endRefreshing];
@@ -465,9 +465,9 @@
                                            _model.news_id, @"article",
                                            nil];
             [Flurry logEvent:@"Comments_List_UpLoad_N" withParameters:articleParams];
-#if DEBUG
-            [iConsole info:[NSString stringWithFormat:@"Comments_List_UpLoad_N:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//            [iConsole info:[NSString stringWithFormat:@"Comments_List_UpLoad_N:%@",articleParams],nil];
+//#endif
         }
     } isShowHUD:NO];
     [_tasks addObject:task];
@@ -575,9 +575,9 @@
                                        _model.news_id, @"article",
                                        nil];
         [Flurry logEvent:@"Article_Comments_Send_Y" withParameters:articleParams];
-#if DEBUG
-        [iConsole info:[NSString stringWithFormat:@"Article_Comments_Send_Y:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//        [iConsole info:[NSString stringWithFormat:@"Article_Comments_Send_Y:%@",articleParams],nil];
+//#endif
     } failure:^(NSError *error) {
         _commentTextView.sendButton.enabled = YES;
         // 打点-评论失败-010211
@@ -587,9 +587,9 @@
                                        _model.news_id, @"article",
                                        nil];
         [Flurry logEvent:@"Article_Comments_Send_N" withParameters:articleParams];
-#if DEBUG
-        [iConsole info:[NSString stringWithFormat:@"Article_Comments_Send_N:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//        [iConsole info:[NSString stringWithFormat:@"Article_Comments_Send_N:%@",articleParams],nil];
+//#endif
     } isShowHUD:YES];
 }
 
@@ -622,9 +622,9 @@
                                                _model.news_id, @"article",
                                                nil];
                 [Flurry logEvent:@"Article_Favorite_Click_Y" withParameters:articleParams];
-#if DEBUG
-                [iConsole info:[NSString stringWithFormat:@"Article_Favorite_Click_Y:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//                [iConsole info:[NSString stringWithFormat:@"Article_Favorite_Click_Y:%@",articleParams],nil];
+//#endif
             }
         } failure:^(NSError *error) {
             button.selected = NO;
@@ -635,9 +635,9 @@
                                            _model.news_id, @"article",
                                            nil];
             [Flurry logEvent:@"Article_Favorite_Click_N" withParameters:articleParams];
-#if DEBUG
-            [iConsole info:[NSString stringWithFormat:@"Article_Favorite_Click_N:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//            [iConsole info:[NSString stringWithFormat:@"Article_Favorite_Click_N:%@",articleParams],nil];
+//#endif
         } isShowHUD:YES];
     } else if (_detailModel && _model) {
         // 新闻详情本地缓存
@@ -661,9 +661,9 @@
                                        _model.news_id, @"article",
                                        nil];
         [Flurry logEvent:@"Article_Favorite_Click_Y" withParameters:articleParams];
-#if DEBUG
-        [iConsole info:[NSString stringWithFormat:@"Article_Favorite_Click_Y:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//        [iConsole info:[NSString stringWithFormat:@"Article_Favorite_Click_Y:%@",articleParams],nil];
+//#endif
     }
 }
 
@@ -741,9 +741,9 @@
                                    _model.news_id, @"article",
                                    nil];
     [Flurry logEvent:@"Video_LikeButton_Click" withParameters:articleParams];
-#if DEBUG
-    [iConsole info:[NSString stringWithFormat:@"Video_LikeButton_Click:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//    [iConsole info:[NSString stringWithFormat:@"Video_LikeButton_Click:%@",articleParams],nil];
+//#endif
     if (button.selected) {
         if (button.titleLabel.text.intValue > 1) {
             _model.likedCount = [NSNumber numberWithInteger:_model.likedCount.integerValue - 1];
@@ -841,9 +841,9 @@
                                    _model.news_id, @"article",
                                    nil];
     [Flurry logEvent:@"Article_Comments_Send" withParameters:articleParams];
-#if DEBUG
-    [iConsole info:[NSString stringWithFormat:@"Article_Comments_Send:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//    [iConsole info:[NSString stringWithFormat:@"Article_Comments_Send:%@",articleParams],nil];
+//#endif
     [self postComment];
 }
 
@@ -864,9 +864,9 @@
                                            _model.news_id, @"article",
                                            nil];
             [Flurry logEvent:@"Video_Comment_Click" withParameters:articleParams];
-#if DEBUG
-            [iConsole info:[NSString stringWithFormat:@"Video_Comment_Click:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//            [iConsole info:[NSString stringWithFormat:@"Video_Comment_Click:%@",articleParams],nil];
+//#endif
             // 点击评论按钮
             CGRect commentRect = [_tableView rectForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:2]];
             if (_tableView.contentOffset.y < commentRect.origin.y - (kScreenHeight - _playerView.bottom - 64 - 50)) {
@@ -885,9 +885,9 @@
                                            _model.news_id, @"article",
                                            nil];
             [Flurry logEvent:@"Article_Favorite_Click" withParameters:articleParams];
-#if DEBUG
-            [iConsole info:[NSString stringWithFormat:@"Article_Favorite_Click:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//            [iConsole info:[NSString stringWithFormat:@"Article_Favorite_Click:%@",articleParams],nil];
+//#endif
             // 点击收藏按钮
             if (button.selected) {
                 [self deleteCollectNewsWithButton:button];
@@ -906,9 +906,9 @@
                                            _model.news_id, @"article",
                                            nil];
             [Flurry logEvent:@"Video_share_FB_Click" withParameters:articleParams];
-#if DEBUG
-            [iConsole info:[NSString stringWithFormat:@"Video_share_FB_Click:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//            [iConsole info:[NSString stringWithFormat:@"Video_share_FB_Click:%@",articleParams],nil];
+//#endif
 
             FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
             NSString *shareString = _model.share_url;
@@ -939,9 +939,9 @@
                                    _model.news_id, @"article",
                                    nil];
     [Flurry logEvent:@"Video_share_Click" withParameters:articleParams];
-#if DEBUG
-    [iConsole info:[NSString stringWithFormat:@"Video_share_Click:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//    [iConsole info:[NSString stringWithFormat:@"Video_share_Click:%@",articleParams],nil];
+//#endif
     __weak typeof(self) weakSelf = self;
     [SSUIShareActionSheetStyle setCancelButtonLabelColor:kGrayColor];
     [SSUIShareActionSheetStyle setItemNameFont:[UIFont systemFontOfSize:13]];
@@ -956,9 +956,9 @@
                                        _model.news_id, @"article",
                                        nil];
         [Flurry logEvent:@"Article_Share_Facebook_Click" withParameters:articleParams];
-#if DEBUG
-        [iConsole info:[NSString stringWithFormat:@"Article_Share_Facebook_Click:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//        [iConsole info:[NSString stringWithFormat:@"Article_Share_Facebook_Click:%@",articleParams],nil];
+//#endif
 
         FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
         NSString *shareString = _model.share_url;
@@ -981,9 +981,9 @@
                                        _model.news_id, @"article",
                                        nil];
         [Flurry logEvent:@"Article_Share_Twitter_Click" withParameters:articleParams];
-#if DEBUG
-        [iConsole info:[NSString stringWithFormat:@"Article_Share_Twitter_Click:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//        [iConsole info:[NSString stringWithFormat:@"Article_Share_Twitter_Click:%@",articleParams],nil];
+//#endif
 
         NSString *shareString = _model.share_url;
         shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"twitter"];
@@ -1015,9 +1015,9 @@
                                        _model.news_id, @"article",
                                        nil];
         [Flurry logEvent:@"Article_Share_Google+_Click" withParameters:articleParams];
-#if DEBUG
-        [iConsole info:[NSString stringWithFormat:@"Article_Share_Google+_Click:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//        [iConsole info:[NSString stringWithFormat:@"Article_Share_Google+_Click:%@",articleParams],nil];
+//#endif
 
         NSString *shareString = _model.share_url;
         shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"googleplus"];
@@ -1565,9 +1565,9 @@
                                                _model.news_id, @"article",
                                                nil];
                 [Flurry logEvent:@"Article_ReArticle_Click" withParameters:articleParams];
-#if DEBUG
-                [iConsole info:[NSString stringWithFormat:@"Article_ReArticle_Click:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//                [iConsole info:[NSString stringWithFormat:@"Article_ReArticle_Click:%@",articleParams],nil];
+//#endif
                 // 服务器打点-详情页点击相关推荐-020202
                 NSMutableDictionary *eventDic = [NSMutableDictionary dictionary];
                 [eventDic setObject:@"020202" forKey:@"id"];

@@ -138,9 +138,9 @@
                                                @"Small", @"text_size",
                                                nil];
                 [Flurry logEvent:@"Set_FontSize_Set_Click" withParameters:articleParams];
-#if DEBUG
-                [iConsole info:[NSString stringWithFormat:@"Set_FontSize_Set_Click:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//                [iConsole info:[NSString stringWithFormat:@"Set_FontSize_Set_Click:%@",articleParams],nil];
+//#endif
                 DEF_PERSISTENT_SET_OBJECT(SS_FontSize, @3);
                 [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_FontSize_Change object:nil];
                 break;
@@ -152,9 +152,9 @@
                                                @"Normal", @"text_size",
                                                nil];
                 [Flurry logEvent:@"Set_FontSize_Set_Click" withParameters:articleParams];
-#if DEBUG
-                [iConsole info:[NSString stringWithFormat:@"Set_FontSize_Set_Click:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//                [iConsole info:[NSString stringWithFormat:@"Set_FontSize_Set_Click:%@",articleParams],nil];
+//#endif
                 DEF_PERSISTENT_SET_OBJECT(SS_FontSize, @0);
                 [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_FontSize_Change object:nil];
                 break;
@@ -166,9 +166,9 @@
                                                @"Large", @"text_size",
                                                nil];
                 [Flurry logEvent:@"Set_FontSize_Set_Click" withParameters:articleParams];
-#if DEBUG
-                [iConsole info:[NSString stringWithFormat:@"Set_FontSize_Set_Click:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//                [iConsole info:[NSString stringWithFormat:@"Set_FontSize_Set_Click:%@",articleParams],nil];
+//#endif
                 DEF_PERSISTENT_SET_OBJECT(SS_FontSize, @2);
                 [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_FontSize_Change object:nil];
                 break;
@@ -180,9 +180,9 @@
                                                @"Extra Large", @"text_size",
                                                nil];
                 [Flurry logEvent:@"Set_FontSize_Set_Click" withParameters:articleParams];
-#if DEBUG
-                [iConsole info:[NSString stringWithFormat:@"Set_FontSize_Set_Click:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//                [iConsole info:[NSString stringWithFormat:@"Set_FontSize_Set_Click:%@",articleParams],nil];
+//#endif
                 DEF_PERSISTENT_SET_OBJECT(SS_FontSize, @1);
                 [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_FontSize_Change object:nil];
                 break;

@@ -246,9 +246,9 @@
                                    [NetType getNetType], @"network",
                                    nil];
     [Flurry logEvent:@"PhotoFullScreen_SavePhoto_Click" withParameters:articleParams];
-#if DEBUG
-    [iConsole info:[NSString stringWithFormat:@"PhotoFullScreen_SavePhoto_Click:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//    [iConsole info:[NSString stringWithFormat:@"PhotoFullScreen_SavePhoto_Click:%@",articleParams],nil];
+//#endif
     int index = _scrollView.contentOffset.x / _scrollView.bounds.size.width;
     
     HZPhotoBrowserView *currentView = _scrollView.subviews[index];
@@ -288,9 +288,9 @@
                                    [NetType getNetType], @"network",
                                    nil];
     [Flurry logEvent:@"PhotoFullScreen_Enter" withParameters:articleParams];
-#if DEBUG
-    [iConsole info:[NSString stringWithFormat:@"PhotoFullScreen_Enter:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//    [iConsole info:[NSString stringWithFormat:@"PhotoFullScreen_Enter:%@",articleParams],nil];
+//#endif
 }
 
 #pragma mark 单击隐藏图片浏览器

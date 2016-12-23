@@ -405,9 +405,9 @@
                                    [NetType getNetType], @"network",
                                    nil];
     [Flurry logEvent:@"Home_Videolist_Play_Click" withParameters:articleParams];
-#if DEBUG
-    [iConsole info:[NSString stringWithFormat:@"Home_Videolist_Play_Click:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//    [iConsole info:[NSString stringWithFormat:@"Home_Videolist_Play_Click:%@",articleParams],nil];
+//#endif
     // 服务器打点参数
     [_playerPath addObject:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time", @"1" , @"type", nil]];
     VideoModel *model = _model.videos.firstObject;

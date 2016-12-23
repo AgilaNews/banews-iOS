@@ -245,9 +245,9 @@
             {
                 // 打点-点击通知按钮-010409
                 [Flurry logEvent:@"Menu_Notification_Click"];
-#if DEBUG
-                [iConsole info:@"Menu_Notification_Click",nil];
-#endif
+//#if DEBUG
+//                [iConsole info:@"Menu_Notification_Click",nil];
+//#endif
                 // 服务器打点-notification点击-050105
                 NSMutableDictionary *eventDic = [NSMutableDictionary dictionary];
                 [eventDic setObject:@"050105" forKey:@"id"];
@@ -293,9 +293,9 @@
             {
                 // 打点-点击频道-010407
                 [Flurry logEvent:@"Menu_Channels_Click"];
-#if DEBUG
-                [iConsole info:@"Menu_Channels_Click",nil];
-#endif
+//#if DEBUG
+//                [iConsole info:@"Menu_Channels_Click",nil];
+//#endif
                 // 点击Channels
                 ChannelViewController *channelVC = [[ChannelViewController alloc] init];
                 [homeVC.navigationController pushViewController:channelVC animated:YES];
@@ -305,9 +305,9 @@
             {
                 // 打点-点击收藏-010403
                 [Flurry logEvent:@"Info_Icon_Click"];
-#if DEBUG
-                [iConsole info:@"Info_Icon_Click",nil];
-#endif
+//#if DEBUG
+//                [iConsole info:@"Info_Icon_Click",nil];
+//#endif
                 // 点击Favorites
                 FavoritesViewController *favoritesVC = [[FavoritesViewController alloc] init];
                 [homeVC.navigationController pushViewController:favoritesVC animated:YES];
@@ -333,9 +333,9 @@
             {
                 // 打点-点击反馈-010404
                 [Flurry logEvent:@"Menu_FeedbackButton_Click"];
-#if DEBUG
-                [iConsole info:@"Menu_FeedbackButton_Click",nil];
-#endif
+//#if DEBUG
+//                [iConsole info:@"Menu_FeedbackButton_Click",nil];
+//#endif
                 // 点击Feedback
                 FeedbackViewController *feedbackVC = [[FeedbackViewController alloc] init];
                 [homeVC.navigationController pushViewController:feedbackVC animated:YES];
@@ -345,9 +345,9 @@
             {
                 // 打点-点击设置-010406
                 [Flurry logEvent:@"Menu_SetButton_Click"];
-#if DEBUG
-                [iConsole info:@"Menu_SetButton_Click",nil];
-#endif
+//#if DEBUG
+//                [iConsole info:@"Menu_SetButton_Click",nil];
+//#endif
                 // 点击Settings
                 SettingsViewController *settingsVC = [[SettingsViewController alloc] init];
                 [homeVC.navigationController pushViewController:settingsVC animated:YES];
@@ -365,9 +365,9 @@
     if (_appDelegate.model) {
         // 打点-点击头像-010701
         [Flurry logEvent:@"Info_Icon_Click"];
-#if DEBUG
-        [iConsole info:@"Info_Icon_Click",nil];
-#endif
+//#if DEBUG
+//        [iConsole info:@"Info_Icon_Click",nil];
+//#endif
         LeftView *leftView = (LeftView *)self.superview;
         leftView.isShow = NO;
         JTNavigationController *navCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
@@ -391,26 +391,26 @@
         {
             // 打点-点击facebook-010602
             [Flurry logEvent:@"Login_Facebook_Click"];
-#if DEBUG
-            [iConsole info:@"Login_Facebook_Click",nil];
-#endif
+//#if DEBUG
+//            [iConsole info:@"Login_Facebook_Click",nil];
+//#endif
             [SVProgressHUD show];
             button.enabled = NO;
             [ShareSDK getUserInfo:SSDKPlatformTypeFacebook onStateChanged:^(SSDKResponseState state, SSDKUser *user, NSError *error) {
                 if (state == SSDKResponseStateSuccess) {
                     // 打点-登陆Facebook成功-010605
                     [Flurry logEvent:@"Login_Facebook_Click_Y"];
-#if DEBUG
-                    [iConsole info:@"Login_Facebook_Click_Y",nil];
-#endif
+//#if DEBUG
+//                    [iConsole info:@"Login_Facebook_Click_Y",nil];
+//#endif
                     [self loginWithUserData:user LoginType:Facebook];
                     button.enabled = YES;
                 } else {
                     // 打点-登陆Facebook失败-010608
                     [Flurry logEvent:@"Login_Facebook_Click_N"];
-#if DEBUG
-                    [iConsole info:@"Login_Facebook_Click_N",nil];
-#endif
+//#if DEBUG
+//                    [iConsole info:@"Login_Facebook_Click_N",nil];
+//#endif
                     [SVProgressHUD dismiss];
                     button.enabled = YES;
                     SSLog(@"%@",error);
@@ -422,26 +422,26 @@
         {
             // 打点-点击twitter-010603
             [Flurry logEvent:@"Login_Twitter_Click"];
-#if DEBUG
-            [iConsole info:@"Login_Twitter_Click",nil];
-#endif
+//#if DEBUG
+//            [iConsole info:@"Login_Twitter_Click",nil];
+//#endif
             [SVProgressHUD show];
             button.enabled = NO;
             [ShareSDK getUserInfo:SSDKPlatformTypeTwitter onStateChanged:^(SSDKResponseState state, SSDKUser *user, NSError *error) {
                 if (state == SSDKResponseStateSuccess) {
                     // 打点-登陆twitter成功-010606
                     [Flurry logEvent:@"Login_Twitter_Click_Y"];
-#if DEBUG
-                    [iConsole info:@"Login_Twitter_Click_Y",nil];
-#endif
+//#if DEBUG
+//                    [iConsole info:@"Login_Twitter_Click_Y",nil];
+//#endif
                     [self loginWithUserData:user LoginType:Twitter];
                     button.enabled = YES;
                 } else {
                     // 打点-登陆twitter失败-010609
                     [Flurry logEvent:@"Login_Twitter_Click_N"];
-#if DEBUG
-                    [iConsole info:@"Login_Twitter_Click_N",nil];
-#endif
+//#if DEBUG
+//                    [iConsole info:@"Login_Twitter_Click_N",nil];
+//#endif
                     [SVProgressHUD dismiss];
                     button.enabled = YES;
                     SSLog(@"%@",error);
@@ -453,9 +453,9 @@
         {
             // 打点-点击Google＋-010604
             [Flurry logEvent:@"Login_Google_Click"];
-#if DEBUG
-            [iConsole info:@"Login_Google_Click",nil];
-#endif
+//#if DEBUG
+//            [iConsole info:@"Login_Google_Click",nil];
+//#endif
             button.enabled = NO;
             [GIDSignIn sharedInstance].clientID = [FIRApp defaultApp].options.clientID;
             [GIDSignIn sharedInstance].scopes = @[@"profile", @"email"];
@@ -538,9 +538,9 @@
     if (error == nil) {
         // 打点-登陆Google＋成功-010607
         [Flurry logEvent:@"Login_Google_Click_Y"];
-#if DEBUG
-        [iConsole info:@"Login_Google_Click_Y",nil];
-#endif
+//#if DEBUG
+//        [iConsole info:@"Login_Google_Click_Y",nil];
+//#endif
         SSDKUser *loginUser = [[SSDKUser alloc] init];
         loginUser.uid = user.userID;
         loginUser.rawData = @{@"email":user.profile.email};
@@ -555,9 +555,9 @@
         leftView.alpha = 1;
         // 打点-登陆Google＋失败-010610
         [Flurry logEvent:@"Login_Google_Click_N"];
-#if DEBUG
-        [iConsole info:@"Login_Google_Click_N",nil];
-#endif
+//#if DEBUG
+//        [iConsole info:@"Login_Google_Click_N",nil];
+//#endif
         SSLog(@"%@",error.localizedDescription);
     }
 }

@@ -366,9 +366,9 @@
                                        [NetType getNetType], @"network",
                                        nil];
         [Flurry logEvent:@"Home_Videolist_Click" withParameters:articleParams];
-#if DEBUG
-        [iConsole info:[NSString stringWithFormat:@"Home_Videolist_Click:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//        [iConsole info:[NSString stringWithFormat:@"Home_Videolist_Click:%@",articleParams],nil];
+//#endif
         [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_PausedVideo object:model.news_id];
         VideoDetailViewController *videoDetailVC = [[VideoDetailViewController alloc] init];
         videoDetailVC.model = model;
@@ -491,9 +491,9 @@
                                    newsModel.news_id, @"article",
                                    nil];
     [Flurry logEvent:@"Home_List_Share_FacebookClick" withParameters:articleParams];
-#if DEBUG
-    [iConsole info:[NSString stringWithFormat:@"Home_List_Share_FacebookClick:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//    [iConsole info:[NSString stringWithFormat:@"Home_List_Share_FacebookClick:%@",articleParams],nil];
+//#endif
     
     __weak typeof(self) weakSelf = self;
     FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];

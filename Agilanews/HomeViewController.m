@@ -247,9 +247,9 @@ static CGFloat const ButtonHeight = 40;
                                        channelName, @"channel",
                                        nil];
         [Flurry logEvent:@"Home_MenuButton_Click" withParameters:articleParams];
-#if DEBUG
-        [iConsole info:[NSString stringWithFormat:@"Home_MenuButton_Click:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//        [iConsole info:[NSString stringWithFormat:@"Home_MenuButton_Click:%@",articleParams],nil];
+//#endif
     }
     if (_leftView == nil) {
         _leftView = [[LeftView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
@@ -272,9 +272,9 @@ static CGFloat const ButtonHeight = 40;
                                    channelName, @"channel",
                                    nil];
     [Flurry logEvent:@"Home_TopRefresh_Click" withParameters:articleParams];
-#if DEBUG
-    [iConsole info:[NSString stringWithFormat:@"Home_TopRefresh_Click:%@",articleParams],nil];
-#endif
+//#if DEBUG
+//    [iConsole info:[NSString stringWithFormat:@"Home_TopRefresh_Click:%@",articleParams],nil];
+//#endif
     // 创建弹性效果关键帧动画
     CAKeyframeAnimation *keyFrame = [CAKeyframeAnimation animationWithKeyPath:@"transform.scale"];
     // 设置放大倍数
