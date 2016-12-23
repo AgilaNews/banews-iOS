@@ -75,8 +75,11 @@
     _tableView.tableFooterView = [UIView new];
     [self.view addSubview:_tableView];
     
-    // 请求热词
-    [self requestHotwords];
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    if (appDelegate.hotwordsDic.count) {
+        _hotArray = appDelegate.hotwordsDic[@"hotwords"];
+        self.tableView.tableHeaderView = [self getHeaderViewWithHotWords:_hotArray];
+    }
 }
 
 - (void)dealloc
@@ -85,16 +88,16 @@
 }
 
 #pragma mark - Network
-- (void)requestHotwords
-{
-    __weak typeof(self) weakSelf = self;
-    NSMutableDictionary *params = [NSMutableDictionary dictionary];
-    [params setObject:@10 forKey:@"size"];
-    [[SSHttpRequest sharedInstance] get:kHomeUrl_NewsHotwords params:params contentType:JsonType serverType:NetServer_API1 success:^(id responseObj) {
-        _hotArray = responseObj[@"hotwords"];
-        weakSelf.tableView.tableHeaderView = [weakSelf getHeaderViewWithHotWords:_hotArray];
-    } failure:nil isShowHUD:NO];
-}
+//- (void)requestHotwords
+//{
+//    __weak typeof(self) weakSelf = self;
+//    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+//    [params setObject:@10 forKey:@"size"];
+//    [[SSHttpRequest sharedInstance] get:kHomeUrl_NewsHotwords params:params contentType:JsonType serverType:NetServer_API1 success:^(id responseObj) {
+//        _hotArray = responseObj[@"hotwords"];
+//        weakSelf.tableView.tableHeaderView = [weakSelf getHeaderViewWithHotWords:_hotArray];
+//    } failure:nil isShowHUD:NO];
+//}
 // 请求搜索数据
 - (void)requestSearchDataWithIsFooter:(BOOL)isFooter
 {

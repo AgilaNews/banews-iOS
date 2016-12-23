@@ -278,6 +278,25 @@
     // 检查是否有新广告
     [[FacebookAdManager sharedInstance] checkNewAdNumWithType:AllAd];
     [[FacebookAdManager sharedInstance] checkNewAdNumWithType:AllAd];
+    // 更新搜索热词
+    [self refreshHotwords];
+}
+
+- (void)refreshHotwords
+{
+    if (!self.hotwordsDic.count) {
+        self.hotwordsDic = [NSMutableDictionary dictionary];
+    }
+    NSNumber *time = self.hotwordsDic[@"time"];
+    if (!time || [[NSDate date] timeIntervalSince1970] - time.longLongValue > 3600 * 4) {
+        __weak typeof(self) weakSelf = self;
+        NSMutableDictionary *params = [NSMutableDictionary dictionary];
+        [params setObject:@10 forKey:@"size"];
+        [[SSHttpRequest sharedInstance] get:kHomeUrl_NewsHotwords params:params contentType:JsonType serverType:NetServer_API1 success:^(id responseObj) {
+            [weakSelf.hotwordsDic setObject:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]] forKey:@"time"];
+            [weakSelf.hotwordsDic setObject:responseObj[@"hotwords"] forKey:@"hotwords"];
+        } failure:nil isShowHUD:NO];
+    }
 }
 
 #pragma mark - 请求下发频道
