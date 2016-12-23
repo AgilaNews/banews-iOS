@@ -530,11 +530,11 @@
     
     _headerView = [[UIView alloc] init];
     _headerView.backgroundColor = kWhiteBgColor;
-    UIImageView *keywordView = [[UIImageView alloc] initWithFrame:CGRectMake(11, 14.5, 15, 12)];
+    UIImageView *keywordView = [[UIImageView alloc] initWithFrame:CGRectMake(11, 15, 15, 12)];
     keywordView.contentMode = UIViewContentModeScaleAspectFit;
     keywordView.image = [UIImage imageNamed:@"icon_keyword"];
     [_headerView addSubview:keywordView];
-    UILabel *keywordLabel = [[UILabel alloc] initWithFrame:CGRectMake(keywordView.right + 10, 12, 200, 17)];
+    UILabel *keywordLabel = [[UILabel alloc] initWithFrame:CGRectMake(keywordView.right + 10, 12, 200, 19)];
     keywordLabel.backgroundColor = kWhiteBgColor;
     keywordLabel.textColor = kBlackColor;
     keywordLabel.font = [UIFont systemFontOfSize:17];

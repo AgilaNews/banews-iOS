@@ -18,7 +18,6 @@
 #import "OnlyPicCell.h"
 #import "GifPicCell.h"
 #import "OnlyVideoCell.h"
-#import "TopicCell.h"
 #import "RefreshCell.h"
 #import "AppDelegate.h"
 #import "BannerView.h"
@@ -288,7 +287,8 @@
         }
         case NEWS_Topics:
         {
-            return imageHeight + 18 + 15;
+            CGSize titleLabelSize = [model.title calculateSize:CGSizeMake(kScreenWidth - 22, 40) font:titleFont];
+            return 12 + titleLabelSize.height + imageHeight + 20 + 11 + 11;
         }
         case NEWS_Interest:
         {
@@ -481,14 +481,14 @@
             case NEWS_Topics:
             {
                 // 专题cell
-                static NSString *cellID = @"TopicCellID";
-                TopicCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+                static NSString *cellID = @"BigPicCellID";
+                BigPicCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
                 if (cell == nil) {
-                    cell = [[TopicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+                    cell = [[BigPicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
                     [cell.dislikeButton addTarget:self action:@selector(dislikeAction:) forControlEvents:UIControlEventTouchUpInside];
                 }
                 cell.model = model;
-                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                cell.isHaveVideo = NO;
                 [cell setNeedsLayout];
                 return cell;
             }

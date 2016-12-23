@@ -21,7 +21,7 @@
         
         NSString *titleStr = @"Let us know what topics you prefer, GO!";
         CGSize titleSize = [titleStr calculateSize:CGSizeMake(kScreenWidth - 30, 20) font:[UIFont systemFontOfSize:15]];
-        UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake((kScreenWidth - titleSize.width - 10 - 11) * .5, (44 - 16) * .5, titleSize.width + 5, 16)];
+        UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake((kScreenWidth - titleSize.width - 8 - 11) * .5, (44 - 16) * .5, titleSize.width + 5, 16)];
         NSMutableAttributedString *attributedStr = [[NSMutableAttributedString alloc]initWithString:titleStr];
         [attributedStr addAttributes:@{NSFontAttributeName : [UIFont systemFontOfSize:15],
                                        NSForegroundColorAttributeName : kBlackColor
@@ -32,7 +32,7 @@
         titleLabel.attributedText = attributedStr;
         [self.contentView addSubview:titleLabel];
         
-        UIImageView *goView = [[UIImageView alloc] initWithFrame:CGRectMake(titleLabel.right + 6, (44 - 12) * .5, 11, 12)];
+        UIImageView *goView = [[UIImageView alloc] initWithFrame:CGRectMake(titleLabel.right + 4, (44 - 12) * .5, 11, 12)];
         goView.contentMode = UIViewContentModeScaleAspectFit;
         goView.image = [UIImage imageNamed:@"icon_go"];
         [self.contentView addSubview:goView];

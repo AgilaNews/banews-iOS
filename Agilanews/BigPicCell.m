@@ -89,14 +89,14 @@
     // 时钟布局
     [self.timeView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(weakSelf.sourceLabel.mas_right).offset(15);
-        make.centerY.mas_equalTo(weakSelf.sourceLabel.mas_centerY);
+        make.centerY.mas_equalTo(weakSelf.tagLabel.mas_centerY);
         make.width.mas_equalTo(11);
         make.height.mas_equalTo(11);
     }];
     // 时间布局
     [self.timeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(weakSelf.timeView.mas_right).offset(6);
-        make.centerY.mas_equalTo(weakSelf.sourceLabel.mas_centerY);
+        make.centerY.mas_equalTo(weakSelf.tagLabel.mas_centerY);
         make.width.mas_equalTo(80);
         make.height.mas_equalTo(13);
     }];
@@ -124,7 +124,7 @@
     // 不喜欢布局
     [self.dislikeButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.mas_equalTo(0);
-        make.centerY.mas_equalTo(weakSelf.sourceLabel.mas_centerY);
+        make.centerY.mas_equalTo(weakSelf.tagLabel.mas_centerY);
         make.width.mas_equalTo(34);
         make.height.mas_equalTo(34);
     }];
@@ -152,6 +152,8 @@
         self.tagLabel.hidden = NO;
         if (_isHaveVideo) {
             self.tagLabel.backgroundColor = kOrangeColor;
+        } else if (_model.tpl.integerValue == NEWS_Topics) {
+            self.tagLabel.backgroundColor = SSColor(78, 173, 240);
         } else {
             self.tagLabel.backgroundColor = SSColor(255, 91, 54);
         }
@@ -189,7 +191,7 @@
     // 时钟布局
     [self.timeView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(weakSelf.sourceLabel.mas_right).offset(15);
-        make.centerY.mas_equalTo(weakSelf.sourceLabel.mas_centerY);
+        make.centerY.mas_equalTo(weakSelf.tagLabel.mas_centerY);
     }];
     // 时间布局
     NSString *timeString = nil;
@@ -203,7 +205,7 @@
         make.width.mas_equalTo(timeLabelSize.width);
         make.height.mas_equalTo(timeLabelSize.height);
         make.left.mas_equalTo(weakSelf.timeView.mas_right).offset(5);
-        make.centerY.mas_equalTo(weakSelf.sourceLabel.mas_centerY);
+        make.centerY.mas_equalTo(weakSelf.tagLabel.mas_centerY);
     }];
     // 评论布局
     if (_model.commentCount.integerValue > 0) {
@@ -237,7 +239,7 @@
     // 不喜欢布局
     [self.dislikeButton mas_updateConstraints:^(MASConstraintMaker *make) {
         make.right.mas_equalTo(0);
-        make.centerY.mas_equalTo(weakSelf.sourceLabel.mas_centerY);
+        make.centerY.mas_equalTo(weakSelf.tagLabel.mas_centerY);
         make.width.mas_equalTo(34);
         make.height.mas_equalTo(34);
     }];
@@ -286,7 +288,22 @@
     self.tagLabel.text = _model.tag;
     self.sourceLabel.text = _model.source;
     self.timeLabel.text = timeString;
-    
+    if (self.isHaveVideo) {
+        self.haveVideoView.hidden = NO;
+        self.dislikeButton.hidden = YES;
+    } else {
+        self.haveVideoView.hidden = YES;
+        if ([self.ViewController isKindOfClass:[HomeTableViewController class]]) {
+            self.dislikeButton.hidden = NO;
+        } else {
+            self.dislikeButton.hidden = YES;
+        }
+    }
+    if (_model.filter_tags.count) {
+        self.dislikeButton.hidden = NO;
+    } else {
+        self.dislikeButton.hidden = YES;
+    }
     NSNumber *textOnlyMode = DEF_PERSISTENT_GET_OBJECT(SS_textOnlyMode);
     if ([textOnlyMode integerValue] == 1) {
         self.titleImageView.contentMode = UIViewContentModeCenter;
@@ -306,17 +323,6 @@
             _titleImageView.image = image;
         }
     }];
-    if (self.isHaveVideo) {
-        self.haveVideoView.hidden = NO;
-        self.dislikeButton.hidden = YES;
-    } else {
-        self.haveVideoView.hidden = YES;
-        if ([self.ViewController isKindOfClass:[HomeTableViewController class]]) {
-            self.dislikeButton.hidden = NO;
-        } else {
-            self.dislikeButton.hidden = YES;
-        }
-    }
 }
 
 - (UILabel *)titleLabel
