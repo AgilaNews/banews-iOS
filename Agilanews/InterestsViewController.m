@@ -206,7 +206,7 @@
     [SVProgressHUD show];
     __weak typeof(self) weakSelf = self;
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
-    [[SSHttpRequest sharedInstance] get:kHomeUrl_Interest params:params contentType:JsonType serverType:NetServer_API2 success:^(id responseObj) {
+    [[SSHttpRequest sharedInstance] get:kHomeUrl_Interest params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
         [SVProgressHUD dismiss];
         NSMutableArray *models = [NSMutableArray array];
         for (NSDictionary *dic in responseObj[@"interests"]) {
@@ -249,7 +249,7 @@
     NSArray *interestArray = [CategoriesModel mj_keyValuesArrayWithObjectArray:self.interests];
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setObject:interestArray forKey:@"interests"];
-    [[SSHttpRequest sharedInstance] post:kHomeUrl_Interest params:params contentType:JsonType serverType:NetServer_API2 success:^(id responseObj) {
+    [[SSHttpRequest sharedInstance] post:kHomeUrl_Interest params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
         [SVProgressHUD showSuccessWithStatus:@"Successful"];
         [self.navigationController popViewControllerAnimated:YES];
     } failure:^(NSError *error) {

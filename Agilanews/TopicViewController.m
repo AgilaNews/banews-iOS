@@ -63,7 +63,7 @@
     if (isFooter) {
         [params setObject:[NSNumber numberWithInteger:_dataList.count] forKey:@"from"];
     }
-    [[SSHttpRequest sharedInstance] get:kHomeUrl_TopicDetail params:params contentType:JsonType serverType:NetServer_API2 success:^(id responseObj) {
+    [[SSHttpRequest sharedInstance] get:kHomeUrl_TopicDetail params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
         [SVProgressHUD dismiss];
         NSMutableArray *models = [NSMutableArray array];
         @autoreleasepool {

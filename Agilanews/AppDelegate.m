@@ -292,7 +292,7 @@
         __weak typeof(self) weakSelf = self;
         NSMutableDictionary *params = [NSMutableDictionary dictionary];
         [params setObject:@10 forKey:@"size"];
-        [[SSHttpRequest sharedInstance] get:kHomeUrl_NewsHotwords params:params contentType:JsonType serverType:NetServer_API1 success:^(id responseObj) {
+        [[SSHttpRequest sharedInstance] get:kHomeUrl_NewsHotwords params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
             [weakSelf.hotwordsDic setObject:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]] forKey:@"time"];
             [weakSelf.hotwordsDic setObject:responseObj[@"hotwords"] forKey:@"hotwords"];
         } failure:nil isShowHUD:NO];

@@ -93,7 +93,7 @@
 //    __weak typeof(self) weakSelf = self;
 //    NSMutableDictionary *params = [NSMutableDictionary dictionary];
 //    [params setObject:@10 forKey:@"size"];
-//    [[SSHttpRequest sharedInstance] get:kHomeUrl_NewsHotwords params:params contentType:JsonType serverType:NetServer_API1 success:^(id responseObj) {
+//    [[SSHttpRequest sharedInstance] get:kHomeUrl_NewsHotwords params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
 //        _hotArray = responseObj[@"hotwords"];
 //        weakSelf.tableView.tableHeaderView = [weakSelf getHeaderViewWithHotWords:_hotArray];
 //    } failure:nil isShowHUD:NO];
@@ -123,7 +123,7 @@
         _pageCount = 0;
     }
     [params setObject:[NSNumber numberWithInteger:20 * _pageCount] forKey:@"from"];
-    [[SSHttpRequest sharedInstance] get:kHomeUrl_NewsSearch params:params contentType:JsonType serverType:NetServer_API1 success:^(id responseObj) {
+    [[SSHttpRequest sharedInstance] get:kHomeUrl_NewsSearch params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
         [SVProgressHUD dismiss];
         NSMutableArray *models = [NSMutableArray array];
         @autoreleasepool {
@@ -585,6 +585,7 @@
 - (void)clickKeyword:(UIButton *)button
 {
     [self.searchBar resignFirstResponder];
+    self.searchBar.text = @"";
     _keyword = button.titleLabel.text;
     [SVProgressHUD show];
     [self requestSearchDataWithIsFooter:NO];
