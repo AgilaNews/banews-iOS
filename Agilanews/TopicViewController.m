@@ -322,41 +322,41 @@
         return;
     }
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-//    // 服务器打点-列表页点击详情-020102
-//    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-//    NSString *pagePos = [NSString stringWithFormat:@"%.1f",(cell.top - tableView.contentOffset.y + 1.5) / tableView.height];
-//    NSMutableDictionary *eventDic = [NSMutableDictionary dictionary];
-//    [eventDic setObject:@"020102" forKey:@"id"];
-//    [eventDic setObject:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970] * 1000] forKey:@"time"];
-//    [eventDic setObject:model.news_id forKey:@"news_id"];
-//    [eventDic setObject:[NSNumber numberWithInteger:indexPath.row] forKey:@"list_pos"];
-//    [eventDic setObject:_model.channelID forKey:@"refer"];
-//    [eventDic setObject:pagePos forKey:@"page_pos"];
-//    [eventDic setObject:model.issuedID forKey:@"dispatch_id"];
-//    [eventDic setObject:[NetType getNetType] forKey:@"net"];
-//    if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
-//        [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) forKey:@"lng"];
-//        [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) forKey:@"lat"];
-//    } else {
-//        [eventDic setObject:@"" forKey:@"lng"];
-//        [eventDic setObject:@"" forKey:@"lat"];
-//    }
-//    NSString *abflag = DEF_PERSISTENT_GET_OBJECT(@"abflag");
-//    if (abflag && abflag.length > 0) {
-//        [eventDic setObject:abflag forKey:@"abflag"];
-//    }
-//    NSDictionary *sessionDic = [NSDictionary dictionaryWithObjectsAndKeys:
-//                                DEF_PERSISTENT_GET_OBJECT(@"UUID"), @"id",
-//                                [NSArray arrayWithObject:eventDic], @"events",
-//                                nil];
-//    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObject:[NSArray arrayWithObject:sessionDic] forKey:@"sessions"];
-//    [[SSHttpRequest sharedInstance] post:@"" params:params contentType:JsonType serverType:NetServer_Log success:^(id responseObj) {
-//        // 打点成功
-//    } failure:^(NSError *error) {
-//        // 打点失败
-//        [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
-//        [appDelegate.eventArray addObject:eventDic];
-//    } isShowHUD:NO];
+    // 服务器打点-列表页点击详情-020102
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    NSString *pagePos = [NSString stringWithFormat:@"%.1f",(cell.top - tableView.contentOffset.y + 1.5) / tableView.height];
+    NSMutableDictionary *eventDic = [NSMutableDictionary dictionary];
+    [eventDic setObject:@"020102" forKey:@"id"];
+    [eventDic setObject:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970] * 1000] forKey:@"time"];
+    [eventDic setObject:model.news_id forKey:@"news_id"];
+    [eventDic setObject:[NSNumber numberWithInteger:indexPath.row] forKey:@"list_pos"];
+    [eventDic setObject:@"topic" forKey:@"refer"];
+    [eventDic setObject:pagePos forKey:@"page_pos"];
+    [eventDic setObject:model.issuedID forKey:@"dispatch_id"];
+    [eventDic setObject:[NetType getNetType] forKey:@"net"];
+    if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
+        [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) forKey:@"lng"];
+        [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) forKey:@"lat"];
+    } else {
+        [eventDic setObject:@"" forKey:@"lng"];
+        [eventDic setObject:@"" forKey:@"lat"];
+    }
+    NSString *abflag = DEF_PERSISTENT_GET_OBJECT(@"abflag");
+    if (abflag && abflag.length > 0) {
+        [eventDic setObject:abflag forKey:@"abflag"];
+    }
+    NSDictionary *sessionDic = [NSDictionary dictionaryWithObjectsAndKeys:
+                                DEF_PERSISTENT_GET_OBJECT(@"UUID"), @"id",
+                                [NSArray arrayWithObject:eventDic], @"events",
+                                nil];
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObject:[NSArray arrayWithObject:sessionDic] forKey:@"sessions"];
+    [[SSHttpRequest sharedInstance] post:@"" params:params contentType:JsonType serverType:NetServer_Log success:^(id responseObj) {
+        // 打点成功
+    } failure:^(NSError *error) {
+        // 打点失败
+        [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
+        [appDelegate.eventArray addObject:eventDic];
+    } isShowHUD:NO];
     
     if (model.tpl.integerValue == NEWS_OnlyVideo) {
         // 打点-点击视频列表-010131
