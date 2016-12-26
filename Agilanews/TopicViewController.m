@@ -335,7 +335,9 @@
     [eventDic setObject:[NSNumber numberWithInteger:indexPath.row] forKey:@"list_pos"];
     [eventDic setObject:@"topic" forKey:@"refer"];
     [eventDic setObject:pagePos forKey:@"page_pos"];
-    [eventDic setObject:_model.issuedID forKey:@"dispatch_id"];
+    if (model.issuedID) {
+        [eventDic setObject:model.issuedID forKey:@"dispatch_id"];
+    }
     [eventDic setObject:[NetType getNetType] forKey:@"net"];
     if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
         [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) forKey:@"lng"];
