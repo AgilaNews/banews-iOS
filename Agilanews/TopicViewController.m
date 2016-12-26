@@ -89,6 +89,9 @@
             weakSelf.showBlankView = NO;
         }
         [_tableView reloadData];
+        if (isFooter) {
+            [weakSelf.tableView.footer endRefreshing];
+        }
     } failure:^(NSError *error) {
         [SVProgressHUD dismiss];
         weakSelf.showBlankView = YES;
@@ -332,7 +335,7 @@
     [eventDic setObject:[NSNumber numberWithInteger:indexPath.row] forKey:@"list_pos"];
     [eventDic setObject:@"topic" forKey:@"refer"];
     [eventDic setObject:pagePos forKey:@"page_pos"];
-    [eventDic setObject:model.issuedID forKey:@"dispatch_id"];
+    [eventDic setObject:_model.issuedID forKey:@"dispatch_id"];
     [eventDic setObject:[NetType getNetType] forKey:@"net"];
     if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
         [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) forKey:@"lng"];
@@ -459,18 +462,20 @@
 
 - (void)setDataList:(NSMutableArray *)dataList
 {
-    _dataList = dataList;
-    if (_dataList.count > 5) {
-        __weak typeof(self) weakSelf = self;
-        [self.tableView addLegendFooterWithRefreshingBlock:^{
-            [weakSelf tableViewDidTriggerFooterRefresh];
-            [weakSelf.tableView.footer beginRefreshing];
-        }];
-        [self.tableView.footer setTitle:@"" forState:MJRefreshFooterStateIdle];
-        [self.tableView.footer setTitle:@"Loading..." forState:MJRefreshFooterStateRefreshing];
-        [self.tableView.footer setTitle:@"No more news" forState:MJRefreshFooterStateNoMoreData];
-    } else {
-        [self.tableView removeFooter];
+    if (_dataList != dataList) {
+        _dataList = dataList;
+        if (_dataList.count > 5) {
+            __weak typeof(self) weakSelf = self;
+            [self.tableView addLegendFooterWithRefreshingBlock:^{
+                [weakSelf tableViewDidTriggerFooterRefresh];
+                [weakSelf.tableView.footer beginRefreshing];
+            }];
+            [self.tableView.footer setTitle:@"" forState:MJRefreshFooterStateIdle];
+            [self.tableView.footer setTitle:@"Loading..." forState:MJRefreshFooterStateRefreshing];
+            [self.tableView.footer setTitle:@"No more news" forState:MJRefreshFooterStateNoMoreData];
+        } else {
+            [self.tableView removeFooter];
+        }
     }
 }
 

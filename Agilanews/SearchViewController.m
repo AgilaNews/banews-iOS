@@ -71,6 +71,8 @@
     _tableView.backgroundColor = kWhiteBgColor;
     _tableView.dataSource = self;
     _tableView.delegate = self;
+    _tableView.sectionHeaderHeight = 0;
+    _tableView.sectionFooterHeight = 0;
     _tableView.separatorColor = SSColor(235, 235, 235);
     _tableView.tableFooterView = [UIView new];
     [self.view addSubview:_tableView];
@@ -150,6 +152,9 @@
             weakSelf.showBlankView = NO;
         }
         [_tableView reloadData];
+        if (isFooter) {
+            [weakSelf.tableView.footer endRefreshing];
+        }
     } failure:^(NSError *error) {
         [SVProgressHUD dismiss];
     } isShowHUD:NO];
@@ -478,18 +483,20 @@
 #pragma mark - setter/getter
 - (void)setDataList:(NSMutableArray *)dataList
 {
-    _dataList = dataList;
-    if (_dataList.count > 5) {
-        __weak typeof(self) weakSelf = self;
-        [self.tableView addLegendFooterWithRefreshingBlock:^{
-            [weakSelf tableViewDidTriggerFooterRefresh];
-            [weakSelf.tableView.footer beginRefreshing];
-        }];
-        [self.tableView.footer setTitle:@"" forState:MJRefreshFooterStateIdle];
-        [self.tableView.footer setTitle:@"Loading..." forState:MJRefreshFooterStateRefreshing];
-        [self.tableView.footer setTitle:@"No more news" forState:MJRefreshFooterStateNoMoreData];
-    } else {
-        [self.tableView removeFooter];
+    if (_dataList != dataList) {
+        _dataList = dataList;
+        if (_dataList.count > 0) {
+            __weak typeof(self) weakSelf = self;
+            [self.tableView addLegendFooterWithRefreshingBlock:^{
+                [weakSelf tableViewDidTriggerFooterRefresh];
+                [weakSelf.tableView.footer beginRefreshing];
+            }];
+            [self.tableView.footer setTitle:@"" forState:MJRefreshFooterStateIdle];
+            [self.tableView.footer setTitle:@"Loading..." forState:MJRefreshFooterStateRefreshing];
+            [self.tableView.footer setTitle:@"No more news" forState:MJRefreshFooterStateNoMoreData];
+        } else {
+            [self.tableView removeFooter];
+        }
     }
 }
 

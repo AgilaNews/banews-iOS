@@ -209,6 +209,9 @@
             weakSelf.showBlankView = NO;
         }
         [_tableView reloadData];
+        if (isFooter) {
+            [weakSelf.tableView.footer endRefreshing];
+        }
     } failure:^(NSError *error) {
         [SVProgressHUD dismiss];
     } isShowHUD:NO];
@@ -769,19 +772,21 @@
 
 - (void)setDataList:(NSMutableArray *)dataList
 {
-    _dataList = dataList;
-    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    if (_dataList.count > 5 && appDelegate.model) {
-        __weak typeof(self) weakSelf = self;
-        [self.tableView addLegendFooterWithRefreshingBlock:^{
-            [weakSelf tableViewDidTriggerFooterRefresh];
-            [weakSelf.tableView.footer beginRefreshing];
-        }];
-        [self.tableView.footer setTitle:@"" forState:MJRefreshFooterStateIdle];
-        [self.tableView.footer setTitle:@"Loading..." forState:MJRefreshFooterStateRefreshing];
-        [self.tableView.footer setTitle:@"No more favorites" forState:MJRefreshFooterStateNoMoreData];
-    } else {
-        [self.tableView removeFooter];
+    if (_dataList != dataList) {
+        _dataList = dataList;
+        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        if (_dataList.count > 5 && appDelegate.model) {
+            __weak typeof(self) weakSelf = self;
+            [self.tableView addLegendFooterWithRefreshingBlock:^{
+                [weakSelf tableViewDidTriggerFooterRefresh];
+                [weakSelf.tableView.footer beginRefreshing];
+            }];
+            [self.tableView.footer setTitle:@"" forState:MJRefreshFooterStateIdle];
+            [self.tableView.footer setTitle:@"Loading..." forState:MJRefreshFooterStateRefreshing];
+            [self.tableView.footer setTitle:@"No more favorites" forState:MJRefreshFooterStateNoMoreData];
+        } else {
+            [self.tableView removeFooter];
+        }
     }
 }
 
