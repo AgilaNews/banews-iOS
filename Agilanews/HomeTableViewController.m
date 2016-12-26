@@ -207,7 +207,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row >= _dataList.count) {
-        return 50;
+        return 1;
     }
     if ([_dataList[indexPath.row] isKindOfClass:[NSString class]]) {
         return 35;
@@ -295,7 +295,7 @@
             return 44;
         }
         default:
-            return 50;
+            return 1;
     }
 }
 
