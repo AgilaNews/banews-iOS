@@ -540,22 +540,13 @@
             weakSelf.commentArray = weakSelf.commentArray;
             _commentsLabel.hidden = NO;
             _model.commentCount = [NSNumber numberWithInteger:_model.commentCount.integerValue + 1];
-            int width;
-            if (_model.commentCount.integerValue < 10) {
-                width = 12;
-            } else if (_model.commentCount.integerValue < 100) {
-                width = 16;
-            } else if (_model.commentCount.integerValue < 1000) {
-                width = 22;
-            } else {
-                width = 28;
-            }
-            _commentsLabel.width = width;
             if (_model.commentCount.integerValue < 1000) {
                 _commentsLabel.text = _model.commentCount.stringValue;
             } else {
                 _commentsLabel.text = @"999+";
             }
+            CGSize commentSize = [_detailModel.commentCount.stringValue calculateSize:CGSizeMake(40, 10) font:_commentsLabel.font];
+            _commentsLabel.width = commentSize.width + 5;
         }
         [_tableView reloadData];
         [_commentTextView.textView resignFirstResponder];
@@ -1530,22 +1521,13 @@
                 NewsModel *model = _recommend_news[indexPath.row - 1];
                 if (model.commentCount.integerValue > 0) {
                     _commentsLabel.hidden = NO;
-                    int width;
-                    if (_model.commentCount.integerValue < 10) {
-                        width = 12;
-                    } else if (_model.commentCount.integerValue < 100) {
-                        width = 16;
-                    } else if (_model.commentCount.integerValue < 1000) {
-                        width = 22;
-                    } else {
-                        width = 28;
-                    }
-                    _commentsLabel.width = width;
                     if (model.commentCount.integerValue < 1000) {
                         _commentsLabel.text = model.commentCount.stringValue;
                     } else {
                         _commentsLabel.text = @"999+";
                     }
+                    CGSize commentSize = [_detailModel.commentCount.stringValue calculateSize:CGSizeMake(40, 10) font:_commentsLabel.font];
+                    _commentsLabel.width = commentSize.width + 5;
                 } else {
                     _commentsLabel.hidden = YES;
                 }
@@ -1814,22 +1796,13 @@
                 [_commentsView addSubview:_commentsLabel];
                 if (_model.commentCount.integerValue > 0) {
                     _commentsLabel.hidden = NO;
-                    int width;
-                    if (_model.commentCount.integerValue < 10) {
-                        width = 12;
-                    } else if (_model.commentCount.integerValue < 100) {
-                        width = 16;
-                    } else if (_model.commentCount.integerValue < 1000) {
-                        width = 22;
-                    } else {
-                        width = 28;
-                    }
-                    _commentsLabel.width = width;
                     if (_model.commentCount.integerValue < 1000) {
                         _commentsLabel.text = _model.commentCount.stringValue;
                     } else {
                         _commentsLabel.text = @"999+";
                     }
+                    CGSize commentSize = [_detailModel.commentCount.stringValue calculateSize:CGSizeMake(40, 10) font:_commentsLabel.font];
+                    _commentsLabel.width = commentSize.width + 5;
                 }
             }
         }

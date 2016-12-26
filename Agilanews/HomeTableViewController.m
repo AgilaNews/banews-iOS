@@ -822,8 +822,7 @@
     if ([_model.channelID isEqualToNumber:@30001]) {
         type = NetServer_V3;
     } else {
-//        type = NetServer_Home;
-        type = NetServer_API2;
+        type = NetServer_Home;
     }
     [[SSHttpRequest sharedInstance] get:kHomeUrl_NewsList params:params contentType:UrlencodedType serverType:type success:^(id responseObj) {
         [SVProgressHUD dismiss];

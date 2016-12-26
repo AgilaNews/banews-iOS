@@ -631,22 +631,13 @@
             weakSelf.commentArray = weakSelf.commentArray;
             _commentsLabel.hidden = NO;
             _detailModel.commentCount = [NSNumber numberWithInteger:_detailModel.commentCount.integerValue + 1];
-            int width;
-            if (_detailModel.commentCount.integerValue < 10) {
-                width = 12;
-            } else if (_detailModel.commentCount.integerValue < 100) {
-                width = 16;
-            } else if (_detailModel.commentCount.integerValue < 1000) {
-                width = 22;
-            } else {
-                width = 28;
-            }
-            _commentsLabel.width = width;
             if (_detailModel.commentCount.integerValue < 1000) {
                 _commentsLabel.text = _detailModel.commentCount.stringValue;
             } else {
                 _commentsLabel.text = @"999+";
             }
+            CGSize commentSize = [_detailModel.commentCount.stringValue calculateSize:CGSizeMake(40, 10) font:_commentsLabel.font];
+            _commentsLabel.width = commentSize.width + 5;
         }
         [_tableView reloadData];
         [_commentTextView.textView resignFirstResponder];
@@ -1387,22 +1378,13 @@
                 [_commentsView addSubview:_commentsLabel];
                 if (_detailModel.commentCount.integerValue > 0) {
                     _commentsLabel.hidden = NO;
-                    int width;
-                    if (_detailModel.commentCount.integerValue < 10) {
-                        width = 12;
-                    } else if (_detailModel.commentCount.integerValue < 100) {
-                        width = 16;
-                    } else if (_detailModel.commentCount.integerValue < 1000) {
-                        width = 22;
-                    } else {
-                        width = 28;
-                    }
-                    _commentsLabel.width = width;
                     if (_detailModel.commentCount.integerValue < 1000) {
                         _commentsLabel.text = _detailModel.commentCount.stringValue;
                     } else {
                         _commentsLabel.text = @"999+";
                     }
+                    CGSize commentSize = [_detailModel.commentCount.stringValue calculateSize:CGSizeMake(40, 10) font:_commentsLabel.font];
+                    _commentsLabel.width = commentSize.width + 5;
                 }
             }
         }
