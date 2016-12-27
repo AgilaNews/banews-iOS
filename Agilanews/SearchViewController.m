@@ -594,8 +594,8 @@
 - (void)clickKeyword:(UIButton *)button
 {
     [self.searchBar resignFirstResponder];
-    self.searchBar.text = @"";
     _keyword = button.titleLabel.text;
+    self.searchBar.text = _keyword;
     [SVProgressHUD show];
     [self requestSearchDataWithIsFooter:NO];
     self.tableView.tableHeaderView = nil;
