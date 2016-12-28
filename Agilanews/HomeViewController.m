@@ -424,10 +424,12 @@ static CGFloat const ButtonHeight = 40;
 // 添加小红点
 - (void)addRedPoint
 {
-    _redPoint = [[UIView alloc] initWithFrame:CGRectMake(_leftButton.right - 15, _leftButton.top + 10, 6, 6)];
-    _redPoint.backgroundColor = SSColor(233, 51, 17);
-    _redPoint.layer.cornerRadius = 3;
-    _redPoint.layer.masksToBounds = YES;
+    if (!_redPoint) {
+        _redPoint = [[UIView alloc] initWithFrame:CGRectMake(_leftButton.right - 15, _leftButton.top + 10, 6, 6)];
+        _redPoint.backgroundColor = SSColor(233, 51, 17);
+        _redPoint.layer.cornerRadius = 3;
+        _redPoint.layer.masksToBounds = YES;
+    }
     [_leftButton addSubview:_redPoint];
 }
 
