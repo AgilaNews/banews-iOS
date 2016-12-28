@@ -637,7 +637,7 @@
                 _commentsLabel.text = @"999+";
             }
             CGSize commentSize = [_detailModel.commentCount.stringValue calculateSize:CGSizeMake(40, 10) font:_commentsLabel.font];
-            _commentsLabel.width = commentSize.width + 5;
+            _commentsLabel.width = MAX(commentSize.width + 5, 10);
         }
         [_tableView reloadData];
         [_commentTextView.textView resignFirstResponder];
@@ -1384,7 +1384,7 @@
                         _commentsLabel.text = @"999+";
                     }
                     CGSize commentSize = [_detailModel.commentCount.stringValue calculateSize:CGSizeMake(40, 10) font:_commentsLabel.font];
-                    _commentsLabel.width = commentSize.width + 5;
+                    _commentsLabel.width = MAX(commentSize.width + 5, 10);
                 }
             }
         }
