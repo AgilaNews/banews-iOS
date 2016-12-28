@@ -398,9 +398,6 @@
                                        [NetType getNetType], @"network",
                                        nil];
         [Flurry logEvent:@"Comments_Enter" withParameters:articleParams];
-//#if DEBUG
-//        [iConsole info:[NSString stringWithFormat:@"Comments_Enter:%@",articleParams],nil];
-//#endif
     } else {
         // 打点-上拉加载-010302
         NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -409,9 +406,6 @@
                                        _model.news_id, @"article",
                                        nil];
         [Flurry logEvent:@"Comments_List_UpLoad" withParameters:articleParams];
-//#if DEBUG
-//        [iConsole info:[NSString stringWithFormat:@"Comments_List_UpLoad:%@",articleParams],nil];
-//#endif
     }
     
     __weak typeof(self) weakSelf = self;
@@ -447,9 +441,6 @@
                                            _model.news_id, @"article",
                                            nil];
             [Flurry logEvent:@"Comments_List_UpLoad_Y" withParameters:articleParams];
-//#if DEBUG
-//            [iConsole info:[NSString stringWithFormat:@"Comments_List_UpLoad_Y:%@",articleParams],nil];
-//#endif
         }
     } failure:^(NSError *error) {
         [_tableView.footer endRefreshing];
@@ -461,9 +452,6 @@
                                            _model.news_id, @"article",
                                            nil];
             [Flurry logEvent:@"Comments_List_UpLoad_N" withParameters:articleParams];
-//#if DEBUG
-//            [iConsole info:[NSString stringWithFormat:@"Comments_List_UpLoad_N:%@",articleParams],nil];
-//#endif
         }
     } isShowHUD:NO];
     [_tasks addObject:task];
@@ -541,7 +529,7 @@
             } else {
                 _commentsLabel.text = @"999+";
             }
-            CGSize commentSize = [_detailModel.commentCount.stringValue calculateSize:CGSizeMake(40, 10) font:_commentsLabel.font];
+            CGSize commentSize = [_model.commentCount.stringValue calculateSize:CGSizeMake(40, 10) font:_commentsLabel.font];
             _commentsLabel.width = MAX(commentSize.width + 5, 10);
         }
         [_tableView reloadData];
@@ -1522,7 +1510,7 @@
                     } else {
                         _commentsLabel.text = @"999+";
                     }
-                    CGSize commentSize = [_detailModel.commentCount.stringValue calculateSize:CGSizeMake(40, 10) font:_commentsLabel.font];
+                    CGSize commentSize = [model.commentCount.stringValue calculateSize:CGSizeMake(40, 10) font:_commentsLabel.font];
                     _commentsLabel.width = MAX(commentSize.width + 5, 10);
                 } else {
                     _commentsLabel.hidden = YES;
@@ -1783,7 +1771,7 @@
                     } else {
                         _commentsLabel.text = @"999+";
                     }
-                    CGSize commentSize = [_detailModel.commentCount.stringValue calculateSize:CGSizeMake(40, 10) font:_commentsLabel.font];
+                    CGSize commentSize = [_model.commentCount.stringValue calculateSize:CGSizeMake(40, 10) font:_commentsLabel.font];
                     _commentsLabel.width = MAX(commentSize.width + 5, 10);
                 }
             }
