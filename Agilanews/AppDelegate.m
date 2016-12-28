@@ -529,16 +529,16 @@
         {
             NSString *user_id = userInfo[@"user_id"];
             if (user_id && [self.model.user_id isEqualToString:user_id]) {
-                // 添加通知小红点
-                [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_FindNewNotif object:nil];
+                // 检查是否有新通知
+                [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_CheckNewNotif object:nil];
             }
         }
         case 5:
         {
             NSString *user_id = userInfo[@"user_id"];
             if (user_id && [self.model.user_id isEqualToString:user_id]) {
-                // 添加通知小红点
-                [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_FindNewNotif object:nil];
+                // 检查是否有新通知
+                [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_CheckNewNotif object:nil];
             }
         }
         default:
