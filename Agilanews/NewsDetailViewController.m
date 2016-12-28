@@ -39,11 +39,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    // ------对iOS7.0之后自动适应滑动视图内填充进行设置
-    if ([UIDevice currentDevice].systemVersion.floatValue >= 7.0)
-    {
-        self.automaticallyAdjustsScrollViewInsets = NO;
-    }
+    self.automaticallyAdjustsScrollViewInsets = NO;
     self.isBackButton = YES;
     _commentArray = [NSMutableArray array];
     _pullupCount = 0;
@@ -63,13 +59,9 @@
     [moreBtn setImage:[UIImage imageNamed:@"icon_article_font"] forState:UIControlStateNormal];
     [moreBtn addTarget:self action:@selector(moreAction) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *moreItem = [[UIBarButtonItem alloc]initWithCustomView:moreBtn];
-    if ([UIDevice currentDevice].systemVersion.floatValue >= 7.0) {
-        UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-        negativeSpacer.width = -10;
-        self.navigationItem.rightBarButtonItems = @[negativeSpacer, moreItem, shareItem];
-    } else {
-        self.navigationItem.rightBarButtonItems = @[moreItem, shareItem];
-    }
+    UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+    negativeSpacer.width = -10;
+    self.navigationItem.rightBarButtonItems = @[negativeSpacer, moreItem, shareItem];
     
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight) style:UITableViewStyleGrouped];
     _tableView.backgroundColor = kWhiteBgColor;

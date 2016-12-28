@@ -66,10 +66,6 @@
                                              selector:@selector(keyboardWillHidden)
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(touchFavorite)
-                                                 name:KNOTIFICATION_TouchFavorite
-                                               object:nil];
     
     UIButton *shareBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     shareBtn.frame = CGRectMake(0, 0, 40, 40);
@@ -1680,20 +1676,6 @@
     _commentTextView.textView.delegate = self;
     [_commentTextView.cancelButton addTarget:self action:@selector(cancelAction) forControlEvents:UIControlEventTouchUpInside];
     [_commentTextView.sendButton addTarget:self action:@selector(sendAction) forControlEvents:UIControlEventTouchUpInside];
-}
-
-/**
- *  收藏通知
- */
-- (void)touchFavorite
-{
-    UIButton *button = [_commentsView viewWithTag:301];
-    // 点击收藏按钮
-    if (button.selected) {
-        [self deleteCollectNewsWithButton:button];
-    } else {
-        [self collectNewsWithButton:button];
-    }
 }
 
 #pragma mark - setter/getter
