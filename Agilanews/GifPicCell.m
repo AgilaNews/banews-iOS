@@ -294,9 +294,6 @@
         _titleImageView.contentMode = UIViewContentModeCenter;
         _titleImageView.clipsToBounds = YES;
         _titleImageView.image = [UIImage imageNamed:@"holderImage"];
-//        _titleImageView.userInteractionEnabled = YES;
-//        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapAction)];
-//        [_titleImageView addGestureRecognizer:tap];
     }
     return _titleImageView;
 }

@@ -31,6 +31,8 @@
 		5F2E0A1D1D87B47A00FEC0AC /* HZIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F2E0A161D87B47A00FEC0AC /* HZIndicatorView.m */; };
 		5F2E0A1E1D87B47A00FEC0AC /* HZPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F2E0A181D87B47A00FEC0AC /* HZPhotoBrowser.m */; };
 		5F2E0A1F1D87B47A00FEC0AC /* HZPhotoBrowserView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F2E0A1B1D87B47A00FEC0AC /* HZPhotoBrowserView.m */; };
+		5F3AC7301E136F3D0034DA5A /* GifDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F3AC72F1E136F3C0034DA5A /* GifDetailViewController.m */; };
+		5F3AC7331E13BADE0034DA5A /* GifDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F3AC7321E13BADE0034DA5A /* GifDetailCell.m */; };
 		5F42BFB51D34E2F000B89651 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F42BFB41D34E2F000B89651 /* main.m */; };
 		5F42BFB81D34E2F000B89651 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F42BFB71D34E2F000B89651 /* AppDelegate.m */; };
 		5F42BFC01D34E2F000B89651 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5F42BFBF1D34E2F000B89651 /* Assets.xcassets */; };
@@ -300,6 +302,10 @@
 		5F2E0A191D87B47A00FEC0AC /* HZPhotoBrowserConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HZPhotoBrowserConfig.h; sourceTree = "<group>"; };
 		5F2E0A1A1D87B47A00FEC0AC /* HZPhotoBrowserView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HZPhotoBrowserView.h; sourceTree = "<group>"; };
 		5F2E0A1B1D87B47A00FEC0AC /* HZPhotoBrowserView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HZPhotoBrowserView.m; sourceTree = "<group>"; };
+		5F3AC72E1E136F3C0034DA5A /* GifDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GifDetailViewController.h; sourceTree = "<group>"; };
+		5F3AC72F1E136F3C0034DA5A /* GifDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GifDetailViewController.m; sourceTree = "<group>"; };
+		5F3AC7311E13BADE0034DA5A /* GifDetailCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GifDetailCell.h; sourceTree = "<group>"; };
+		5F3AC7321E13BADE0034DA5A /* GifDetailCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GifDetailCell.m; sourceTree = "<group>"; };
 		5F42BFB01D34E2F000B89651 /* Agila.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Agila.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5F42BFB41D34E2F000B89651 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		5F42BFB61D34E2F000B89651 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -819,6 +825,21 @@
 			path = HZPhotoBrowser;
 			sourceTree = "<group>";
 		};
+		5F3AC72D1E1369DA0034DA5A /* NewsDetail */ = {
+			isa = PBXGroup;
+			children = (
+				5F635CB21D3E12C3006AAE3D /* NewsDetailViewController.h */,
+				5F635CB31D3E12C3006AAE3D /* NewsDetailViewController.m */,
+				5F5342B51DBF3CD8005D78F1 /* DetailPlayerViewController.h */,
+				5F5342B61DBF3CD8005D78F1 /* DetailPlayerViewController.m */,
+				5F635ED71D41EB51006AAE3D /* webView.css */,
+				5F571FE31D64057500604CDD /* webView.js */,
+				5FE722211D50B5B70026BFC3 /* textonly.png */,
+				5F8D85D11D7D1AA800FF4019 /* placeholder.png */,
+			);
+			name = NewsDetail;
+			sourceTree = "<group>";
+		};
 		5F42BFA71D34E2F000B89651 = {
 			isa = PBXGroup;
 			children = (
@@ -1292,8 +1313,6 @@
 				5F64627C1D4855F7008EEDEC /* CommentTextField.m */,
 				5F64627E1D48AD3A008EEDEC /* CommentTextView.h */,
 				5F64627F1D48AD3A008EEDEC /* CommentTextView.m */,
-				5F5342C81DC717C3005D78F1 /* VideoDetailCell.h */,
-				5F5342C91DC717C3005D78F1 /* VideoDetailCell.m */,
 			);
 			name = Detail;
 			sourceTree = "<group>";
@@ -1348,16 +1367,15 @@
 		5F86EDE81E03F64F00F3C35B /* Detail */ = {
 			isa = PBXGroup;
 			children = (
-				5F635CB21D3E12C3006AAE3D /* NewsDetailViewController.h */,
-				5F635CB31D3E12C3006AAE3D /* NewsDetailViewController.m */,
-				5F5342B51DBF3CD8005D78F1 /* DetailPlayerViewController.h */,
-				5F5342B61DBF3CD8005D78F1 /* DetailPlayerViewController.m */,
+				5F3AC72D1E1369DA0034DA5A /* NewsDetail */,
+				5F5342C81DC717C3005D78F1 /* VideoDetailCell.h */,
+				5F5342C91DC717C3005D78F1 /* VideoDetailCell.m */,
 				5F5342B81DC21C7E005D78F1 /* VideoDetailViewController.h */,
 				5F5342B91DC21C7E005D78F1 /* VideoDetailViewController.m */,
-				5F635ED71D41EB51006AAE3D /* webView.css */,
-				5F571FE31D64057500604CDD /* webView.js */,
-				5FE722211D50B5B70026BFC3 /* textonly.png */,
-				5F8D85D11D7D1AA800FF4019 /* placeholder.png */,
+				5F3AC7311E13BADE0034DA5A /* GifDetailCell.h */,
+				5F3AC7321E13BADE0034DA5A /* GifDetailCell.m */,
+				5F3AC72E1E136F3C0034DA5A /* GifDetailViewController.h */,
+				5F3AC72F1E136F3C0034DA5A /* GifDetailViewController.m */,
 			);
 			name = Detail;
 			sourceTree = "<group>";
@@ -1742,6 +1760,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5F3AC7331E13BADE0034DA5A /* GifDetailCell.m in Sources */,
 				5FF4B6E01D362ED100CC6704 /* Signature.m in Sources */,
 				5F635CC01D3E28E9006AAE3D /* LoginModel.m in Sources */,
 				5F42BFFA1D34E3D500B89651 /* AFURLSessionManager.m in Sources */,
@@ -1778,6 +1797,7 @@
 				5FF4B6EA1D3645A100CC6704 /* BaseModel.m in Sources */,
 				5F6462801D48AD3A008EEDEC /* CommentTextView.m in Sources */,
 				5F86EDE51E039B1300F3C35B /* SearchBar.m in Sources */,
+				5F3AC7301E136F3D0034DA5A /* GifDetailViewController.m in Sources */,
 				5F42C0911D34E41D00B89651 /* UIView+WebCacheOperation.m in Sources */,
 				5FF4B7B51D38F7B200CC6704 /* View+MASAdditions.m in Sources */,
 				5F86EDD01DF94B1400F3C35B /* PullDownListView.m in Sources */,

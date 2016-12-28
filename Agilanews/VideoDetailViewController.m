@@ -231,6 +231,7 @@
 {
     [self.playerView stopVideo];
     self.playerView.delegate = nil;
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     
     for (NSURLSessionDataTask *task in _tasks) {
         [task cancel];

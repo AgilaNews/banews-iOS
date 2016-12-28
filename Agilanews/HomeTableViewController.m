@@ -9,8 +9,16 @@
 #import "HomeTableViewController.h"
 #import "BaseNavigationController.h"
 #import "NewsDetailViewController.h"
+#import "VideoDetailViewController.h"
+#import "InterestsViewController.h"
+#import "TopicViewController.h"
+#import "GifDetailViewController.h"
+#import "HomeViewController.h"
+
 #import "NewsModel.h"
 #import "FilterModel.h"
+#import "ImageModel.h"
+
 #import "ManyPicCell.h"
 #import "SinglePicCell.h"
 #import "NoPicCell.h"
@@ -19,19 +27,14 @@
 #import "GifPicCell.h"
 #import "OnlyVideoCell.h"
 #import "RefreshCell.h"
-#import "AppDelegate.h"
-#import "BannerView.h"
-#import "AppDelegate.h"
-#import "HomeViewController.h"
-#import "ImageModel.h"
-#import "VideoDetailViewController.h"
 #import "FacebookAdCell.h"
 #import "TopCell.h"
+#import "InterestCell.h"
+
+#import "BannerView.h"
+#import "AppDelegate.h"
 #import "DislikeView.h"
 #import "SearchBar.h"
-#import "InterestCell.h"
-#import "TopicViewController.h"
-#import "InterestsViewController.h"
 
 #define titleFont_Normal        [UIFont systemFontOfSize:16]
 #define titleFont_ExtraLarge    [UIFont systemFontOfSize:20]
@@ -536,8 +539,8 @@
         [self.tableView.header beginRefreshing];
         return;
     }
-    if ([_model.channelID isEqualToNumber:@10011] || [_model.channelID isEqualToNumber:@10012]) {
-        // 点击图片频道和GIF频道
+    if ([_model.channelID isEqualToNumber:@10011]) {
+        // 点击图片频道
         return;
     }
     
@@ -595,6 +598,13 @@
         TopicViewController *topicVC = [[TopicViewController alloc] init];
         topicVC.model = model;
         [self.navigationController pushViewController:topicVC animated:YES];
+        return;
+    }
+    // 点击GIF频道
+    if ([_model.channelID isEqualToNumber:@10012]) {
+        GifDetailViewController *gifDetailVC = [[GifDetailViewController alloc] init];
+        gifDetailVC.model = model;
+        [self.navigationController pushViewController:gifDetailVC animated:YES];
         return;
     }
     
