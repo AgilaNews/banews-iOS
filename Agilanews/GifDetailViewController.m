@@ -995,6 +995,18 @@
     SSLog(@"取消分享");
 }
 
+#pragma mark - UITextViewDelegate
+- (void)textViewDidChange:(UITextView *)textView
+{
+    if (_commentTextView.textView.text.length > 0) {
+        _commentTextView.placeholderLabel.hidden = YES;
+        _commentTextView.isInput = YES;
+    } else {
+        _commentTextView.placeholderLabel.hidden = NO;
+        _commentTextView.isInput = NO;
+    }
+}
+
 #pragma mark - Notification
 /**
  *  键盘弹出后执行的操作
