@@ -1577,7 +1577,7 @@
                 [self.tableView reloadData];
                 self.isRecommendShow = NO;
                 // 播放结束打点
-                [_playerPath addObject:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time", @"4" , @"type", nil]];
+                [_playerPath addObject:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time", @"4", @"type", nil]];
                 [self uploadOverPlayingVideo];
                 // 新闻推荐网络请求
                 [self recommendWithNewsID:model.news_id AppDelegate:appDelegate];
