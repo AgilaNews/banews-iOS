@@ -1449,6 +1449,7 @@
                             [self.noCommentView removeFromSuperview];
                             ((CommentCell *)cell).model = _commentArray[indexPath.row - 1];
                         } else {
+                            ((CommentCell *)cell).model = nil;
                             [cell.contentView addSubview:self.noCommentView];
                         }
                         [cell setNeedsLayout];
@@ -1488,6 +1489,7 @@
                         [self.noCommentView removeFromSuperview];
                         ((CommentCell *)cell).model = _commentArray[indexPath.row - 1];
                     } else {
+                        ((CommentCell *)cell).model = nil;
                         [cell.contentView addSubview:self.noCommentView];
                     }
                     [cell setNeedsLayout];
