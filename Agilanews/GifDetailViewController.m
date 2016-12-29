@@ -73,6 +73,25 @@
 
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    SVProgressHUD.defaultStyle = SVProgressHUDStyleLight;
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    id cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+    if (cell && [cell isKindOfClass:[GifDetailCell class]]) {
+        GifDetailCell *gifCell = cell;
+        AFNetworkReachabilityManager *manager = [AFNetworkReachabilityManager sharedManager];
+        if (manager.networkReachabilityStatus == AFNetworkReachabilityStatusReachableViaWiFi) {
+            [gifCell tapAction];
+        }
+    }
+}
+
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];

@@ -23,4 +23,6 @@
 @property (nonatomic, strong) LoadingView *loadingView;
 @property (nonatomic, assign) BOOL isPlay;
 
+- (void)tapAction;
+
 @end
