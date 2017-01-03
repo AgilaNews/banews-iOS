@@ -251,6 +251,7 @@ static CGFloat const ButtonHeight = 40;
 //        [iConsole info:[NSString stringWithFormat:@"Home_MenuButton_Click:%@",articleParams],nil];
 //#endif
     }
+    self.segmentVC.isPullDownListShow = NO;
     if (_leftView == nil) {
         _leftView = [[LeftView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
     }
