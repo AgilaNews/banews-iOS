@@ -227,6 +227,8 @@
                         [SVProgressHUD dismiss];
                     });
                 }
+                weakSelf.playButton.hidden = NO;
+                [fileManager removeItemAtPath:mp4FilePath error:nil];
             } else {
                 [weakSelf playVideoWithUrl:mp4FilePath];
             }
