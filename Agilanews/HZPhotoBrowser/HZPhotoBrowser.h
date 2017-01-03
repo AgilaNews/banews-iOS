@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "HZPhotoBrowserView.h"
 #import "NewsModel.h"
+#import "BaseViewController.h"
 
 @class HZPhotoBrowser;
 
@@ -18,7 +19,7 @@
 - (NSURL *)photoBrowser:(HZPhotoBrowser *)browser highQualityImageURLForIndex:(NSInteger)index;
 @end
 
-@interface HZPhotoBrowser : UIViewController
+@interface HZPhotoBrowser : BaseViewController
 
 @property (nonatomic, weak) UIView *sourceImagesContainerView;
 @property (nonatomic, assign) int currentImageIndex;

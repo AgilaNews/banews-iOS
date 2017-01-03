@@ -24,10 +24,25 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    self.isBackButton = YES;
+    if ([UIDevice currentDevice].systemVersion.floatValue >= 10.0) {
+        [self.navigationController.navigationBar setBarTintColor:SSColor_RGB(27)];
+        UIView *barBgView = self.navigationController.navigationBar.subviews.firstObject;
+        for (UIView *subview in barBgView.subviews) {
+            if([subview isKindOfClass:[UIVisualEffectView class]]) {
+                subview.backgroundColor = SSColor_RGB(27);
+                [subview removeAllSubviews];
+            }
+        }
+    } else {
+        [self.navigationController.navigationBar lt_setBackgroundColor:SSColor_RGB(27)];
+    }
+    
     _hasShowedPhotoBrowser = NO;
-    self.view.backgroundColor = kPhotoBrowserBackgrounColor;
+    self.view.backgroundColor = SSColor_RGB(27);
     [self addScrollView];
-//    [self addToolbars];
+    [self addToolbars];
     [self setUpFrames];
     
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressAction:)];
@@ -87,7 +102,7 @@
 #pragma mark 显示图片浏览器
 - (void)showPhotoBrowser
 {
-    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
+//    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
 //    UIView *sourceView = self.sourceImagesContainerView.subviews[self.currentImageIndex];
     UIView *sourceView = self.sourceImagesContainerView;
 
@@ -103,51 +118,51 @@
         rect.origin.y =  rect.origin.y + 64 + 40;
     }
     
-    UIImageView *tempImageView = [[UIImageView alloc] init];
-    tempImageView.frame = rect;
-    tempImageView.image = [self placeholderImageForIndex:self.currentImageIndex];
-    [self.view addSubview:tempImageView];
-    tempImageView.contentMode = UIViewContentModeScaleAspectFit;
+//    UIImageView *tempImageView = [[UIImageView alloc] init];
+//    tempImageView.frame = rect;
+//    tempImageView.image = [self placeholderImageForIndex:self.currentImageIndex];
+//    [self.view addSubview:tempImageView];
+//    tempImageView.contentMode = UIViewContentModeScaleAspectFill;
 
-    CGFloat placeImageSizeW = tempImageView.image.size.width;
-    CGFloat placeImageSizeH = tempImageView.image.size.height;
-    CGRect targetTemp;
-    
-    if (!kIsFullWidthForLandScape) {
-        if (kAPPWidth < kAppHeight) {
-            CGFloat placeHolderH = (placeImageSizeH * kAPPWidth)/placeImageSizeW;
-            if (placeHolderH <= kAppHeight) {
-                targetTemp = CGRectMake(0, (kAppHeight - placeHolderH) * 0.5 , kAPPWidth, placeHolderH);
-            } else {
-                targetTemp = CGRectMake(0, 0, kAPPWidth, placeHolderH);
-            }
-        } else {
-            CGFloat placeHolderW = (placeImageSizeW * kAppHeight)/placeImageSizeH;
-            if (placeHolderW < kAPPWidth) {
-                targetTemp = CGRectMake((kAPPWidth - placeHolderW)*0.5, 0, placeHolderW, kAppHeight);
-            } else {
-                targetTemp = CGRectMake(0, 0, placeHolderW, kAppHeight);
-            }
-        }
-
-    } else {
-        CGFloat placeHolderH = (placeImageSizeH * kAPPWidth)/placeImageSizeW;
-        if (placeHolderH <= kAppHeight) {
-            targetTemp = CGRectMake(0, (kAppHeight - placeHolderH) * 0.5 , kAPPWidth, placeHolderH);
-        } else {
-            targetTemp = CGRectMake(0, 0, kAPPWidth, placeHolderH);
-        }
-    }
+//    CGFloat placeImageSizeW = tempImageView.image.size.width;
+//    CGFloat placeImageSizeH = tempImageView.image.size.height;
+//    CGRect targetTemp;
+//    
+//    if (!kIsFullWidthForLandScape) {
+//        if (kAPPWidth < kAppHeight) {
+//            CGFloat placeHolderH = (placeImageSizeH * kAPPWidth)/placeImageSizeW;
+//            if (placeHolderH <= kAppHeight) {
+//                targetTemp = CGRectMake(0, (kAppHeight - placeHolderH) * 0.5 , kAPPWidth, placeHolderH);
+//            } else {
+//                targetTemp = CGRectMake(0, 0, kAPPWidth, placeHolderH);
+//            }
+//        } else {
+//            CGFloat placeHolderW = (placeImageSizeW * kAppHeight)/placeImageSizeH;
+//            if (placeHolderW < kAPPWidth) {
+//                targetTemp = CGRectMake((kAPPWidth - placeHolderW)*0.5, 0, placeHolderW, kAppHeight);
+//            } else {
+//                targetTemp = CGRectMake(0, 0, placeHolderW, kAppHeight);
+//            }
+//        }
+//
+//    } else {
+//        CGFloat placeHolderH = (placeImageSizeH * kAPPWidth)/placeImageSizeW;
+//        if (placeHolderH <= kAppHeight) {
+//            targetTemp = CGRectMake(0, (kAppHeight - placeHolderH) * 0.5 , kAPPWidth, placeHolderH);
+//        } else {
+//            targetTemp = CGRectMake(0, 0, kAPPWidth, placeHolderH);
+//        }
+//    }
     
     _scrollView.hidden = YES;
     _indexLabel.hidden = YES;
     _saveButton.hidden = YES;
 
     [UIView animateWithDuration:kPhotoBrowserShowDuration animations:^{
-        tempImageView.frame = targetTemp;
+//        tempImageView.frame = targetTemp;
     } completion:^(BOOL finished) {
         _hasShowedPhotoBrowser = YES;
-        [tempImageView removeFromSuperview];
+//        [tempImageView removeFromSuperview];
         _scrollView.hidden = NO;
         _indexLabel.hidden = NO;
         _saveButton.hidden = NO;
@@ -186,34 +201,40 @@
 - (void)addToolbars
 {
     //序标
-    UILabel *indexLabel = [[UILabel alloc] init];
-    indexLabel.textAlignment = NSTextAlignmentCenter;
-    indexLabel.textColor = [UIColor whiteColor];
-    indexLabel.font = [UIFont boldSystemFontOfSize:20];
-    indexLabel.backgroundColor = [UIColor colorWithRed:0.1f green:0.1f blue:0.1f alpha:0.3f];
-    indexLabel.bounds = CGRectMake(0, 0, 100, 40);
-    indexLabel.center = CGPointMake(kAPPWidth * 0.5, 30);
-    indexLabel.layer.cornerRadius = 15;
-    indexLabel.clipsToBounds = YES;
- 
-    if (self.imageCount > 1) {
-        indexLabel.text = [NSString stringWithFormat:@"1/%ld", (long)self.imageCount];
-        _indexLabel = indexLabel;
-        [self.view addSubview:indexLabel];
+    if (self.imageCount >= 1) {
+        if (!_indexLabel) {
+            UILabel *indexLabel = [[UILabel alloc] init];
+            indexLabel.textAlignment = NSTextAlignmentCenter;
+            indexLabel.textColor = [UIColor whiteColor];
+            indexLabel.font = [UIFont boldSystemFontOfSize:20];
+            indexLabel.bounds = CGRectMake(0, 0, 100, 40);
+            indexLabel.center = CGPointMake(kAPPWidth * 0.5, 30);
+            NSString *titleStr = [NSString stringWithFormat:@"1/%ld", (long)self.imageCount];
+            NSMutableAttributedString *attributedStr = [[NSMutableAttributedString alloc]initWithString:titleStr];
+            [attributedStr addAttributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:19],
+                                           NSForegroundColorAttributeName : [UIColor whiteColor]
+                                           } range:NSMakeRange(0, 1)];
+            [attributedStr addAttributes:@{NSFontAttributeName : [UIFont systemFontOfSize:16],
+                                           NSForegroundColorAttributeName : [UIColor whiteColor]
+                                           } range:NSMakeRange(1, attributedStr.length - 1)];
+            indexLabel.attributedText = attributedStr;
+            self.navigationItem.titleView = indexLabel;
+            _indexLabel = indexLabel;
+        }
     }
     
-    // 2.保存按钮
-    UIButton *saveButton = [[UIButton alloc] init];
-    [saveButton setTitle:@"保存" forState:UIControlStateNormal];
-    [saveButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    saveButton.layer.borderWidth = 0.1;
-    saveButton.layer.borderColor = [UIColor whiteColor].CGColor;
-    saveButton.backgroundColor = [UIColor colorWithRed:0.1f green:0.1f blue:0.1f alpha:0.3f];
-    saveButton.layer.cornerRadius = 2;
-    saveButton.clipsToBounds = YES;
-    [saveButton addTarget:self action:@selector(saveImage) forControlEvents:UIControlEventTouchUpInside];
-    _saveButton = saveButton;
-    [self.view addSubview:saveButton];
+//    // 2.保存按钮
+//    UIButton *saveButton = [[UIButton alloc] init];
+//    [saveButton setTitle:@"保存" forState:UIControlStateNormal];
+//    [saveButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+//    saveButton.layer.borderWidth = 0.1;
+//    saveButton.layer.borderColor = [UIColor whiteColor].CGColor;
+//    saveButton.backgroundColor = [UIColor colorWithRed:0.1f green:0.1f blue:0.1f alpha:0.3f];
+//    saveButton.layer.cornerRadius = 2;
+//    saveButton.clipsToBounds = YES;
+//    [saveButton addTarget:self action:@selector(saveImage) forControlEvents:UIControlEventTouchUpInside];
+//    _saveButton = saveButton;
+//    [self.view addSubview:saveButton];
 }
 
 #pragma mark 长按图片事件
@@ -276,7 +297,7 @@
 
 - (void)show
 {
-    [[[[UIApplication sharedApplication] keyWindow] rootViewController] presentViewController:self animated:NO completion:nil];
+//    [[[[UIApplication sharedApplication] keyWindow] rootViewController] presentViewController:self animated:NO completion:nil];
     // 打点-图片全屏展示页页面进入-010009
     JTNavigationController *navCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
     HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
@@ -291,64 +312,66 @@
 //#if DEBUG
 //    [iConsole info:[NSString stringWithFormat:@"PhotoFullScreen_Enter:%@",articleParams],nil];
 //#endif
+    [homeVC.navigationController pushViewController:self animated:YES];
 }
 
 #pragma mark 单击隐藏图片浏览器
 - (void)hidePhotoBrowser:(UITapGestureRecognizer *)recognizer
 {
-    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationNone];
-    
-    HZPhotoBrowserView *view = (HZPhotoBrowserView *)recognizer.view;
-    UIImageView *currentImageView = view.imageview;
-    
-//    UIView *sourceView = self.sourceImagesContainerView.subviews[self.currentImageIndex];
-    UIView *sourceView = self.sourceImagesContainerView;
-    UIView *parentView = [self getParsentView:sourceView];
-    CGRect targetTemp = [sourceView.superview convertRect:sourceView.frame toView:parentView];
-    
-    // 减去偏移量
-//    if ([parentView isKindOfClass:[UITableView class]]) {
-//        UITableView *tableview = (UITableView *)parentView;
-//        targetTemp.origin.y =  targetTemp.origin.y - tableview.contentOffset.y;
+    [self.navigationController popViewControllerAnimated:YES];
+//    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationNone];
+//    
+//    HZPhotoBrowserView *view = (HZPhotoBrowserView *)recognizer.view;
+//    UIImageView *currentImageView = view.imageview;
+//    
+////    UIView *sourceView = self.sourceImagesContainerView.subviews[self.currentImageIndex];
+//    UIView *sourceView = self.sourceImagesContainerView;
+//    UIView *parentView = [self getParsentView:sourceView];
+//    CGRect targetTemp = [sourceView.superview convertRect:sourceView.frame toView:parentView];
+//    
+//    // 减去偏移量
+////    if ([parentView isKindOfClass:[UITableView class]]) {
+////        UITableView *tableview = (UITableView *)parentView;
+////        targetTemp.origin.y =  targetTemp.origin.y - tableview.contentOffset.y;
+////    }
+//    if ([sourceView.superview.superview isKindOfClass:[UITableViewCell class]]) {
+////        UITableView *tableview = (UITableView *)parentView;
+//        targetTemp.origin.y =  targetTemp.origin.y + 64 + 40;
 //    }
-    if ([sourceView.superview.superview isKindOfClass:[UITableViewCell class]]) {
-//        UITableView *tableview = (UITableView *)parentView;
-        targetTemp.origin.y =  targetTemp.origin.y + 64 + 40;
-    }
-    
-    CGFloat appWidth;
-    CGFloat appHeight;
-    if (kAPPWidth < kAppHeight) {
-        appWidth = kAPPWidth;
-        appHeight = kAppHeight;
-    } else {
-        appWidth = kAppHeight;
-        appHeight = kAPPWidth;
-    }
-    
-    UIImageView *tempImageView = [[UIImageView alloc] init];
-    tempImageView.image = currentImageView.image;
-    if (tempImageView.image) {
-        CGFloat tempImageSizeH = tempImageView.image.size.height;
-        CGFloat tempImageSizeW = tempImageView.image.size.width;
-        CGFloat tempImageViewH = (tempImageSizeH * appWidth)/tempImageSizeW;
-        if (tempImageViewH < appHeight) {
-            tempImageView.frame = CGRectMake(0, (appHeight - tempImageViewH)*0.5, appWidth, tempImageViewH);
-        } else {
-            tempImageView.frame = CGRectMake(0, 0, appWidth, tempImageViewH);
-        }
-    } else {
-        tempImageView.backgroundColor = [UIColor whiteColor];
-        tempImageView.frame = CGRectMake(0, (appHeight - appWidth)*0.5, appWidth, appWidth);
-    }
-    
-    [self.view.window addSubview:tempImageView];
-    [self dismissViewControllerAnimated:NO completion:nil];
-    [UIView animateWithDuration:kPhotoBrowserHideDuration animations:^{
-        tempImageView.frame = targetTemp;
-    } completion:^(BOOL finished) {
-        [tempImageView removeFromSuperview];
-    }];
+//    
+//    CGFloat appWidth;
+//    CGFloat appHeight;
+//    if (kAPPWidth < kAppHeight) {
+//        appWidth = kAPPWidth;
+//        appHeight = kAppHeight;
+//    } else {
+//        appWidth = kAppHeight;
+//        appHeight = kAPPWidth;
+//    }
+//    
+//    UIImageView *tempImageView = [[UIImageView alloc] init];
+//    tempImageView.image = currentImageView.image;
+//    if (tempImageView.image) {
+//        CGFloat tempImageSizeH = tempImageView.image.size.height;
+//        CGFloat tempImageSizeW = tempImageView.image.size.width;
+//        CGFloat tempImageViewH = (tempImageSizeH * appWidth)/tempImageSizeW;
+//        if (tempImageViewH < appHeight) {
+//            tempImageView.frame = CGRectMake(0, (appHeight - tempImageViewH)*0.5, appWidth, tempImageViewH);
+//        } else {
+//            tempImageView.frame = CGRectMake(0, 0, appWidth, tempImageViewH);
+//        }
+//    } else {
+//        tempImageView.backgroundColor = [UIColor whiteColor];
+//        tempImageView.frame = CGRectMake(0, (appHeight - appWidth)*0.5, appWidth, appWidth);
+//    }
+//    
+//    [self.view.window addSubview:tempImageView];
+//    [self dismissViewControllerAnimated:NO completion:nil];
+//    [UIView animateWithDuration:kPhotoBrowserHideDuration animations:^{
+//        tempImageView.frame = targetTemp;
+//    } completion:^(BOOL finished) {
+//        [tempImageView removeFromSuperview];
+//    }];
 }
 
 #pragma mark 网络加载图片
@@ -396,11 +419,19 @@
 {
     int index = (scrollView.contentOffset.x + _scrollView.bounds.size.width * 0.5) / _scrollView.bounds.size.width;
     
-    _indexLabel.text = [NSString stringWithFormat:@"%d/%ld", index + 1, (long)self.imageCount];
+    NSString *titleStr = [NSString stringWithFormat:@"%d/%ld", index + 1, (long)self.imageCount];
+    NSMutableAttributedString *attributedStr = [[NSMutableAttributedString alloc]initWithString:titleStr];
+    [attributedStr addAttributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:19],
+                                   NSForegroundColorAttributeName : [UIColor whiteColor]
+                                   } range:NSMakeRange(0, 1)];
+    [attributedStr addAttributes:@{NSFontAttributeName : [UIFont systemFontOfSize:16],
+                                   NSForegroundColorAttributeName : [UIColor whiteColor]
+                                   } range:NSMakeRange(1, attributedStr.length - 1)];
+    _indexLabel.attributedText = attributedStr;
     long left = index - 2;
     long right = index + 2;
     left = left>0?left : 0;
-    right = right>self.imageCount?self.imageCount:right;
+    right = right>self.imageCount ? self.imageCount : right;
     
     //预加载三张图片
     for (long i = left; i < right; i++) {
@@ -410,7 +441,7 @@
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
-    int autualIndex = scrollView.contentOffset.x  / _scrollView.bounds.size.width;
+    int autualIndex = scrollView.contentOffset.x / _scrollView.bounds.size.width;
     //设置当前下标
     self.currentImageIndex = autualIndex;
     

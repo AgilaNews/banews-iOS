@@ -23,5 +23,6 @@
 @property (nonatomic, strong) UIColor *bgColor;
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier bgColor:(UIColor *)bgColor;
+- (void)tapAction;
 
 @end

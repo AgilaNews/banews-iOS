@@ -249,8 +249,8 @@
         _titleImageView.clipsToBounds = YES;
         _titleImageView.image = [UIImage imageNamed:@"holderImage"];
         _titleImageView.userInteractionEnabled = YES;
-        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapAction)];
-        [_titleImageView addGestureRecognizer:tap];
+//        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapAction)];
+//        [_titleImageView addGestureRecognizer:tap];
     }
     return _titleImageView;
 }
@@ -353,7 +353,7 @@
     HZPhotoBrowser *browserVc = [[HZPhotoBrowser alloc] init];
     browserVc.model = _model;
     browserVc.sourceImagesContainerView = self.titleImageView; // 原图的父控件
-    browserVc.imageCount = 1; // 图片总数
+    browserVc.imageCount = _model.imgs.count; // 图片总数
     browserVc.currentImageIndex = 0;
     browserVc.delegate = self;
     [browserVc show];

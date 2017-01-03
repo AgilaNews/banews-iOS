@@ -77,7 +77,7 @@
 #define NEWS_ManyPic     3   // 多图模板
 #define NEWS_SinglePic   4   // 单图模板
 #define NEWS_NoPic       5   // 无图模板
-#define NEWS_OnlyPic     6   // 纯图模板
+#define NEWS_OnlyPic     6   // 图片模板
 #define NEWS_GifPic      7   // gif图模板
 #define NEWS_HotVideo    10  // hot视频模板
 #define NEWS_HaveVideo   11  // 含视频模板

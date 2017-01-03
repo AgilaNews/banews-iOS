@@ -8,12 +8,12 @@
 
 #import "HomeTableViewController.h"
 #import "BaseNavigationController.h"
+#import "HomeViewController.h"
 #import "NewsDetailViewController.h"
 #import "VideoDetailViewController.h"
 #import "InterestsViewController.h"
 #import "TopicViewController.h"
 #import "GifDetailViewController.h"
-#import "HomeViewController.h"
 
 #import "NewsModel.h"
 #import "FilterModel.h"
@@ -539,10 +539,6 @@
         [self.tableView.header beginRefreshing];
         return;
     }
-    if ([_model.channelID isEqualToNumber:@10011]) {
-        // 点击图片频道
-        return;
-    }
     
     NewsModel *model = _dataList[indexPath.row];
     // 点击兴趣
@@ -600,11 +596,17 @@
         [self.navigationController pushViewController:topicVC animated:YES];
         return;
     }
-    // 点击GIF频道
-    if ([_model.channelID isEqualToNumber:@10012]) {
+    // 点击GIF
+    if (model.tpl.integerValue == NEWS_GifPic) {
         GifDetailViewController *gifDetailVC = [[GifDetailViewController alloc] init];
         gifDetailVC.model = model;
         [self.navigationController pushViewController:gifDetailVC animated:YES];
+        return;
+    }
+    // 点击图片
+    if (model.tpl.integerValue == NEWS_OnlyPic) {
+        OnlyPicCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+        [cell tapAction];
         return;
     }
     
