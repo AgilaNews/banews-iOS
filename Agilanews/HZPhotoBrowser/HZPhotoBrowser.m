@@ -10,6 +10,8 @@
 #import "HZPhotoBrowserConfig.h"
 #import "HomeViewController.h"
 #import "HomeTableViewController.h"
+#import "CommentTextField.h"
+#import "LoginView.h"
 
 @interface HZPhotoBrowser() <UIScrollViewDelegate>
 @property (nonatomic,strong) UIScrollView *scrollView;
@@ -48,6 +50,25 @@
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressAction:)];
 //    longPress.minimumPressDuration = 1;
     [self.view addGestureRecognizer:longPress];
+    
+    // 底部评论框
+    [self.view addSubview:self.commentsView];
+    // 详情标签
+    [self.view addSubview:self.contentView];
+    
+    // 注册通知
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(loginSuccess)
+                                                 name:KNOTIFICATION_Login_Success
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHidden)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
 }
 
 //- (void)viewDidAppear:(BOOL)animated
@@ -473,4 +494,311 @@
 {
     return YES;
 }
+
+#pragma mark - addPrivateMethod
+
+#pragma mark - setter/getter
+// 内容描述
+- (UIView *)contentView
+{
+    if (_contentView == nil) {
+        _contentView = [[UIView alloc] init];
+        _contentView.backgroundColor = [UIColor colorWithRed:27/255.0 green:27/255.0 blue:27/255.0 alpha:.4];
+        UILabel *contentLabel = [[UILabel alloc] init];
+        contentLabel.numberOfLines = 0;
+        contentLabel.font = [UIFont boldSystemFontOfSize:16];
+        contentLabel.textColor = [UIColor whiteColor];
+        contentLabel.text = _model.title;
+        CGSize contentSize = [_model.title calculateSize:CGSizeMake(kScreenWidth - 22, 40) font:contentLabel.font];
+        contentLabel.frame = CGRectMake(11, 8, contentSize.width, contentSize.height);
+        [_contentView addSubview:contentLabel];
+        _contentView.frame = CGRectMake(0, self.commentsView.top - contentLabel.height - 16, kScreenWidth, contentLabel.height + 16);
+    }
+    return _contentView;
+}
+
+// 评论视图
+- (UIView *)commentsView
+{
+    if (_commentsView == nil) {
+        _commentsView = [[UIView alloc] initWithFrame:CGRectMake(0, kScreenHeight - 50, kScreenWidth, 51)];
+        _commentsView.backgroundColor = SSColor_RGB(27);
+        _commentsView.layer.borderWidth = 1;
+        _commentsView.layer.borderColor = SSColor_RGB(102).CGColor;
+        _commentsView.userInteractionEnabled = YES;
+        
+        CommentTextField *textField = [[CommentTextField alloc] initWithFrame:CGRectMake(11, 8, kScreenWidth - 22 - 19 * 2 - 24 * 2, 34)];
+        textField.backgroundColor = SSColor_RGB(27);
+        textField.layer.borderColor = SSColor_RGB(102).CGColor;
+        [textField setValue:kGrayColor forKeyPath:@"_placeholderLabel.textColor"];
+        [_commentsView addSubview:textField];
+        
+        UIView *view = [[UIView alloc] initWithFrame:textField.frame];
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(commentAction:)];
+        [view addGestureRecognizer:tap];
+        [_commentsView addSubview:view];
+        
+        for (int i = 0; i < 2; i++) {
+            UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+            button.frame = CGRectMake(textField.right + 10 + 43 * i, 0, 42, 50);
+            button.tag = 300 + i;
+            [button addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
+            switch (i) {
+                case 0:
+                {
+                    [button setImage:[UIImage imageNamed:@"icon_article_comments_gray"] forState:UIControlStateNormal];
+                    [button setImage:[UIImage imageNamed:@"icon_article_comments_select"] forState:UIControlStateHighlighted];
+                    break;
+                }
+                case 1:
+                    [button setImage:[UIImage imageNamed:@"facebook"] forState:UIControlStateNormal];
+                    break;
+                default:
+                    break;
+            }
+            [_commentsView addSubview:button];
+            
+            if (i == 0) {
+                _commentsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 10, 10)];
+                _commentsLabel.center = CGPointMake(button.right - 10, button.top + 16);
+                _commentsLabel.backgroundColor = SSColor(255, 0, 0);
+                _commentsLabel.layer.cornerRadius = 5.0f;
+                _commentsLabel.layer.masksToBounds = YES;
+                _commentsLabel.textAlignment = NSTextAlignmentCenter;
+                _commentsLabel.font = [UIFont systemFontOfSize:10];
+                _commentsLabel.textColor = [UIColor whiteColor];
+                _commentsLabel.hidden = YES;
+                [_commentsView addSubview:_commentsLabel];
+                if (_model.commentCount.integerValue > 0) {
+                    _commentsLabel.hidden = NO;
+                    if (_model.commentCount.integerValue < 1000) {
+                        _commentsLabel.text = _model.commentCount.stringValue;
+                    } else {
+                        _commentsLabel.text = @"999+";
+                    }
+                    CGSize commentSize = [_model.commentCount.stringValue calculateSize:CGSizeMake(40, 10) font:_commentsLabel.font];
+                    _commentsLabel.width = MAX(commentSize.width + 5, 10);
+                }
+            }
+        }
+    }
+    return _commentsView;
+}
+
+/**
+ *  评论框点击事件
+ */
+- (void)commentAction:(UITapGestureRecognizer *)tap
+{
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    if (appDelegate.model) {
+        // 评论
+        _commentTextView = [[CommentTextView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(cancelAction)];
+        [_commentTextView.shadowView addGestureRecognizer:tap];
+        
+        UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+        [keyWindow addSubview:_commentTextView];
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
+        _commentTextView.textView.delegate = self;
+        [_commentTextView.cancelButton addTarget:self action:@selector(cancelAction) forControlEvents:UIControlEventTouchUpInside];
+        [_commentTextView.sendButton addTarget:self action:@selector(sendAction) forControlEvents:UIControlEventTouchUpInside];
+    } else {
+        // 登录后评论
+        LoginView *loginView = [[LoginView alloc] init];
+        [[UIApplication sharedApplication].keyWindow addSubview:loginView];
+    }
+}
+
+/**
+ *  发送评论按钮点击事件
+ */
+- (void)sendAction
+{
+    [self postComment];
+}
+
+/**
+ *  取消按钮点击事件
+ */
+- (void)cancelAction
+{
+    [_commentTextView.textView resignFirstResponder];
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
+    [UIView animateWithDuration:0.3 animations:^{
+        _commentTextView.shadowView.alpha = 0;
+        _commentTextView.bgView.alpha = 0;
+    } completion:^(BOOL finished) {
+        [_commentTextView removeFromSuperview];
+        _commentTextView = nil;
+    }];
+}
+
+/**
+ *  底部按钮点击事件
+ *
+ *  @param button 按钮
+ */
+- (void)buttonAction:(UIButton *)button
+{
+    switch (button.tag - 300) {
+        case 0:
+        {
+            // 打点-视频评论点击-011606
+            NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
+                                           [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
+                                           @"Photos", @"channel",
+                                           _model.news_id, @"article",
+                                           nil];
+            [Flurry logEvent:@"Video_Comment_Click" withParameters:articleParams];
+            // 点击评论按钮,跳转到评论页
+            
+            
+            break;
+        }
+        case 1:
+        {
+            // 点击facebook按钮
+//            // 打点-视频分享_fb分享-011605
+//            NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
+//                                           [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
+//                                           @"Photos", @"channel",
+//                                           _model.news_id, @"article",
+//                                           nil];
+//            [Flurry logEvent:@"Video_share_FB_Click" withParameters:articleParams];
+            FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
+            NSString *shareString = _model.share_url;
+            shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"facebook"];
+            content.contentURL = [NSURL URLWithString:shareString];
+            content.contentTitle = _model.title;
+            ImageModel *imageModel = _model.imgs.firstObject;
+            content.imageURL = [NSURL URLWithString:imageModel.src];
+            [FBSDKShareDialog showFromViewController:self
+                                         withContent:content
+                                            delegate:self];
+            break;
+        }
+        default:
+            break;
+    }
+}
+
+#pragma mark - FBSDKSharingDelegate
+- (void)sharer:(id<FBSDKSharing>)sharer didCompleteWithResults:(NSDictionary *)results
+{
+    SSLog(@"分享成功");
+}
+- (void)sharer:(id<FBSDKSharing>)sharer didFailWithError:(NSError *)error
+{
+    SSLog(@"分享失败");
+}
+- (void)sharerDidCancel:(id<FBSDKSharing>)sharer
+{
+    SSLog(@"取消分享");
+}
+
+#pragma mark - UITextViewDelegate
+- (void)textViewDidChange:(UITextView *)textView
+{
+    if (_commentTextView.textView.text.length > 0) {
+        _commentTextView.placeholderLabel.hidden = YES;
+        _commentTextView.isInput = YES;
+    } else {
+        _commentTextView.placeholderLabel.hidden = NO;
+        _commentTextView.isInput = NO;
+    }
+}
+
+#pragma mark - Network
+/**
+ *  发布评论网络请求
+ */
+- (void)postComment
+{
+    _commentTextView.sendButton.enabled = NO;
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    [params setObject:_model.news_id forKey:@"news_id"];
+    [params setObject:_commentTextView.textView.text forKey:@"comment_detail"];
+    [[SSHttpRequest sharedInstance] post:kHomeUrl_Comment params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
+        _commentTextView.sendButton.enabled = YES;
+        _commentsLabel.hidden = NO;
+        _model.commentCount = [NSNumber numberWithInteger:_model.commentCount.integerValue + 1];
+        if (_model.commentCount.integerValue < 1000) {
+            _commentsLabel.text = _model.commentCount.stringValue;
+        } else {
+            _commentsLabel.text = @"999+";
+        }
+        CGSize commentSize = [_model.commentCount.stringValue calculateSize:CGSizeMake(40, 10) font:_commentsLabel.font];
+        _commentsLabel.width = MAX(commentSize.width + 5, 10);
+
+        [_commentTextView.textView resignFirstResponder];
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
+        [UIView animateWithDuration:0.3 animations:^{
+            _commentTextView.shadowView.alpha = 0;
+            _commentTextView.bgView.alpha = 0;
+        } completion:^(BOOL finished) {
+            [_commentTextView removeFromSuperview];
+            _commentTextView = nil;
+        }];
+        [SVProgressHUD showSuccessWithStatus:@"Successful"];
+        // 打点-评论成功-010210
+        NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
+                                       [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
+                                       @"Photos", @"channel",
+                                       _model.news_id, @"article",
+                                       nil];
+        [Flurry logEvent:@"Article_Comments_Send_Y" withParameters:articleParams];
+    } failure:^(NSError *error) {
+        _commentTextView.sendButton.enabled = YES;
+        // 打点-评论失败-010211
+        NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
+                                       [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
+                                       @"Photos", @"channel",
+                                       _model.news_id, @"article",
+                                       nil];
+        [Flurry logEvent:@"Article_Comments_Send_N" withParameters:articleParams];
+    } isShowHUD:YES];
+}
+
+#pragma mark - Notification
+/**
+ *  键盘弹出后执行的操作
+ *
+ *  @param notif 键盘通知
+ */
+- (void)keyboardWillShow:(NSNotification *)notif
+{
+    // 获取到键盘的高度
+    float keyboardHeight = [[[notif userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size.height;
+    // 登录界面随键盘上弹
+    [UIView animateWithDuration:0.2 animations:^{
+        _commentTextView.bgView.bottom = kScreenHeight - keyboardHeight;
+    }];
+}
+- (void)keyboardWillHidden
+{
+    [UIView animateWithDuration:0.2 animations:^{
+        _commentTextView.bgView.bottom = kScreenHeight;
+    }];
+}
+
+/**
+ *  点击收藏/评论后登录成功
+ */
+- (void)loginSuccess
+{
+    _commentTextView = [[CommentTextView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
+    _commentTextView.news_id = _model.news_id;
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(cancelAction)];
+    [_commentTextView.shadowView addGestureRecognizer:tap];
+    UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+    [keyWindow addSubview:_commentTextView];
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
+    _commentTextView.textView.delegate = self;
+    [_commentTextView.cancelButton addTarget:self action:@selector(cancelAction) forControlEvents:UIControlEventTouchUpInside];
+    [_commentTextView.sendButton addTarget:self action:@selector(sendAction) forControlEvents:UIControlEventTouchUpInside];
+}
+
+
+
 @end
