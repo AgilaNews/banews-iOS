@@ -14,6 +14,7 @@
 #import "LoginView.h"
 #import "ImageModel.h"
 #import "GifDetailCell.h"
+#import "AppDelegate.h"
 
 @import SafariServices;
 @interface GifDetailViewController ()
@@ -340,9 +341,9 @@
             NSArray *result = responseObj;
             if (result) {
                 weakSelf.collectID = result.firstObject[@"collect_id"];
+                _model.collect_id = weakSelf.collectID;
                 button.selected = YES;
                 [SVProgressHUD showSuccessWithStatus:@"Save the news and read it later by entering 'Favorites'"];
-                [[CoreDataManager sharedInstance] addAccountFavoriteWithCollectID:weakSelf.collectID DetailModel:_detailModel];
                 // 打点-收藏成功-010215
                 NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
                                                [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
@@ -1138,13 +1139,20 @@
                     break;
                 }
                 case 1:
+                {
                     [button setImage:[UIImage imageNamed:@"icon_article_collect_default"] forState:UIControlStateNormal];
                     [button setImage:[UIImage imageNamed:@"icon_article_collect_select"] forState:UIControlStateSelected];
                     [button setImage:[UIImage imageNamed:@"icon_article_collect_select"] forState:UIControlStateHighlighted];
-                    if ([[CoreDataManager sharedInstance] searchLocalFavoriteModelWithNewsID:_model.news_id]) {
+                    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+                    if (appDelegate.model) {
+                        if (_model.collect_id && ![_model.collect_id isEqualToString:@"0"]) {
+                            button.selected = YES;
+                        }
+                    } else if ([[CoreDataManager sharedInstance] searchLocalFavoriteModelWithNewsID:_model.news_id]) {
                         button.selected = YES;
                     }
                     break;
+                }
                 case 2:
                     [button setImage:[UIImage imageNamed:@"facebook"] forState:UIControlStateNormal];
                     break;
