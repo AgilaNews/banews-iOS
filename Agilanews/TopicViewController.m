@@ -56,6 +56,10 @@
 // 请求数据
 - (void)requestDataWithIsFooter:(BOOL)isFooter
 {
+    if (!isFooter) {
+        SVProgressHUD.defaultStyle = SVProgressHUDStyleCustom;
+        [SVProgressHUD show];
+    }
     __weak typeof(self) weakSelf = self;
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setObject:_model.news_id forKey:@"news_id"];
