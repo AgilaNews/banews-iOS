@@ -269,7 +269,7 @@ static SSHttpRequest *_manager = nil;
     [baseParams setObject:[NetType getNetType] forKey:@"net"];
     // 时区
     NSTimeZone *zone = [NSTimeZone systemTimeZone];
-    [params setObject:[NSNumber numberWithInteger:zone.secondsFromGMT / 3600] forKey:@"tz"];
+    [baseParams setObject:[NSNumber numberWithInteger:zone.secondsFromGMT / 3600] forKey:@"tz"];
     // 经纬度
     if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
         [baseParams setObject:DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) forKey:@"lng"];
