@@ -71,6 +71,7 @@
     [self requsetCommentsListWithNewsID:_model.news_id];
     // 详情网络请求
     [self requsetDetailWithNewsID:_model.news_id];
+    _collectID = _model.collect_id;
 
 }
 
@@ -216,15 +217,15 @@
     [params setObject:newsID forKey:@"news_id"];
     NSURLSessionDataTask *task = [[SSHttpRequest sharedInstance] get:kHomeUrl_NewsDetail params:params contentType:UrlencodedType serverType:NetServer_V3 success:^(id responseObj) {
         weakSelf.detailModel = [NewsDetailModel mj_objectWithKeyValues:responseObj];
-        if ([_detailModel.collect_id isEqualToString:@"1"]) {
-            UIButton *button = [weakSelf.commentsView viewWithTag:301];
-            button.selected = YES;
-            _collectID = _detailModel.collect_id;
-        } else {
-            UIButton *button = [weakSelf.commentsView viewWithTag:301];
-            button.selected = NO;
-            _collectID = _detailModel.collect_id;
-        }
+//        if ([_detailModel.collect_id isEqualToString:@"1"]) {
+//            UIButton *button = [weakSelf.commentsView viewWithTag:301];
+//            button.selected = YES;
+//            _collectID = _detailModel.collect_id;
+//        } else {
+//            UIButton *button = [weakSelf.commentsView viewWithTag:301];
+//            button.selected = NO;
+//            _collectID = _detailModel.collect_id;
+//        }
     } failure:^(NSError *error) {
         
     } isShowHUD:NO];
@@ -341,8 +342,8 @@
             NSArray *result = responseObj;
             if (result) {
                 weakSelf.collectID = result.firstObject[@"collect_id"];
-                _model.collect_id = weakSelf.collectID;
                 button.selected = YES;
+                [[CoreDataManager sharedInstance] addAccountFavoriteWithCollectID:weakSelf.collectID DetailModel:_detailModel];
                 [SVProgressHUD showSuccessWithStatus:@"Save the news and read it later by entering 'Favorites'"];
                 // 打点-收藏成功-010215
                 NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -1144,10 +1145,8 @@
                     [button setImage:[UIImage imageNamed:@"icon_article_collect_select"] forState:UIControlStateSelected];
                     [button setImage:[UIImage imageNamed:@"icon_article_collect_select"] forState:UIControlStateHighlighted];
                     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-                    if (appDelegate.model) {
-                        if (_model.collect_id && ![_model.collect_id isEqualToString:@"0"]) {
-                            button.selected = YES;
-                        }
+                    if (appDelegate.model && ![_model.collect_id isEqualToString:@"0"]) {
+                        button.selected = YES;
                     } else if ([[CoreDataManager sharedInstance] searchLocalFavoriteModelWithNewsID:_model.news_id]) {
                         button.selected = YES;
                     }
