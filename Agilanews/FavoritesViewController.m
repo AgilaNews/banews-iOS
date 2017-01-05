@@ -553,7 +553,6 @@
                 [cell.shareButton addTarget:self action:@selector(shareToFacebook:) forControlEvents:UIControlEventTouchUpInside];
             }
             cell.model = model;
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
             [cell setNeedsLayout];
             return cell;
         }
