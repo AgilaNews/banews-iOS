@@ -7,19 +7,23 @@
 //
 
 #import "FavoritesViewController.h"
+#import "BaseNavigationController.h"
+#import "NewsDetailViewController.h"
+#import "VideoDetailViewController.h"
+#import "GifDetailViewController.h"
+
 #import "NewsModel.h"
 #import "ImageModel.h"
+#import "LocalFavorite+CoreDataClass.h"
+
 #import "ManyPicCell.h"
 #import "SinglePicCell.h"
 #import "NoPicCell.h"
 #import "BigPicCell.h"
+#import "GifPicCell.h"
 #import "OnlyVideoCell.h"
-#import "NewsDetailViewController.h"
+
 #import "AppDelegate.h"
-#import "BaseNavigationController.h"
-#import "LocalFavorite+CoreDataClass.h"
-#import "VideoDetailViewController.h"
-#import "PushTransitionAnimate.h"
 #import "LoginView.h"
 
 #define titleFont_Normal        [UIFont systemFontOfSize:16]
@@ -453,6 +457,12 @@
         {
             return 12 + 68 + 12;
         }
+        case NEWS_GifPic:
+        {
+            CGSize titleLabelSize = [model.title calculateSize:CGSizeMake(kScreenWidth - 22, 40) font:titleFont];
+            ImageModel *imageModel = model.imgs.firstObject;
+            return 12 + titleLabelSize.height + 10 + imageModel.height.integerValue / 2.0 + 12 + 18 + 12;
+        }
         case NEWS_HaveVideo:
         {
             return 12 + 68 + 12;
@@ -533,6 +543,20 @@
             [cell setNeedsLayout];
             return cell;
         }
+        case NEWS_GifPic:
+        {
+            // gif图cell
+            static NSString *cellID = @"GifPicCellID";
+            GifPicCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+            if (cell == nil) {
+                cell = [[GifPicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
+                [cell.shareButton addTarget:self action:@selector(shareToFacebook:) forControlEvents:UIControlEventTouchUpInside];
+            }
+            cell.model = model;
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            [cell setNeedsLayout];
+            return cell;
+        }
         case NEWS_HaveVideo:
         {
             // 单图带视频cell
@@ -607,10 +631,14 @@
     if (!_tableView.editing) {
         // 打点-点击列表文章-010502
         [Flurry logEvent:@"Favor_List_Click"];
-//#if DEBUG
-//        [iConsole info:@"Favor_List_Click",nil];
-//#endif
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
+        // 点击GIF
+        if (model.tpl.integerValue == NEWS_GifPic) {
+            GifDetailViewController *gifDetailVC = [[GifDetailViewController alloc] init];
+            gifDetailVC.model = model;
+            [self.navigationController pushViewController:gifDetailVC animated:YES];
+            return;
+        }
         if (model.tpl.integerValue == NEWS_OnlyVideo || model.tpl.integerValue == NEWS_HotVideo) {
             VideoDetailViewController *videoDetailVC = [[VideoDetailViewController alloc] init];
             videoDetailVC.model = model;
