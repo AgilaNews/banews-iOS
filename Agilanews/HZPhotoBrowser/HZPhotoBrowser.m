@@ -12,6 +12,8 @@
 #import "HomeTableViewController.h"
 #import "CommentTextField.h"
 #import "LoginView.h"
+#import "CommentViewController.h"
+#import "OnlyPicCell.h"
 
 @interface HZPhotoBrowser() <UIScrollViewDelegate>
 @property (nonatomic,strong) UIScrollView *scrollView;
@@ -84,6 +86,25 @@
     [super viewWillAppear:animated];
     if (!_hasShowedPhotoBrowser) {
         [self showPhotoBrowser];
+    } else {
+        if (_model.commentCount.integerValue > 0) {
+            _commentsLabel.hidden = NO;
+            if (_model.commentCount.integerValue < 1000) {
+                _commentsLabel.text = _model.commentCount.stringValue;
+            } else {
+                _commentsLabel.text = @"999+";
+            }
+            CGSize commentSize = [_model.commentCount.stringValue calculateSize:CGSizeMake(40, 10) font:_commentsLabel.font];
+            _commentsLabel.width = MAX(commentSize.width + 5, 10);
+        }
+    }
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    if (_cell) {
+        [_cell setNeedsLayout];
     }
 }
 
@@ -506,7 +527,7 @@
         _contentView.backgroundColor = [UIColor colorWithRed:27/255.0 green:27/255.0 blue:27/255.0 alpha:.4];
         UILabel *contentLabel = [[UILabel alloc] init];
         contentLabel.numberOfLines = 0;
-        contentLabel.font = [UIFont boldSystemFontOfSize:16];
+        contentLabel.font = [UIFont systemFontOfSize:16];
         contentLabel.textColor = [UIColor whiteColor];
         contentLabel.text = _model.title;
         CGSize contentSize = [_model.title calculateSize:CGSizeMake(kScreenWidth - 22, 40) font:contentLabel.font];
@@ -521,7 +542,7 @@
 - (UIView *)commentsView
 {
     if (_commentsView == nil) {
-        _commentsView = [[UIView alloc] initWithFrame:CGRectMake(0, kScreenHeight - 50, kScreenWidth, 51)];
+        _commentsView = [[UIView alloc] initWithFrame:CGRectMake(-1, kScreenHeight - 50, kScreenWidth + 2, 51)];
         _commentsView.backgroundColor = SSColor_RGB(27);
         _commentsView.layer.borderWidth = 1;
         _commentsView.layer.borderColor = SSColor_RGB(102).CGColor;
@@ -652,8 +673,9 @@
                                            nil];
             [Flurry logEvent:@"Video_Comment_Click" withParameters:articleParams];
             // 点击评论按钮,跳转到评论页
-            
-            
+            CommentViewController *commentVC = [[CommentViewController alloc] init];
+            commentVC.model = _model;
+            [self.navigationController pushViewController:commentVC animated:YES];
             break;
         }
         case 1:
@@ -719,7 +741,7 @@
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setObject:_model.news_id forKey:@"news_id"];
     [params setObject:_commentTextView.textView.text forKey:@"comment_detail"];
-    [[SSHttpRequest sharedInstance] post:kHomeUrl_Comment params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
+    [[SSHttpRequest sharedInstance] post:kHomeUrl_VideoComment params:params contentType:JsonType serverType:NetServer_V3 success:^(id responseObj) {
         _commentTextView.sendButton.enabled = YES;
         _commentsLabel.hidden = NO;
         _model.commentCount = [NSNumber numberWithInteger:_model.commentCount.integerValue + 1];

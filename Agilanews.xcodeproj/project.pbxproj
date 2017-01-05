@@ -103,6 +103,7 @@
 		5F5AE9711D5353B400A5A8B7 /* BannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5AE9701D5353B400A5A8B7 /* BannerView.m */; };
 		5F5AE9761D54364E00A5A8B7 /* GuideRefreshView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5AE9751D54364E00A5A8B7 /* GuideRefreshView.m */; };
 		5F5AE9791D54A4C900A5A8B7 /* GuideFavoritesView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5AE9781D54A4C900A5A8B7 /* GuideFavoritesView.m */; };
+		5F5C17FE1E1CC9FA00CB4A32 /* CommentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5C17FD1E1CC9FA00CB4A32 /* CommentViewController.m */; };
 		5F5C63791D8E5FED005D3578 /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5C63781D8E5FED005D3578 /* KeychainItemWrapper.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		5F5C63801D90FC29005D3578 /* VideoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5C637F1D90FC29005D3578 /* VideoModel.m */; };
 		5F5C638E1D938DA9005D3578 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F5C638D1D938DA9005D3578 /* UserNotifications.framework */; };
@@ -434,6 +435,8 @@
 		5F5AE9751D54364E00A5A8B7 /* GuideRefreshView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GuideRefreshView.m; sourceTree = "<group>"; };
 		5F5AE9771D54A4C900A5A8B7 /* GuideFavoritesView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuideFavoritesView.h; sourceTree = "<group>"; };
 		5F5AE9781D54A4C900A5A8B7 /* GuideFavoritesView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GuideFavoritesView.m; sourceTree = "<group>"; };
+		5F5C17FC1E1CC9FA00CB4A32 /* CommentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentViewController.h; sourceTree = "<group>"; };
+		5F5C17FD1E1CC9FA00CB4A32 /* CommentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentViewController.m; sourceTree = "<group>"; };
 		5F5C63751D8E5AE7005D3578 /* Agila.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Agila.entitlements; sourceTree = "<group>"; };
 		5F5C63771D8E5FED005D3578 /* KeychainItemWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeychainItemWrapper.h; sourceTree = "<group>"; };
 		5F5C63781D8E5FED005D3578 /* KeychainItemWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeychainItemWrapper.m; sourceTree = "<group>"; };
@@ -1376,6 +1379,8 @@
 				5F3AC7321E13BADE0034DA5A /* GifDetailCell.m */,
 				5F3AC72E1E136F3C0034DA5A /* GifDetailViewController.h */,
 				5F3AC72F1E136F3C0034DA5A /* GifDetailViewController.m */,
+				5F5C17FC1E1CC9FA00CB4A32 /* CommentViewController.h */,
+				5F5C17FD1E1CC9FA00CB4A32 /* CommentViewController.m */,
 			);
 			name = Detail;
 			sourceTree = "<group>";
@@ -1790,6 +1795,7 @@
 				5F635CBA1D3E1E7A006AAE3D /* NewsDetailModel.m in Sources */,
 				5FF4B76F1D37BD2C00CC6704 /* NSObject+UhouAddition.m in Sources */,
 				5FF4B7051D373E2200CC6704 /* EaseRefreshTableViewController.m in Sources */,
+				5F5C17FE1E1CC9FA00CB4A32 /* CommentViewController.m in Sources */,
 				5F767A601D9BB6EA00822BAC /* ChannelViewController.m in Sources */,
 				5F6FAEBB1DF52C22006E4A1C /* SnowView.m in Sources */,
 				5F42C0831D34E41D00B89651 /* NSData+ImageContentType.m in Sources */,

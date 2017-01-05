@@ -356,6 +356,7 @@
     browserVc.imageCount = _model.imgs.count; // 图片总数
     browserVc.currentImageIndex = 0;
     browserVc.delegate = self;
+    browserVc.cell = self;
     [browserVc show];
 }
 

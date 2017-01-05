@@ -312,6 +312,11 @@ static SSHttpRequest *_manager = nil;
             }
             break;
         }
+        case NetServer_V3:
+        {
+            _urlString = [NSString stringWithFormat:@"%@%@",kV3Url,url];
+            break;
+        }
         case NetServer_Log:
         {
             if (DEF_PERSISTENT_GET_OBJECT(Server_Log) != nil) {

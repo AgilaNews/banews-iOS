@@ -13,9 +13,8 @@
 #import "CommentTextView.h"
 
 @class HZPhotoBrowser;
-
+@class OnlyPicCell;
 @protocol HZPhotoBrowserDelegate <NSObject>
-
 - (UIImage *)photoBrowser:(HZPhotoBrowser *)browser placeholderImageForIndex:(NSInteger)index;
 - (NSURL *)photoBrowser:(HZPhotoBrowser *)browser highQualityImageURLForIndex:(NSInteger)index;
 @end
@@ -26,6 +25,7 @@
 @property (nonatomic, assign) int currentImageIndex;
 @property (nonatomic, assign) NSInteger imageCount;//图片总数
 @property (nonatomic, strong) NewsModel *model;
+@property (nonatomic, strong) OnlyPicCell *cell;
 @property (nonatomic, weak) id<HZPhotoBrowserDelegate> delegate;
 
 @property (nonatomic, strong) UIView *commentsView;     // 底部评论框
