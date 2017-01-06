@@ -10,10 +10,11 @@
 #import "NotificationModel.h"
 #import "AppDelegate.h"
 #import "NotificationCell.h"
+#import "OnlyPicCell.h"
 #import "NotifDetailViewController.h"
 #import "NewsDetailViewController.h"
 #import "VideoDetailViewController.h"
-#import "PushTransitionAnimate.h"
+#import "GifDetailViewController.h"
 #import "LoginView.h"
 
 @interface NotificationViewController ()
@@ -189,7 +190,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *cellID = @"SinglePicCellID";
+    static NSString *cellID = @"NotificationCellID";
     NotificationCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
     if (cell == nil) {
         cell = [[NotificationCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
@@ -221,6 +222,15 @@
             videoDetailVC.channelName = @"Videos";
             videoDetailVC.isNoModel = YES;
             [self.navigationController pushViewController:videoDetailVC animated:YES];
+            return;
+        } else if (model.tpl.integerValue == NEWS_GifPic) {
+            GifDetailViewController *gifDetailVC = [[GifDetailViewController alloc] init];
+            gifDetailVC.model = newsModel;
+            [self.navigationController pushViewController:gifDetailVC animated:YES];
+            return;
+        } else if (model.tpl.integerValue == NEWS_OnlyPic) {
+            OnlyPicCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+            [cell tapAction];
             return;
         }
         NewsDetailViewController *newsDetailVC = [[NewsDetailViewController alloc] init];

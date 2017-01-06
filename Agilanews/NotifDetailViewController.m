@@ -11,13 +11,15 @@
 #import "SinglePicCell.h"
 #import "NoPicCell.h"
 #import "BigPicCell.h"
+#import "OnlyPicCell.h"
+#import "GifPicCell.h"
 #import "OnlyVideoCell.h"
 #import "CommentCell.h"
 #import "ImageModel.h"
 #import "AppDelegate.h"
 #import "NewsDetailViewController.h"
 #import "VideoDetailViewController.h"
-#import "PushTransitionAnimate.h"
+#import "GifDetailViewController.h"
 
 #define titleFont_Normal        [UIFont systemFontOfSize:16]
 #define titleFont_ExtraLarge    [UIFont systemFontOfSize:20]
@@ -411,6 +413,12 @@
                 CGSize titleLabelSize = [model.title calculateSize:CGSizeMake(kScreenWidth - 22, 40) font:titleFont];
                 return 12 + titleLabelSize.height + imageHeight + 20 + 11 + 11;
             }
+            case NEWS_GifPic:
+            {
+                CGSize titleLabelSize = [model.title calculateSize:CGSizeMake(kScreenWidth - 22, 40) font:titleFont];
+                ImageModel *imageModel = model.imgs.firstObject;
+                return 12 + titleLabelSize.height + 10 + imageModel.height.integerValue / 2.0 + 12 + 18 + 12;
+            }
             case NEWS_HaveVideo:
             {
                 return 12 + 68 + 12;
@@ -491,6 +499,34 @@
                 [cell setNeedsLayout];
                 return cell;
             }
+            case NEWS_OnlyPic:
+            {
+                // 纯图cell
+                static NSString *cellID = @"OnlyPicCellID";
+                OnlyPicCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+                if (cell == nil) {
+                    cell = [[OnlyPicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
+                    [cell.shareButton addTarget:self action:@selector(shareToFacebook:) forControlEvents:UIControlEventTouchUpInside];
+                }
+                cell.model = model;
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                [cell setNeedsLayout];
+                return cell;
+            }
+            case NEWS_GifPic:
+            {
+                // gif图cell
+                static NSString *cellID = @"GifPicCellID";
+                GifPicCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+                if (cell == nil) {
+                    cell = [[GifPicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
+                    [cell.shareButton addTarget:self action:@selector(shareToFacebook:) forControlEvents:UIControlEventTouchUpInside];
+                }
+                cell.model = model;
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                [cell setNeedsLayout];
+                return cell;
+            }
             case NEWS_HaveVideo:
             {
                 // 单图cell
@@ -561,6 +597,18 @@
 //        [iConsole info:[NSString stringWithFormat:@"ReplyComments_Article_Click:%@",articleParams],nil];
 //#endif
         NewsModel *model = _model.related_news;
+        if (model.tpl.integerValue == NEWS_GifPic) {
+            // 点击GIF
+            GifDetailViewController *gifDetailVC = [[GifDetailViewController alloc] init];
+            gifDetailVC.model = model;
+            [self.navigationController pushViewController:gifDetailVC animated:YES];
+            return;
+        } else if (model.tpl.integerValue == NEWS_OnlyPic) {
+            // 点击图片
+            OnlyPicCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+            [cell tapAction];
+            return;
+        }
         if (model.tpl.integerValue == NEWS_OnlyVideo) {
             VideoDetailViewController *videoDetailVC = [[VideoDetailViewController alloc] init];
             videoDetailVC.model = model;
