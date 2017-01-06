@@ -217,18 +217,19 @@
     [params setObject:newsID forKey:@"news_id"];
     NSURLSessionDataTask *task = [[SSHttpRequest sharedInstance] get:kHomeUrl_NewsDetail params:params contentType:UrlencodedType serverType:NetServer_V3 success:^(id responseObj) {
         weakSelf.detailModel = [NewsDetailModel mj_objectWithKeyValues:responseObj];
-//        if ([_detailModel.collect_id isEqualToString:@"1"]) {
-//            UIButton *button = [weakSelf.commentsView viewWithTag:301];
-//            button.selected = YES;
-//            _collectID = _detailModel.collect_id;
-//        } else {
-//            UIButton *button = [weakSelf.commentsView viewWithTag:301];
-//            button.selected = NO;
-//            _collectID = _detailModel.collect_id;
-//        }
-    } failure:^(NSError *error) {
-        
-    } isShowHUD:NO];
+        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        if (appDelegate.model) {
+            if (![_detailModel.collect_id isEqualToString:@"0"]) {
+                UIButton *button = [weakSelf.commentsView viewWithTag:301];
+                button.selected = YES;
+                _collectID = _detailModel.collect_id;
+            } else {
+                UIButton *button = [weakSelf.commentsView viewWithTag:301];
+                button.selected = NO;
+                _collectID = _detailModel.collect_id;
+            }
+        }
+    } failure:nil isShowHUD:NO];
     [_tasks addObject:task];
 }
 
@@ -1145,9 +1146,7 @@
                     [button setImage:[UIImage imageNamed:@"icon_article_collect_select"] forState:UIControlStateSelected];
                     [button setImage:[UIImage imageNamed:@"icon_article_collect_select"] forState:UIControlStateHighlighted];
                     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-                    if (appDelegate.model && ![_model.collect_id isEqualToString:@"0"]) {
-                        button.selected = YES;
-                    } else if ([[CoreDataManager sharedInstance] searchLocalFavoriteModelWithNewsID:_model.news_id]) {
+                    if (!appDelegate.model && [[CoreDataManager sharedInstance] searchLocalFavoriteModelWithNewsID:_model.news_id]) {
                         button.selected = YES;
                     }
                     break;
