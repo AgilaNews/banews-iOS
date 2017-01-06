@@ -115,12 +115,12 @@
     }];
     // 标题图片布局
     ImageModel *imageModel = _model.imgs.firstObject;
-    CGFloat width = imageModel.height.floatValue / 2.0;
+    CGFloat height = imageModel.height.floatValue / 2.0;
     [self.titleImageView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(weakSelf.titleLabel.mas_left);
         make.top.mas_equalTo(weakSelf.titleLabel.mas_bottom).offset(10);
         make.width.mas_equalTo(kScreenWidth - 22);
-        make.height.mas_equalTo(width);
+        make.height.mas_equalTo(height);
     }];
     // 观看视图布局
     [self.watchView mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -169,7 +169,6 @@
         make.width.mas_equalTo(18);
         make.height.mas_equalTo(18);
     }];
-    
     [super updateConstraints];
 
     // 设置内容
@@ -197,7 +196,9 @@
         self.titleImageView.image = [UIImage imageNamed:@"holderImage"];
         return;
     }
-    NSString *imageUrl = [imageModel.src stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSString *imageUrl = [imageModel.pattern stringByReplacingOccurrencesOfString:@"{w}" withString:[NSString stringWithFormat:@"%d",(int)((kScreenWidth - 22) * 2)]];
+    imageUrl = [imageUrl stringByReplacingOccurrencesOfString:@"{h}" withString:[NSString stringWithFormat:@"%d",(int)(height * 2)]];
+    imageUrl = [imageUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     [self.titleImageView sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:[UIImage imageNamed:@"holderImage"] options:SDWebImageRetryFailed completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         if (!image) {
             _titleImageView.image = [UIImage imageNamed:@"holderImage"];
