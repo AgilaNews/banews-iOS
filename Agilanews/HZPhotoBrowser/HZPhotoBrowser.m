@@ -14,6 +14,7 @@
 #import "LoginView.h"
 #import "CommentViewController.h"
 #import "OnlyPicCell.h"
+#import "PicDetailViewController.h"
 
 @interface HZPhotoBrowser() <UIScrollViewDelegate>
 @property (nonatomic,strong) UIScrollView *scrollView;
@@ -71,15 +72,27 @@
                                              selector:@selector(keyboardWillHidden)
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
+
 }
 
-//- (void)viewDidAppear:(BOOL)animated
-//{
-//    [super viewDidAppear:animated];
-//    if (!_hasShowedPhotoBrowser) {
-//        [self showPhotoBrowser];
-//    }
-//}
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    NSArray *array = [[NSMutableArray alloc] initWithArray: self.jt_navigationController.jt_viewControllers];
+    NSInteger index = -1;
+    for (int i = 0; i < self.jt_navigationController.jt_viewControllers.count; i++) {
+        UIViewController *vc = array[i];
+        if ([vc isKindOfClass:[PicDetailViewController class]]) {
+            index = i;
+            break;
+        }
+    }
+    if (index >= 0) {
+        NSMutableArray *navigationArray = [NSMutableArray arrayWithArray:self.jt_navigationController.viewControllers];
+        [navigationArray removeObjectAtIndex:index];
+        self.jt_navigationController.viewControllers = navigationArray;
+    }
+}
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -351,9 +364,11 @@
                                    [NetType getNetType], @"network",
                                    nil];
     [Flurry logEvent:@"PhotoFullScreen_Enter" withParameters:articleParams];
-//#if DEBUG
-//    [iConsole info:[NSString stringWithFormat:@"PhotoFullScreen_Enter:%@",articleParams],nil];
-//#endif
+    UIViewController *controller = navCtrl.jt_viewControllers[navCtrl.jt_viewControllers.count - 1];
+    if ([controller isKindOfClass:[PicDetailViewController class]]) {
+        [controller.navigationController pushViewController:self animated:NO];
+        return;
+    }
     [homeVC.navigationController pushViewController:self animated:YES];
 }
 
@@ -681,13 +696,6 @@
         case 1:
         {
             // 点击facebook按钮
-//            // 打点-视频分享_fb分享-011605
-//            NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
-//                                           [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
-//                                           @"Photos", @"channel",
-//                                           _model.news_id, @"article",
-//                                           nil];
-//            [Flurry logEvent:@"Video_share_FB_Click" withParameters:articleParams];
             FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
             NSString *shareString = _model.share_url;
             shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"facebook"];

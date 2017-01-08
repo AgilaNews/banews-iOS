@@ -204,6 +204,7 @@
 		5FE7221D1D5051BB0026BFC3 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5FE7221C1D5051BB0026BFC3 /* AdSupport.framework */; };
 		5FE722201D506CD70026BFC3 /* FeedbackTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FE7221F1D506CD70026BFC3 /* FeedbackTextField.m */; };
 		5FE722221D50B5B70026BFC3 /* textonly.png in Resources */ = {isa = PBXBuildFile; fileRef = 5FE722211D50B5B70026BFC3 /* textonly.png */; };
+		5FE7FB331E21DABB00529D54 /* PicDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FE7FB321E21DABB00529D54 /* PicDetailViewController.m */; };
 		5FF4B6E01D362ED100CC6704 /* Signature.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FF4B6DF1D362ED100CC6704 /* Signature.m */; };
 		5FF4B6E31D362F0000CC6704 /* base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FF4B6E21D362F0000CC6704 /* base64.m */; };
 		5FF4B6EA1D3645A100CC6704 /* BaseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FF4B6E91D3645A100CC6704 /* BaseModel.m */; };
@@ -604,6 +605,8 @@
 		5FE7221E1D506CD70026BFC3 /* FeedbackTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedbackTextField.h; sourceTree = "<group>"; };
 		5FE7221F1D506CD70026BFC3 /* FeedbackTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedbackTextField.m; sourceTree = "<group>"; };
 		5FE722211D50B5B70026BFC3 /* textonly.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = textonly.png; sourceTree = "<group>"; };
+		5FE7FB311E21DABB00529D54 /* PicDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PicDetailViewController.h; sourceTree = "<group>"; };
+		5FE7FB321E21DABB00529D54 /* PicDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PicDetailViewController.m; sourceTree = "<group>"; };
 		5FF4B6DE1D362ED100CC6704 /* Signature.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Signature.h; sourceTree = "<group>"; };
 		5FF4B6DF1D362ED100CC6704 /* Signature.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Signature.m; sourceTree = "<group>"; };
 		5FF4B6E11D362F0000CC6704 /* base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = base64.h; sourceTree = "<group>"; };
@@ -1379,6 +1382,8 @@
 				5F3AC7321E13BADE0034DA5A /* GifDetailCell.m */,
 				5F3AC72E1E136F3C0034DA5A /* GifDetailViewController.h */,
 				5F3AC72F1E136F3C0034DA5A /* GifDetailViewController.m */,
+				5FE7FB311E21DABB00529D54 /* PicDetailViewController.h */,
+				5FE7FB321E21DABB00529D54 /* PicDetailViewController.m */,
 				5F5C17FC1E1CC9FA00CB4A32 /* CommentViewController.h */,
 				5F5C17FD1E1CC9FA00CB4A32 /* CommentViewController.m */,
 			);
@@ -1814,6 +1819,7 @@
 				5F8D85AB1D76A99700FF4019 /* WebViewJavascriptBridge_JS.m in Sources */,
 				5F120E421E0BACAA00F27094 /* InterestsViewController.m in Sources */,
 				5F42C0851D34E41D00B89651 /* SDWebImageCompat.m in Sources */,
+				5FE7FB331E21DABB00529D54 /* PicDetailViewController.m in Sources */,
 				5F42C08D1D34E41D00B89651 /* UIImage+MultiFormat.m in Sources */,
 				5F42BFF61D34E3D500B89651 /* AFNetworkReachabilityManager.m in Sources */,
 				5F907AC01DD5A8F200DD9748 /* FacebookAdManager.m in Sources */,

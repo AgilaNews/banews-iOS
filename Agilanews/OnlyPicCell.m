@@ -336,18 +336,17 @@
     // 无图模式点击图片不进入全屏显示状态
     NSNumber *textOnlyMode = DEF_PERSISTENT_GET_OBJECT(SS_textOnlyMode);
     // 打点-点击版本更新对话框中立即更新选项-010006
-    HomeTableViewController *homeTBC = (HomeTableViewController *)self.ViewController;
-    NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
-                                   homeTBC.model.name, @"channel",
-                                   _model.news_id, @"article",
-                                   [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
-                                   [NetType getNetType], @"network",
-                                   textOnlyMode.integerValue ? @"YES" : @"NO", @"state",
-                                   nil];
-    [Flurry logEvent:@"Home_PhotoList_Click" withParameters:articleParams];
-//#if DEBUG
-//    [iConsole info:[NSString stringWithFormat:@"Home_PhotoList_Click:%@",articleParams],nil];
-//#endif
+    if ([self.ViewController isKindOfClass:[HomeTableViewController class]]) {
+        HomeTableViewController *homeTBC = (HomeTableViewController *)self.ViewController;
+        NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
+                                       homeTBC.model.name, @"channel",
+                                       _model.news_id, @"article",
+                                       [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
+                                       [NetType getNetType], @"network",
+                                       textOnlyMode.integerValue ? @"YES" : @"NO", @"state",
+                                       nil];
+        [Flurry logEvent:@"Home_PhotoList_Click" withParameters:articleParams];
+    }
     if ([textOnlyMode integerValue] == 1) {
         return;
     }

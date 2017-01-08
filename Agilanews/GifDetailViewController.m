@@ -42,7 +42,7 @@
     negativeSpacer.width = -10;
     self.navigationItem.rightBarButtonItems = @[negativeSpacer, shareItem];
 
-    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, kScreenWidth, kScreenHeight - 64) style:UITableViewStyleGrouped];
+    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, kScreenWidth, kScreenHeight - 64 - 50) style:UITableViewStyleGrouped];
     _tableView.backgroundColor = kWhiteBgColor;
     _tableView.dataSource = self;
     _tableView.delegate = self;
@@ -228,6 +228,10 @@
                 button.selected = NO;
                 _collectID = _detailModel.collect_id;
             }
+        }
+        if (_isNoModel) {
+            weakSelf.model = [NewsModel mj_objectWithKeyValues:responseObj];
+            [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
         }
     } failure:nil isShowHUD:NO];
     [_tasks addObject:task];
@@ -497,7 +501,7 @@
     switch (indexPath.section) {
         case 0:
         {
-            CGSize titleLabelSize = [_model.title calculateSize:CGSizeMake(kScreenWidth - 22, 80) font:[UIFont boldSystemFontOfSize:21]];
+            CGSize titleLabelSize = [_model.title calculateSize:CGSizeMake(kScreenWidth - 22, 80) font:[UIFont systemFontOfSize:16]];
             ImageModel *model = _model.imgs.firstObject;
             return 11 + titleLabelSize.height + 12 + (int)(model.height.integerValue / 2.0) + 30 + 34 + 25;
         }

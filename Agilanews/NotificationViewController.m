@@ -15,6 +15,7 @@
 #import "NewsDetailViewController.h"
 #import "VideoDetailViewController.h"
 #import "GifDetailViewController.h"
+#import "PicDetailViewController.h"
 #import "LoginView.h"
 
 @interface NotificationViewController ()
@@ -218,28 +219,42 @@
         [[SSHttpRequest sharedInstance] get:kHomeUrl_NotifRead params:params contentType:JsonType serverType:NetServer_Home success:nil failure:nil isShowHUD:NO];
         NewsModel *newsModel = [[NewsModel alloc] init];
         newsModel.news_id = model.news_id;
-        if (model.tpl.integerValue == NEWS_HotVideo || model.tpl.integerValue == NEWS_OnlyVideo) {
-            VideoDetailViewController *videoDetailVC = [[VideoDetailViewController alloc] init];
-            videoDetailVC.model = newsModel;
-            videoDetailVC.channelName = @"Videos";
-            videoDetailVC.isNoModel = YES;
-            [self.navigationController pushViewController:videoDetailVC animated:YES];
-            return;
-        } else if (model.tpl.integerValue == NEWS_GifPic) {
-            GifDetailViewController *gifDetailVC = [[GifDetailViewController alloc] init];
-            gifDetailVC.model = newsModel;
-            [self.navigationController pushViewController:gifDetailVC animated:YES];
-            return;
-        } else if (model.tpl.integerValue == NEWS_OnlyPic) {
-            OnlyPicCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-            [cell tapAction];
-            return;
+        switch (model.tpl.integerValue) {
+            case 2:
+            {
+                NewsDetailViewController *newsDetailVC = [[NewsDetailViewController alloc] init];
+                newsDetailVC.model = newsModel;
+                newsDetailVC.channelName = @"Hot";
+                [self.navigationController pushViewController:newsDetailVC animated:YES];
+                return;
+            }
+            case 3:
+            {
+                VideoDetailViewController *videoDetailVC = [[VideoDetailViewController alloc] init];
+                videoDetailVC.model = newsModel;
+                videoDetailVC.channelName = @"Videos";
+                videoDetailVC.isNoModel = YES;
+                [self.navigationController pushViewController:videoDetailVC animated:YES];
+                return;
+            }
+            case 4:
+            {
+                GifDetailViewController *gifDetailVC = [[GifDetailViewController alloc] init];
+                gifDetailVC.model = newsModel;
+                gifDetailVC.isNoModel = YES;
+                [self.navigationController pushViewController:gifDetailVC animated:YES];
+                return;
+            }
+            case 5:
+            {
+                PicDetailViewController *picDetail = [[PicDetailViewController alloc] init];
+                picDetail.model = newsModel;
+                [self.navigationController pushViewController:picDetail animated:YES];
+                return;
+            }
+            default:
+                break;
         }
-        NewsDetailViewController *newsDetailVC = [[NewsDetailViewController alloc] init];
-        newsDetailVC.model = newsModel;
-        newsDetailVC.channelName = @"Hot";
-        [self.navigationController pushViewController:newsDetailVC animated:YES];
-        return;
     }
     NotifDetailViewController *notifDetailVC = [[NotifDetailViewController alloc] init];
     notifDetailVC.notify_id = model.notify_id;

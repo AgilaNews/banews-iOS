@@ -28,7 +28,7 @@
 @property (nonatomic, strong) NSMutableArray *tasks;
 @property (nonatomic, strong) NSString *collectID;          // 收藏新闻ID
 @property (nonatomic, strong) NSNumber *commentID;
-
+@property (nonatomic, assign) BOOL isNoModel;
 
 
 @end
