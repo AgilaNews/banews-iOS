@@ -183,7 +183,11 @@
             _titleLabel.textColor = SSColor(68, 68, 68);
         }
     }
-    self.watchLabel.text = views;
+    if (_model.views.integerValue > 0) {
+        self.watchLabel.text = views;
+    } else {
+        self.watchLabel.text = @"";
+    }
     if (_model.commentCount.integerValue > 0) {
         self.commentLabel.text = _model.commentCount.stringValue;
     } else {

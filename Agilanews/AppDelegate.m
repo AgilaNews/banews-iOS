@@ -13,7 +13,8 @@
 #import "HomeTableViewController.h"
 #import "NewsDetailViewController.h"
 #import "VideoDetailViewController.h"
-#import "SnowView.h"
+#import "GifDetailViewController.h"
+#import "PicDetailViewController.h"
 
 @interface AppDelegate ()
 
@@ -622,25 +623,45 @@
     if (model.news_id == nil) {
         return;
     }
-    NSNumber *tpl = userInfo[@"tpl"];
-    if (tpl && tpl.integerValue == 3) {
-        VideoDetailViewController *videoDetailVC = [[VideoDetailViewController alloc] init];
-        videoDetailVC.model = model;
-        videoDetailVC.isPushEnter = YES;
-        videoDetailVC.isNoModel = YES;
-        JTNavigationController *navCtrl = (JTNavigationController *)_window.rootViewController;
-        HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
-        [homeVC.navigationController pushViewController:videoDetailVC animated:YES];
-        return;
-    }
-    
-    // 跳转到详情页
-    NewsDetailViewController *newsDetailVC = [[NewsDetailViewController alloc] init];
-    newsDetailVC.model = model;
-    newsDetailVC.isPushEnter = YES;
     JTNavigationController *navCtrl = (JTNavigationController *)_window.rootViewController;
     HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
-    [homeVC.navigationController pushViewController:newsDetailVC animated:NO];
+    NSNumber *tpl = userInfo[@"tpl"];
+    switch (tpl.integerValue) {
+        case 2:
+        {
+            NewsDetailViewController *newsDetailVC = [[NewsDetailViewController alloc] init];
+            newsDetailVC.model = model;
+            newsDetailVC.isPushEnter = YES;
+            [homeVC.navigationController pushViewController:newsDetailVC animated:NO];
+            return;
+        }
+        case 3:
+        {
+            VideoDetailViewController *videoDetailVC = [[VideoDetailViewController alloc] init];
+            videoDetailVC.model = model;
+            videoDetailVC.isPushEnter = YES;
+            videoDetailVC.isNoModel = YES;
+            [homeVC.navigationController pushViewController:videoDetailVC animated:YES];
+            return;
+        }
+        case 4:
+        {
+            GifDetailViewController *gifDetailVC = [[GifDetailViewController alloc] init];
+            gifDetailVC.model = model;
+            gifDetailVC.isNoModel = YES;
+            [homeVC.navigationController pushViewController:gifDetailVC animated:NO];
+            return;
+        }
+        case 5:
+        {
+            PicDetailViewController *picDetail = [[PicDetailViewController alloc] init];
+            picDetail.model = model;
+            [homeVC.navigationController pushViewController:picDetail animated:NO];
+            return;
+        }
+        default:
+            break;
+    }
 }
 #pragma mark - 监听网络状态
 /**
