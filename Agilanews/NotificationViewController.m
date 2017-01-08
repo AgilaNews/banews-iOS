@@ -116,7 +116,8 @@
 
 - (void)showLoginView
 {
-    if (!self.dataList.count) {
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    if (!appDelegate.model && !self.dataList.count) {
         LoginView *loginView = [[LoginView alloc] init];
         [[UIApplication sharedApplication].keyWindow addSubview:loginView];
     }
@@ -161,6 +162,7 @@
         [_tableView reloadData];
     } failure:^(NSError *error) {
         [SVProgressHUD dismiss];
+        weakSelf.showBlankView = YES;
     } isShowHUD:NO];
 }
 
