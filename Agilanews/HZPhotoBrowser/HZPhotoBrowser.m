@@ -256,7 +256,7 @@
 - (void)addToolbars
 {
     //序标
-    if (self.imageCount >= 1) {
+    if (self.imageCount > 1) {
         if (!_indexLabel) {
             UILabel *indexLabel = [[UILabel alloc] init];
             indexLabel.textAlignment = NSTextAlignmentCenter;
