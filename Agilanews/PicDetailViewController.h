@@ -14,4 +14,8 @@
 @property (nonatomic, strong) NewsModel *model;
 @property (nonatomic, strong) OnlyPicCell *cell;
 
+@property (nonatomic, strong) UIView *blankView;
+@property (nonatomic, strong) UILabel *blankLabel;
+@property (nonatomic, strong) UIImageView *failureView;
+
 @end

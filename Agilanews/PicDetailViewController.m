@@ -32,6 +32,7 @@
  */
 - (void)requsetDetailWithNewsID:(NSString *)newsID
 {
+    SVProgressHUD.defaultStyle = SVProgressHUDStyleCustom;
     [SVProgressHUD show];
     __weak typeof(self) weakSelf = self;
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
@@ -43,7 +44,45 @@
         [weakSelf.cell tapAction];
     } failure:^(NSError *error) {
         [SVProgressHUD dismiss];
+        if (!_blankView) {
+            _blankView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, weakSelf.view.width, weakSelf.view.height)];
+            _blankView.backgroundColor = [UIColor whiteColor];
+            _blankView.userInteractionEnabled = YES;
+            [weakSelf.view addSubview:_blankView];
+            _failureView = [[UIImageView alloc] initWithFrame:CGRectMake((_blankView.width - 28) * .5, 200 / kScreenHeight * 568 + 64, 28, 26)];
+            _failureView.image = [UIImage imageNamed:@"icon_common_netoff"];
+            [_blankView addSubview:_failureView];
+            _blankLabel = [[UILabel alloc] initWithFrame:CGRectMake((kScreenWidth - 300) * .5, _failureView.bottom + 13, 300, 20)];
+            _blankLabel.backgroundColor = [UIColor whiteColor];
+            _blankLabel.textAlignment = NSTextAlignmentCenter;
+            _blankLabel.textColor = SSColor(177, 177, 177);
+            _blankLabel.font = [UIFont systemFontOfSize:16];
+            [_blankView addSubview:_blankLabel];
+            UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:weakSelf action:@selector(requestData)];
+            [_blankView addGestureRecognizer:tap];
+        }
+        if ([AFNetworkReachabilityManager sharedManager].networkReachabilityStatus == AFNetworkReachabilityStatusNotReachable) {
+            weakSelf.blankLabel.text = @"Network unavailable";
+            weakSelf.failureView.image = [UIImage imageNamed:@"icon_common_netoff"];
+        } else {
+            weakSelf.blankLabel.text = @"Sorry,please try again";
+            weakSelf.failureView.image = [UIImage imageNamed:@"icon_common_failed"];
+        }
     } isShowHUD:NO];
+}
+
+/**
+ *  失败页面请求网络
+ */
+- (void)requestData
+{
+    if (self.blankView) {
+        [self.blankView removeFromSuperview];
+        self.blankView = nil;
+        SVProgressHUD.defaultStyle = SVProgressHUDStyleCustom;
+        [SVProgressHUD show];
+    }
+    [self requsetDetailWithNewsID:_model.news_id];
 }
 
 - (void)didReceiveMemoryWarning {
