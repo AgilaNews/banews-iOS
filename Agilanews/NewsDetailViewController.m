@@ -45,13 +45,13 @@
     _pullupCount = 0;
     
     // 添加导航栏右侧按钮
-    UIButton *shareBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    shareBtn.backgroundColor = kOrangeColor;
-    shareBtn.frame = CGRectMake(0, 0, 40, 40);
-    shareBtn.imageView.backgroundColor = kOrangeColor;
-    [shareBtn setImage:[UIImage imageNamed:@"icon_article_share_default"] forState:UIControlStateNormal];
-    [shareBtn addTarget:self action:@selector(shareAction) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *shareItem = [[UIBarButtonItem alloc]initWithCustomView:shareBtn];
+//    UIButton *shareBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+//    shareBtn.backgroundColor = kOrangeColor;
+//    shareBtn.frame = CGRectMake(0, 0, 40, 40);
+//    shareBtn.imageView.backgroundColor = kOrangeColor;
+//    [shareBtn setImage:[UIImage imageNamed:@"icon_article_share_default"] forState:UIControlStateNormal];
+//    [shareBtn addTarget:self action:@selector(shareAction) forControlEvents:UIControlEventTouchUpInside];
+//    UIBarButtonItem *shareItem = [[UIBarButtonItem alloc]initWithCustomView:shareBtn];
     UIButton *moreBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     moreBtn.backgroundColor = kOrangeColor;
     moreBtn.frame = CGRectMake(0, 0, 40, 38);
@@ -61,7 +61,7 @@
     UIBarButtonItem *moreItem = [[UIBarButtonItem alloc]initWithCustomView:moreBtn];
     UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
     negativeSpacer.width = -10;
-    self.navigationItem.rightBarButtonItems = @[negativeSpacer, moreItem, shareItem];
+    self.navigationItem.rightBarButtonItems = @[negativeSpacer, moreItem];
     
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight) style:UITableViewStyleGrouped];
     _tableView.backgroundColor = kWhiteBgColor;
@@ -1350,7 +1350,8 @@
                     }
                     break;
                 case 2:
-                    [button setImage:[UIImage imageNamed:@"facebook"] forState:UIControlStateNormal];
+                    [button setImage:[UIImage imageNamed:@"icon_article_share_gray"] forState:UIControlStateNormal];
+                    [button setImage:[UIImage imageNamed:@"icon_article_share_slect"] forState:UIControlStateHighlighted];
                     break;
                 default:
                     break;
@@ -1773,28 +1774,7 @@
         }
         case 2:
         {
-            // 点击facebook按钮
-            // 打点-分享至facebook-010219
-            NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
-                                           [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
-                                           _channelName, @"channel",
-                                           _model.news_id, @"article",
-                                           nil];
-            [Flurry logEvent:@"Article_Share_Facebook_Click" withParameters:articleParams];
-//#if DEBUG
-//            [iConsole info:[NSString stringWithFormat:@"Article_Share_Facebook_Click:%@",articleParams],nil];
-//#endif
-            
-            FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
-            NSString *shareString = _detailModel.share_url;
-            shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"facebook"];
-            content.contentURL = [NSURL URLWithString:shareString];
-            content.contentTitle = _detailModel.title;
-            ImageModel *imageModel = _detailModel.imgs.firstObject;
-            content.imageURL = [NSURL URLWithString:imageModel.src];
-            [FBSDKShareDialog showFromViewController:self
-                                         withContent:content
-                                            delegate:self];
+            [self shareAction];
             break;
         }
         default:

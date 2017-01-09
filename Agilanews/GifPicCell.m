@@ -371,7 +371,8 @@
         _shareButton.imageView.backgroundColor = [UIColor whiteColor];
         _shareButton.adjustsImageWhenHighlighted = NO;
         //        [_shareButton setBackgroundColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [_shareButton setImage:[UIImage imageNamed:@"icon_video_facebook"] forState:UIControlStateNormal];
+        [_shareButton setImage:[UIImage imageNamed:@"icon_video_share"] forState:UIControlStateNormal];
+        [_shareButton setImage:[UIImage imageNamed:@"icon_share_s"] forState:UIControlStateHighlighted];
     }
     return _shareButton;
 }

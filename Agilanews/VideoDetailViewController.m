@@ -67,14 +67,14 @@
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
     
-    UIButton *shareBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    shareBtn.frame = CGRectMake(0, 0, 40, 40);
-    [shareBtn setImage:[UIImage imageNamed:@"icon_article_share_default"] forState:UIControlStateNormal];
-    [shareBtn addTarget:self action:@selector(shareAction) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *shareItem = [[UIBarButtonItem alloc]initWithCustomView:shareBtn];
-    UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-    negativeSpacer.width = -10;
-    self.navigationItem.rightBarButtonItems = @[negativeSpacer, shareItem];
+//    UIButton *shareBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+//    shareBtn.frame = CGRectMake(0, 0, 40, 40);
+//    [shareBtn setImage:[UIImage imageNamed:@"icon_article_share_default"] forState:UIControlStateNormal];
+//    [shareBtn addTarget:self action:@selector(shareAction) forControlEvents:UIControlEventTouchUpInside];
+//    UIBarButtonItem *shareItem = [[UIBarButtonItem alloc]initWithCustomView:shareBtn];
+//    UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+//    negativeSpacer.width = -10;
+//    self.navigationItem.rightBarButtonItems = @[negativeSpacer, shareItem];
     
     _playerPath = [NSMutableArray array];
     
@@ -874,28 +874,7 @@
         }
         case 2:
         {
-            // 点击facebook按钮
-            // 打点-视频分享_fb分享-011605
-            NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
-                                           [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
-                                           _channelName, @"channel",
-                                           _model.news_id, @"article",
-                                           nil];
-            [Flurry logEvent:@"Video_share_FB_Click" withParameters:articleParams];
-//#if DEBUG
-//            [iConsole info:[NSString stringWithFormat:@"Video_share_FB_Click:%@",articleParams],nil];
-//#endif
-
-            FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
-            NSString *shareString = _model.share_url;
-            shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"facebook"];
-            content.contentURL = [NSURL URLWithString:shareString];
-            content.contentTitle = _model.title;
-            ImageModel *imageModel = _model.imgs.firstObject;
-            content.imageURL = [NSURL URLWithString:imageModel.src];
-            [FBSDKShareDialog showFromViewController:self
-                                         withContent:content
-                                            delegate:self];
+            [self shareAction];
             break;
         }
         default:
@@ -1749,7 +1728,8 @@
                     }
                     break;
                 case 2:
-                    [button setImage:[UIImage imageNamed:@"facebook"] forState:UIControlStateNormal];
+                    [button setImage:[UIImage imageNamed:@"icon_article_share_gray"] forState:UIControlStateNormal];
+                    [button setImage:[UIImage imageNamed:@"icon_article_share_slect"] forState:UIControlStateHighlighted];
                     break;
                 default:
                     break;

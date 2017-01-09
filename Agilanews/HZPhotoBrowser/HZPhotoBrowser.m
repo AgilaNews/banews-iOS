@@ -24,6 +24,7 @@
 @property (nonatomic,strong) UIButton *saveButton;
 @end
 
+@import SafariServices;
 @implementation HZPhotoBrowser
 
 - (void)viewDidLoad
@@ -587,7 +588,8 @@
                     break;
                 }
                 case 1:
-                    [button setImage:[UIImage imageNamed:@"facebook"] forState:UIControlStateNormal];
+                    [button setImage:[UIImage imageNamed:@"icon_article_share_gray"] forState:UIControlStateNormal];
+                    [button setImage:[UIImage imageNamed:@"icon_article_share_slect"] forState:UIControlStateHighlighted];
                     break;
                 default:
                     break;
@@ -695,22 +697,99 @@
         }
         case 1:
         {
-            // 点击facebook按钮
-            FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
-            NSString *shareString = _model.share_url;
-            shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"facebook"];
-            content.contentURL = [NSURL URLWithString:shareString];
-            content.contentTitle = _model.title;
-            ImageModel *imageModel = _model.imgs.firstObject;
-            content.imageURL = [NSURL URLWithString:imageModel.src];
-            [FBSDKShareDialog showFromViewController:self
-                                         withContent:content
-                                            delegate:self];
+            [self shareAction];
             break;
         }
         default:
             break;
     }
+}
+
+/**
+ *  分享按钮点击事件
+ */
+- (void)shareAction
+{
+    __weak typeof(self) weakSelf = self;
+    [SSUIShareActionSheetStyle setCancelButtonLabelColor:kGrayColor];
+    [SSUIShareActionSheetStyle setItemNameFont:[UIFont systemFontOfSize:13]];
+    [SSUIShareActionSheetStyle setItemNameColor:kBlackColor];
+    
+    // 分享到facebook
+    SSUIShareActionSheetCustomItem *facebook = [SSUIShareActionSheetCustomItem itemWithIcon:[UIImage imageNamed:@"icon_share_facebook"] label:@"Facebook" onClick:^{
+        FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
+        NSString *shareString = _model.share_url;
+        shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"facebook"];
+        content.contentURL = [NSURL URLWithString:shareString];
+        content.contentTitle = _model.title;
+        ImageModel *imageModel = _model.imgs.firstObject;
+        content.imageURL = [NSURL URLWithString:imageModel.src];
+        [FBSDKShareDialog showFromViewController:weakSelf
+                                     withContent:content
+                                        delegate:weakSelf];
+    }];
+    
+    // 分享到twitter
+    SSUIShareActionSheetCustomItem *twitter = [SSUIShareActionSheetCustomItem itemWithIcon:[UIImage imageNamed:@"icon_share_twitter"] label:@"Twitter" onClick:^{
+        NSString *shareString = _model.share_url;
+        shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"twitter"];
+        TWTRComposer *composer = [[TWTRComposer alloc] init];
+        [composer setText:_model.title];
+        [composer setURL:[NSURL URLWithString:shareString]];
+        @try {
+            [composer showFromViewController:weakSelf completion:^(TWTRComposerResult result) {
+                if (result == TWTRComposerResultCancelled) {
+                    // 取消分享
+                    SSLog(@"Tweet composition cancelled");
+                } else {
+                    // 分享成功
+                    SSLog(@"Sending Tweet!");
+                }
+            }];
+        }
+        @catch (NSException *exception) {
+            SSLog(@"%s\n%@", __FUNCTION__, exception);
+        }
+    }];
+    
+    // 分享到google+
+    SSUIShareActionSheetCustomItem *googleplus = [SSUIShareActionSheetCustomItem itemWithIcon:[UIImage imageNamed:@"icon_share_google"] label:@"Google+" onClick:^{
+        NSString *shareString = _model.share_url;
+        shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"googleplus"];
+        NSURLComponents* urlComponents = [[NSURLComponents alloc]
+                                          initWithString:@"https://plus.google.com/share"];
+        urlComponents.queryItems = @[[[NSURLQueryItem alloc]
+                                      initWithName:@"url"
+                                      value:[[NSURL URLWithString:shareString] absoluteString]]];
+        NSURL* url = [urlComponents URL];
+        if ([SFSafariViewController class]) {
+            // Open the URL in SFSafariViewController (iOS 9+)
+            SFSafariViewController* controller = [[SFSafariViewController alloc]
+                                                  initWithURL:url];
+            //            controller.delegate = self;
+            [weakSelf presentViewController:controller animated:YES completion:nil];
+        } else {
+            // Open the URL in the device's browser
+            [[UIApplication sharedApplication] openURL:url];
+        }
+    }];
+    
+    [ShareSDK showShareActionSheet:self.view
+                             items:@[facebook, twitter, googleplus]
+                       shareParams:nil
+               onShareStateChanged:^(SSDKResponseState state, SSDKPlatformType platformType, NSDictionary *userData, SSDKContentEntity *contentEntity, NSError *error, BOOL end)
+     {
+         switch (state)
+         {
+             case SSDKResponseStateCancel:
+             {
+                 SSLog(@"取消分享");
+                 break;
+             }
+             default:
+                 break;
+         }
+     }];
 }
 
 #pragma mark - FBSDKSharingDelegate
