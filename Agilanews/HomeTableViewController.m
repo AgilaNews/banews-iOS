@@ -600,6 +600,7 @@
     if (model.tpl.integerValue == NEWS_GifPic) {
         GifDetailViewController *gifDetailVC = [[GifDetailViewController alloc] init];
         gifDetailVC.model = model;
+        gifDetailVC.cell = [tableView cellForRowAtIndexPath:indexPath];
         [self.navigationController pushViewController:gifDetailVC animated:YES];
         return;
     }

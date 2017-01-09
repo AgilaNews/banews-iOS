@@ -9,6 +9,7 @@
 #import "BaseViewController.h"
 #import "CommentTextView.h"
 #import "RecommendedView.h"
+#import "GifPicCell.h"
 
 @interface GifDetailViewController : BaseViewController <UITableViewDataSource, UITableViewDelegate, UITextViewDelegate, FBSDKSharingDelegate>
 
@@ -28,6 +29,7 @@
 @property (nonatomic, strong) NSMutableArray *tasks;
 @property (nonatomic, strong) NSString *collectID;          // 收藏新闻ID
 @property (nonatomic, strong) NSNumber *commentID;
+@property (nonatomic, strong) GifPicCell *cell;
 @property (nonatomic, assign) BOOL isNoModel;
 
 

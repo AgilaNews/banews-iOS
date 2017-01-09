@@ -102,6 +102,10 @@
     }
     [_tasks removeAllObjects];
     
+    if (_cell) {
+        [_cell setNeedsLayout];
+    }
+    
 //    // 服务器打点-详情页返回-020201
 //    NSMutableDictionary *eventDic = [NSMutableDictionary dictionary];
 //    [eventDic setObject:@"020201" forKey:@"id"];
