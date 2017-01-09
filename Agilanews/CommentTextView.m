@@ -42,7 +42,7 @@
         _placeholderLabel.textColor = kGrayColor;
         _placeholderLabel.font = [UIFont systemFontOfSize:14];
         _placeholderLabel.enabled = NO;
-        _placeholderLabel.text = @"Comments here...";
+        _placeholderLabel.text = @"Comment here...";
         [_textView addSubview:_placeholderLabel];
         
         _cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];

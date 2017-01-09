@@ -20,7 +20,7 @@
         self.layer.masksToBounds = YES;
         self.layer.borderWidth = 1;
         self.layer.borderColor = SSColor(235, 235, 235).CGColor;
-        self.placeholder = @"    Comments here...";
+        self.placeholder = @"    Comment here...";
         [self setValue:kGrayColor forKeyPath:@"_placeholderLabel.textColor"];
         [self setValue:[UIFont systemFontOfSize:14] forKeyPath:@"_placeholderLabel.font"];
     }
