@@ -370,6 +370,9 @@
         } isShowHUD:YES];
     } else if (_detailModel && _model) {
         // 新闻详情本地缓存
+        if (_isNoModel) {
+            _model.tpl = @7;
+        }
         NSString *time = [NSString stringWithFormat:@"%@",[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]]];
         [[CoreDataManager sharedInstance] addLocalFavoriteWithNewsID:_model.news_id DetailModel:_detailModel CollectTime:time NewsModel:_model];
         button.selected = YES;
