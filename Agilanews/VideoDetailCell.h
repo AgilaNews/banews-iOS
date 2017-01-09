@@ -20,6 +20,7 @@
 @property (nonatomic, strong) UILabel *contentLabel;        // 内容
 @property (nonatomic, strong) UIButton *openButton;         // 展开按钮
 @property (nonatomic, strong) UIButton *likeButton;         // 点赞按钮
+@property (nonatomic, strong) UIButton *facebookShare;      // 分享按钮
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier bgColor:(UIColor *)bgColor;
 

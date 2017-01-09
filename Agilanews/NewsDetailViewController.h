@@ -23,6 +23,7 @@
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UIView *commentsView;         
 @property (nonatomic, strong) UIButton *likeButton;         // 点赞按钮
+@property (nonatomic, strong) UIButton *facebookShare;      // 分享按钮
 @property (nonatomic, assign) float webViewHeight;          // webView高度
 @property (nonatomic, strong) NewsDetailModel *detailModel; // 新闻详情model
 @property (nonatomic, strong) NSMutableArray *commentArray; // 评论数组

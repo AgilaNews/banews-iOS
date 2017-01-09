@@ -920,6 +920,8 @@
             [cell.contentView addSubview:_webView];
             [cell.contentView addSubview:self.likeButton];
             self.likeButton.top = _webView.bottom;
+            [cell.contentView addSubview:self.facebookShare];
+            self.facebookShare.top = self.likeButton.top;
             if (_isHaveAd) {
                 [cell.contentView addSubview:self.facebookAdView];
                 self.facebookAdView.top = self.likeButton.bottom + 20;
@@ -1390,13 +1392,13 @@
 {
     if (_likeButton == nil) {
         _likeButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _likeButton.frame = CGRectMake((kScreenWidth - 95) * .5, 0, 95, 34);
+        _likeButton.frame = CGRectMake((kScreenWidth - 105 - 10 - 50) * .5, 0, 105, 34);
         _likeButton.imageView.backgroundColor = kWhiteBgColor;
         _likeButton.titleLabel.backgroundColor = kWhiteBgColor;
         _likeButton.layer.cornerRadius = 17;
         _likeButton.layer.masksToBounds = YES;
         _likeButton.layer.borderWidth = 1;
-        _likeButton.layer.borderColor = SSColor(235, 235, 235).CGColor;
+        _likeButton.layer.borderColor = SSColor_RGB(204).CGColor;
         _likeButton.titleLabel.font = [UIFont systemFontOfSize:14];
         _likeButton.imageEdgeInsets = UIEdgeInsetsMake(0, -5, 0, 0);
         _likeButton.hidden = YES;
@@ -1438,6 +1440,25 @@
         [_likeButton setTitle:@"" forState:UIControlStateNormal];
     }
     return _likeButton;
+}
+
+// Facebook按钮
+- (UIButton *)facebookShare
+{
+    if (_facebookShare == nil) {
+        _facebookShare = [UIButton buttonWithType:UIButtonTypeCustom];
+        _facebookShare.frame = CGRectMake(_likeButton.right + 10, _likeButton.top, 50, 34);
+        _facebookShare.imageView.backgroundColor = kWhiteBgColor;
+        _facebookShare.layer.cornerRadius = 17;
+        _facebookShare.layer.masksToBounds = YES;
+        _facebookShare.layer.borderWidth = 1;
+        _facebookShare.layer.borderColor = SSColor_RGB(204).CGColor;
+        [_facebookShare setAdjustsImageWhenHighlighted:NO];
+        [_facebookShare setBackgroundColor:kWhiteBgColor forState:UIControlStateNormal];
+        [_facebookShare setImage:[UIImage imageNamed:@"icon_article_facebook_default"] forState:UIControlStateNormal];
+        [_facebookShare addTarget:self action:@selector(shareToFacebook:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _facebookShare;
 }
 
 - (void)setDetailModel:(NewsDetailModel *)detailModel
@@ -1908,6 +1929,26 @@
                 break;
         }
     }];
+}
+
+/**
+ 分享到Facebook
+ 
+ param button
+ */
+- (void)shareToFacebook:(UIButton *)button
+{
+    __weak typeof(self) weakSelf = self;
+    FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
+    NSString *shareString = _model.share_url;
+    shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"facebook"];
+    content.contentURL = [NSURL URLWithString:shareString];
+    content.contentTitle = _model.title;
+    ImageModel *imageModel = _model.imgs.firstObject;
+    content.imageURL = [NSURL URLWithString:imageModel.src];
+    [FBSDKShareDialog showFromViewController:weakSelf
+                                 withContent:content
+                                    delegate:weakSelf];
 }
 
 /**

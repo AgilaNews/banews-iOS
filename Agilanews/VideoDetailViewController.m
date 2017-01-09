@@ -1012,6 +1012,35 @@
      }];
 }
 
+/**
+ 分享到Facebook
+ 
+ param button
+ */
+- (void)shareToFacebook:(UIButton *)button
+{
+    id cell = button.superview;
+    do {
+        if ([cell isKindOfClass:[UITableViewCell class]]) {
+            break;
+        }
+        cell = ((UIView *)cell).superview;
+    } while (cell != nil);
+    NewsModel *newsModel = ((OnlyVideoCell *)cell).model;
+    
+    __weak typeof(self) weakSelf = self;
+    FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
+    NSString *shareString = newsModel.share_url;
+    shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"facebook"];
+    content.contentURL = [NSURL URLWithString:shareString];
+    content.contentTitle = newsModel.title;
+    ImageModel *imageModel = newsModel.imgs.firstObject;
+    content.imageURL = [NSURL URLWithString:imageModel.src];
+    [FBSDKShareDialog showFromViewController:weakSelf
+                                 withContent:content
+                                    delegate:weakSelf];
+}
+
 #pragma mark - FBSDKSharingDelegate
 - (void)sharer:(id<FBSDKSharing>)sharer didCompleteWithResults:(NSDictionary *)results
 {
@@ -1236,6 +1265,7 @@
                 cell = [[VideoDetailCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:kWhiteBgColor];
                 [((VideoDetailCell *)cell).likeButton addTarget:self action:@selector(likeAction:) forControlEvents:UIControlEventTouchUpInside];
                 [((VideoDetailCell *)cell).openButton addTarget:self action:@selector(openAction:) forControlEvents:UIControlEventTouchUpInside];
+                [((VideoDetailCell *)cell).facebookShare addTarget:self action:@selector(shareToFacebook:) forControlEvents:UIControlEventTouchUpInside];
             }
             ((VideoDetailCell *)cell).model = _model;
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];

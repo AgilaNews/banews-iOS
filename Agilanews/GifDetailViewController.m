@@ -587,6 +587,7 @@
             if (cell == nil) {
                 cell = [[GifDetailCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
                 [((GifDetailCell *)cell).likeButton addTarget:self action:@selector(likeAction:) forControlEvents:UIControlEventTouchUpInside];
+                [((GifDetailCell *)cell).facebookShare addTarget:self action:@selector(shareToFacebook:) forControlEvents:UIControlEventTouchUpInside];
             }
             ((GifDetailCell *)cell).model = _model;
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
@@ -990,6 +991,26 @@
                  break;
          }
      }];
+}
+
+/**
+ 分享到Facebook
+ 
+ param button
+ */
+- (void)shareToFacebook:(UIButton *)button
+{
+    __weak typeof(self) weakSelf = self;
+    FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
+    NSString *shareString = _model.share_url;
+    shareString = [shareString stringByReplacingOccurrencesOfString:@"{from}" withString:@"facebook"];
+    content.contentURL = [NSURL URLWithString:shareString];
+    content.contentTitle = _model.title;
+    ImageModel *imageModel = _model.imgs.firstObject;
+    content.imageURL = [NSURL URLWithString:imageModel.src];
+    [FBSDKShareDialog showFromViewController:weakSelf
+                                 withContent:content
+                                    delegate:weakSelf];
 }
 
 #pragma mark - FBSDKSharingDelegate

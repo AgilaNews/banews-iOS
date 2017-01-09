@@ -17,6 +17,7 @@
 @property (nonatomic, strong) UIImageView *titleImageView;  // 标题图片
 @property (nonatomic, strong) UIButton *playButton;         // 播放按钮
 @property (nonatomic, strong) UIButton *likeButton;         // 点赞按钮
+@property (nonatomic, strong) UIButton *facebookShare;      // 分享按钮
 @property (nonatomic, strong) AVPlayer *player;             // 播放器对象
 @property (nonatomic, strong) AVPlayerLayer *playerLayer;   // 播放层
 @property (nonatomic, strong) NSURLSessionDownloadTask *downloadTask;

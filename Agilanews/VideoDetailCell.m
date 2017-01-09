@@ -33,6 +33,7 @@
     [self addSubview:self.contentLabel];
     [self addSubview:self.openButton];
     [self addSubview:self.likeButton];
+    [self addSubview:self.facebookShare];
     
     __weak typeof(self) weakSelf = self;
     CGSize titleLabelSize = [_model.title calculateSize:CGSizeMake(kScreenWidth - 22, 80) font:self.titleLabel.font];
@@ -75,9 +76,15 @@
         make.height.mas_equalTo(40);
     }];
     [self.likeButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.mas_equalTo(weakSelf.mas_centerX);
+        make.left.mas_equalTo((kScreenWidth - 105 - 10 - 50) * .5);
         make.top.mas_equalTo(weakSelf.contentLabel.mas_bottom).offset(30);
-        make.width.mas_equalTo(95);
+        make.width.mas_equalTo(105);
+        make.height.mas_equalTo(34);
+    }];
+    [self.facebookShare mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(weakSelf.likeButton.mas_right).offset(10);
+        make.top.mas_equalTo(weakSelf.likeButton.mas_top);
+        make.width.mas_equalTo(50);
         make.height.mas_equalTo(34);
     }];
 }
@@ -135,9 +142,15 @@
         make.height.mas_equalTo(40);
     }];
     [self.likeButton mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.centerX.mas_equalTo(weakSelf.mas_centerX);
+        make.left.mas_equalTo((kScreenWidth - 105 - 10 - 50) * .5);
         make.top.mas_equalTo(weakSelf.contentLabel.mas_bottom).offset(30);
-        make.width.mas_equalTo(95);
+        make.width.mas_equalTo(105);
+        make.height.mas_equalTo(34);
+    }];
+    [self.facebookShare mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(weakSelf.likeButton.mas_right).offset(10);
+        make.top.mas_equalTo(weakSelf.likeButton.mas_top);
+        make.width.mas_equalTo(50);
         make.height.mas_equalTo(34);
     }];
     [super updateConstraints];
@@ -255,7 +268,7 @@
         _likeButton.layer.cornerRadius = 17;
         _likeButton.layer.masksToBounds = YES;
         _likeButton.layer.borderWidth = 1;
-        _likeButton.layer.borderColor = SSColor(235, 235, 235).CGColor;
+        _likeButton.layer.borderColor = SSColor_RGB(204).CGColor;
         _likeButton.titleLabel.font = [UIFont systemFontOfSize:14];
         _likeButton.imageEdgeInsets = UIEdgeInsetsMake(0, -5, 0, 0);
         [_likeButton setAdjustsImageWhenHighlighted:NO];
@@ -297,6 +310,23 @@
         [_likeButton setTitle:@"" forState:UIControlStateNormal];
     }
     return _likeButton;
+}
+
+// Facebook按钮
+- (UIButton *)facebookShare
+{
+    if (_facebookShare == nil) {
+        _facebookShare = [UIButton buttonWithType:UIButtonTypeCustom];
+        _facebookShare.imageView.backgroundColor = kWhiteBgColor;
+        _facebookShare.layer.cornerRadius = 17;
+        _facebookShare.layer.masksToBounds = YES;
+        _facebookShare.layer.borderWidth = 1;
+        _facebookShare.layer.borderColor = SSColor_RGB(204).CGColor;
+        [_facebookShare setAdjustsImageWhenHighlighted:NO];
+        [_facebookShare setBackgroundColor:kWhiteBgColor forState:UIControlStateNormal];
+        [_facebookShare setImage:[UIImage imageNamed:@"icon_article_facebook_default"] forState:UIControlStateNormal];
+    }
+    return _facebookShare;
 }
 
 - (void)setModel:(NewsModel *)model
