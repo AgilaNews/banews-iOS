@@ -2112,8 +2112,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.banews.agila;
 				PRODUCT_NAME = Agila;
-				PROVISIONING_PROFILE = "8d8b817d-7b59-411e-a8fe-198fc4a71122";
-				PROVISIONING_PROFILE_SPECIFIER = iOS_Development;
+				PROVISIONING_PROFILE = "a7712be7-9c9b-4c05-a4d5-6a32ec26179e";
+				PROVISIONING_PROFILE_SPECIFIER = Agila_Development_Debug;
 				SWIFT_OBJC_BRIDGING_HEADER = "Agila-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
@@ -2249,8 +2249,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.banews.agila;
 				PRODUCT_NAME = Agila;
-				PROVISIONING_PROFILE = "c21df7c4-82d9-470e-9443-2334ffbd104e";
-				PROVISIONING_PROFILE_SPECIFIER = "Agila Distribution_AdHoc";
+				PROVISIONING_PROFILE = "56b55a2b-490f-4154-9d1b-2e9a4fac5416";
+				PROVISIONING_PROFILE_SPECIFIER = Agila_Distribution_AdHoc;
 				SWIFT_OBJC_BRIDGING_HEADER = "Agila-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 				VALID_ARCHS = "arm64 armv7s armv7";
