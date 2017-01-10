@@ -153,12 +153,18 @@
         make.width.mas_equalTo(titleLabelSize.width);
         make.height.mas_equalTo(titleLabelSize.height);
     }];
+    ImageModel *imageModel = _model.imgs.firstObject;
+    CGFloat height = imageModel.height.floatValue / 2.0;
     // 标题图片布局
     [self.titleImageView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(weakSelf.titleLabel.mas_left);
         make.top.mas_equalTo(weakSelf.titleLabel.mas_bottom).offset(10);
         make.width.mas_equalTo(kScreenWidth - 22);
-        make.height.mas_equalTo(imageHeight);
+        if (_model.tpl.integerValue == NEWS_GifPic) {
+            make.height.mas_equalTo(height);
+        } else {
+            make.height.mas_equalTo(imageHeight);
+        }
     }];
     // 时长布局
     VideoModel *model = _model.videos.firstObject;
@@ -327,7 +333,7 @@
             }
         }
     }
-    if (model.duration.integerValue > 0) {
+    if (_model.tpl.integerValue == NEWS_OnlyVideo || _model.tpl.integerValue == NEWS_HotVideo) {
         self.durationLabel.hidden = NO;
         self.durationLabel.text = durationString;
     } else {
@@ -337,8 +343,13 @@
     self.sourceLabel.text = _model.source;
     self.timeLabel.text = timeString;
     
-    if (_model.tpl.integerValue == NEWS_HaveVideo || _model.tpl.integerValue == NEWS_OnlyVideo || _model.tpl.integerValue == NEWS_HotVideo) {
+    if (_model.tpl.integerValue == NEWS_HaveVideo || _model.tpl.integerValue == NEWS_OnlyVideo || _model.tpl.integerValue == NEWS_HotVideo || _model.tpl.integerValue == NEWS_GifPic) {
         self.haveVideoView.hidden = NO;
+        if (_model.tpl.integerValue == NEWS_GifPic) {
+            self.haveVideoView.image = [UIImage imageNamed:@"play_button"];
+        } else {
+            self.haveVideoView.image = [UIImage imageNamed:@"icon_video_play"];
+        }
         self.dislikeButton.hidden = YES;
     } else {
         self.haveVideoView.hidden = YES;
@@ -360,11 +371,15 @@
         return;
     }
     self.titleImageView.contentMode = UIViewContentModeScaleAspectFit;
-    ImageModel *imageModel = _model.imgs.firstObject;
     float width = kScreenWidth - 22;
-    NSString *imageUrl = [imageModel.pattern stringByReplacingOccurrencesOfString:@"{w}" withString:[NSString stringWithFormat:@"%d",((int)width * 2)]];
-    imageUrl = [imageUrl stringByReplacingOccurrencesOfString:@"{h}" withString:[NSString stringWithFormat:@"%d",(int)(imageHeight * 2)]];
-    imageUrl = [imageUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSString *imageUrl = nil;
+    if (_model.tpl.integerValue == NEWS_GifPic) {
+        imageUrl = [imageModel.src stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    } else {
+        imageUrl = [imageModel.pattern stringByReplacingOccurrencesOfString:@"{w}" withString:[NSString stringWithFormat:@"%d",((int)width * 2)]];
+        imageUrl = [imageUrl stringByReplacingOccurrencesOfString:@"{h}" withString:[NSString stringWithFormat:@"%d",(int)(imageHeight * 2)]];
+        imageUrl = [imageUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    }
     [self.titleImageView sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:[UIImage imageNamed:@"holderImage"] options:SDWebImageRetryFailed completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         if (!image) {
             _titleImageView.image = [UIImage imageNamed:@"holderImage"];

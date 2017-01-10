@@ -432,13 +432,14 @@
         }
         case NEWS_BigPic:
         {
-            return 12 + 68 + 12;
+            CGSize titleLabelSize = [model.title calculateSize:CGSizeMake(kScreenWidth - 22, 40) font:titleFont];
+            return 12 + titleLabelSize.height + imageHeight + 20 + 11 + 11;
         }
         case NEWS_GifPic:
         {
             CGSize titleLabelSize = [model.title calculateSize:CGSizeMake(kScreenWidth - 22, 40) font:titleFont];
             ImageModel *imageModel = model.imgs.firstObject;
-            return 12 + titleLabelSize.height + 10 + imageModel.height.integerValue / 2.0 + 12 + 18 + 12;
+            return 12 + titleLabelSize.height + imageModel.height.integerValue / 2.0 + 15 + 11 + 11;
         }
         case NEWS_HaveVideo:
         {
@@ -524,12 +525,11 @@
         }
         case NEWS_GifPic:
         {
-            // gif图cell
-            static NSString *cellID = @"GifPicCellID";
-            GifPicCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+            // 大图cell
+            static NSString *cellID = @"BigPicCellID";
+            BigPicCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
             if (cell == nil) {
-                cell = [[GifPicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
-                [cell.shareButton addTarget:self action:@selector(shareToFacebook:) forControlEvents:UIControlEventTouchUpInside];
+                cell = [[BigPicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
             }
             cell.model = model;
             [cell setNeedsLayout];
