@@ -427,17 +427,31 @@
             }
             case NEWS_OnlyVideo:
             {
-                // 视频cell
-                static NSString *cellID = @"OnlyVideoCellID";
-                OnlyVideoCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
-                if (cell == nil) {
-                    cell = [[OnlyVideoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
-                    [cell.shareButton addTarget:self action:@selector(shareAction:) forControlEvents:UIControlEventTouchUpInside];
+                if ([_model.channelID isEqualToNumber:@30001]) {
+                    // 视频cell
+                    static NSString *cellID = @"OnlyVideoCellID";
+                    OnlyVideoCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+                    if (cell == nil) {
+                        cell = [[OnlyVideoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
+                        [cell.shareButton addTarget:self action:@selector(shareAction:) forControlEvents:UIControlEventTouchUpInside];
+                    }
+                    cell.model = model;
+                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                    [cell setNeedsLayout];
+                    return cell;
+                } else {
+                    // 大图cell
+                    static NSString *cellID = @"BigPicCellID";
+                    BigPicCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+                    if (cell == nil) {
+                        cell = [[BigPicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
+                        [cell.dislikeButton addTarget:self action:@selector(dislikeAction:) forControlEvents:UIControlEventTouchUpInside];
+                    }
+                    cell.model = model;
+                    cell.isHaveVideo = YES;
+                    [cell setNeedsLayout];
+                    return cell;
                 }
-                cell.model = model;
-                cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                [cell setNeedsLayout];
-                return cell;
             }
             case NEWS_HotVideo:
             {
