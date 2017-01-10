@@ -58,8 +58,9 @@
     [self.contentView addSubview:self.titleImageView];
     [self.contentView addSubview:self.playButton];
     [self.contentView addSubview:self.loadingView];
-    [self.contentView addSubview:self.watchView];
-    [self.contentView addSubview:self.watchLabel];
+//    [self.contentView addSubview:self.watchView];
+//    [self.contentView addSubview:self.watchLabel];
+    [self.contentView addSubview:self.likeButton];
     [self.contentView addSubview:self.commentView];
     [self.contentView addSubview:self.commentLabel];
     [self.contentView addSubview:self.shareButton];
@@ -94,38 +95,45 @@
         make.width.mas_equalTo(45);
         make.height.mas_equalTo(45);
     }];
-    // 观看视图布局
-    [self.watchView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(weakSelf.titleImageView.mas_bottom).offset(15.5);
-        make.left.mas_equalTo(11);
-        make.width.mas_equalTo(11);
-        make.height.mas_equalTo(11);
-    }];
-    // 观看量布局
-    [self.watchLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(weakSelf.watchView.mas_right).offset(5);
-        make.centerY.mas_equalTo(weakSelf.watchView.mas_centerY);
-        make.width.mas_equalTo(0);
-        make.height.mas_equalTo(0);
+//    // 观看视图布局
+//    [self.watchView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.top.mas_equalTo(weakSelf.titleImageView.mas_bottom).offset(15.5);
+//        make.left.mas_equalTo(11);
+//        make.width.mas_equalTo(11);
+//        make.height.mas_equalTo(11);
+//    }];
+//    // 观看量布局
+//    [self.watchLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.mas_equalTo(weakSelf.watchView.mas_right).offset(5);
+//        make.centerY.mas_equalTo(weakSelf.watchView.mas_centerY);
+//        make.width.mas_equalTo(0);
+//        make.height.mas_equalTo(0);
+//    }];
+    // 点赞按钮布局
+    [self.likeButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(weakSelf.titleLabel.mas_left);
+        make.top.mas_equalTo(weakSelf.titleImageView.mas_bottom).offset(1);
+        make.width.mas_equalTo(50);
+        make.height.mas_equalTo(40);
     }];
     // 分享按钮布局
     [self.shareButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.mas_equalTo(0);
-        make.centerY.mas_equalTo(weakSelf.watchView.mas_centerY);
+        make.centerY.mas_equalTo(weakSelf.likeButton.mas_centerY);
         make.width.mas_equalTo(40);
         make.height.mas_equalTo(40);
     }];
     // 评论数布局
     [self.commentLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.mas_equalTo(weakSelf.shareButton.mas_left).offset(-27);
-        make.centerY.mas_equalTo(weakSelf.watchView.mas_centerY);
+        make.centerY.mas_equalTo(weakSelf.likeButton.mas_centerY);
         make.width.mas_equalTo(0);
         make.height.mas_equalTo(0);
     }];
     // 评论视图布局
     [self.commentView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.mas_equalTo(weakSelf.commentLabel.mas_left).offset(-6);
-        make.centerY.mas_equalTo(weakSelf.watchView.mas_centerY);
+        make.centerY.mas_equalTo(weakSelf.likeButton.mas_centerY);
         make.width.mas_equalTo(18);
         make.height.mas_equalTo(18);
     }];
@@ -161,26 +169,31 @@
         make.centerX.mas_equalTo(weakSelf.titleImageView.mas_centerX);
         make.centerY.mas_equalTo(weakSelf.titleImageView.mas_centerY);
     }];
-    // 观看视图布局
-    [self.watchView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(weakSelf.titleImageView.mas_bottom).offset(15.5);
-        make.left.mas_equalTo(11);
-        make.width.mas_equalTo(11);
-        make.height.mas_equalTo(11);
-    }];
-    // 观看量布局
-    NSString *views = [TimeStampToString getViewsStringWithNumber:_model.views];
-    CGSize watchLabelSize = [views calculateSize:CGSizeMake(100, 14) font:self.watchLabel.font];
-    [self.watchLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(weakSelf.watchView.mas_right).offset(5);
-        make.centerY.mas_equalTo(weakSelf.watchView.mas_centerY);
-        make.width.mas_equalTo(watchLabelSize.width);
-        make.height.mas_equalTo(watchLabelSize.height);
+//    // 观看视图布局
+//    [self.watchView mas_updateConstraints:^(MASConstraintMaker *make) {
+//        make.top.mas_equalTo(weakSelf.titleImageView.mas_bottom).offset(15.5);
+//        make.left.mas_equalTo(11);
+//        make.width.mas_equalTo(11);
+//        make.height.mas_equalTo(11);
+//    }];
+//    // 观看量布局
+//    NSString *views = [TimeStampToString getViewsStringWithNumber:_model.views];
+//    CGSize watchLabelSize = [views calculateSize:CGSizeMake(100, 14) font:self.watchLabel.font];
+//    [self.watchLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+//        make.left.mas_equalTo(weakSelf.watchView.mas_right).offset(5);
+//        make.centerY.mas_equalTo(weakSelf.watchView.mas_centerY);
+//        make.width.mas_equalTo(watchLabelSize.width);
+//        make.height.mas_equalTo(watchLabelSize.height);
+//    }];
+    // 点赞按钮布局
+    [self.likeButton mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(weakSelf.titleLabel.mas_left);
+        make.top.mas_equalTo(weakSelf.titleImageView.mas_bottom).offset(1);
     }];
     // 分享按钮布局
     [self.shareButton mas_updateConstraints:^(MASConstraintMaker *make) {
         make.right.mas_equalTo(0);
-        make.centerY.mas_equalTo(weakSelf.watchView.mas_centerY);
+        make.centerY.mas_equalTo(weakSelf.likeButton.mas_centerY);
         make.width.mas_equalTo(40);
         make.height.mas_equalTo(40);
     }];
@@ -189,14 +202,14 @@
         CGSize commentLabelSize = [_model.commentCount.stringValue calculateSize:CGSizeMake(100, 13) font:self.commentLabel.font];
         [self.commentLabel mas_updateConstraints:^(MASConstraintMaker *make) {
             make.right.mas_equalTo(weakSelf.shareButton.mas_left).offset(-27);
-            make.centerY.mas_equalTo(weakSelf.watchView.mas_centerY);
+            make.centerY.mas_equalTo(weakSelf.likeButton.mas_centerY);
             make.width.mas_equalTo(commentLabelSize.width);
             make.height.mas_equalTo(commentLabelSize.height);
         }];
     } else {
         [self.commentLabel mas_updateConstraints:^(MASConstraintMaker *make) {
             make.right.mas_equalTo(weakSelf.shareButton.mas_left).offset(-27);
-            make.centerY.mas_equalTo(weakSelf.watchView.mas_centerY);
+            make.centerY.mas_equalTo(weakSelf.likeButton.mas_centerY);
             make.width.mas_equalTo(0);
             make.height.mas_equalTo(0);
         }];
@@ -204,7 +217,7 @@
     // 评论视图布局
     [self.commentView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.right.mas_equalTo(weakSelf.commentLabel.mas_left).offset(-6);
-        make.centerY.mas_equalTo(weakSelf.watchView.mas_centerY);
+        make.centerY.mas_equalTo(weakSelf.likeButton.mas_centerY);
         make.width.mas_equalTo(18);
         make.height.mas_equalTo(18);
     }];
@@ -223,11 +236,11 @@
             _titleLabel.textColor = SSColor(68, 68, 68);
         }
     }
-    if (_model.views.integerValue > 0) {
-        self.watchLabel.text = views;
-    } else {
-        self.watchLabel.text = @"";
-    }
+//    if (_model.views.integerValue > 0) {
+//        self.watchLabel.text = views;
+//    } else {
+//        self.watchLabel.text = @"";
+//    }
     if (_model.commentCount.integerValue > 0) {
         self.commentLabel.text = _model.commentCount.stringValue;
     } else {
@@ -323,24 +336,86 @@
     return _loadingView;
 }
 
-- (UIImageView *)watchView
-{
-    if (_watchView == nil) {
-        _watchView = [[UIImageView alloc] init];
-        _watchView.contentMode = UIViewContentModeScaleAspectFit;
-        _watchView.image = [UIImage imageNamed:@"icon_video"];
-    }
-    return _watchView;
-}
+//- (UIImageView *)watchView
+//{
+//    if (_watchView == nil) {
+//        _watchView = [[UIImageView alloc] init];
+//        _watchView.contentMode = UIViewContentModeScaleAspectFit;
+//        _watchView.image = [UIImage imageNamed:@"icon_video"];
+//    }
+//    return _watchView;
+//}
+//
+//- (UILabel *)watchLabel
+//{
+//    if (_watchLabel == nil) {
+//        _watchLabel = [[UILabel alloc] init];
+//        _watchLabel.font = [UIFont systemFontOfSize:13];
+//        _watchLabel.textColor = kBlackColor;
+//    }
+//    return _watchLabel;
+//}
 
-- (UILabel *)watchLabel
+- (UIButton *)likeButton
 {
-    if (_watchLabel == nil) {
-        _watchLabel = [[UILabel alloc] init];
-        _watchLabel.font = [UIFont systemFontOfSize:13];
-        _watchLabel.textColor = kBlackColor;
+    if (_likeButton == nil) {
+        _likeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _likeButton.imageView.backgroundColor = [UIColor whiteColor];
+        _likeButton.titleLabel.backgroundColor = [UIColor whiteColor];
+        _likeButton.titleLabel.font = [UIFont systemFontOfSize:13];
+        _likeButton.adjustsImageWhenHighlighted = NO;
+        [_likeButton setTitleColor:SSColor(102, 102, 102) forState:UIControlStateNormal];
+        [_likeButton setTitleColor:kOrangeColor forState:UIControlStateSelected];
+        [_likeButton setBackgroundColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [_likeButton setImage:[UIImage imageNamed:@"icon_like_d"] forState:UIControlStateNormal];
+        [_likeButton setImage:[UIImage imageNamed:@"icon_like_s"] forState:UIControlStateSelected];
     }
-    return _watchLabel;
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    NSNumber *likeNum = appDelegate.likedDic[_model.news_id];
+    if (likeNum != nil && [likeNum isEqualToNumber:@1]) {
+        _likeButton.selected = YES;
+    } else {
+        _likeButton.selected = NO;
+    }
+    if (_model.likedCount.integerValue > 0) {
+        NSString *buttonTitle = [NSString stringWithFormat:@"%@",_model.likedCount];
+        switch (buttonTitle.length) {
+            case 1:
+                _likeButton.imageEdgeInsets = UIEdgeInsetsMake(0, -12, 0, 0);
+                _likeButton.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, -4);
+                [_likeButton setTitle:buttonTitle forState:UIControlStateNormal];
+                break;
+            case 2:
+                _likeButton.imageEdgeInsets = UIEdgeInsetsMake(0, -4, 0, 0);
+                _likeButton.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, -8);
+                [_likeButton setTitle:buttonTitle forState:UIControlStateNormal];
+                break;
+            case 3:
+                _likeButton.imageEdgeInsets = UIEdgeInsetsMake(0, 2, 0, 0);
+                _likeButton.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, -12);
+                [_likeButton setTitle:buttonTitle forState:UIControlStateNormal];
+                break;
+            case 4:
+                _likeButton.imageEdgeInsets = UIEdgeInsetsMake(0, 5, 0, 0);
+                _likeButton.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, -16);
+                [_likeButton setTitle:buttonTitle forState:UIControlStateNormal];
+                break;
+            case 5:
+                _likeButton.imageEdgeInsets = UIEdgeInsetsMake(0, 5, 0, 0);
+                _likeButton.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, -20);
+                [_likeButton setTitle:@"9999+" forState:UIControlStateNormal];
+                break;
+            default:
+                _likeButton.imageEdgeInsets = UIEdgeInsetsMake(0, -12, 0, 0);
+                _likeButton.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, -4);
+                [_likeButton setTitle:buttonTitle forState:UIControlStateNormal];
+                break;
+        }
+    } else {
+        _likeButton.imageEdgeInsets = UIEdgeInsetsMake(0, -20, 0, 0);
+        [_likeButton setTitle:@"" forState:UIControlStateNormal];
+    }
+    return _likeButton;
 }
 
 - (UIImageView *)commentView

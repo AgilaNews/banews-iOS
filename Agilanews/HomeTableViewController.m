@@ -405,6 +405,7 @@
                 GifPicCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
                 if (cell == nil) {
                     cell = [[GifPicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
+                    [cell.likeButton addTarget:self action:@selector(likeAction:) forControlEvents:UIControlEventTouchUpInside];
                     [cell.shareButton addTarget:self action:@selector(shareAction:) forControlEvents:UIControlEventTouchUpInside];
                 }
                 cell.model = model;

@@ -16,8 +16,9 @@
 @property (nonatomic, strong) UILabel *titleLabel;          // 标题
 @property (nonatomic, strong) UIImageView *titleImageView;  // 标题图片
 @property (nonatomic, strong) UIButton *playButton;         // 播放图片
-@property (nonatomic, strong) UIImageView *watchView;       // 观看量视图
-@property (nonatomic, strong) UILabel *watchLabel;
+//@property (nonatomic, strong) UIImageView *watchView;       // 观看量视图
+//@property (nonatomic, strong) UILabel *watchLabel;
+@property (nonatomic, strong) UIButton *likeButton;         // 点赞按钮
 @property (nonatomic, strong) UIImageView *commentView;     // 评论视图
 @property (nonatomic, strong) UILabel *commentLabel;
 @property (nonatomic, strong) UIButton *shareButton;        // 分享按钮
