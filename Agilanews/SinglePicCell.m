@@ -135,7 +135,10 @@
     __weak typeof(self) weakSelf = self;
 
     // 标题布局
-    CGSize titleLabelSize = [_model.title calculateSize:CGSizeMake(kScreenWidth - 22 - 108 - 9, 60) font:self.titleLabel.font];
+    NSString *title = [_model.title copy];
+    title = [title stringByReplacingOccurrencesOfString:@"<font>" withString:@""];
+    title = [title stringByReplacingOccurrencesOfString:@"</font>" withString:@""];
+    CGSize titleLabelSize = [title calculateSize:CGSizeMake(kScreenWidth - 22 - 108 - 9, 60) font:self.titleLabel.font];
     [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
         make.width.mas_equalTo(titleLabelSize.width);
         make.height.mas_equalTo(titleLabelSize.height);

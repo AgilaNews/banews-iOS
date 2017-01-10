@@ -245,7 +245,10 @@
         make.height.mas_equalTo(42);
     }];
     // 标题布局
-    CGSize titleLabelSize = [_model.title calculateSize:CGSizeMake(kScreenWidth - 22, 50) font:self.titleLabel.font];
+    NSString *title = [_model.title copy];
+    title = [title stringByReplacingOccurrencesOfString:@"<font>" withString:@""];
+    title = [title stringByReplacingOccurrencesOfString:@"</font>" withString:@""];
+    CGSize titleLabelSize = [title calculateSize:CGSizeMake(kScreenWidth - 22, 50) font:self.titleLabel.font];
     [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(11);
         make.top.mas_equalTo(6);

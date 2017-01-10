@@ -71,7 +71,7 @@
     CGSize sourceLabelSize = [_model.source calculateSize:CGSizeMake(300, 12) font:self.sourceLabel.font];
     [self.sourceLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(weakSelf.tagLabel.mas_right);
-        make.top.mas_equalTo(weakSelf.titleLabel.mas_bottom).offset(14);
+        make.bottom.mas_equalTo(-7);
         make.width.mas_equalTo(sourceLabelSize.width);
         make.height.mas_equalTo(sourceLabelSize.height + 1);
     }];
@@ -118,9 +118,12 @@
     __weak typeof(self) weakSelf = self;
     
     // 标题布局
-    CGSize titleLabelSize = [_model.title calculateSize:CGSizeMake(kScreenWidth - 22, 60) font:self.titleLabel.font];
+    NSString *title = [_model.title copy];
+    title = [title stringByReplacingOccurrencesOfString:@"<font>" withString:@""];
+    title = [title stringByReplacingOccurrencesOfString:@"</font>" withString:@""];
+    CGSize titleLabelSize = [title calculateSize:CGSizeMake(kScreenWidth - 22, 60) font:self.titleLabel.font];
     [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.width.mas_equalTo(titleLabelSize.width);
+        make.width.mas_equalTo(kScreenWidth - 22);
         make.height.mas_equalTo(titleLabelSize.height);
     }];
     if (_model.tag.length > 0) {
@@ -137,7 +140,7 @@
         CGSize sourceLabelSize = [_model.source calculateSize:CGSizeMake(300 - tagLabelSize.width - 16, 12) font:self.sourceLabel.font];
         [self.sourceLabel mas_updateConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(weakSelf.tagLabel.mas_right).offset(8);
-            make.top.mas_equalTo(weakSelf.titleLabel.mas_bottom).offset(14);
+            make.bottom.mas_equalTo(-7);
             make.width.mas_equalTo(sourceLabelSize.width);
             make.height.mas_equalTo(sourceLabelSize.height + 1);
         }];
@@ -153,7 +156,7 @@
         CGSize sourceLabelSize = [_model.source calculateSize:CGSizeMake(300, 12) font:self.sourceLabel.font];
         [self.sourceLabel mas_updateConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(weakSelf.tagLabel.mas_right);
-            make.top.mas_equalTo(weakSelf.titleLabel.mas_bottom).offset(14);
+            make.bottom.mas_equalTo(-7);
             make.width.mas_equalTo(sourceLabelSize.width);
             make.height.mas_equalTo(sourceLabelSize.height + 1);
         }];

@@ -127,6 +127,9 @@
     [params setObject:[NSNumber numberWithInteger:20 * _pageCount] forKey:@"from"];
     [[SSHttpRequest sharedInstance] get:kHomeUrl_NewsSearch params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
         [SVProgressHUD dismiss];
+        if (weakSelf.tableView.tableHeaderView) {
+            return;
+        }
         NSMutableArray *models = [NSMutableArray array];
         @autoreleasepool {
             for (NSDictionary *dic in responseObj[@"news"]) {
@@ -198,11 +201,14 @@
             titleFont = titleFont_Normal;
             break;
     }
+    NSString *title = [model.title copy];
+    title = [model.title stringByReplacingOccurrencesOfString:@"<font>" withString:@""];
+    title = [model.title stringByReplacingOccurrencesOfString:@"</font>" withString:@""];
     switch ([model.tpl integerValue])
     {
         case NEWS_ManyPic:
         {
-            CGSize titleLabelSize = [model.title calculateSize:CGSizeMake(kScreenWidth - 22, 40) font:titleFont];
+            CGSize titleLabelSize = [title calculateSize:CGSizeMake(kScreenWidth - 22, 40) font:titleFont];
             return 11 + titleLabelSize.height + 10 + 70 + 10 + 11 + 11;
         }
         case NEWS_SinglePic:
@@ -211,23 +217,23 @@
         }
         case NEWS_NoPic:
         {
-            CGSize titleLabelSize = [model.title calculateSize:CGSizeMake(kScreenWidth - 22, 60) font:titleFont];
+            CGSize titleLabelSize = [title calculateSize:CGSizeMake(kScreenWidth - 22, 60) font:titleFont];
             return 11 + titleLabelSize.height + 15 + 11 + 11;
         }
         case NEWS_BigPic:
         {
-            CGSize titleLabelSize = [model.title calculateSize:CGSizeMake(kScreenWidth - 22, 40) font:titleFont];
+            CGSize titleLabelSize = [title calculateSize:CGSizeMake(kScreenWidth - 22, 40) font:titleFont];
             return 12 + titleLabelSize.height + imageHeight + 20 + 11 + 11;
         }
         case NEWS_OnlyPic:
         {
-            CGSize titleLabelSize = [model.title calculateSize:CGSizeMake(kScreenWidth - 22, 40) font:titleFont];
+            CGSize titleLabelSize = [title calculateSize:CGSizeMake(kScreenWidth - 22, 40) font:titleFont];
             ImageModel *imageModel = model.imgs.firstObject;
             return 12 + titleLabelSize.height + 10 + imageModel.height.integerValue / 2.0 + 12 + 18 + 12;
         }
         case NEWS_GifPic:
         {
-            CGSize titleLabelSize = [model.title calculateSize:CGSizeMake(kScreenWidth - 22, 40) font:titleFont];
+            CGSize titleLabelSize = [title calculateSize:CGSizeMake(kScreenWidth - 22, 40) font:titleFont];
             ImageModel *imageModel = model.imgs.firstObject;
             return 12 + titleLabelSize.height + 10 + imageModel.height.integerValue / 2.0 + 12 + 18 + 12;
         }
@@ -241,7 +247,7 @@
         }
         case NEWS_HotVideo:
         {
-            CGSize titleLabelSize = [model.title calculateSize:CGSizeMake(kScreenWidth - 22, 40) font:titleFont];
+            CGSize titleLabelSize = [title calculateSize:CGSizeMake(kScreenWidth - 22, 40) font:titleFont];
             return 12 + titleLabelSize.height + imageHeight + 20 + 11 + 11;
         }
         default:
