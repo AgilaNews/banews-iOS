@@ -205,6 +205,7 @@
 		5FE722201D506CD70026BFC3 /* FeedbackTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FE7221F1D506CD70026BFC3 /* FeedbackTextField.m */; };
 		5FE722221D50B5B70026BFC3 /* textonly.png in Resources */ = {isa = PBXBuildFile; fileRef = 5FE722211D50B5B70026BFC3 /* textonly.png */; };
 		5FE7FB331E21DABB00529D54 /* PicDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FE7FB321E21DABB00529D54 /* PicDetailViewController.m */; };
+		5FE7FB3A1E24E55E00529D54 /* SNSModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FE7FB391E24E55E00529D54 /* SNSModel.m */; };
 		5FF4B6E01D362ED100CC6704 /* Signature.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FF4B6DF1D362ED100CC6704 /* Signature.m */; };
 		5FF4B6E31D362F0000CC6704 /* base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FF4B6E21D362F0000CC6704 /* base64.m */; };
 		5FF4B6EA1D3645A100CC6704 /* BaseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FF4B6E91D3645A100CC6704 /* BaseModel.m */; };
@@ -607,6 +608,8 @@
 		5FE722211D50B5B70026BFC3 /* textonly.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = textonly.png; sourceTree = "<group>"; };
 		5FE7FB311E21DABB00529D54 /* PicDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PicDetailViewController.h; sourceTree = "<group>"; };
 		5FE7FB321E21DABB00529D54 /* PicDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PicDetailViewController.m; sourceTree = "<group>"; };
+		5FE7FB381E24E55E00529D54 /* SNSModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SNSModel.h; sourceTree = "<group>"; };
+		5FE7FB391E24E55E00529D54 /* SNSModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SNSModel.m; sourceTree = "<group>"; };
 		5FF4B6DE1D362ED100CC6704 /* Signature.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Signature.h; sourceTree = "<group>"; };
 		5FF4B6DF1D362ED100CC6704 /* Signature.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Signature.m; sourceTree = "<group>"; };
 		5FF4B6E11D362F0000CC6704 /* base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = base64.h; sourceTree = "<group>"; };
@@ -1506,6 +1509,8 @@
 				5F5C637F1D90FC29005D3578 /* VideoModel.m */,
 				5F635CB81D3E1E7A006AAE3D /* NewsDetailModel.h */,
 				5F635CB91D3E1E7A006AAE3D /* NewsDetailModel.m */,
+				5FE7FB381E24E55E00529D54 /* SNSModel.h */,
+				5FE7FB391E24E55E00529D54 /* SNSModel.m */,
 				5F635CBB1D3E22CD006AAE3D /* CommentModel.h */,
 				5F635CBC1D3E22CD006AAE3D /* CommentModel.m */,
 				5F86EDD61DFEA2D700F3C35B /* FilterModel.h */,
@@ -1916,6 +1921,7 @@
 				5FF4B78A1D38DEA400CC6704 /* NoPicCell.m in Sources */,
 				5F6462711D45F64A008EEDEC /* FavoritesViewController.m in Sources */,
 				5FF4B7D61D3A174900CC6704 /* MJRefreshLegendHeader.m in Sources */,
+				5FE7FB3A1E24E55E00529D54 /* SNSModel.m in Sources */,
 				5FF4B76E1D37BD2C00CC6704 /* NSMutableDictionary+UhouAdditions.m in Sources */,
 				5F86EDCD1DF66DCD00F3C35B /* LSEmojiFly.m in Sources */,
 				5F2E0A1E1D87B47A00FEC0AC /* HZPhotoBrowser.m in Sources */,

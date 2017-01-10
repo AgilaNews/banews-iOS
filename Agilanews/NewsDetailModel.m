@@ -11,6 +11,7 @@
 #import "NewsModel.h"
 #import "CommentModel.h"
 #import "VideoModel.h"
+#import "SNSModel.h"
 
 @implementation NewsDetailModel
 
@@ -41,7 +42,8 @@ MJCodingImplementation
              @"title":@"title",
              @"source":@"source",
              @"share_url":@"share_url",
-             @"youtube_videos":@"VideoModel"
+             @"youtube_videos":@"VideoModel",
+             @"sns_widgets":@"SNSModel",
              };
 }
 

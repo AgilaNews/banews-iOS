@@ -21,6 +21,7 @@
 #import "BaseNavigationController.h"
 #import "HomeViewController.h"
 #import "LoginView.h"
+#import "SNSModel.h"
 
 #define titleFont_Normal        [UIFont systemFontOfSize:16]
 #define titleFont_ExtraLarge    [UIFont systemFontOfSize:20]
@@ -329,6 +330,42 @@
                     imageUrl = [imageUrl stringByReplacingOccurrencesOfString:@"{w}" withString:[NSString stringWithFormat:@"%ld",videoModel.width.integerValue / 2]];
                     weakSelf.detailModel.body = [weakSelf.detailModel.body stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"<!--YOUTUBE%d-->",i] withString:imageUrl];
                 }
+            }
+            for (int i = 0; i < weakSelf.detailModel.sns_widgets.count; i++) {
+                SNSModel *snsModel = weakSelf.detailModel.sns_widgets[i];
+                NSString *snsString = @"<section class=\"sns-container\"><div class=\"sns-info\">";
+                snsString = [snsString stringByAppendingFormat:@"<img src=\"%@\" class=\"sns-avatar\"/>", snsModel.sns_icon];
+                snsString = [snsString stringByAppendingFormat:@"<div class=\"sns-name\">%@</div>", snsModel.sns_name];
+                switch (snsModel.sns_type.integerValue) {
+                    case 1:
+                    {
+                        snsString = [snsString stringByAppendingString:@"<div class=\"sns-logo embed-facebook\"></div></div>"];
+                        break;
+                    }
+                    case 2:
+                    {
+                        snsString = [snsString stringByAppendingString:@"<div class=\"sns-logo embed-twitter\"></div></div>"];
+                        break;
+                    }
+                    case 3:
+                    {
+                        snsString = [snsString stringByAppendingString:@"<div class=\"sns-logo embed-instagram\"></div></div>"];
+                        break;
+                    }
+                    default:
+                        break;
+                }
+                NSString *imageUrl = nil;
+                if ([DEF_PERSISTENT_GET_OBJECT(SS_textOnlyMode) isEqualToNumber:@1]) {
+                    NSString *imageFilePath = [[NSBundle mainBundle] pathForResource:@"textonly" ofType:@"png"];
+                    imageUrl = [NSString stringWithFormat:@"<img src=file:///%@/>",imageFilePath];
+                } else {
+                    imageUrl = [NSString stringWithFormat:@"<img src=\"\" data-src=\"%@\" height=\"%fpx\" width=\"%fpx\" img-type=\"image\" class=\"ready-to-load\"/>",snsModel.pattern, snsModel.height.integerValue / 2.0, snsModel.width.integerValue / 2.0];
+                    imageUrl = [imageUrl stringByReplacingOccurrencesOfString:@"{w}" withString:[NSString stringWithFormat:@"%ld",snsModel.width.integerValue / 2]];
+                }
+                snsString = [snsString stringByAppendingString:imageUrl];
+                snsString = [snsString stringByAppendingFormat:@"<div class=\"sns-content\">%@</div></section>", snsModel.sns_content];
+                weakSelf.detailModel.body = [weakSelf.detailModel.body stringByReplacingOccurrencesOfString:snsModel.name withString:snsString];
             }
         }
         // 拼接HTML
