@@ -321,7 +321,6 @@
                     cell.isSearch = YES;
                 }
                 cell.model = model;
-                cell.isHaveVideo = NO;
                 [cell setNeedsLayout];
                 return cell;
             }
@@ -364,7 +363,6 @@
                     cell.isSearch = YES;
                 }
                 cell.model = model;
-                cell.isHaveVideo = YES;
                 [cell setNeedsLayout];
                 return cell;
             }

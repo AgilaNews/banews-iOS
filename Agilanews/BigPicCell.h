@@ -24,7 +24,6 @@
 @property (nonatomic, strong) UIButton *dislikeButton;      // 不喜欢按钮
 
 @property (nonatomic, strong) UIColor *bgColor;
-@property (nonatomic, assign) BOOL isHaveVideo;
 @property (nonatomic, strong) UIImageView *haveVideoView;
 @property (nonatomic, assign) BOOL isSearch;            
 

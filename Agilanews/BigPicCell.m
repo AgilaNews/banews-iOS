@@ -192,7 +192,7 @@
     }];
     if (_model.tag.length > 0) {
         self.tagLabel.hidden = NO;
-        if (_isHaveVideo) {
+        if (_model.tpl.integerValue == NEWS_OnlyVideo || _model.tpl.integerValue == NEWS_HotVideo) {
             self.tagLabel.backgroundColor = kOrangeColor;
         } else if (_model.tpl.integerValue == NEWS_Topics) {
             self.tagLabel.backgroundColor = SSColor(78, 173, 240);
@@ -336,7 +336,8 @@
     self.tagLabel.text = _model.tag;
     self.sourceLabel.text = _model.source;
     self.timeLabel.text = timeString;
-    if (self.isHaveVideo) {
+    
+    if (_model.tpl.integerValue == NEWS_HaveVideo || _model.tpl.integerValue == NEWS_OnlyVideo || _model.tpl.integerValue == NEWS_HotVideo) {
         self.haveVideoView.hidden = NO;
         self.dislikeButton.hidden = YES;
     } else {

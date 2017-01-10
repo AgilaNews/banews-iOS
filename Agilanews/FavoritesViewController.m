@@ -557,7 +557,6 @@
                 cell = [[BigPicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
             }
             cell.model = model;
-            cell.isHaveVideo = YES;
             [cell setNeedsLayout];
             return cell;
         }
@@ -570,7 +569,6 @@
                 cell = [[BigPicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
             }
             cell.model = model;
-            cell.isHaveVideo = YES;
             [cell setNeedsLayout];
             return cell;
         }

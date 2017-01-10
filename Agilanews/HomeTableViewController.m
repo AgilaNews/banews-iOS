@@ -379,7 +379,6 @@
                     [cell.dislikeButton addTarget:self action:@selector(dislikeAction:) forControlEvents:UIControlEventTouchUpInside];
                 }
                 cell.model = model;
-                cell.isHaveVideo = NO;
                 [cell setNeedsLayout];
                 return cell;
             }
@@ -451,7 +450,6 @@
                         [cell.dislikeButton addTarget:self action:@selector(dislikeAction:) forControlEvents:UIControlEventTouchUpInside];
                     }
                     cell.model = model;
-                    cell.isHaveVideo = YES;
                     [cell setNeedsLayout];
                     return cell;
                 }
@@ -466,7 +464,6 @@
                     [cell.dislikeButton addTarget:self action:@selector(dislikeAction:) forControlEvents:UIControlEventTouchUpInside];
                 }
                 cell.model = model;
-                cell.isHaveVideo = YES;
                 [cell setNeedsLayout];
                 return cell;
             }
@@ -506,7 +503,6 @@
                     [cell.dislikeButton addTarget:self action:@selector(dislikeAction:) forControlEvents:UIControlEventTouchUpInside];
                 }
                 cell.model = model;
-                cell.isHaveVideo = NO;
                 [cell setNeedsLayout];
                 return cell;
             }
