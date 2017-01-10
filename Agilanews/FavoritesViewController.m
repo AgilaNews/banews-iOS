@@ -620,12 +620,7 @@
         if (model.tpl.integerValue == NEWS_OnlyVideo || model.tpl.integerValue == NEWS_HotVideo) {
             VideoDetailViewController *videoDetailVC = [[VideoDetailViewController alloc] init];
             videoDetailVC.model = model;
-            videoDetailVC.channelName = @"Video";
-            OnlyVideoCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-            videoDetailVC.playerView = cell.playerView;
-            videoDetailVC.indexPath = indexPath;
-            videoDetailVC.fromCell = cell;
-            cell.isMove = YES;
+            videoDetailVC.channelName = @"Favorite";
             [self.navigationController pushViewController:videoDetailVC animated:YES];
             return;
         }

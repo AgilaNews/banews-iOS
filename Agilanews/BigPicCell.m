@@ -194,7 +194,7 @@
     // 时钟布局
     [self.timeView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(weakSelf.sourceLabel.mas_right).offset(15);
-        make.centerY.mas_equalTo(weakSelf.tagLabel.mas_centerY);
+        make.centerY.mas_equalTo(weakSelf.sourceLabel.mas_centerY);
     }];
     // 时间布局
     NSString *timeString = nil;
@@ -208,7 +208,7 @@
         make.width.mas_equalTo(timeLabelSize.width);
         make.height.mas_equalTo(timeLabelSize.height);
         make.left.mas_equalTo(weakSelf.timeView.mas_right).offset(5);
-        make.centerY.mas_equalTo(weakSelf.tagLabel.mas_centerY);
+        make.centerY.mas_equalTo(weakSelf.sourceLabel.mas_centerY);
     }];
     // 评论布局
     if (_model.commentCount.integerValue > 0) {
