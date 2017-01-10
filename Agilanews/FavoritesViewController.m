@@ -96,6 +96,8 @@
             NSMutableArray *detailModelList = [NSMutableArray array];
             for (LocalFavorite *localFavorite in data) {
                 NewsModel *model = (NewsModel *)localFavorite.news_model;
+                model.title = [model.title stringByReplacingOccurrencesOfString:@"<font>" withString:@""];
+                model.title = [model.title stringByReplacingOccurrencesOfString:@"</font>" withString:@""];
                 NewsDetailModel *detailModel = (NewsDetailModel *)localFavorite.detail_model;
                 [modelList addObject:model];
                 [detailModelList addObject:detailModel];
