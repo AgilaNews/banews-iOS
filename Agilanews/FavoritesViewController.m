@@ -30,6 +30,7 @@
 #define titleFont_ExtraLarge    [UIFont systemFontOfSize:20]
 #define titleFont_Large         [UIFont systemFontOfSize:18]
 #define titleFont_Small         [UIFont systemFontOfSize:14]
+#define imageHeight 162 * kScreenWidth / 320.0
 #define videoHeight 180 * kScreenWidth / 320.0
 
 @interface FavoritesViewController ()
@@ -72,10 +73,6 @@
     _tableView.tableFooterView = [UIView new];
     [self.view addSubview:_tableView];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(recoverVideo:)
-                                                 name:KNOTIFICATION_RecoverVideo
-                                               object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(loginSuccess)
                                                  name:KNOTIFICATION_Login_Success
@@ -375,28 +372,6 @@
 
 #pragma mark - Notification
 /**
- 视频从详情回位
- */
-- (void)recoverVideo:(NSNotification *)notif
-{
-    NSDictionary *dic = notif.object;
-    YTPlayerView *playerView = dic[@"playerView"];
-    NSIndexPath *indexPath = dic[@"index"];
-    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-    if ([cell isKindOfClass:[OnlyVideoCell class]]) {
-        OnlyVideoCell *videoCell = (OnlyVideoCell *)cell;
-        if (videoCell.isMove) {
-            [videoCell.contentView addSubview:playerView];
-            [videoCell.contentView bringSubviewToFront:videoCell.titleImageView];
-            videoCell.isMove = NO;
-            videoCell.isPlay = NO;
-            [videoCell.playerView stopVideo];
-            [videoCell setNeedsLayout];
-        }
-    }
-}
-
-/**
  登录成功
  */
 - (void)loginSuccess
@@ -471,11 +446,13 @@
         }
         case NEWS_OnlyVideo:
         {
-            return videoHeight + 42;
+            CGSize titleLabelSize = [model.title calculateSize:CGSizeMake(kScreenWidth - 22, 40) font:titleFont];
+            return 12 + titleLabelSize.height + imageHeight + 20 + 11 + 11;
         }
         case NEWS_HotVideo:
         {
-            return videoHeight + 42;
+            CGSize titleLabelSize = [model.title calculateSize:CGSizeMake(kScreenWidth - 22, 40) font:titleFont];
+            return 12 + titleLabelSize.height + imageHeight + 20 + 11 + 11;
         }
         default:
         {
@@ -573,27 +550,27 @@
         }
         case NEWS_OnlyVideo:
         {
-            // 视频cell
-            static NSString *cellID = @"OnlyVideoCell";
-            OnlyVideoCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+            // 大图cell
+            static NSString *cellID = @"BigPicCellID";
+            BigPicCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
             if (cell == nil) {
-                cell = [[OnlyVideoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
-                [cell.shareButton addTarget:self action:@selector(shareToFacebook:) forControlEvents:UIControlEventTouchUpInside];
+                cell = [[BigPicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
             }
             cell.model = model;
+            cell.isHaveVideo = YES;
             [cell setNeedsLayout];
             return cell;
         }
         case NEWS_HotVideo:
         {
-            // 视频cell
-            static NSString *cellID = @"OnlyVideoCell";
-            OnlyVideoCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+            // 大图cell
+            static NSString *cellID = @"BigPicCellID";
+            BigPicCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
             if (cell == nil) {
-                cell = [[OnlyVideoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
-                [cell.shareButton addTarget:self action:@selector(shareToFacebook:) forControlEvents:UIControlEventTouchUpInside];
+                cell = [[BigPicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
             }
             cell.model = model;
+            cell.isHaveVideo = YES;
             [cell setNeedsLayout];
             return cell;
         }
