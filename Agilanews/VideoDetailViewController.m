@@ -237,6 +237,9 @@
         [task cancel];
     }
     [_tasks removeAllObjects];
+    if (_fromCell) {
+        [_fromCell setNeedsLayout];
+    }
     
     // 播放结束打点
     [_playerPath addObject:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time", @"5" , @"type", nil]];
