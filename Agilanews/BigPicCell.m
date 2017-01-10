@@ -8,6 +8,7 @@
 
 #import "BigPicCell.h"
 #import "ImageModel.h"
+#import "VideoModel.h"
 #import "AppDelegate.h"
 #import "HomeTableViewController.h"
 
@@ -51,6 +52,7 @@
     [self.contentView addSubview:self.commentView];
     [self.contentView addSubview:self.commentLabel];
     [self.contentView addSubview:self.titleImageView];
+    [self.titleImageView addSubview:self.durationLabel];
     [self.contentView addSubview:self.haveVideoView];
     [self.contentView addSubview:self.dislikeButton];
     
@@ -69,6 +71,13 @@
         make.top.mas_equalTo(weakSelf.titleLabel.mas_bottom).offset(10);
         make.width.mas_equalTo(kScreenWidth - 22);
         make.height.mas_equalTo(imageHeight);
+    }];
+    // 时长布局
+    [self.durationLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.mas_equalTo(-6);
+        make.bottom.mas_equalTo(-5);
+        make.width.mas_equalTo(0);
+        make.height.mas_equalTo(0);
     }];
     // 标签布局
     CGSize tagLabelSize = [_model.tag calculateSize:CGSizeMake(100, 13) font:self.tagLabel.font];
@@ -150,6 +159,36 @@
         make.top.mas_equalTo(weakSelf.titleLabel.mas_bottom).offset(10);
         make.width.mas_equalTo(kScreenWidth - 22);
         make.height.mas_equalTo(imageHeight);
+    }];
+    // 时长布局
+    VideoModel *model = _model.videos.firstObject;
+    NSInteger hour;
+    NSInteger minute = model.duration.integerValue / 60;
+    NSInteger second = model.duration.integerValue % 60;
+    NSString *dateString = nil;
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    NSString *durationString = nil;
+    if (minute > 60) {
+        hour = minute / 60;
+        minute = minute - hour * 60;
+        dateString = [NSString stringWithFormat:@"%ld:%ld:%ld",(long)hour,(long)minute,(long)second];
+        [dateFormat setDateFormat:@"h:m:s"];
+        NSDate *date = [dateFormat dateFromString:dateString];
+        [dateFormat setDateFormat:@"hh:mm:ss"];
+        durationString = [dateFormat stringFromDate:date];
+    } else {
+        dateString = [NSString stringWithFormat:@"%ld:%ld",(long)minute,(long)second];
+        [dateFormat setDateFormat:@"m:s"];
+        NSDate *date = [dateFormat dateFromString:dateString];
+        [dateFormat setDateFormat:@"mm:ss"];
+        durationString = [dateFormat stringFromDate:date];
+    }
+    CGSize durationLabelSize = [durationString calculateSize:CGSizeMake(80, 20) font:self.durationLabel.font];
+    [self.durationLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.right.mas_equalTo(-6);
+        make.bottom.mas_equalTo(-5);
+        make.width.mas_equalTo(durationLabelSize.width + 6);
+        make.height.mas_equalTo(durationLabelSize.height);
     }];
     if (_model.tag.length > 0) {
         self.tagLabel.hidden = NO;
@@ -288,6 +327,12 @@
             }
         }
     }
+    if (model.duration.integerValue > 0) {
+        self.durationLabel.hidden = NO;
+        self.durationLabel.text = durationString;
+    } else {
+        self.durationLabel.hidden = YES;
+    }
     self.tagLabel.text = _model.tag;
     self.sourceLabel.text = _model.source;
     self.timeLabel.text = timeString;
@@ -370,6 +415,20 @@
         _titleImageView.image = [UIImage imageNamed:@"holderImage"];
     }
     return _titleImageView;
+}
+
+- (UILabel *)durationLabel
+{
+    if (_durationLabel == nil) {
+        _durationLabel = [[UILabel alloc] init];
+        _durationLabel.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.4];
+        _durationLabel.font = [UIFont systemFontOfSize:11];
+        _durationLabel.textColor = [UIColor whiteColor];
+        _durationLabel.textAlignment = NSTextAlignmentCenter;
+        _durationLabel.layer.cornerRadius = 2;
+        _durationLabel.layer.masksToBounds = YES;
+    }
+    return _durationLabel;
 }
 
 - (UILabel *)tagLabel
