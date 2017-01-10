@@ -348,7 +348,6 @@
     [_tasks addObject:task];
 }
 
-
 /**
  新闻详情网络请求
 
@@ -1357,6 +1356,19 @@
                             return cell;
                         }
                         case NEWS_OnlyVideo:
+                        {
+                            // 视频cell
+                            static NSString *cellID = @"SingleVideoCell";
+                            SingleVideoCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+                            if (cell == nil) {
+                                cell = [[SingleVideoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:kWhiteBgColor];
+                            }
+                            cell.model = model;
+                            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                            [cell setNeedsLayout];
+                            return cell;
+                        }
+                        case NEWS_SingleVideo:
                         {
                             // 视频cell
                             static NSString *cellID = @"SingleVideoCell";
