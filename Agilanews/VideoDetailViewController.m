@@ -1177,7 +1177,11 @@
                         {
                             return 12 + 68 + 12;
                         }
-                            case NEWS_OnlyVideo:
+                        case NEWS_OnlyVideo:
+                        {
+                            return 12 + 68 + 12;
+                        }
+                        case NEWS_SingleVideo:
                         {
                             return 12 + 68 + 12;
                         }
