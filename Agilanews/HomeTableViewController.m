@@ -273,7 +273,11 @@
         }
         case NEWS_OnlyVideo:
         {
-            return videoHeight + 42;
+            if ([_model.channelID isEqualToNumber:@30001]) {
+                return videoHeight + 42;
+            }
+            CGSize titleLabelSize = [model.title calculateSize:CGSizeMake(kScreenWidth - 22, 40) font:titleFont];
+            return 12 + titleLabelSize.height + imageHeight + 20 + 11 + 11;
         }
         case NEWS_HotVideo:
         {
@@ -624,7 +628,7 @@
         return;
     }
     
-    if ([_model.channelID isEqualToNumber:@30001] || model.tpl.integerValue == NEWS_OnlyVideo) {
+    if ([_model.channelID isEqualToNumber:@30001]) {
         // 打点-点击视频列表-010131
         NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
                                        [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
@@ -658,7 +662,7 @@
 //#endif
     [appDelegate.checkDic setObject:@1 forKey:model.news_id];
     
-    if (model.tpl.integerValue == NEWS_HotVideo) {
+    if (model.tpl.integerValue == NEWS_HotVideo || model.tpl.integerValue == NEWS_OnlyVideo) {
         VideoDetailViewController *videoDetailVC = [[VideoDetailViewController alloc] init];
         videoDetailVC.model = model;
         videoDetailVC.channelName = _model.name;
