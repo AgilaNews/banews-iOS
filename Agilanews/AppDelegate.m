@@ -59,8 +59,8 @@
     JTNavigationController *navCtrl = [[JTNavigationController alloc] initWithRootViewController:homeVC];
     // 设置根控制器
     _window.rootViewController = navCtrl;
-    
 
+//    //活动页面
 //    NSString *launchImage = nil;
 //    if (iPhone4) {
 //        launchImage = @"LaunchImage-700";
