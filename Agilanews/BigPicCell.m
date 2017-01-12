@@ -45,14 +45,14 @@
 - (void)_initSubviews
 {
     [self.contentView addSubview:self.titleLabel];
+    [self.contentView addSubview:self.titleImageView];
+    [self.titleImageView addSubview:self.durationLabel];
     [self.contentView addSubview:self.tagLabel];
     [self.contentView addSubview:self.sourceLabel];
     [self.contentView addSubview:self.timeView];
     [self.contentView addSubview:self.timeLabel];
     [self.contentView addSubview:self.commentView];
     [self.contentView addSubview:self.commentLabel];
-    [self.contentView addSubview:self.titleImageView];
-    [self.titleImageView addSubview:self.durationLabel];
     [self.contentView addSubview:self.haveVideoView];
     [self.contentView addSubview:self.dislikeButton];
     
@@ -93,7 +93,7 @@
         make.left.mas_equalTo(weakSelf.tagLabel.mas_right);
         make.bottom.mas_equalTo(-7);
         make.width.mas_equalTo(sourceLabelSize.width);
-        make.height.mas_equalTo(sourceLabelSize.height + 1);
+        make.height.mas_equalTo(13);
     }];
     // 时钟布局
     [self.timeView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -217,6 +217,7 @@
         CGSize sourceLabelSize = [_model.source calculateSize:CGSizeMake(kScreenWidth - 22 - 11 - 60 - tagLabelSize.width - 16, 12) font:self.sourceLabel.font];
         [self.sourceLabel mas_updateConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(weakSelf.tagLabel.mas_right).offset(8);
+            make.bottom.mas_equalTo(-7);
             make.width.mas_equalTo(sourceLabelSize.width);
             make.height.mas_equalTo(sourceLabelSize.height);
         }];
@@ -227,11 +228,13 @@
             make.left.mas_equalTo(weakSelf.titleLabel.mas_left);
             make.bottom.mas_equalTo(-6);
             make.width.mas_equalTo(0);
+            make.height.mas_equalTo(15);
         }];
         // 来源布局
         CGSize sourceLabelSize = [_model.source calculateSize:CGSizeMake(kScreenWidth - 22 - 11 - 60, 12) font:self.sourceLabel.font];
         [self.sourceLabel mas_updateConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(weakSelf.tagLabel.mas_right);
+            make.bottom.mas_equalTo(-7);
             make.width.mas_equalTo(sourceLabelSize.width);
             make.height.mas_equalTo(sourceLabelSize.height);
         }];
