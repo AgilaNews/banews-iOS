@@ -274,6 +274,7 @@
  */
 - (void)requestDataWithNewsID:(NSString *)newsID ShowHUD:(BOOL)showHUD
 {
+    __weak typeof(self) weakSelf = self;
     if (showHUD) {
         SVProgressHUD.defaultStyle = SVProgressHUDStyleCustom;
         [SVProgressHUD show];
@@ -300,7 +301,6 @@
         weakSelf.blankLabel.text = @"Sorry,please try again";
         weakSelf.failureView.image = [UIImage imageNamed:@"icon_common_failed"];
     }
-    __weak typeof(self) weakSelf = self;
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setObject:newsID forKey:@"news_id"];
 //    [params setObject:@"1l+ULtd4zog=" forKey:@"news_id"];
