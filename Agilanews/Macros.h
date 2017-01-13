@@ -70,7 +70,15 @@
 #define SS_GuideHomeKey @"SS_GuideHomeKey_v1.0.1"// 引导页——主页
 #define SS_GuideFavKey  @"SS_GuideFavKey_v1.0.1" // 引导页——收藏
 #define SS_GuideCnlKey  @"SS_GuideCnlKey_v1.0.1" // 引导页——频道
-
+// 开屏广告参数
+#define SS_SPLASH_ON            @"SS_SPLASH_ON"         // 开屏广告开关
+#define SS_SPLASH_SLOT          @"SS_SPLASH_SLOT"       // 广告轮播位
+#define SS_SPLASH_STAY_TIME     @"SS_SPLASH_STAY_TIME"  // 等待时间
+#define SS_SPLASH_AD_TIME       @"SS_SPLASH_AD_TIME"    // 广告停留时间
+#define SS_SPLASH_AD_TTL        @"SS_SPLASH_AD_TTL"     // 广告有效时间
+#define SS_SPLASH_REBOOT_TIME   @"SS_SPLASH_REBOOT_TIME"// 广告间隔时间
+#define SS_SPLASH_GET_TIME      @"SS_SPLASH_GET_TIME"   // 广告获取时间
+#define SS_SPLASH_SHOW_TIME     @"SS_SPLASH_SHOW_TIME"  // 广告展示时间
 
 // 新闻模板
 #define NEWS_BigPic      2   // 大图模板

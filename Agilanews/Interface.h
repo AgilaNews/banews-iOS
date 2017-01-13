@@ -33,8 +33,8 @@ typedef enum {
 #define kMonUrl         @"http://mon.agilanews.info"
 #define kReferrerUrl    @"http://api.agilanews.info/referrer"
 #define kV3Url          @"http://api.agilanews.info/v3"
-#define kAPI1           @"http://api1.agilanews.info/v2"
-#define kAPI2           @"http://api2.agilanews.info/v2"
+#define kAPI1           @"http://api9.agilanews.info/v2"
+#define kAPI2           @"http://api9.agilanews.info/v3"
 #else
 #define kHomeUrl        @"http://api.agilanews.today/v2"
 #define kLogUrl         @"http://log.agilanews.today/v3"
@@ -91,6 +91,8 @@ typedef enum {
 #define kHomeUrl_TopicDetail      @"/topic/detail"
 // 专题详情接口
 #define kHomeUrl_Interest         @"/interest"
+// 开屏广告数据接口
+#define kHomeUrl_Splash           @"/splash"
 
 
 

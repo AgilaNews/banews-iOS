@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "CategoriesModel.h"
 #import "LoginModel.h"
-#import "iConsole.h"
+//#import "iConsole.h"
 #import <UserNotifications/UserNotifications.h>
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate, CLLocationManagerDelegate, UNUserNotificationCenterDelegate>

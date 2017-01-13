@@ -76,6 +76,7 @@
 #import "FacebookAdManager.h"
 #import "JTNavigationController.h"
 #import "UIViewController+JTNavigationExtension.h"
+#import "XHLaunchAd.h"
 
 
 ////////////////////////////////////////

@@ -10,11 +10,13 @@
 #import "HomeViewController.h"
 #import "BaseNavigationController.h"
 #import "AppDelegate+ShareSDK.h"
+#import "AppDelegate+LaunchAd.h"
 #import "HomeTableViewController.h"
 #import "NewsDetailViewController.h"
 #import "VideoDetailViewController.h"
 #import "GifDetailViewController.h"
 #import "PicDetailViewController.h"
+#import "LaunchAdManager.h"
 
 @interface AppDelegate ()
 
@@ -59,7 +61,13 @@
     JTNavigationController *navCtrl = [[JTNavigationController alloc] initWithRootViewController:homeVC];
     // 设置根控制器
     _window.rootViewController = navCtrl;
-
+    
+    NSNumber *on = DEF_PERSISTENT_GET_OBJECT(SS_SPLASH_ON);
+    if (on.integerValue) {
+        // 开屏广告
+        [self setupLaunchAd];
+    }
+    
 //    //活动页面
 //    NSString *launchImage = nil;
 //    if (iPhone4) {
@@ -112,8 +120,10 @@
 //        [self serverLogWithEventArray:logData];
 //    }
     _eventArray = [NSMutableArray array];
-    //设置启动页面时间
-    [NSThread sleepForTimeInterval:2.0];
+    if (!on.integerValue) {
+        //设置启动页面时间
+        [NSThread sleepForTimeInterval:2.0];
+    }
     return YES;
 }
 
@@ -271,6 +281,29 @@
             } else {
                 [weakSelf getChannelWithVersion:channelVersion isFirst:NO];
             }
+        }
+        NSDictionary *splash = responseObj[@"ad"][@"splash"];
+        NSNumber *on = splash[@"on"];
+        DEF_PERSISTENT_SET_OBJECT(SS_SPLASH_ON, on);
+        NSNumber *slot = splash[@"slot"];
+        if (slot.integerValue > 0) {
+            DEF_PERSISTENT_SET_OBJECT(SS_SPLASH_SLOT, slot);
+        }
+        NSNumber *stay_time = splash[@"stay_time"];
+        if (stay_time.integerValue > 0 && stay_time.integerValue <= 5) {
+            DEF_PERSISTENT_SET_OBJECT(SS_SPLASH_STAY_TIME, stay_time);
+        }
+        NSNumber *ad_time = splash[@"ad_time"];
+        if (ad_time.integerValue > 0 && ad_time.integerValue <= 5) {
+            DEF_PERSISTENT_SET_OBJECT(SS_SPLASH_AD_TIME, ad_time);
+        }
+        NSNumber *ad_ttl = splash[@"ad_ttl"];
+        if (ad_ttl.integerValue > 0) {
+            DEF_PERSISTENT_SET_OBJECT(SS_SPLASH_AD_TTL, ad_ttl);
+        }
+        NSNumber *reboot_time = splash[@"reboot_time"];
+        if (reboot_time.integerValue > 0) {
+            DEF_PERSISTENT_SET_OBJECT(SS_SPLASH_REBOOT_TIME, reboot_time);
         }
     } failure:^(NSError *error) {
         
@@ -988,6 +1021,11 @@
         // 缓存频道刷新记录
         NSString *refreshFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/refresh.data"];
         [NSKeyedArchiver archiveRootObject:_refreshTimeDic toFile:refreshFilePath];
+        // 缓存开屏广告
+        NSString *launchAdFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/launchAd.data"];
+        NSDictionary *launchAdDic = @{@"launchAdArray":[LaunchAdManager sharedInstance].launchAdArray,
+                                      @"checkDic":[LaunchAdManager sharedInstance].checkDic};
+        [NSKeyedArchiver archiveRootObject:launchAdDic toFile:launchAdFilePath];
     }
 }
 
