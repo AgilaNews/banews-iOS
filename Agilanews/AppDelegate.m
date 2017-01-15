@@ -1036,6 +1036,9 @@
   sourceApplication:(NSString *)sourceApplication
          annotation:(id)annotation
 {
+    if ([url.scheme isEqualToString:@"com.banews.agila"]) {
+        [self openAppWithUrl:url.query];
+    }
     return [[GIDSignIn sharedInstance] handleURL:url
                                sourceApplication:sourceApplication
                                       annotation:annotation];
@@ -1045,12 +1048,75 @@
             openURL:(NSURL *)url
             options:(NSDictionary *)options
 {
+    if ([url.scheme isEqualToString:@"com.banews.agila"]) {
+        [self openAppWithUrl:url.query];
+    }
     if ([[Twitter sharedInstance] application:app openURL:url options:options]) {
         return YES;
     }
     return [[GIDSignIn sharedInstance] handleURL:url
                                sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
                                       annotation:options[UIApplicationOpenURLOptionsAnnotationKey]];
+}
+
+- (void)openAppWithUrl:(NSString *)url
+{
+    NSArray *paramArray = [url componentsSeparatedByString:@"&"];
+    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+    for (NSString *string in paramArray) {
+        if ([string hasPrefix:@"news_id="]) {
+            NSString *value = [string stringByReplacingOccurrencesOfString:@"news_id=" withString:@""];
+            [dic setObject:value forKey:@"news_id"];
+        } else if ([string hasPrefix:@"tpl="]) {
+            NSString *value = [string stringByReplacingOccurrencesOfString:@"tpl=" withString:@""];
+            [dic setObject:value forKey:@"tpl"];
+        }
+    }
+    NewsModel *model = [[NewsModel alloc] init];
+    model.news_id = dic[@"news_id"];
+    model.news_id = [model.news_id stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSNumber *tpl = dic[@"tpl"];
+    if (!model.news_id || !tpl) {
+        return;
+    }
+    JTNavigationController *navCtrl = (JTNavigationController *)_window.rootViewController;
+    HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
+    switch (tpl.integerValue) {
+        case 2:
+        {
+            NewsDetailViewController *newsDetailVC = [[NewsDetailViewController alloc] init];
+            newsDetailVC.model = model;
+            newsDetailVC.isPushEnter = YES;
+            [homeVC.navigationController pushViewController:newsDetailVC animated:NO];
+            return;
+        }
+        case 3:
+        {
+            VideoDetailViewController *videoDetailVC = [[VideoDetailViewController alloc] init];
+            videoDetailVC.model = model;
+            videoDetailVC.isPushEnter = YES;
+            videoDetailVC.isNoModel = YES;
+            [homeVC.navigationController pushViewController:videoDetailVC animated:YES];
+            return;
+        }
+        case 4:
+        {
+            GifDetailViewController *gifDetailVC = [[GifDetailViewController alloc] init];
+            gifDetailVC.model = model;
+            gifDetailVC.isNoModel = YES;
+            [homeVC.navigationController pushViewController:gifDetailVC animated:NO];
+            return;
+        }
+        case 5:
+        {
+            PicDetailViewController *picDetail = [[PicDetailViewController alloc] init];
+            picDetail.model = model;
+            [homeVC.navigationController pushViewController:picDetail animated:NO];
+            return;
+        }
+        default:
+            break;
+    }
 }
 
 // 全屏播放支持横屏

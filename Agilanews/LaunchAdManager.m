@@ -31,7 +31,6 @@ static LaunchAdManager *_manager = nil;
     // 判断广告是否过期
     NSNumber *ad_ttl = DEF_PERSISTENT_GET_OBJECT(SS_SPLASH_AD_TTL);
     NSNumber *get_time = DEF_PERSISTENT_GET_OBJECT(SS_SPLASH_GET_TIME);
-//    NSNumber *get_time = 0;
     if ([[NSDate date] timeIntervalSince1970] - get_time.longLongValue > ad_ttl.longLongValue) {
         // 广告过期
         __weak typeof(self) weakSelf = self;
