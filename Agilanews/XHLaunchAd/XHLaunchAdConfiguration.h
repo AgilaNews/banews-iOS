@@ -11,6 +11,7 @@
 #import "XHLaunchAdButton.h"
 #import "UIImageView+XHLaunchAdCache.h"
 #import <MediaPlayer/MediaPlayer.h>
+#import "LaunchAdModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -81,6 +82,7 @@ typedef NS_ENUM(NSInteger , ShowFinishAnimate) {
 
 #pragma mark - 图片广告相关
 @interface XHLaunchImageAdConfiguration : XHLaunchAdConfiguration
+
 
 /**
  *  图片广告缩放模式(default UIViewContentModeScaleToFill)

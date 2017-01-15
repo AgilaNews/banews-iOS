@@ -42,7 +42,7 @@ static LaunchAdManager *_manager = nil;
         } else {
             [params setObject:@3 forKey:@"pn"];
         }
-        [[SSHttpRequest sharedInstance] get:kHomeUrl_Splash params:params contentType:UrlencodedType serverType:NetServer_API2 success:^(id responseObj) {
+        [[SSHttpRequest sharedInstance] get:kHomeUrl_Splash params:params contentType:UrlencodedType serverType:NetServer_V3 success:^(id responseObj) {
             for (NSDictionary *dic in responseObj[@"ads"]) {
                 LaunchAdModel *model = [LaunchAdModel mj_objectWithKeyValues:dic];
                 DEF_PERSISTENT_SET_OBJECT(SS_SPLASH_GET_TIME, [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]]);
@@ -80,11 +80,15 @@ static LaunchAdManager *_manager = nil;
         // 广告未过期
         for (NSString *key in self.checkDic.allKeys) {
             NSNumber *count = [self.checkDic valueForKey:key];
-            if (count.integerValue >= 3) {
-                NSArray *ads = [self.launchAdArray copy];
-                for (LaunchAdModel *ad in ads) {
-                    if ([ad.dataid isEqualToString:key]) {
-                        [self.launchAdArray removeObject:ad];
+            NSArray *ads = [self.launchAdArray copy];
+            for (LaunchAdModel *ad in ads) {
+                if ([ad.dataid isEqualToString:key]) {
+                    if (count.integerValue >= ad.display.integerValue) {
+                        for (LaunchAdModel *ad in ads) {
+                            if ([ad.dataid isEqualToString:key]) {
+                                [self.launchAdArray removeObject:ad];
+                            }
+                        }
                     }
                 }
             }

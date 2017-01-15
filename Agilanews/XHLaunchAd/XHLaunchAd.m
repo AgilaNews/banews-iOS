@@ -202,8 +202,9 @@ static NSInteger defaultWaitDataDuration = 3;
                 __weak typeof(self) weakSelf = self;
                 [self.adView xh_setImageWithURL:[NSURL URLWithString:configuration.imageNameOrURLString] placeholderImage:nil options:configuration.imageOption completed:^(UIImage *image,NSError *error,NSURL *url) {
                     
-                    if ([weakSelf.delegate respondsToSelector:@selector(xhLaunchAd:imageDownLoadFinish:)]) {
-                        [weakSelf.delegate xhLaunchAd:self imageDownLoadFinish:image];
+                    if ([weakSelf.delegate respondsToSelector:@selector(xhLaunchAd:imageDownLoadFinish:configuration:)]) {
+                        [weakSelf.delegate xhLaunchAd:self imageDownLoadFinish:image configuration:configuration];
+                        
                     }
                 }];
                 
@@ -225,14 +226,14 @@ static NSInteger defaultWaitDataDuration = 3;
             UIImage *image = [UIImage xh_imageWithName:configuration.imageNameOrURLString];
             if(image)
             {
-                if ([self.delegate respondsToSelector:@selector(xhLaunchAd:imageDownLoadFinish:)]) {
-                    [self.delegate xhLaunchAd:self imageDownLoadFinish:image];
+                if ([self.delegate respondsToSelector:@selector(xhLaunchAd:imageDownLoadFinish:configuration:)]) {
+                    [self.delegate xhLaunchAd:self imageDownLoadFinish:image configuration:configuration];
                 }
                 self.adView.image = image;
             }
             else
             {
-                NSLog(@"Error:图片未找到,或名称有误!");
+                SSLog(@"Error:图片未找到,或名称有误!");
             }
             
         }
@@ -339,7 +340,7 @@ static NSInteger defaultWaitDataDuration = 3;
             }
             else
             {
-                NSLog(@"Error:视频文件未找到,或名称有误!");
+                SSLog(@"Error:视频文件未找到,或名称有误!");
             }
             
         }

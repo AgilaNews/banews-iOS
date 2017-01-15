@@ -13,6 +13,7 @@
 @property (nonatomic, strong) NSString *dataid;
 @property (nonatomic, strong) NSString *image;
 @property (nonatomic, strong) NSNumber *display;
-@property (nonatomic, strong) NSNumber *showCount;
+@property (nonatomic, strong) NSString *impression_id;
+@property (nonatomic, strong) NSNumber *is_skip;
 
 @end

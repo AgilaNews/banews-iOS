@@ -1023,9 +1023,11 @@
         [NSKeyedArchiver archiveRootObject:_refreshTimeDic toFile:refreshFilePath];
         // 缓存开屏广告
         NSString *launchAdFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/launchAd.data"];
-        NSDictionary *launchAdDic = @{@"launchAdArray":[LaunchAdManager sharedInstance].launchAdArray,
-                                      @"checkDic":[LaunchAdManager sharedInstance].checkDic};
-        [NSKeyedArchiver archiveRootObject:launchAdDic toFile:launchAdFilePath];
+        if ([LaunchAdManager sharedInstance].launchAdArray && [LaunchAdManager sharedInstance].checkDic) {
+            NSDictionary *launchAdDic = @{@"launchAdArray":[LaunchAdManager sharedInstance].launchAdArray,
+                                          @"checkDic":[LaunchAdManager sharedInstance].checkDic};
+            [NSKeyedArchiver archiveRootObject:launchAdDic toFile:launchAdFilePath];
+        }
     }
 }
 

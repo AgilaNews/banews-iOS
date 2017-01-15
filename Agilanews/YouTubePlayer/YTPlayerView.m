@@ -724,7 +724,7 @@ NSString static *const kYTPlayerSyndicationRegexPattern = @"^https://tpc.googles
       [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:&error];
 
   if (error) {
-    NSLog(@"Received error rendering template: %@", error);
+    SSLog(@"Received error rendering template: %@", error);
     return NO;
   }
 
@@ -734,7 +734,7 @@ NSString static *const kYTPlayerSyndicationRegexPattern = @"^https://tpc.googles
                                                      options:NSJSONWritingPrettyPrinted
                                                        error:&jsonRenderingError];
   if (jsonRenderingError) {
-    NSLog(@"Attempted configuration of player with invalid playerVars: %@ \tError: %@",
+    SSLog(@"Attempted configuration of player with invalid playerVars: %@ \tError: %@",
           playerParams,
           jsonRenderingError);
     return NO;

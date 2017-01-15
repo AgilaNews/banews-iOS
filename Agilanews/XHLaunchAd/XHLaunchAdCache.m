@@ -25,7 +25,7 @@
     if (data) {
         BOOL isOk = [[NSFileManager defaultManager] createFileAtPath:path contents:data attributes:nil];
 
-        if (!isOk) NSLog(@"cache file error for URL: %@", url);
+        if (!isOk) SSLog(@"cache file error for URL: %@", url);
         
         return isOk;
     }
@@ -159,9 +159,9 @@
     [[NSFileManager defaultManager] createDirectoryAtPath:path withIntermediateDirectories:YES
                                                attributes:nil error:&error];
     if (error) {
-        NSLog(@"create cache directory failed, error = %@", error);
+        SSLog(@"create cache directory failed, error = %@", error);
     } else {
-        NSLog(@"XHLaunchAdCachePath:%@",path);
+        SSLog(@"XHLaunchAdCachePath:%@",path);
         [self addDoNotBackupAttribute:path];
     }
 }
@@ -171,7 +171,7 @@
     NSError *error = nil;
     [url setResourceValue:[NSNumber numberWithBool:YES] forKey:NSURLIsExcludedFromBackupKey error:&error];
     if (error) {
-        NSLog(@"error to set do not backup attribute, error = %@", error);
+        SSLog(@"error to set do not backup attribute, error = %@", error);
     }
 }
 @end

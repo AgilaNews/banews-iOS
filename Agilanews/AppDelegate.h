@@ -28,6 +28,8 @@
 @property (strong, nonatomic) NSMutableArray *eventArray;           // 打点记录
 @property (strong, nonatomic) NSMutableDictionary *refreshTimeDic;  // 刷新时间
 @property (strong, nonatomic) NSMutableDictionary *hotwordsDic;     // 热词记录
+@property (strong, nonatomic) LaunchAdModel *launchAdModel;
+@property (assign, nonatomic) long long launchAdShowTime;           // 开屏广告展示时间
 
 @end
 

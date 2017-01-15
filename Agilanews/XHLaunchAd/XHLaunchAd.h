@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "XHLaunchAdConfiguration.h"
+#import "LaunchAdModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -32,7 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param launchAd  XHLaunchAd
  *  @param imageSize image
  */
--(void)xhLaunchAd:(XHLaunchAd *)launchAd imageDownLoadFinish:(UIImage *)image;
+-(void)xhLaunchAd:(XHLaunchAd *)launchAd imageDownLoadFinish:(UIImage *)image configuration:(XHLaunchAdConfiguration *)configuration;
 
 /**
  *  video本地读取/或下载完成回调
@@ -81,6 +82,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface XHLaunchAd : NSObject
 
 @property(nonatomic,assign) id<XHLaunchAdDelegate> delegate;
+@property (nonatomic, strong) LaunchAdModel *model;
 
 /**
  *  设置等待数据源时间(default 3)

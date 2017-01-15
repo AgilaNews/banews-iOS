@@ -92,7 +92,7 @@ didFinishDownloadingToURL:(NSURL *)location {
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error {
 
     if (error){
-        NSLog(@"error=%@",error);
+        SSLog(@"error=%@",error);
         if (_completedBlock) {
             _completedBlock(nil,nil, error);
         }
@@ -144,7 +144,7 @@ didFinishDownloadingToURL:(NSURL *)location {
     NSError *error=nil;
     NSURL *toURL = [NSURL fileURLWithPath:[XHLaunchAdCache videoPathWithURL:self.url]];
     [[NSFileManager defaultManager] copyItemAtURL:location toURL:toURL error:&error];
-    if(error)  NSLog(@"error=%@",error);
+    if(error)  SSLog(@"error=%@",error);
     dispatch_async(dispatch_get_main_queue(), ^{
         
         if (_completedBlock) {
