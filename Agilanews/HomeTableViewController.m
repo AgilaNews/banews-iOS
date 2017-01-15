@@ -704,8 +704,10 @@
     }
     if (scrollView.contentOffset.y > _scrollY) {
         JTNavigationController *navCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
-        HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
-        [homeVC removeBackToTopView];
+        if ([navCtrl isKindOfClass:[JTNavigationController class]]) {
+            HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
+            [homeVC removeBackToTopView];
+        }
     }
 }
 
