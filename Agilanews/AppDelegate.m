@@ -1061,6 +1061,7 @@
 
 - (void)openAppWithUrl:(NSString *)url
 {
+    url = [url stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSArray *paramArray = [url componentsSeparatedByString:@"&"];
     NSMutableDictionary *dic = [NSMutableDictionary dictionary];
     for (NSString *string in paramArray) {

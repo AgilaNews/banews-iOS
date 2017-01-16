@@ -476,7 +476,7 @@ static NSInteger defaultWaitDataDuration = 3;
 -(void)startWaitDataDispathTiemr
 {
     __block NSInteger duration = defaultWaitDataDuration;
-    
+    __weak typeof(self) weakSelf = self;
     if(_waitDataDuration) duration = _waitDataDuration;
     
     NSTimeInterval period = 1.0;
@@ -489,8 +489,11 @@ static NSInteger defaultWaitDataDuration = 3;
             if(duration==0)
             {
                 dispatch_source_cancel(_waitDataTimer);
-                
-                [self remove];
+                @try {
+                    [weakSelf remove];
+                } @catch (NSException *exception) {
+                    SSLog(@"捕获异常%@",exception);
+                }
             }
             
             duration--;

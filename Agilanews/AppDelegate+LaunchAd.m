@@ -49,7 +49,15 @@
         // 自定义跳过按钮
         imageAdconfiguration.customSkipView = [self customSkipView];
         // 设置要添加的子视图(可选)
-        // imageAdconfiguration.subViews = ...
+        UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake(kScreenWidth - 20, kScreenHeight * .81 - 12, 20, 12)];
+        bgView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.4];
+        UILabel *adLabel = [[UILabel alloc] initWithFrame:bgView.bounds];
+        adLabel.textAlignment = NSTextAlignmentCenter;
+        adLabel.font = [UIFont systemFontOfSize:10];
+        adLabel.textColor = [UIColor whiteColor];
+        adLabel.text = @"Ad";
+        [bgView addSubview:adLabel];
+        imageAdconfiguration.subViews = @[bgView];
         // 显示图片开屏广告
         [XHLaunchAd imageAdWithImageAdConfiguration:imageAdconfiguration delegate:self];
     }];
