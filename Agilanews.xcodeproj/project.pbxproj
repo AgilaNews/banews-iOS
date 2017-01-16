@@ -135,7 +135,6 @@
 		5F635CE71D3E4209006AAE3D /* AppDelegate+ShareSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F635CE61D3E4209006AAE3D /* AppDelegate+ShareSDK.m */; };
 		5F635EA31D3F46A5006AAE3D /* LeftTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F635EA21D3F46A5006AAE3D /* LeftTableView.m */; };
 		5F635EC61D3F62BD006AAE3D /* LeftCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F635EC51D3F62BD006AAE3D /* LeftCell.m */; };
-		5F635ED31D4065C1006AAE3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5F42BFC11D34E2F000B89651 /* LaunchScreen.storyboard */; };
 		5F635ED61D40D2E8006AAE3D /* UserInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F635ED51D40D2E8006AAE3D /* UserInfoViewController.m */; };
 		5F635ED81D41EB51006AAE3D /* webView.css in Resources */ = {isa = PBXBuildFile; fileRef = 5F635ED71D41EB51006AAE3D /* webView.css */; };
 		5F635EDB1D4344E2006AAE3D /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F635EDA1D4344E2006AAE3D /* SettingsViewController.m */; };
@@ -331,7 +330,6 @@
 		5F42BFB71D34E2F000B89651 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		5F42BFBD1D34E2F000B89651 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		5F42BFBF1D34E2F000B89651 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		5F42BFC21D34E2F000B89651 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5F42BFC41D34E2F000B89651 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5F42BFE81D34E3D500B89651 /* AFHTTPSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPSessionManager.h; sourceTree = "<group>"; };
 		5F42BFE91D34E3D500B89651 /* AFHTTPSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPSessionManager.m; sourceTree = "<group>"; };
@@ -934,7 +932,6 @@
 				5FE7FB651E289A3400529D54 /* LaunchAd */,
 				5F42BFBC1D34E2F000B89651 /* Main.storyboard */,
 				5F42BFBF1D34E2F000B89651 /* Assets.xcassets */,
-				5F42BFC11D34E2F000B89651 /* LaunchScreen.storyboard */,
 				5F42BFC41D34E2F000B89651 /* Info.plist */,
 				5F17B4BC1DB86883008EBD51 /* Agila.xcdatamodeld */,
 				5F500B4A1DE44BDB00E88198 /* GoogleService-Info.plist */,
@@ -1830,7 +1827,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				5F17B4581DA8A594008EBD51 /* GoogleSignIn.bundle in Resources */,
-				5F635ED31D4065C1006AAE3D /* LaunchScreen.storyboard in Resources */,
 				5FE722221D50B5B70026BFC3 /* textonly.png in Resources */,
 				5F8D85D21D7D1AA800FF4019 /* placeholder.png in Resources */,
 				5F42C09F1D34E42A00B89651 /* SVProgressHUD.bundle in Resources */,
@@ -2087,14 +2083,6 @@
 				5F42BFBD1D34E2F000B89651 /* Base */,
 			);
 			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		5F42BFC11D34E2F000B89651 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				5F42BFC21D34E2F000B89651 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
