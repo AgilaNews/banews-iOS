@@ -300,6 +300,7 @@
         }
         weakSelf.blankLabel.text = @"Sorry,please try again";
         weakSelf.failureView.image = [UIImage imageNamed:@"icon_common_failed"];
+        return;
     }
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setObject:newsID forKey:@"news_id"];

@@ -512,14 +512,13 @@
         }
         case NEWS_BigPic:
         {
-            // 单图cell
-            static NSString *cellID = @"SinglePicCellID";
-            SinglePicCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+            // 大图cell
+            static NSString *cellID = @"BigPicCellID";
+            BigPicCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
             if (cell == nil) {
-                cell = [[SinglePicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
+                cell = [[BigPicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID bgColor:[UIColor whiteColor]];
             }
             cell.model = model;
-            cell.isHaveVideo = NO;
             [cell setNeedsLayout];
             return cell;
         }
