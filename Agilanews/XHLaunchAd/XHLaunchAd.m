@@ -478,26 +478,22 @@ static NSInteger defaultWaitDataDuration = 3;
     __block NSInteger duration = defaultWaitDataDuration;
     if(_waitDataDuration) duration = _waitDataDuration;
     
-    __weak typeof(self) weakSelf = self;
-
     NSTimeInterval period = 1.0;
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     _waitDataTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
     dispatch_source_set_timer(_waitDataTimer, dispatch_walltime(NULL, 0), period * NSEC_PER_SEC, 0);
     dispatch_source_set_event_handler(_waitDataTimer, ^{
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if(duration==0)
-            {
-                typeof(self) strongSelf = weakSelf;
-                if (strongSelf) {
-                    dispatch_source_cancel(_waitDataTimer);
-                    [self remove];
-                }
+        if(duration==0)
+        {
+            if (_waitDataTimer) {
+                dispatch_source_cancel(_waitDataTimer);
+                _waitDataTimer = nil;
             }
-            
-            duration--;
-        });
+            [self remove];
+        }
+        
+        duration--;
     });
     dispatch_resume(_waitDataTimer);
 }
