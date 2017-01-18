@@ -476,9 +476,10 @@ static NSInteger defaultWaitDataDuration = 3;
 -(void)startWaitDataDispathTiemr
 {
     __block NSInteger duration = defaultWaitDataDuration;
-    __weak typeof(self) weakSelf = self;
     if(_waitDataDuration) duration = _waitDataDuration;
     
+    __weak typeof(self) weakSelf = self;
+
     NSTimeInterval period = 1.0;
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     _waitDataTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
@@ -488,11 +489,10 @@ static NSInteger defaultWaitDataDuration = 3;
         dispatch_async(dispatch_get_main_queue(), ^{
             if(duration==0)
             {
-                dispatch_source_cancel(_waitDataTimer);
-                @try {
-                    [weakSelf remove];
-                } @catch (NSException *exception) {
-                    SSLog(@"捕获异常%@",exception);
+                typeof(self) strongSelf = weakSelf;
+                if (strongSelf) {
+                    dispatch_source_cancel(_waitDataTimer);
+                    [self remove];
                 }
             }
             
