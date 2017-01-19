@@ -55,7 +55,31 @@ static LaunchAdManager *_manager = nil;
                     if (!weakSelf.launchAdArray) {
                         weakSelf.launchAdArray = [NSMutableArray array];
                     }
-                    [weakSelf.launchAdArray addObject:model];
+                    NSString *md5String = [NSString encryptPassword:model.image];
+                    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+                    NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:[NSString stringWithFormat:@"ImageFolder/%@.jpg", md5String]];
+                    NSFileManager *fileManager = [NSFileManager defaultManager];
+                    if ([fileManager fileExistsAtPath:filePath]) {
+                        NSString *imagePath = [NSString stringWithFormat:@"file://%@/",filePath];
+                        model.image = imagePath;
+                        [weakSelf.launchAdArray addObject:model];
+                    } else {
+                        SDWebImageDownloader *downloader = [SDWebImageDownloader sharedDownloader];
+                        [downloader downloadImageWithURL:[NSURL URLWithString:model.image]
+                                                 options:0
+                                                progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+                                                    // progression tracking code
+                                                }
+                                               completed:^(UIImage *image, NSData *data, NSError *error, BOOL finished) {
+                                                   if (image && finished) {
+                                                       if ([data writeToFile:filePath atomically:YES]) {
+                                                           NSString *imagePath = [NSString stringWithFormat:@"file://%@/",filePath];
+                                                           model.image = imagePath;
+                                                           [weakSelf.launchAdArray addObject:model];
+                                                       }
+                                                   }
+                                               }];
+                    }
                 }
             }
             if (weakSelf.launchAdArray.count) {

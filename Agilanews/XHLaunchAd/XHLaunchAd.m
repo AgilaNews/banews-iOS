@@ -483,23 +483,24 @@ static NSInteger defaultWaitDataDuration = 3;
     _waitDataTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
     dispatch_source_set_timer(_waitDataTimer, dispatch_walltime(NULL, 0), period * NSEC_PER_SEC, 0);
     dispatch_source_set_event_handler(_waitDataTimer, ^{
-        
-        if(duration==0)
-        {
-            if (_waitDataTimer) {
-                dispatch_source_cancel(_waitDataTimer);
-                _waitDataTimer = nil;
+        if (duration == 0) {
+            @try {
+                if (_waitDataTimer) {
+                    dispatch_source_cancel(_waitDataTimer);
+                    _waitDataTimer = nil;
+                }
+                [self remove];
+            } @catch (NSException *exception) {
+                SSLog(@"%@",exception);
             }
-            [self remove];
         }
-        
         duration--;
     });
     dispatch_resume(_waitDataTimer);
 }
 -(void)startSkipDispathTimer
 {
-    XHLaunchAdConfiguration * configuration = [self commonConfiguration];
+    XHLaunchAdConfiguration *configuration = [self commonConfiguration];
     if(_waitDataTimer)
     {
         dispatch_source_cancel(_waitDataTimer);
