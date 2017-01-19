@@ -62,11 +62,11 @@
     // 设置根控制器
     _window.rootViewController = navCtrl;
     
-    NSNumber *on = DEF_PERSISTENT_GET_OBJECT(SS_SPLASH_ON);
-    if (on.integerValue) {
-        // 开屏广告
-        [self setupLaunchAd];
-    }
+//    NSNumber *on = DEF_PERSISTENT_GET_OBJECT(SS_SPLASH_ON);
+//    if (on.integerValue) {
+//        // 开屏广告
+//        [self setupLaunchAd];
+//    }
     
     // 读取用户登录信息/配置信息
     [self loadUserData];
@@ -91,10 +91,10 @@
 //        [self serverLogWithEventArray:logData];
 //    }
     _eventArray = [NSMutableArray array];
-    if (!on.integerValue) {
+//    if (!on.integerValue) {
         //设置启动页面时间
         [NSThread sleepForTimeInterval:2.0];
-    }
+//    }
     return YES;
 }
 
