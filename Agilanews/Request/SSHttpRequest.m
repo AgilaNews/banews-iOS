@@ -367,8 +367,10 @@ static SSHttpRequest *_manager = nil;
     }
     _urlString = [_urlString stringByAppendingString:@"?"];
     @autoreleasepool {
-        for (NSString *key in baseParams.allKeys) {
-            _urlString = [_urlString stringByAppendingString:[NSString stringWithFormat:@"%@=%@&",key,baseParams[key]]];
+        @synchronized (_urlString) {
+            for (NSString *key in baseParams.allKeys) {
+                _urlString = [_urlString stringByAppendingFormat:@"%@=%@&",key,baseParams[key]];
+            }
         }
     }
     _urlString = [_urlString substringToIndex:_urlString.length - 1];

@@ -739,8 +739,10 @@
             [homeVC showBackToTopView];
         } else if (scrollView.contentOffset.y < kScreenHeight){
             JTNavigationController *navCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
-            HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
-            [homeVC removeBackToTopView];
+            if ([navCtrl isKindOfClass:[JTNavigationController class]]) {
+                HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
+                [homeVC removeBackToTopView];
+            }
         }
 
         UITableViewCell *cell = self.tableView.visibleCells.lastObject;
