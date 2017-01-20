@@ -487,11 +487,16 @@ static NSInteger defaultWaitDataDuration = 3;
         dispatch_async(dispatch_get_main_queue(), ^{
             if (duration <= 0) {
                 if (_waitDataTimer) {
+                    dispatch_source_t timer = nil;
                     @synchronized (_waitDataTimer) {
                         if (_waitDataTimer) {
+                            timer = _waitDataTimer;
                             dispatch_source_cancel(_waitDataTimer);
-                            [weakSelf remove];
+                            _waitDataTimer = nil;
                         }
+                    }
+                    if (timer) {
+                        [weakSelf remove];
                     }
                 }
             }
