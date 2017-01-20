@@ -487,8 +487,12 @@ static NSInteger defaultWaitDataDuration = 3;
         dispatch_async(dispatch_get_main_queue(), ^{
             if (duration <= 0) {
                 if (_waitDataTimer) {
-                    dispatch_source_cancel(_waitDataTimer);
-                    [weakSelf remove];
+                    @synchronized (_waitDataTimer) {
+                        if (_waitDataTimer) {
+                            dispatch_source_cancel(_waitDataTimer);
+                            [weakSelf remove];
+                        }
+                    }
                 }
             }
             duration--;
@@ -500,8 +504,12 @@ static NSInteger defaultWaitDataDuration = 3;
 {
     XHLaunchAdConfiguration *configuration = [self commonConfiguration];
     if (_waitDataTimer) {
-        dispatch_source_cancel(_waitDataTimer);
-        _waitDataTimer = nil;
+        @synchronized (_waitDataTimer) {
+            if (_waitDataTimer) {
+                dispatch_source_cancel(_waitDataTimer);
+                _waitDataTimer = nil;
+            }
+        }
     }
     if(!configuration.skipButtonType) configuration.skipButtonType = SkipTypeTimeText;//默认
     __block NSInteger duration = 5;//默认
