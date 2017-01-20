@@ -26,8 +26,8 @@ static NSInteger defaultWaitDataDuration = 3;
 
 @property(nonatomic,strong)UIWindow *window;
 
-@property(nonatomic,copy)dispatch_source_t waitDataTimer;
-@property(nonatomic,copy)dispatch_source_t skipTimer;
+@property(atomic,copy)dispatch_source_t waitDataTimer;
+@property(atomic,copy)dispatch_source_t skipTimer;
 
 @property(nonatomic,strong)XHLaunchImageAdConfiguration *imageAdConfiguration;
 @property(nonatomic,strong)XHLaunchVideoAdConfiguration *videoAdConfiguration;
@@ -476,6 +476,7 @@ static NSInteger defaultWaitDataDuration = 3;
 -(void)startWaitDataDispathTiemr
 {
     __block NSInteger duration = defaultWaitDataDuration;
+    __weak typeof(self) weakSelf = self;
     if(_waitDataDuration) duration = _waitDataDuration;
     
     NSTimeInterval period = 1.0;
@@ -483,26 +484,22 @@ static NSInteger defaultWaitDataDuration = 3;
     _waitDataTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
     dispatch_source_set_timer(_waitDataTimer, dispatch_walltime(NULL, 0), period * NSEC_PER_SEC, 0);
     dispatch_source_set_event_handler(_waitDataTimer, ^{
-        if (duration == 0) {
-            @try {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (duration == 0) {
                 if (_waitDataTimer) {
                     dispatch_source_cancel(_waitDataTimer);
-                    _waitDataTimer = nil;
+                    [weakSelf remove];
                 }
-                [self remove];
-            } @catch (NSException *exception) {
-                SSLog(@"%@",exception);
             }
-        }
-        duration--;
+            duration--;
+        });
     });
     dispatch_resume(_waitDataTimer);
 }
 -(void)startSkipDispathTimer
 {
     XHLaunchAdConfiguration *configuration = [self commonConfiguration];
-    if(_waitDataTimer)
-    {
+    if (_waitDataTimer) {
         dispatch_source_cancel(_waitDataTimer);
         _waitDataTimer = nil;
     }
