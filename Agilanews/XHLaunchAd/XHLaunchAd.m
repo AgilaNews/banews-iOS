@@ -166,7 +166,7 @@ static NSInteger defaultWaitDataDuration = 3;
     [self.window addSubview:self.launchImageView];
     
     //数据等待
-    [self startWaitDataDispathTiemr];
+    [self startWaitDataDispathTimer];
 }
 
 //图片
@@ -473,7 +473,7 @@ static NSInteger defaultWaitDataDuration = 3;
     }
     return configuration;
 }
--(void)startWaitDataDispathTiemr
+-(void)startWaitDataDispathTimer
 {
     __block NSInteger duration = defaultWaitDataDuration;
     __weak typeof(self) weakSelf = self;
