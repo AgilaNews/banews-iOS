@@ -256,6 +256,9 @@
         NSDictionary *splash = responseObj[@"ad"][@"splash"];
         NSNumber *on = splash[@"on"];
         DEF_PERSISTENT_SET_OBJECT(SS_SPLASH_ON, on);
+        if (on && on.integerValue) {
+            [[LaunchAdManager sharedInstance] loadLaunchAdData];
+        }
         NSNumber *slot = splash[@"slot"];
         if (slot.integerValue > 0) {
             DEF_PERSISTENT_SET_OBJECT(SS_SPLASH_SLOT, slot);
@@ -994,9 +997,14 @@
         [NSKeyedArchiver archiveRootObject:_refreshTimeDic toFile:refreshFilePath];
         // 缓存开屏广告
         NSString *launchAdFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/launchAd.data"];
-        if ([LaunchAdManager sharedInstance].launchAdArray && [LaunchAdManager sharedInstance].checkDic) {
-            NSDictionary *launchAdDic = @{@"launchAdArray":[LaunchAdManager sharedInstance].launchAdArray,
-                                          @"checkDic":[LaunchAdManager sharedInstance].checkDic};
+        NSMutableDictionary *launchAdDic = [NSMutableDictionary dictionary];
+        if ([LaunchAdManager sharedInstance].checkDic) {
+            [launchAdDic setObject:[LaunchAdManager sharedInstance].checkDic forKey:@"checkDic"];
+        }
+        if ([LaunchAdManager sharedInstance].launchAdArray) {
+            [launchAdDic setObject:[LaunchAdManager sharedInstance].launchAdArray forKey:@"launchAdArray"];
+        }
+        if (launchAdDic.count) {
             [NSKeyedArchiver archiveRootObject:launchAdDic toFile:launchAdFilePath];
         }
     }

@@ -17,6 +17,7 @@ typedef void(^NetworkSucess) (LaunchAdModel *model);
 @property (nonatomic, strong) NSMutableDictionary *checkDic;
 
 + (instancetype)sharedInstance;
+- (void)loadLaunchAdData;
 - (void)getLaunchAdData:(NetworkSucess)success;
 
 @end

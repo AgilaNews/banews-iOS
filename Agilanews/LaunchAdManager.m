@@ -25,6 +25,50 @@ static LaunchAdManager *_manager = nil;
     return _manager;
 }
 
+// 加载广告数据
+- (void)loadLaunchAdData
+{
+    // 判断广告是否过期
+    NSNumber *ad_ttl = DEF_PERSISTENT_GET_OBJECT(SS_SPLASH_AD_TTL);
+    NSNumber *get_time = DEF_PERSISTENT_GET_OBJECT(SS_SPLASH_GET_TIME);
+    if ([[NSDate date] timeIntervalSince1970] - get_time.longLongValue > ad_ttl.longLongValue) {
+        // 广告过期
+        __weak typeof(self) weakSelf = self;
+        NSMutableDictionary *params = [NSMutableDictionary dictionary];
+        NSNumber *slot = DEF_PERSISTENT_GET_OBJECT(SS_SPLASH_SLOT);
+        if (slot && slot.integerValue > 0) {
+            [params setObject:slot forKey:@"pn"];
+        } else {
+            [params setObject:@3 forKey:@"pn"];
+        }
+        [[SSHttpRequest sharedInstance] get:kHomeUrl_Splash params:params contentType:UrlencodedType serverType:NetServer_V3 success:^(id responseObj) {
+            for (NSDictionary *dic in responseObj[@"ads"]) {
+                LaunchAdModel *model = [LaunchAdModel mj_objectWithKeyValues:dic];
+                DEF_PERSISTENT_SET_OBJECT(SS_SPLASH_GET_TIME, [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]]);
+                NSInteger find = 0;
+                for (LaunchAdModel *ad in weakSelf.launchAdArray) {
+                    if ([ad.dataid isEqualToString:model.dataid]) {
+                        find = 1;
+                    }
+                }
+                if (!find) {
+                    if (!weakSelf.launchAdArray) {
+                        weakSelf.launchAdArray = [NSMutableArray array];
+                    }
+                    [weakSelf.launchAdArray addObject:model];
+                    NSString *imageUrl = [model.image stringByReplacingOccurrencesOfString:@"{w}" withString:[NSString stringWithFormat:@"%d",(int)(kScreenWidth * 2)]];
+                    imageUrl = [imageUrl stringByReplacingOccurrencesOfString:@"{h}" withString:[NSString stringWithFormat:@"%d",(int)(kScreenHeight * .81 * 2)]];
+                    [[XHLaunchAdImageManager sharedManager] loadImageWithURL:[NSURL URLWithString:imageUrl] options:XHLaunchAdImageCacheInBackground progress:^(unsigned long long total, unsigned long long current) {
+//                        SSLog(@"+++++++%llu",current);
+                    } completed:^(UIImage * _Nullable image, NSError * _Nullable error, NSURL * _Nullable imageURL) {
+                        SSLog(@"-------%@",image);
+                    }];
+                }
+            }
+        } failure:nil isShowHUD:NO];
+    }
+}
+
 // 请求广告数据
 - (void)getLaunchAdData:(NetworkSucess)success
 {
@@ -55,31 +99,7 @@ static LaunchAdManager *_manager = nil;
                     if (!weakSelf.launchAdArray) {
                         weakSelf.launchAdArray = [NSMutableArray array];
                     }
-                    NSString *md5String = [NSString encryptPassword:model.image];
-                    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-                    NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:[NSString stringWithFormat:@"ImageFolder/%@.jpg", md5String]];
-                    NSFileManager *fileManager = [NSFileManager defaultManager];
-                    if ([fileManager fileExistsAtPath:filePath]) {
-                        NSString *imagePath = [NSString stringWithFormat:@"file://%@/",filePath];
-                        model.image = imagePath;
-                        [weakSelf.launchAdArray addObject:model];
-                    } else {
-                        SDWebImageDownloader *downloader = [SDWebImageDownloader sharedDownloader];
-                        [downloader downloadImageWithURL:[NSURL URLWithString:model.image]
-                                                 options:0
-                                                progress:^(NSInteger receivedSize, NSInteger expectedSize) {
-                                                    // progression tracking code
-                                                }
-                                               completed:^(UIImage *image, NSData *data, NSError *error, BOOL finished) {
-                                                   if (image && finished) {
-                                                       if ([data writeToFile:filePath atomically:YES]) {
-                                                           NSString *imagePath = [NSString stringWithFormat:@"file://%@/",filePath];
-                                                           model.image = imagePath;
-                                                           [weakSelf.launchAdArray addObject:model];
-                                                       }
-                                                   }
-                                               }];
-                    }
+                    [weakSelf.launchAdArray addObject:model];
                 }
             }
             if (weakSelf.launchAdArray.count) {
