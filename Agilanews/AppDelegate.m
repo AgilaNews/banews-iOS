@@ -68,35 +68,6 @@
         [self setupLaunchAd];
     }
     
-//    //活动页面
-//    NSString *launchImage = nil;
-//    if (iPhone4) {
-//        launchImage = @"LaunchImage-700";
-//    } else if (iPhone5) {
-//        launchImage = @"LaunchImage-700-568h";
-//    } else if (iPhone6) {
-//        launchImage = @"LaunchImage-800-667h";
-//    } else if (iPhone6Plus) {
-//        launchImage = @"LaunchImage-800-Portrait-736h";
-//    }
-//    UIImageView *launchView = [[UIImageView alloc] initWithFrame:self.window.bounds];
-//    launchView.image = [UIImage imageNamed:launchImage];
-//    launchView.contentMode = UIViewContentModeScaleAspectFit;
-//    [self.window addSubview:launchView];
-//    SnowView *snowView = [[SnowView alloc] initWithFrame:self.window.bounds];
-//    [launchView addSubview:snowView];
-//    [snowView show];
-//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//        [UIView animateWithDuration:.5 animations:^{
-//            launchView.alpha = 0;
-//            snowView.alpha = 0;
-//        } completion:^(BOOL finished) {
-//            [snowView removeFromSuperview];
-//            [launchView removeFromSuperview];
-//        }];
-//    });
-    
-    
     // 读取用户登录信息/配置信息
     [self loadUserData];
     // 监听网络状态
@@ -285,6 +256,9 @@
         NSDictionary *splash = responseObj[@"ad"][@"splash"];
         NSNumber *on = splash[@"on"];
         DEF_PERSISTENT_SET_OBJECT(SS_SPLASH_ON, on);
+        if (on && on.integerValue) {
+            [[LaunchAdManager sharedInstance] loadLaunchAdData];
+        }
         NSNumber *slot = splash[@"slot"];
         if (slot.integerValue > 0) {
             DEF_PERSISTENT_SET_OBJECT(SS_SPLASH_SLOT, slot);
@@ -1023,9 +997,14 @@
         [NSKeyedArchiver archiveRootObject:_refreshTimeDic toFile:refreshFilePath];
         // 缓存开屏广告
         NSString *launchAdFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/launchAd.data"];
-        if ([LaunchAdManager sharedInstance].launchAdArray && [LaunchAdManager sharedInstance].checkDic) {
-            NSDictionary *launchAdDic = @{@"launchAdArray":[LaunchAdManager sharedInstance].launchAdArray,
-                                          @"checkDic":[LaunchAdManager sharedInstance].checkDic};
+        NSMutableDictionary *launchAdDic = [NSMutableDictionary dictionary];
+        if ([LaunchAdManager sharedInstance].checkDic) {
+            [launchAdDic setObject:[LaunchAdManager sharedInstance].checkDic forKey:@"checkDic"];
+        }
+        if ([LaunchAdManager sharedInstance].launchAdArray) {
+            [launchAdDic setObject:[LaunchAdManager sharedInstance].launchAdArray forKey:@"launchAdArray"];
+        }
+        if (launchAdDic.count) {
             [NSKeyedArchiver archiveRootObject:launchAdDic toFile:launchAdFilePath];
         }
     }

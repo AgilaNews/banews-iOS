@@ -119,7 +119,7 @@
    </AnalyzeAction>
    <ArchiveAction
       buildConfiguration = "Debug"
-      customArchiveName = "Agila_v1.2.7_2017.01.15_Debug"
+      customArchiveName = "Agila_v1.2.8_2017.01.20_Debug"
       revealArchiveInOrganizer = "YES">
    </ArchiveAction>
 </Scheme>

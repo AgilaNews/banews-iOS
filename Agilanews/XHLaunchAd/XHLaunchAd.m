@@ -26,8 +26,8 @@ static NSInteger defaultWaitDataDuration = 3;
 
 @property(nonatomic,strong)UIWindow *window;
 
-@property(nonatomic,copy)dispatch_source_t waitDataTimer;
-@property(nonatomic,copy)dispatch_source_t skipTimer;
+@property(atomic,copy)dispatch_source_t waitDataTimer;
+@property(atomic,copy)dispatch_source_t skipTimer;
 
 @property(nonatomic,strong)XHLaunchImageAdConfiguration *imageAdConfiguration;
 @property(nonatomic,strong)XHLaunchVideoAdConfiguration *videoAdConfiguration;
@@ -166,7 +166,7 @@ static NSInteger defaultWaitDataDuration = 3;
     [self.window addSubview:self.launchImageView];
     
     //数据等待
-    [self startWaitDataDispathTiemr];
+    [self startWaitDataDispathTimer];
 }
 
 //图片
@@ -473,7 +473,7 @@ static NSInteger defaultWaitDataDuration = 3;
     }
     return configuration;
 }
--(void)startWaitDataDispathTiemr
+-(void)startWaitDataDispathTimer
 {
     __block NSInteger duration = defaultWaitDataDuration;
     __weak typeof(self) weakSelf = self;
@@ -484,18 +484,22 @@ static NSInteger defaultWaitDataDuration = 3;
     _waitDataTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
     dispatch_source_set_timer(_waitDataTimer, dispatch_walltime(NULL, 0), period * NSEC_PER_SEC, 0);
     dispatch_source_set_event_handler(_waitDataTimer, ^{
-        
         dispatch_async(dispatch_get_main_queue(), ^{
-            if(duration==0)
-            {
-                dispatch_source_cancel(_waitDataTimer);
-                @try {
-                    [weakSelf remove];
-                } @catch (NSException *exception) {
-                    SSLog(@"捕获异常%@",exception);
+            if (duration <= 0) {
+                if (_waitDataTimer) {
+                    dispatch_source_t timer = nil;
+                    @synchronized (_waitDataTimer) {
+                        if (_waitDataTimer) {
+                            timer = _waitDataTimer;
+                            dispatch_source_cancel(_waitDataTimer);
+                            _waitDataTimer = nil;
+                        }
+                    }
+                    if (timer) {
+                        [weakSelf remove];
+                    }
                 }
             }
-            
             duration--;
         });
     });
@@ -503,11 +507,14 @@ static NSInteger defaultWaitDataDuration = 3;
 }
 -(void)startSkipDispathTimer
 {
-    XHLaunchAdConfiguration * configuration = [self commonConfiguration];
-    if(_waitDataTimer)
-    {
-        dispatch_source_cancel(_waitDataTimer);
-        _waitDataTimer = nil;
+    XHLaunchAdConfiguration *configuration = [self commonConfiguration];
+    if (_waitDataTimer) {
+        @synchronized (_waitDataTimer) {
+            if (_waitDataTimer) {
+                dispatch_source_cancel(_waitDataTimer);
+                _waitDataTimer = nil;
+            }
+        }
     }
     if(!configuration.skipButtonType) configuration.skipButtonType = SkipTypeTimeText;//默认
     __block NSInteger duration = 5;//默认
@@ -529,7 +536,7 @@ static NSInteger defaultWaitDataDuration = 3;
             {
                  [self.adSkipButton stateWithskipType:configuration.skipButtonType andDuration:duration];
             }
-            if(duration==0)
+            if(duration<=0)
             {
                 dispatch_source_cancel(_skipTimer);
                 
@@ -575,11 +582,13 @@ static NSInteger defaultWaitDataDuration = 3;
     }
 }
 -(void)remove{
-    
-    if(_waitDataTimer)
-    {
-        dispatch_source_cancel(_waitDataTimer);
-        _waitDataTimer = nil;
+    if (_waitDataTimer) {
+        @synchronized (_waitDataTimer) {
+            if (_waitDataTimer) {
+                dispatch_source_cancel(_waitDataTimer);
+                _waitDataTimer = nil;
+            }
+        }
     }
     if(_skipTimer)
     {

@@ -35,7 +35,7 @@
         imageUrl = [imageUrl stringByReplacingOccurrencesOfString:@"{h}" withString:[NSString stringWithFormat:@"%d",(int)(kScreenHeight * .81 * 2)]];
         imageAdconfiguration.imageNameOrURLString = imageUrl;
         // 网络图片缓存机制
-        imageAdconfiguration.imageOption = XHLaunchAdImageDefault;
+        imageAdconfiguration.imageOption = XHLaunchAdImageCacheInBackground;
         // 图片填充模式
         imageAdconfiguration.contentMode = UIViewContentModeScaleAspectFit;
         // 广告点击打开链接
@@ -89,8 +89,8 @@
         }
         long long finishTime = [[NSDate date] timeIntervalSince1970] * 1000;
         long long duration = finishTime - self.launchAdShowTime;
-        if (duration > 0) {
-            [eventDic setObject:[NSNumber numberWithLongLong:finishTime - self.launchAdShowTime] forKey:@"show_period"];
+        if (duration > 0 && duration < 10) {
+            [eventDic setObject:[NSNumber numberWithLongLong:duration] forKey:@"show_period"];
         }
         self.launchAdModel.is_skip = @1;
         [eventDic setObject:@1 forKey:@"is_skip"];
@@ -106,18 +106,8 @@
         if (abflag && abflag.length > 0) {
             [eventDic setObject:abflag forKey:@"abflag"];
         }
-        NSDictionary *sessionDic = [NSDictionary dictionaryWithObjectsAndKeys:
-                                    DEF_PERSISTENT_GET_OBJECT(@"UUID"), @"id",
-                                    [NSArray arrayWithObject:eventDic], @"events",
-                                    nil];
-        NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObject:[NSArray arrayWithObject:sessionDic] forKey:@"sessions"];
-        [[SSHttpRequest sharedInstance] post:@"" params:params contentType:JsonType serverType:NetServer_Log success:^(id responseObj) {
-            // 打点成功
-        } failure:^(NSError *error) {
-            // 打点失败
-            [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
-            [weakSelf.eventArray addObject:eventDic];
-        } isShowHUD:NO];
+        [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
+        [weakSelf.eventArray addObject:eventDic];
     }
     [XHLaunchAd skipAction];
 }
@@ -135,9 +125,9 @@
     self.launchAdShowTime = showTime;
     [eventDic setObject:[NSNumber numberWithLongLong:showTime] forKey:@"time"];
     [eventDic setObject:self.launchAdModel.dataid forKey:@"data_id"];
-    NSString *uuid = [[NSUUID UUID] UUIDString];
-    self.launchAdModel.impression_id = uuid;
-    [eventDic setObject:uuid forKey:@"impression_id"];
+    if (self.launchAdModel.impression_id) {
+        [eventDic setObject:self.launchAdModel.impression_id forKey:@"impression_id"];
+    }
     [eventDic setObject:[NetType getNetType] forKey:@"net"];
     if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
         [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) forKey:@"lng"];
@@ -150,18 +140,8 @@
     if (abflag && abflag.length > 0) {
         [eventDic setObject:abflag forKey:@"abflag"];
     }
-    NSDictionary *sessionDic = [NSDictionary dictionaryWithObjectsAndKeys:
-                                DEF_PERSISTENT_GET_OBJECT(@"UUID"), @"id",
-                                [NSArray arrayWithObject:eventDic], @"events",
-                                nil];
-    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObject:[NSArray arrayWithObject:sessionDic] forKey:@"sessions"];
-    [[SSHttpRequest sharedInstance] post:@"" params:params contentType:JsonType serverType:NetServer_Log success:^(id responseObj) {
-        // 打点成功
-    } failure:^(NSError *error) {
-        // 打点失败
-        [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
-        [weakSelf.eventArray addObject:eventDic];
-    } isShowHUD:NO];
+    [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
+    [weakSelf.eventArray addObject:eventDic];
 }
 
 /**
@@ -201,8 +181,8 @@
         }
         long long finishTime = [[NSDate date] timeIntervalSince1970] * 1000;
         long long duration = finishTime - self.launchAdShowTime;
-        if (duration > 0) {
-            [eventDic setObject:[NSNumber numberWithLongLong:finishTime - self.launchAdShowTime] forKey:@"show_period"];
+        if (duration > 0 && duration < 10) {
+            [eventDic setObject:[NSNumber numberWithLongLong:duration] forKey:@"show_period"];
         }
         [eventDic setObject:@0 forKey:@"is_skip"];
         [eventDic setObject:[NetType getNetType] forKey:@"net"];
@@ -217,18 +197,8 @@
         if (abflag && abflag.length > 0) {
             [eventDic setObject:abflag forKey:@"abflag"];
         }
-        NSDictionary *sessionDic = [NSDictionary dictionaryWithObjectsAndKeys:
-                                    DEF_PERSISTENT_GET_OBJECT(@"UUID"), @"id",
-                                    [NSArray arrayWithObject:eventDic], @"events",
-                                    nil];
-        NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObject:[NSArray arrayWithObject:sessionDic] forKey:@"sessions"];
-        [[SSHttpRequest sharedInstance] post:@"" params:params contentType:JsonType serverType:NetServer_Log success:^(id responseObj) {
-            // 打点成功
-        } failure:^(NSError *error) {
-            // 打点失败
-            [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
-            [weakSelf.eventArray addObject:eventDic];
-        } isShowHUD:NO];
+        [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
+        [weakSelf.eventArray addObject:eventDic];
     }
 }
 
