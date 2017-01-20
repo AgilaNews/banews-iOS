@@ -577,11 +577,13 @@ static NSInteger defaultWaitDataDuration = 3;
     }
 }
 -(void)remove{
-    
-    if(_waitDataTimer)
-    {
-        dispatch_source_cancel(_waitDataTimer);
-        _waitDataTimer = nil;
+    if (_waitDataTimer) {
+        @synchronized (_waitDataTimer) {
+            if (_waitDataTimer) {
+                dispatch_source_cancel(_waitDataTimer);
+                _waitDataTimer = nil;
+            }
+        }
     }
     if(_skipTimer)
     {
