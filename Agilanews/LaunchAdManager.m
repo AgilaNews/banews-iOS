@@ -55,6 +55,8 @@ static LaunchAdManager *_manager = nil;
                     if (!weakSelf.launchAdArray) {
                         weakSelf.launchAdArray = [NSMutableArray array];
                     }
+                    NSString *uuid = [[NSUUID UUID] UUIDString];
+                    model.impression_id = uuid;
                     [weakSelf.launchAdArray addObject:model];
                     NSString *imageUrl = [model.image stringByReplacingOccurrencesOfString:@"{w}" withString:[NSString stringWithFormat:@"%d",(int)(kScreenWidth * 2)]];
                     imageUrl = [imageUrl stringByReplacingOccurrencesOfString:@"{h}" withString:[NSString stringWithFormat:@"%d",(int)(kScreenHeight * .81 * 2)]];
@@ -99,6 +101,8 @@ static LaunchAdManager *_manager = nil;
                     if (!weakSelf.launchAdArray) {
                         weakSelf.launchAdArray = [NSMutableArray array];
                     }
+                    NSString *uuid = [[NSUUID UUID] UUIDString];
+                    model.impression_id = uuid;
                     [weakSelf.launchAdArray addObject:model];
                 }
             }

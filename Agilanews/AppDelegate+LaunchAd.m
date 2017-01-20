@@ -125,9 +125,9 @@
     self.launchAdShowTime = showTime;
     [eventDic setObject:[NSNumber numberWithLongLong:showTime] forKey:@"time"];
     [eventDic setObject:self.launchAdModel.dataid forKey:@"data_id"];
-    NSString *uuid = [[NSUUID UUID] UUIDString];
-    self.launchAdModel.impression_id = uuid;
-    [eventDic setObject:uuid forKey:@"impression_id"];
+    if (self.launchAdModel.impression_id) {
+        [eventDic setObject:self.launchAdModel.impression_id forKey:@"impression_id"];
+    }
     [eventDic setObject:[NetType getNetType] forKey:@"net"];
     if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
         [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) forKey:@"lng"];
@@ -181,8 +181,8 @@
         }
         long long finishTime = [[NSDate date] timeIntervalSince1970] * 1000;
         long long duration = finishTime - self.launchAdShowTime;
-        if (duration > 0) {
-            [eventDic setObject:[NSNumber numberWithLongLong:finishTime - self.launchAdShowTime] forKey:@"show_period"];
+        if (duration > 0 && duration < 10) {
+            [eventDic setObject:[NSNumber numberWithLongLong:duration] forKey:@"show_period"];
         }
         [eventDic setObject:@0 forKey:@"is_skip"];
         [eventDic setObject:[NetType getNetType] forKey:@"net"];
