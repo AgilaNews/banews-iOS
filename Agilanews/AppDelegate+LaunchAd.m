@@ -89,8 +89,8 @@
         }
         long long finishTime = [[NSDate date] timeIntervalSince1970] * 1000;
         long long duration = finishTime - self.launchAdShowTime;
-        if (duration > 0) {
-            [eventDic setObject:[NSNumber numberWithLongLong:finishTime - self.launchAdShowTime] forKey:@"show_period"];
+        if (duration > 0 && duration < 10) {
+            [eventDic setObject:[NSNumber numberWithLongLong:duration] forKey:@"show_period"];
         }
         self.launchAdModel.is_skip = @1;
         [eventDic setObject:@1 forKey:@"is_skip"];
