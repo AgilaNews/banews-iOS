@@ -485,7 +485,7 @@ static NSInteger defaultWaitDataDuration = 3;
     dispatch_source_set_timer(_waitDataTimer, dispatch_walltime(NULL, 0), period * NSEC_PER_SEC, 0);
     dispatch_source_set_event_handler(_waitDataTimer, ^{
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (duration == 0) {
+            if (duration <= 0) {
                 if (_waitDataTimer) {
                     dispatch_source_cancel(_waitDataTimer);
                     [weakSelf remove];
@@ -523,7 +523,7 @@ static NSInteger defaultWaitDataDuration = 3;
             {
                  [self.adSkipButton stateWithskipType:configuration.skipButtonType andDuration:duration];
             }
-            if(duration==0)
+            if(duration<=0)
             {
                 dispatch_source_cancel(_skipTimer);
                 
