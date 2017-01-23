@@ -165,12 +165,6 @@
     }
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-
-}
-
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
@@ -186,12 +180,6 @@
     } else {
         [self.navigationController.navigationBar lt_setBackgroundColor:kOrangeColor];
     }
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-
 }
 
 - (void)dealloc
