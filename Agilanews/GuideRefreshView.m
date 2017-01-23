@@ -204,19 +204,19 @@ static GuideRefreshView *_guideView = nil;
     }
 }
 
-- (void)menuAction
-{
-    JTNavigationController *navCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
-    HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
-    [UIView animateWithDuration:.3 animations:^{
-        _menuView.alpha = 0;
-    } completion:^(BOOL finished) {
-        [homeVC.leftButton sendActionsForControlEvents:UIControlEventTouchUpInside];
-        DEF_PERSISTENT_SET_OBJECT(SS_GuideHomeKey, @1);
-        [[GuideRefreshView sharedInstance] removeFromSuperview];
-        _guideView = nil;
-    }];
-}
+//- (void)menuAction
+//{
+//    JTNavigationController *navCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+//    HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
+//    [UIView animateWithDuration:.3 animations:^{
+//        _menuView.alpha = 0;
+//    } completion:^(BOOL finished) {
+//        [homeVC.leftButton sendActionsForControlEvents:UIControlEventTouchUpInside];
+//        DEF_PERSISTENT_SET_OBJECT(SS_GuideHomeKey, @1);
+//        [[GuideRefreshView sharedInstance] removeFromSuperview];
+//        _guideView = nil;
+//    }];
+//}
 
 
 @end

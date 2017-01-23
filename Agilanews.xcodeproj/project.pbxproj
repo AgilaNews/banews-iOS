@@ -108,6 +108,9 @@
 		5F5C63801D90FC29005D3578 /* VideoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5C637F1D90FC29005D3578 /* VideoModel.m */; };
 		5F5C638E1D938DA9005D3578 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F5C638D1D938DA9005D3578 /* UserNotifications.framework */; };
 		5F5C63931D950AB4005D3578 /* LoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F5C63921D950AB4005D3578 /* LoadingView.m */; };
+		5F605F291E35E55600953120 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F605F281E35E55600953120 /* MainViewController.m */; };
+		5F605F2F1E35E80400953120 /* VideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F605F2E1E35E80400953120 /* VideoViewController.m */; };
+		5F605F321E35E80E00953120 /* MeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F605F311E35E80E00953120 /* MeViewController.m */; };
 		5F635CA41D3CCC50006AAE3D /* UIView+UIScreenDisplaying.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F635CA31D3CCC50006AAE3D /* UIView+UIScreenDisplaying.m */; };
 		5F635CA71D3CFA58006AAE3D /* TimeStampToString.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F635CA61D3CFA58006AAE3D /* TimeStampToString.m */; };
 		5F635CB11D3DD4C3006AAE3D /* LeftView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F635CB01D3DD4C3006AAE3D /* LeftView.m */; };
@@ -461,6 +464,12 @@
 		5F5C638D1D938DA9005D3578 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		5F5C63911D950AB4005D3578 /* LoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadingView.h; sourceTree = "<group>"; };
 		5F5C63921D950AB4005D3578 /* LoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadingView.m; sourceTree = "<group>"; };
+		5F605F271E35E55600953120 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
+		5F605F281E35E55600953120 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
+		5F605F2D1E35E80400953120 /* VideoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoViewController.h; sourceTree = "<group>"; };
+		5F605F2E1E35E80400953120 /* VideoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoViewController.m; sourceTree = "<group>"; };
+		5F605F301E35E80E00953120 /* MeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeViewController.h; sourceTree = "<group>"; };
+		5F605F311E35E80E00953120 /* MeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeViewController.m; sourceTree = "<group>"; };
 		5F635CA21D3CCC50006AAE3D /* UIView+UIScreenDisplaying.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+UIScreenDisplaying.h"; sourceTree = "<group>"; };
 		5F635CA31D3CCC50006AAE3D /* UIView+UIScreenDisplaying.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+UIScreenDisplaying.m"; sourceTree = "<group>"; };
 		5F635CA51D3CFA58006AAE3D /* TimeStampToString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeStampToString.h; sourceTree = "<group>"; };
@@ -924,8 +933,12 @@
 				5F635CE61D3E4209006AAE3D /* AppDelegate+ShareSDK.m */,
 				5FE7FB621E28707500529D54 /* AppDelegate+LaunchAd.h */,
 				5FE7FB631E28707500529D54 /* AppDelegate+LaunchAd.m */,
+				5F605F271E35E55600953120 /* MainViewController.h */,
+				5F605F281E35E55600953120 /* MainViewController.m */,
 				5FF4B6E51D36432800CC6704 /* Login */,
 				5FF4B6F51D372BDE00CC6704 /* Home */,
+				5F605F2B1E35E7BF00953120 /* Video */,
+				5F605F2C1E35E7CE00953120 /* Me */,
 				5F635CA81D3DD3B9006AAE3D /* Left */,
 				5F5AE9721D54344700A5A8B7 /* Guide */,
 				5F907ABD1DD5A3E700DD9748 /* FacebookAd */,
@@ -1177,6 +1190,24 @@
 				5F5C63781D8E5FED005D3578 /* KeychainItemWrapper.m */,
 			);
 			path = KeychainItemWrapper;
+			sourceTree = "<group>";
+		};
+		5F605F2B1E35E7BF00953120 /* Video */ = {
+			isa = PBXGroup;
+			children = (
+				5F605F2D1E35E80400953120 /* VideoViewController.h */,
+				5F605F2E1E35E80400953120 /* VideoViewController.m */,
+			);
+			name = Video;
+			sourceTree = "<group>";
+		};
+		5F605F2C1E35E7CE00953120 /* Me */ = {
+			isa = PBXGroup;
+			children = (
+				5F605F301E35E80E00953120 /* MeViewController.h */,
+				5F605F311E35E80E00953120 /* MeViewController.m */,
+			);
+			name = Me;
 			sourceTree = "<group>";
 		};
 		5F635CA81D3DD3B9006AAE3D /* Left */ = {
@@ -1929,6 +1960,7 @@
 				5FE7FB5E1E28701E00529D54 /* XHLaunchAdDownloader.m in Sources */,
 				5F635CB71D3E14F8006AAE3D /* BaseViewController.m in Sources */,
 				5FF4B7701D37BD2C00CC6704 /* NSString+UhouAdditions.m in Sources */,
+				5F605F2F1E35E80400953120 /* VideoViewController.m in Sources */,
 				5F500B421DDF1F9100E88198 /* FacebookAdCell.m in Sources */,
 				5FF4B7D51D3A174900CC6704 /* MJRefreshLegendFooter.m in Sources */,
 				5F8E264E1D7428E100B48130 /* BigPicCell.m in Sources */,
@@ -2015,6 +2047,7 @@
 				5F42C0A81D34E43A00B89651 /* SSHttpRequest.m in Sources */,
 				5F42C0901D34E41D00B89651 /* UIImageView+WebCache.m in Sources */,
 				5FF4B7CF1D3A174900CC6704 /* MJRefreshComponent.m in Sources */,
+				5F605F291E35E55600953120 /* MainViewController.m in Sources */,
 				5F907ACF1DDB100E00DD9748 /* NotifDetailModel.m in Sources */,
 				5FF4B6F11D372A9300CC6704 /* BaseNavigationController.m in Sources */,
 				5F17B4901DB5BEB5008EBD51 /* YTPlayerView.m in Sources */,
@@ -2063,6 +2096,7 @@
 				5F571FDB1D62DE0500604CDD /* FJSWaveProgress.m in Sources */,
 				5F2E0A1D1D87B47A00FEC0AC /* HZIndicatorView.m in Sources */,
 				5F5C63801D90FC29005D3578 /* VideoModel.m in Sources */,
+				5F605F321E35E80E00953120 /* MeViewController.m in Sources */,
 				5FE7221B1D5034970026BFC3 /* FeedbackTextView.m in Sources */,
 				5F571FDE1D632A5400604CDD /* iConsole.m in Sources */,
 				5F635ED61D40D2E8006AAE3D /* UserInfoViewController.m in Sources */,

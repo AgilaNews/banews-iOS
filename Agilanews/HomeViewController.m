@@ -10,6 +10,7 @@
 #import "AppDelegate.h"
 #import "HomeTableViewController.h"
 #import "CategoriesModel.h"
+#import "SearchViewController.h"
 
 static CGFloat const ButtonHeight = 40;
 
@@ -26,17 +27,28 @@ static CGFloat const ButtonHeight = 40;
     self.view.backgroundColor = kWhiteBgColor;
     self.automaticallyAdjustsScrollViewInsets = NO;
 
-    // 添加导航栏左侧按钮
-    _leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    _leftButton.frame = CGRectMake(0, 0, 44, 44);
-    [_leftButton setImage:[UIImage imageNamed:@"left"] forState:UIControlStateNormal];
-    [_leftButton addTarget:self action:@selector(leftAction:) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *buttonItem = [[UIBarButtonItem alloc] initWithCustomView:_leftButton];
-    if ([UIDevice currentDevice].systemVersion.floatValue >= 7.0) {
-        UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-        negativeSpacer.width = -12;
-        self.navigationItem.leftBarButtonItems = @[negativeSpacer, buttonItem];
-    }
+//    //添加导航栏左侧按钮
+//    _leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
+//    _leftButton.frame = CGRectMake(0, 0, 44, 44);
+//    [_leftButton setImage:[UIImage imageNamed:@"left"] forState:UIControlStateNormal];
+//    [_leftButton addTarget:self action:@selector(leftAction:) forControlEvents:UIControlEventTouchUpInside];
+//    UIBarButtonItem *buttonItem = [[UIBarButtonItem alloc] initWithCustomView:_leftButton];
+//    UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+//    negativeSpacer.width = -12;
+//    self.navigationItem.leftBarButtonItems = @[negativeSpacer, buttonItem];
+    
+    // 添加导航栏右侧按钮
+    UIButton *searchBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    searchBtn.backgroundColor = kOrangeColor;
+    searchBtn.frame = CGRectMake(0, 0, 40, 38);
+    searchBtn.imageView.backgroundColor = kOrangeColor;
+    [searchBtn setImage:[UIImage imageNamed:@"icon_search"] forState:UIControlStateNormal];
+    [searchBtn addTarget:self action:@selector(searchAction) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *searchItem = [[UIBarButtonItem alloc]initWithCustomView:searchBtn];
+    UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+    negativeSpacer.width = -10;
+    self.navigationItem.rightBarButtonItems = @[negativeSpacer, searchItem];
+    
     if ([DEF_PERSISTENT_GET_OBJECT(kHaveNewChannel) isEqual:@1] || [DEF_PERSISTENT_GET_OBJECT(kHaveNewNotif) isEqual:@1]) {
         [self addRedPoint];
     }
@@ -261,6 +273,17 @@ static CGFloat const ButtonHeight = 40;
 }
 
 /**
+ *  导航栏右侧按钮点击事件
+ *
+ *  @param button 按钮
+ */
+- (void)searchAction
+{
+    SearchViewController *searchVC = [[SearchViewController alloc] init];
+    [self.navigationController pushViewController:searchVC animated:YES];
+}
+
+/**
  *  首页刷新按钮点击事件
  *
  *  @param button 标题按钮
@@ -425,13 +448,13 @@ static CGFloat const ButtonHeight = 40;
 // 添加小红点
 - (void)addRedPoint
 {
-    if (!_redPoint) {
-        _redPoint = [[UIView alloc] initWithFrame:CGRectMake(_leftButton.right - 15, _leftButton.top + 10, 6, 6)];
-        _redPoint.backgroundColor = SSColor(233, 51, 17);
-        _redPoint.layer.cornerRadius = 3;
-        _redPoint.layer.masksToBounds = YES;
-    }
-    [_leftButton addSubview:_redPoint];
+//    if (!_redPoint) {
+//        _redPoint = [[UIView alloc] initWithFrame:CGRectMake(_leftButton.right - 15, _leftButton.top + 10, 6, 6)];
+//        _redPoint.backgroundColor = SSColor(233, 51, 17);
+//        _redPoint.layer.cornerRadius = 3;
+//        _redPoint.layer.masksToBounds = YES;
+//    }
+//    [_leftButton addSubview:_redPoint];
 }
 
 - (void)didReceiveMemoryWarning {

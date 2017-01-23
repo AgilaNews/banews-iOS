@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "MainViewController.h"
 #import "HomeViewController.h"
 #import "BaseNavigationController.h"
 #import "AppDelegate+ShareSDK.h"
@@ -57,10 +58,9 @@
     _window.backgroundColor = SSColor(255, 255, 255);
 #endif
     [_window makeKeyAndVisible];
-    HomeViewController *homeVC = [[HomeViewController alloc] init];
-    JTNavigationController *navCtrl = [[JTNavigationController alloc] initWithRootViewController:homeVC];
+    MainViewController *homeVC = [[MainViewController alloc] init];
     // 设置根控制器
-    _window.rootViewController = navCtrl;
+    _window.rootViewController = homeVC;
     
     NSNumber *on = DEF_PERSISTENT_GET_OBJECT(SS_SPLASH_ON);
     if (on.integerValue) {

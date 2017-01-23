@@ -112,7 +112,7 @@
                                                object:nil];
     
     // 创建表视图
-    self.tableView.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight);
+    self.tableView.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight - 49);
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     self.tableView.backgroundColor = kWhiteBgColor;
@@ -793,9 +793,13 @@
         HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
         [homeVC showBackToTopView];
     } else if (scrollView.contentOffset.y < kScreenHeight){
-        JTNavigationController *navCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
-        HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
-        [homeVC removeBackToTopView];
+        UIViewController *viewCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+        if ([viewCtrl isKindOfClass:[UITabBarController class]]) {
+            UITabBarController *tabBarVC = (UITabBarController *)viewCtrl;
+            JTNavigationController *navCtrl = tabBarVC.viewControllers.firstObject;
+            HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
+            [homeVC removeBackToTopView];
+        }
     }
     _scrollY = scrollView.contentOffset.y;
     UITableViewCell *cell = self.tableView.visibleCells.lastObject;
