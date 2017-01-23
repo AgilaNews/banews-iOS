@@ -356,12 +356,8 @@
         self.dislikeButton.hidden = YES;
     } else {
         self.haveVideoView.hidden = YES;
-        if ([self.ViewController isKindOfClass:[HomeTableViewController class]]) {
-            if (_model.filter_tags.count) {
-                self.dislikeButton.hidden = NO;
-            } else {
-                self.dislikeButton.hidden = YES;
-            }
+        if ([self.ViewController isKindOfClass:[HomeTableViewController class]] && _model.filter_tags.count) {
+            self.dislikeButton.hidden = NO;
         } else {
             self.dislikeButton.hidden = YES;
         }
