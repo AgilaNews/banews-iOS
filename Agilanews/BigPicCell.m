@@ -357,15 +357,14 @@
     } else {
         self.haveVideoView.hidden = YES;
         if ([self.ViewController isKindOfClass:[HomeTableViewController class]]) {
-            self.dislikeButton.hidden = NO;
+            if (_model.filter_tags.count) {
+                self.dislikeButton.hidden = NO;
+            } else {
+                self.dislikeButton.hidden = YES;
+            }
         } else {
             self.dislikeButton.hidden = YES;
         }
-    }
-    if (_model.filter_tags.count) {
-        self.dislikeButton.hidden = NO;
-    } else {
-        self.dislikeButton.hidden = YES;
     }
     NSNumber *textOnlyMode = DEF_PERSISTENT_GET_OBJECT(SS_textOnlyMode);
     if ([textOnlyMode integerValue] == 1) {
