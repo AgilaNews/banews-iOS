@@ -280,6 +280,7 @@ static CGFloat const ButtonHeight = 40;
 - (void)searchAction
 {
     SearchViewController *searchVC = [[SearchViewController alloc] init];
+    searchVC.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:searchVC animated:YES];
 }
 

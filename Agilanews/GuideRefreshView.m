@@ -155,22 +155,26 @@ static GuideRefreshView *_guideView = nil;
             [[GuideRefreshView sharedInstance] _initChannelGuide];
         }];
     } else {
-        JTNavigationController *navCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
-        HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
-        [homeVC.segmentVC.headerView setContentOffset:CGPointMake(kScreenWidth * .5, homeVC.segmentVC.headerView.top) animated:YES];
-//        UIButton *button = [UIButton new];
-//        button.tag = 10001;
-//        [homeVC.segmentVC btnClick:button];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [UIView animateWithDuration:.3 animations:^{
-                [GuideRefreshView sharedInstance].backgroundColor = [UIColor clearColor];
-            } completion:^(BOOL finished) {
-//                [[GuideRefreshView sharedInstance] _initMenuGuide];
-                DEF_PERSISTENT_SET_OBJECT(SS_GuideHomeKey, @1);
-                [[GuideRefreshView sharedInstance] removeFromSuperview];
-                _guideView = nil;
-            }];
-        });
+        UIViewController *viewCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+        if ([viewCtrl isKindOfClass:[UITabBarController class]]) {
+            UITabBarController *tabBarVC = (UITabBarController *)viewCtrl;
+            JTNavigationController *navCtrl = tabBarVC.viewControllers.firstObject;
+            HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
+            [homeVC.segmentVC.headerView setContentOffset:CGPointMake(kScreenWidth * .5, homeVC.segmentVC.headerView.top) animated:YES];
+            //        UIButton *button = [UIButton new];
+            //        button.tag = 10001;
+            //        [homeVC.segmentVC btnClick:button];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [UIView animateWithDuration:.3 animations:^{
+                    [GuideRefreshView sharedInstance].backgroundColor = [UIColor clearColor];
+                } completion:^(BOOL finished) {
+                    //                [[GuideRefreshView sharedInstance] _initMenuGuide];
+                    DEF_PERSISTENT_SET_OBJECT(SS_GuideHomeKey, @1);
+                    [[GuideRefreshView sharedInstance] removeFromSuperview];
+                    _guideView = nil;
+                }];
+            });
+        }
     }
 }
 

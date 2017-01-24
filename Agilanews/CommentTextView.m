@@ -94,25 +94,29 @@
         
         if (isInput) {
             // 打点-输入评论-010208
-            JTNavigationController *navCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
-            HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
-            NSString *channelName = homeVC.segmentVC.titleArray[homeVC.segmentVC.selectIndex - 10000];
-            NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
-                                           [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
-                                           channelName, @"channel",
-                                           _news_id, @"article",
-                                           [NetType getNetType], @"network",
-                                           nil];
-            if ([channelName isEqualToString:@"Video"]) {
-                [Flurry logEvent:@"Video_Comment_Input" withParameters:articleParams];
-//#if DEBUG
-//                [iConsole info:[NSString stringWithFormat:@"Video_Comment_Input:%@",articleParams],nil];
-//#endif
-            } else {
-                [Flurry logEvent:@"Article_Comments_Input" withParameters:articleParams];
-//#if DEBUG
-//                [iConsole info:[NSString stringWithFormat:@"Article_Comments_Input:%@",articleParams],nil];
-//#endif
+            UIViewController *viewCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+            if ([viewCtrl isKindOfClass:[UITabBarController class]]) {
+                UITabBarController *tabBarVC = (UITabBarController *)viewCtrl;
+                JTNavigationController *navCtrl = tabBarVC.viewControllers.firstObject;
+                HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
+                NSString *channelName = homeVC.segmentVC.titleArray[homeVC.segmentVC.selectIndex - 10000];
+                NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
+                                               [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
+                                               channelName, @"channel",
+                                               _news_id, @"article",
+                                               [NetType getNetType], @"network",
+                                               nil];
+                if ([channelName isEqualToString:@"Video"]) {
+                    [Flurry logEvent:@"Video_Comment_Input" withParameters:articleParams];
+                    //#if DEBUG
+                    //                [iConsole info:[NSString stringWithFormat:@"Video_Comment_Input:%@",articleParams],nil];
+                    //#endif
+                } else {
+                    [Flurry logEvent:@"Article_Comments_Input" withParameters:articleParams];
+                    //#if DEBUG
+                    //                [iConsole info:[NSString stringWithFormat:@"Article_Comments_Input:%@",articleParams],nil];
+                    //#endif
+                }
             }
         }
     }

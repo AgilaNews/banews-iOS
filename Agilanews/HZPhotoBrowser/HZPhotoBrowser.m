@@ -313,21 +313,22 @@
 - (void)saveImage
 {
     // 打点-长按图片点击下载-010008
-    JTNavigationController *navCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
-    HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
-    HomeTableViewController *homeTBC = homeVC.segmentVC.subViewControllers[homeVC.segmentVC.selectIndex - 10000];
-    NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
-                                   homeTBC.model.name, @"channel",
-                                   _model.news_id, @"article",
-                                   [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
-                                   [NetType getNetType], @"network",
-                                   nil];
-    [Flurry logEvent:@"PhotoFullScreen_SavePhoto_Click" withParameters:articleParams];
-//#if DEBUG
-//    [iConsole info:[NSString stringWithFormat:@"PhotoFullScreen_SavePhoto_Click:%@",articleParams],nil];
-//#endif
-    int index = _scrollView.contentOffset.x / _scrollView.bounds.size.width;
+    UIViewController *viewCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+    if ([viewCtrl isKindOfClass:[UITabBarController class]]) {
+        UITabBarController *tabBarVC = (UITabBarController *)viewCtrl;
+        JTNavigationController *navCtrl = tabBarVC.viewControllers.firstObject;
+        HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
+        HomeTableViewController *homeTBC = homeVC.segmentVC.subViewControllers[homeVC.segmentVC.selectIndex - 10000];
+        NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
+                                       homeTBC.model.name, @"channel",
+                                       _model.news_id, @"article",
+                                       [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
+                                       [NetType getNetType], @"network",
+                                       nil];
+        [Flurry logEvent:@"PhotoFullScreen_SavePhoto_Click" withParameters:articleParams];
+    }
     
+    int index = _scrollView.contentOffset.x / _scrollView.bounds.size.width;
     HZPhotoBrowserView *currentView = _scrollView.subviews[index];
     
     UIImageWriteToSavedPhotosAlbum(currentView.imageview.image, self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
@@ -355,22 +356,27 @@
 {
 //    [[[[UIApplication sharedApplication] keyWindow] rootViewController] presentViewController:self animated:NO completion:nil];
     // 打点-图片全屏展示页页面进入-010009
-    JTNavigationController *navCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
-    HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
-    HomeTableViewController *homeTBC = homeVC.segmentVC.subViewControllers[homeVC.segmentVC.selectIndex - 10000];
-    NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
-                                   homeTBC.model.name, @"channel",
-                                   _model.news_id, @"article",
-                                   [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
-                                   [NetType getNetType], @"network",
-                                   nil];
-    [Flurry logEvent:@"PhotoFullScreen_Enter" withParameters:articleParams];
-    UIViewController *controller = navCtrl.jt_viewControllers[navCtrl.jt_viewControllers.count - 1];
-    if ([controller isKindOfClass:[PicDetailViewController class]]) {
-        [controller.navigationController pushViewController:self animated:NO];
-        return;
+    UIViewController *viewCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+    if ([viewCtrl isKindOfClass:[UITabBarController class]]) {
+        UITabBarController *tabBarVC = (UITabBarController *)viewCtrl;
+        JTNavigationController *navCtrl = tabBarVC.viewControllers.firstObject;
+        HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
+        HomeTableViewController *homeTBC = homeVC.segmentVC.subViewControllers[homeVC.segmentVC.selectIndex - 10000];
+        NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
+                                       homeTBC.model.name, @"channel",
+                                       _model.news_id, @"article",
+                                       [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
+                                       [NetType getNetType], @"network",
+                                       nil];
+        [Flurry logEvent:@"PhotoFullScreen_Enter" withParameters:articleParams];
+        UIViewController *controller = navCtrl.jt_viewControllers[navCtrl.jt_viewControllers.count - 1];
+        if ([controller isKindOfClass:[PicDetailViewController class]]) {
+            [controller.navigationController pushViewController:self animated:NO];
+            return;
+        }
+        self.hidesBottomBarWhenPushed = YES;
+        [homeVC.navigationController pushViewController:self animated:YES];
     }
-    [homeVC.navigationController pushViewController:self animated:YES];
 }
 
 #pragma mark 单击隐藏图片浏览器

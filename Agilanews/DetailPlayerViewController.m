@@ -129,19 +129,23 @@
 {
     if (error) {
         // 打点-播放失败-010227
-        JTNavigationController *navCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
-        HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
-        NSString *channelName = homeVC.segmentVC.titleArray[homeVC.segmentVC.selectIndex - 10000];
-        NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
-                                       [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
-                                       channelName, @"channel",
-                                       _model.news_id, @"article",
-                                       [NetType getNetType], @"network",
-                                       nil];
-        [Flurry logEvent:@"Article_Play_Failure" withParameters:articleParams];
-//#if DEBUG
-//        [iConsole info:[NSString stringWithFormat:@"Article_Play_Failure:%@",articleParams],nil];
-//#endif
+        UIViewController *viewCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+        if ([viewCtrl isKindOfClass:[UITabBarController class]]) {
+            UITabBarController *tabBarVC = (UITabBarController *)viewCtrl;
+            JTNavigationController *navCtrl = tabBarVC.viewControllers.firstObject;
+            HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
+            NSString *channelName = homeVC.segmentVC.titleArray[homeVC.segmentVC.selectIndex - 10000];
+            NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
+                                           [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
+                                           channelName, @"channel",
+                                           _model.news_id, @"article",
+                                           [NetType getNetType], @"network",
+                                           nil];
+            [Flurry logEvent:@"Article_Play_Failure" withParameters:articleParams];
+            //#if DEBUG
+            //        [iConsole info:[NSString stringWithFormat:@"Article_Play_Failure:%@",articleParams],nil];
+            //#endif
+        }
     }
 }
 

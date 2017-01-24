@@ -550,6 +550,7 @@
     if (model.tpl.integerValue == NEWS_Interest) {
         InterestsViewController *interestsVC = [[InterestsViewController alloc] init];
         interestsVC.isSkip = YES;
+        interestsVC.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:interestsVC animated:YES];
         return;
     }
@@ -598,6 +599,7 @@
     if (model.tpl.integerValue == NEWS_Topics) {
         TopicViewController *topicVC = [[TopicViewController alloc] init];
         topicVC.model = model;
+        topicVC.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:topicVC animated:YES];
         return;
     }
@@ -606,6 +608,7 @@
         GifDetailViewController *gifDetailVC = [[GifDetailViewController alloc] init];
         gifDetailVC.model = model;
         gifDetailVC.cell = [tableView cellForRowAtIndexPath:indexPath];
+        gifDetailVC.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:gifDetailVC animated:YES];
         return;
     }
@@ -636,6 +639,7 @@
         videoDetailVC.indexPath = indexPath;
         videoDetailVC.fromCell = cell;
         cell.isMove = YES;
+        videoDetailVC.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:videoDetailVC animated:YES];
         return;
     }
@@ -654,12 +658,14 @@
         VideoDetailViewController *videoDetailVC = [[VideoDetailViewController alloc] init];
         videoDetailVC.model = model;
         videoDetailVC.channelName = _model.name;
+        videoDetailVC.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:videoDetailVC animated:YES];
         return;
     }
     NewsDetailViewController *newsDetailVC = [[NewsDetailViewController alloc] init];
     newsDetailVC.model = model;
     newsDetailVC.channelName = _model.name;
+    newsDetailVC.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:newsDetailVC animated:YES];
 }
 
@@ -691,8 +697,10 @@
         _scrollY = 0.5;
     }
     if (scrollView.contentOffset.y > _scrollY) {
-        JTNavigationController *navCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
-        if ([navCtrl isKindOfClass:[JTNavigationController class]]) {
+        UIViewController *viewCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+        if ([viewCtrl isKindOfClass:[UITabBarController class]]) {
+            UITabBarController *tabBarVC = (UITabBarController *)viewCtrl;
+            JTNavigationController *navCtrl = tabBarVC.viewControllers.firstObject;
             HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
             [homeVC removeBackToTopView];
         }
@@ -722,12 +730,18 @@
     if (!decelerate) {
         // 下拉出现底部返回视图
         if (scrollView.contentOffset.y < _scrollY && scrollView.contentOffset.y > kScreenHeight && self.tableView.footer.state == MJRefreshFooterStateIdle) {
-            JTNavigationController *navCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
-            HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
-            [homeVC showBackToTopView];
+            UIViewController *viewCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+            if ([viewCtrl isKindOfClass:[UITabBarController class]]) {
+                UITabBarController *tabBarVC = (UITabBarController *)viewCtrl;
+                JTNavigationController *navCtrl = tabBarVC.viewControllers.firstObject;
+                HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
+                [homeVC showBackToTopView];
+            }
         } else if (scrollView.contentOffset.y < kScreenHeight){
-            JTNavigationController *navCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
-            if ([navCtrl isKindOfClass:[JTNavigationController class]]) {
+            UIViewController *viewCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+            if ([viewCtrl isKindOfClass:[UITabBarController class]]) {
+                UITabBarController *tabBarVC = (UITabBarController *)viewCtrl;
+                JTNavigationController *navCtrl = tabBarVC.viewControllers.firstObject;
                 HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
                 [homeVC removeBackToTopView];
             }
@@ -777,9 +791,13 @@
 {
     // 下拉出现底部返回视图
     if (scrollView.contentOffset.y < _scrollY && scrollView.contentOffset.y > kScreenHeight && self.tableView.footer.state == MJRefreshFooterStateIdle) {
-        JTNavigationController *navCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
-        HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
-        [homeVC showBackToTopView];
+        UIViewController *viewCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+        if ([viewCtrl isKindOfClass:[UITabBarController class]]) {
+            UITabBarController *tabBarVC = (UITabBarController *)viewCtrl;
+            JTNavigationController *navCtrl = tabBarVC.viewControllers.firstObject;
+            HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
+            [homeVC showBackToTopView];
+        }
     } else if (scrollView.contentOffset.y < kScreenHeight){
         UIViewController *viewCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
         if ([viewCtrl isKindOfClass:[UITabBarController class]]) {

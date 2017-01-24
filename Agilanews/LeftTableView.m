@@ -233,8 +233,10 @@
     }
 
     HomeViewController *homeVC = nil;
-    if ([[UIApplication sharedApplication].keyWindow.rootViewController isKindOfClass:[JTNavigationController class]]) {
-        JTNavigationController *navCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+    UIViewController *viewCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+    if ([viewCtrl isKindOfClass:[UITabBarController class]]) {
+        UITabBarController *tabBarVC = (UITabBarController *)viewCtrl;
+        JTNavigationController *navCtrl = tabBarVC.viewControllers.firstObject;
         homeVC = navCtrl.jt_viewControllers.firstObject;
     } else {
         return;
@@ -370,13 +372,16 @@
 //#endif
         LeftView *leftView = (LeftView *)self.superview;
         leftView.isShow = NO;
-        JTNavigationController *navCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
-        HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
-        
-        UserInfoViewController *userInfoVC = [[UserInfoViewController alloc] init];
-        userInfoVC.model = _appDelegate.model;
-        [homeVC.navigationController pushViewController:userInfoVC animated:YES];
-        return;
+        UIViewController *viewCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+        if ([viewCtrl isKindOfClass:[UITabBarController class]]) {
+            UITabBarController *tabBarVC = (UITabBarController *)viewCtrl;
+            JTNavigationController *navCtrl = tabBarVC.viewControllers.firstObject;
+            HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
+            UserInfoViewController *userInfoVC = [[UserInfoViewController alloc] init];
+            userInfoVC.model = _appDelegate.model;
+            [homeVC.navigationController pushViewController:userInfoVC animated:YES];
+            return;
+        }
     }
 }
 /**

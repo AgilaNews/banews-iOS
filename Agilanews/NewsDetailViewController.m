@@ -90,19 +90,20 @@
          NSString *type = data[@"type"];
          if ([type isEqualToString:@"video"]) {
              // 打点-点击播放-010226
-             JTNavigationController *navCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
-             HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
-             NSString *channelName = homeVC.segmentVC.titleArray[homeVC.segmentVC.selectIndex - 10000];
-             NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
-                                            [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
-                                            channelName, @"channel",
-                                            weakSelf.model.news_id, @"article",
-                                            [NetType getNetType], @"network",
-                                            nil];
-             [Flurry logEvent:@"Article_Play_Click" withParameters:articleParams];
-//#if DEBUG
-//             [iConsole info:[NSString stringWithFormat:@"Article_Play_Click:%@",articleParams],nil];
-//#endif
+             UIViewController *viewCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+             if ([viewCtrl isKindOfClass:[UITabBarController class]]) {
+                 UITabBarController *tabBarVC = (UITabBarController *)viewCtrl;
+                 JTNavigationController *navCtrl = tabBarVC.viewControllers.firstObject;
+                 HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
+                 NSString *channelName = homeVC.segmentVC.titleArray[homeVC.segmentVC.selectIndex - 10000];
+                 NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
+                                                [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
+                                                channelName, @"channel",
+                                                weakSelf.model.news_id, @"article",
+                                                [NetType getNetType], @"network",
+                                                nil];
+                 [Flurry logEvent:@"Article_Play_Click" withParameters:articleParams];
+             }
              // 视频
              NSString *videoid = data[@"videoid"];
              DetailPlayerViewController *detailPlayerVC = [[DetailPlayerViewController alloc] init];

@@ -111,17 +111,18 @@
     // 记录进入后台时间
     DEF_PERSISTENT_SET_OBJECT(@"BackgroundTime", [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]]);
     // 打点-退出APP-010002
-    JTNavigationController *navCtrl = (JTNavigationController *)_window.rootViewController;
-    HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
-    NSInteger index = homeVC.segmentVC.selectIndex - 10000;
-    NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
-                                   [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
-                                   homeVC.segmentVC.titleArray[index], @"channel",
-                                   nil];
-    [Flurry logEvent:@"App_Exit" withParameters:articleParams];
-//    #if DEBUG
-//    [iConsole info:[NSString stringWithFormat:@"App_Exit:%@",articleParams],nil];
-//    #endif
+    UIViewController *viewCtrl = (JTNavigationController *)_window.rootViewController;
+    if ([viewCtrl isKindOfClass:[UITabBarController class]]) {
+        UITabBarController *tabBarVC = (UITabBarController *)viewCtrl;
+        JTNavigationController *navCtrl = tabBarVC.viewControllers.firstObject;
+        HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
+        NSInteger index = homeVC.segmentVC.selectIndex - 10000;
+        NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
+                                       [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
+                                       homeVC.segmentVC.titleArray[index], @"channel",
+                                       nil];
+        [Flurry logEvent:@"App_Exit" withParameters:articleParams];
+    }
     // 服务端打点上报
     [self serverLogWithEventArray:_eventArray];
     
