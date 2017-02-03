@@ -278,7 +278,7 @@
         [_likeButton setImage:[UIImage imageNamed:@"icon_article_like_default"] forState:UIControlStateNormal];
         [_likeButton setImage:[UIImage imageNamed:@"icon_article_like_select"] forState:UIControlStateSelected];
         AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-        if (appDelegate.likedDic[_model.news_id] != nil) {
+        if ([appDelegate.likedDic[_model.news_id] isEqual:@1]) {
             self.likeButton.selected = YES;
         } else {
             self.likeButton.selected = NO;
@@ -334,7 +334,7 @@
     if (_model != model) {
         _model = model;
         AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-        if (appDelegate.likedDic[_model.news_id] != nil) {
+        if ([appDelegate.likedDic[_model.news_id] isEqual:@1]) {
             self.likeButton.selected = YES;
         } else {
             self.likeButton.selected = NO;

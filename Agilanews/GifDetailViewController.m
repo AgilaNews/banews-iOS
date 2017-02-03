@@ -736,6 +736,8 @@
                                    _model.news_id, @"article",
                                    nil];
     [Flurry logEvent:@"Video_LikeButton_Click" withParameters:articleParams];
+    
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     if (button.selected) {
         if (button.titleLabel.text.intValue > 1) {
             _model.likedCount = [NSNumber numberWithInteger:_model.likedCount.integerValue - 1];
@@ -743,11 +745,13 @@
             [button setTitle:@"" forState:UIControlStateNormal];
             _model.likedCount = @0;
         }
+        [appDelegate.likedDic setValue:@0 forKey:_model.news_id];
     } else {
         _model.likedCount = [NSNumber numberWithInteger:_model.likedCount.integerValue + 1];
-        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
         if (appDelegate.likedDic[_model.news_id] == nil) {
             [self likedNewsWithAppDelegate:appDelegate button:button];
+        } else {
+            [appDelegate.likedDic setValue:@1 forKey:_model.news_id];
         }
     }
     GifDetailCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];

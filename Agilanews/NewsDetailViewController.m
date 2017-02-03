@@ -1472,7 +1472,7 @@
         [_likeButton setImage:[UIImage imageNamed:@"icon_article_like_select"] forState:UIControlStateSelected];
         [_likeButton addTarget:self action:@selector(likeAction:) forControlEvents:UIControlEventTouchUpInside];
         AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-        if (appDelegate.likedDic[_model.news_id] != nil) {
+        if ([appDelegate.likedDic[_model.news_id] isEqual:@1]) {
             _likeButton.selected = YES;
         }
     }
@@ -1741,9 +1741,8 @@
                                    _model.news_id, @"article",
                                    nil];
     [Flurry logEvent:@"Article_Like_Click" withParameters:articleParams];
-//#if DEBUG
-//    [iConsole info:[NSString stringWithFormat:@"Article_Like_Click:%@",articleParams],nil];
-//#endif
+
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     if (button.selected) {
         if (button.titleLabel.text.intValue > 1) {
             _detailModel.likedCount = [NSNumber numberWithInteger:_detailModel.likedCount.integerValue - 1];
@@ -1751,11 +1750,13 @@
             [button setTitle:@"" forState:UIControlStateNormal];
             _detailModel.likedCount = @0;
         }
+        [appDelegate.likedDic setValue:@0 forKey:_model.news_id];
     } else {
         _detailModel.likedCount = [NSNumber numberWithInteger:_detailModel.likedCount.integerValue + 1];
-        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
         if (appDelegate.likedDic[_model.news_id] == nil) {
             [self likedNewsWithAppDelegate:appDelegate button:button];
+        } else {
+            [appDelegate.likedDic setValue:@1 forKey:_model.news_id];
         }
     }
     self.likeButton.selected = !button.selected;
