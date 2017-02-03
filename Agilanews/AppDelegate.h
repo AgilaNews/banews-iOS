@@ -30,6 +30,7 @@
 @property (strong, nonatomic) NSMutableDictionary *hotwordsDic;     // 热词记录
 @property (strong, nonatomic) LaunchAdModel *launchAdModel;
 @property (assign, nonatomic) long long launchAdShowTime;           // 开屏广告展示时间
+@property (assign, nonatomic) BOOL isStart;                         // 启动状态
 
 @end
 

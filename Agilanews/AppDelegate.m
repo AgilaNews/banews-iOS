@@ -50,10 +50,7 @@
     [self registerShareSDK];
     _window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
 #if DEBUG
-//    _window = [[iConsoleWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     _window.backgroundColor = SSColor(0, 0, 0);
-//    [iConsole sharedConsole].delegate = self;
-//    [iConsole sharedConsole].logSubmissionEmail = @"1164063991@qq.com";
 #else
     _window.backgroundColor = SSColor(255, 255, 255);
 #endif
@@ -84,17 +81,15 @@
     UILocalNotification *notification = [[UILocalNotification alloc] init];
     notification.applicationIconBadgeNumber = -1;
     [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
-//    // 启动上报打点
-//    NSString *logFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/log.data"];
-//    NSMutableArray *logData = [NSKeyedUnarchiver unarchiveObjectWithFile:logFilePath];
-//    if (logData.count > 0 && logData != nil) {
-//        [self serverLogWithEventArray:logData];
-//    }
+
     _eventArray = [NSMutableArray array];
     if (!on.integerValue) {
-        //设置启动页面时间
+        // 无广告情况，设置启动页面时间
         [NSThread sleepForTimeInterval:2.0];
     }
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        _isStart = YES;
+    });
     return YES;
 }
 
@@ -137,13 +132,11 @@
         folderSize += [self fileSizeAtPath:fileAbsolutePath];
     }
     if ((folderSize / (1024.0 * 1024.0) > 50)) {
-        for (NSString *branchPath in filesArray)
-        {
+        for (NSString *branchPath in filesArray) {
             @autoreleasepool {
                 NSError *error = nil ;
                 NSString *path = [folderPath stringByAppendingPathComponent:branchPath];
-                if ([[NSFileManager defaultManager] fileExistsAtPath:path])
-                {
+                if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
                     [[NSFileManager defaultManager] removeItemAtPath:path error:&error];
                 }
             }
@@ -693,8 +686,10 @@
                 NSString *netType = networInfo.currentRadioAccessTechnology;
                 if ([netType isEqualToString:@"CTRadioAccessTechnologyGPRS"] || [netType isEqualToString:@"CTRadioAccessTechnologyEdge"] || [netType isEqualToString:@"CTRadioAccessTechnologyWCDMA"] || [netType isEqualToString:@"CTRadioAccessTechnologyHSDPA"] || [netType isEqualToString:@"CTRadioAccessTechnologyHSUPA"] || [netType isEqualToString:@"CTRadioAccessTechnologyCDMA1x"] || [netType isEqualToString:@"CTRadioAccessTechnologyCDMAEVDORev0"] || [netType isEqualToString:@"CTRadioAccessTechnologyCDMAEVDORevA"] || [netType isEqualToString:@"CTRadioAccessTechnologyCDMAEVDORevB"] || [netType isEqualToString:@"CTRadioAccessTechnologyeHRPD"])
                 {
-                    // 弹出无图模式提示框
-                    [self showTextOnlyAlert];
+                    if (_isStart) {
+                        // 弹出无图模式提示框
+                        [self showTextOnlyAlert];
+                    }
                 }
                 break;
             }
