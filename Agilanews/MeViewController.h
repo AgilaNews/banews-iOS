@@ -7,7 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AppDelegate.h"
 
-@interface MeViewController : UIViewController
+@interface MeViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, GIDSignInDelegate, GIDSignInUIDelegate>
+
+@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) UIButton *avatarButton;
+@property (nonatomic, strong) UIView *headerView;
+@property (nonatomic, strong) UILabel *loginLabel;
+@property (nonatomic, strong) AppDelegate *appDelegate;
 
 @end

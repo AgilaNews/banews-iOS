@@ -43,11 +43,8 @@
 {
     // 创建标签视图控制器
     HomeViewController *homeVC = [[HomeViewController alloc] init];
-//    homeVC.title = @"Home";
     VideoViewController *videoVC = [[VideoViewController alloc] init];
-//    videoVC.title = @"Video";
     MeViewController *meVC = [[MeViewController alloc] init];
-//    meVC.title = @"Me";
     // 将控制器存入数组
     NSArray *viewCtrlArray = @[homeVC, videoVC, meVC];
     // 创建可变数组，存放导航控制器
