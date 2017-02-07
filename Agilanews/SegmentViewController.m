@@ -9,6 +9,7 @@
 #import "SegmentViewController.h"
 #import "HomeTableViewController.h"
 #import "AppDelegate.h"
+#import "MainViewController.h"
 
 #define HEADBTN_TAG                 10000
 #define Default_BottomLineHeight    2
@@ -182,7 +183,12 @@
     [_mainScrollView scrollRectToVisible:CGRectMake((button.tag - HEADBTN_TAG) * MainScreenWidth, 0, MainScreenWidth, _mainScrollView.frame.size.height) animated:YES];
     [self didSelectSegmentIndex:button.tag];
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Secect_Channel object:appDelegate.categoriesArray[button.tag - HEADBTN_TAG]];
+    MainViewController *mainVC = (MainViewController *)appDelegate.window.rootViewController;
+    if (mainVC.index == 0) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Secect_Channel object:appDelegate.categoriesArray[button.tag - HEADBTN_TAG]];
+    } else {
+        [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Secect_Channel object:appDelegate.videoCategories[button.tag - HEADBTN_TAG]];
+    }
 }
 
 /*!

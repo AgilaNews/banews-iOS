@@ -1420,8 +1420,7 @@
     if (model && [model isKindOfClass:[NewsModel class]]) {
         refreshTime = model.public_time.longLongValue;
     }
-    CategoriesModel *cateModel = notif.object;
-    if ([cateModel.channelID isEqualToNumber:_model.channelID] && ([[NSDate date] timeIntervalSince1970] - refreshTime) > 3600) {
+    if ([self.tableView isDisplayedInScreen] && ([[NSDate date] timeIntervalSince1970] - refreshTime) > 3600) {
         _isShowBanner = NO;
         [self.tableView.header beginRefreshing];
     } else {
