@@ -8,6 +8,7 @@
 
 #import "HomeTableViewController.h"
 #import "BaseNavigationController.h"
+#import "MainViewController.h"
 #import "HomeViewController.h"
 #import "NewsDetailViewController.h"
 #import "VideoDetailViewController.h"
@@ -129,6 +130,7 @@
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     self.showRefreshHeader = YES;
     self.showRefreshFooter = YES;
+    
     if ([_model.channelID isEqualToNumber:@10001]) {
         self.tableView.scrollsToTop = YES;
 //        UIView *searchBar = [[SearchBar alloc] init];
@@ -146,8 +148,8 @@
         // 加载缓存
         _dataList = [NSMutableArray arrayWithArray:dataList];
         [self.tableView reloadData];
-        
-        if ([_model.channelID isEqualToNumber:@10001]) {
+
+        if ([_model.channelID isEqualToNumber:@10001] || ([_model.channelID isEqualToNumber:@30001] && [_model.name isEqualToString:@"Hot"])) {
             NewsModel *model = _dataList.firstObject;
             long long refreshTime = 0;
             if (model && [model isKindOfClass:[NewsModel class]]) {
@@ -159,9 +161,6 @@
                 [self.tableView setContentOffset:CGPointMake(self.tableView.contentOffset.x, 44) animated:NO];
             }
         }
-    }
-    if (![DEF_PERSISTENT_GET_OBJECT(SS_GuideHomeKey) isEqualToNumber:@1] && [_model.channelID isEqualToNumber:@10001]) {
-        [[UIApplication sharedApplication].keyWindow.rootViewController.view addSubview:[GuideRefreshView sharedInstance]];
     }
 }
 
@@ -261,7 +260,7 @@
         }
         case NEWS_OnlyVideo:
         {
-            if ([_model.channelID isEqualToNumber:@30001]) {
+            if (_model.channelID.integerValue > 30000) {
                 return videoHeight + 42;
             }
             CGSize titleLabelSize = [model.title calculateSize:CGSizeMake(kScreenWidth - 22, 40) font:titleFont];
@@ -420,7 +419,7 @@
             }
             case NEWS_OnlyVideo:
             {
-                if ([_model.channelID isEqualToNumber:@30001]) {
+                if (_model.channelID.integerValue > 30000) {
                     // 视频cell
                     static NSString *cellID = @"OnlyVideoCellID";
                     OnlyVideoCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
@@ -619,7 +618,7 @@
         return;
     }
     
-    if ([_model.channelID isEqualToNumber:@30001]) {
+    if (_model.channelID.integerValue > 30000) {
         // 打点-点击视频列表-010131
         NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
                                        [NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time",
@@ -696,15 +695,15 @@
         [self.tableView setContentOffset:CGPointMake(self.tableView.contentOffset.x, 0.5)];
         _scrollY = 0.5;
     }
-    if (scrollView.contentOffset.y > _scrollY) {
-        UIViewController *viewCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
-        if ([viewCtrl isKindOfClass:[UITabBarController class]]) {
-            UITabBarController *tabBarVC = (UITabBarController *)viewCtrl;
-            JTNavigationController *navCtrl = tabBarVC.viewControllers.firstObject;
-            HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
-            [homeVC removeBackToTopView];
-        }
-    }
+//    if (scrollView.contentOffset.y > _scrollY) {
+//        UIViewController *viewCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+//        if ([viewCtrl isKindOfClass:[UITabBarController class]]) {
+//            UITabBarController *tabBarVC = (UITabBarController *)viewCtrl;
+//            JTNavigationController *navCtrl = tabBarVC.viewControllers.firstObject;
+//            HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
+//            [homeVC removeBackToTopView];
+//        }
+//    }
 }
 
 // 滑动视图开始拖拽
@@ -728,24 +727,24 @@
 //#endif
     }
     if (!decelerate) {
-        // 下拉出现底部返回视图
-        if (scrollView.contentOffset.y < _scrollY && scrollView.contentOffset.y > kScreenHeight && self.tableView.footer.state == MJRefreshFooterStateIdle) {
-            UIViewController *viewCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
-            if ([viewCtrl isKindOfClass:[UITabBarController class]]) {
-                UITabBarController *tabBarVC = (UITabBarController *)viewCtrl;
-                JTNavigationController *navCtrl = tabBarVC.viewControllers.firstObject;
-                HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
-                [homeVC showBackToTopView];
-            }
-        } else if (scrollView.contentOffset.y < kScreenHeight){
-            UIViewController *viewCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
-            if ([viewCtrl isKindOfClass:[UITabBarController class]]) {
-                UITabBarController *tabBarVC = (UITabBarController *)viewCtrl;
-                JTNavigationController *navCtrl = tabBarVC.viewControllers.firstObject;
-                HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
-                [homeVC removeBackToTopView];
-            }
-        }
+//        // 下拉出现底部返回视图
+//        if (scrollView.contentOffset.y < _scrollY && scrollView.contentOffset.y > kScreenHeight && self.tableView.footer.state == MJRefreshFooterStateIdle) {
+//            UIViewController *viewCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+//            if ([viewCtrl isKindOfClass:[UITabBarController class]]) {
+//                UITabBarController *tabBarVC = (UITabBarController *)viewCtrl;
+//                JTNavigationController *navCtrl = tabBarVC.viewControllers.firstObject;
+//                HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
+//                [homeVC showBackToTopView];
+//            }
+//        } else if (scrollView.contentOffset.y < kScreenHeight){
+//            UIViewController *viewCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+//            if ([viewCtrl isKindOfClass:[UITabBarController class]]) {
+//                UITabBarController *tabBarVC = (UITabBarController *)viewCtrl;
+//                JTNavigationController *navCtrl = tabBarVC.viewControllers.firstObject;
+//                HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
+//                [homeVC removeBackToTopView];
+//            }
+//        }
 
         UITableViewCell *cell = self.tableView.visibleCells.lastObject;
         NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
@@ -789,24 +788,24 @@
 // 滑动视图停止惯性滚动
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
-    // 下拉出现底部返回视图
-    if (scrollView.contentOffset.y < _scrollY && scrollView.contentOffset.y > kScreenHeight && self.tableView.footer.state == MJRefreshFooterStateIdle) {
-        UIViewController *viewCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
-        if ([viewCtrl isKindOfClass:[UITabBarController class]]) {
-            UITabBarController *tabBarVC = (UITabBarController *)viewCtrl;
-            JTNavigationController *navCtrl = tabBarVC.viewControllers.firstObject;
-            HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
-            [homeVC showBackToTopView];
-        }
-    } else if (scrollView.contentOffset.y < kScreenHeight){
-        UIViewController *viewCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
-        if ([viewCtrl isKindOfClass:[UITabBarController class]]) {
-            UITabBarController *tabBarVC = (UITabBarController *)viewCtrl;
-            JTNavigationController *navCtrl = tabBarVC.viewControllers.firstObject;
-            HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
-            [homeVC removeBackToTopView];
-        }
-    }
+//    // 下拉出现底部返回视图
+//    if (scrollView.contentOffset.y < _scrollY && scrollView.contentOffset.y > kScreenHeight && self.tableView.footer.state == MJRefreshFooterStateIdle) {
+//        UIViewController *viewCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+//        if ([viewCtrl isKindOfClass:[UITabBarController class]]) {
+//            UITabBarController *tabBarVC = (UITabBarController *)viewCtrl;
+//            JTNavigationController *navCtrl = tabBarVC.viewControllers.firstObject;
+//            HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
+//            [homeVC showBackToTopView];
+//        }
+//    } else if (scrollView.contentOffset.y < kScreenHeight){
+//        UIViewController *viewCtrl = (JTNavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+//        if ([viewCtrl isKindOfClass:[UITabBarController class]]) {
+//            UITabBarController *tabBarVC = (UITabBarController *)viewCtrl;
+//            JTNavigationController *navCtrl = tabBarVC.viewControllers.firstObject;
+//            HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
+//            [homeVC removeBackToTopView];
+//        }
+//    }
     _scrollY = scrollView.contentOffset.y;
     UITableViewCell *cell = self.tableView.visibleCells.lastObject;
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
@@ -922,9 +921,7 @@
                                            _model.name, @"channel",
                                            nil];
             [Flurry logEvent:@"Home_List_DownRefresh_Y" withParameters:articleParams];
-//#if DEBUG
-//            [iConsole info:[NSString stringWithFormat:@"Home_List_DownRefresh_Y:%@",articleParams],nil];
-//#endif
+
             NewsModel *firstModel = _dataList.firstObject;
             long long refreshTime = 0;
             if (firstModel && [firstModel isKindOfClass:[NewsModel class]]) {
@@ -952,9 +949,7 @@
                                            _model.name, @"channel",
                                            nil];
             [Flurry logEvent:@"Home_List_UpLoad_Y" withParameters:articleParams];
-//#if DEBUG
-//            [iConsole info:[NSString stringWithFormat:@"Home_List_UpLoad_Y:%@",articleParams],nil];
-//#endif
+
             [_dataList addObjectsFromArray:models];
             [weakSelf tableViewDidFinishTriggerHeader:NO reload:YES];
         }
@@ -1385,7 +1380,7 @@
  */
 - (void)requestDataWithRefreshNotif:(NSNotification *)notif
 {
-    if ([_model.channelID isEqualToNumber:notif.object]) {
+    if ([_model.channelID isEqualToNumber:notif.object] && [self.tableView isDisplayedInScreen]) {
         [self.tableView setContentOffset:self.tableView.contentOffset animated:NO];
         _isShowBanner = YES;
         [self.tableView.header beginRefreshing];
@@ -1502,20 +1497,42 @@
  */
 - (void)recoverVideo:(NSNotification *)notif
 {
-    if ([_model.channelID isEqualToNumber:@30001]) {
-        NSDictionary *dic = notif.object;
-        YTPlayerView *playerView = dic[@"playerView"];
-        NSIndexPath *indexPath = dic[@"index"];
-        UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-        if ([cell isKindOfClass:[OnlyVideoCell class]]) {
-            OnlyVideoCell *videoCell = (OnlyVideoCell *)cell;
-            if (videoCell.isMove) {
-                [videoCell.contentView addSubview:playerView];
-                [videoCell.contentView bringSubviewToFront:videoCell.titleImageView];
-                videoCell.isMove = NO;
-                videoCell.isPlay = NO;
-                [videoCell.playerView stopVideo];
-                [videoCell setNeedsLayout];
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    MainViewController *mainVC = (MainViewController *)appDelegate.window.rootViewController;
+    if (mainVC.index == 0) {
+        if ([_model.channelID isEqualToNumber:@30001]) {
+            NSDictionary *dic = notif.object;
+            YTPlayerView *playerView = dic[@"playerView"];
+            NSIndexPath *indexPath = dic[@"index"];
+            UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+            if ([cell isKindOfClass:[OnlyVideoCell class]]) {
+                OnlyVideoCell *videoCell = (OnlyVideoCell *)cell;
+                if (videoCell.isMove) {
+                    [videoCell.contentView addSubview:playerView];
+                    [videoCell.contentView bringSubviewToFront:videoCell.titleImageView];
+                    videoCell.isMove = NO;
+                    videoCell.isPlay = NO;
+                    [videoCell.playerView stopVideo];
+                    [videoCell setNeedsLayout];
+                }
+            }
+        }
+    } else if (mainVC.index == 1 && ![self.model.name isEqualToString:@"Videos"]) {
+        if (_model.channelID.integerValue > 30000 && [self.tableView isDisplayedInScreen]) {
+            NSDictionary *dic = notif.object;
+            YTPlayerView *playerView = dic[@"playerView"];
+            NSIndexPath *indexPath = dic[@"index"];
+            UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+            if ([cell isKindOfClass:[OnlyVideoCell class]]) {
+                OnlyVideoCell *videoCell = (OnlyVideoCell *)cell;
+                if (videoCell.isMove) {
+                    [videoCell.contentView addSubview:playerView];
+                    [videoCell.contentView bringSubviewToFront:videoCell.titleImageView];
+                    videoCell.isMove = NO;
+                    videoCell.isPlay = NO;
+                    [videoCell.playerView stopVideo];
+                    [videoCell setNeedsLayout];
+                }
             }
         }
     }

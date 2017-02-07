@@ -97,28 +97,25 @@
 #define Top_List         1001// 置顶模板
 
 // 通知
-#define KNOTIFICATION_Categories      @"KNOTIFICATION_Categories"     // 频道刷新通知
-#define KNOTIFICATION_Refresh         @"KNOTIFICATION_Refresh"        // 首页刷新按钮通知
-#define KNOTIFICATION_Refresh_Success @"KNOTIFICATION_Refresh_Success"// 首页刷新成功通知
-#define KNOTIFICATION_Login_Success   @"KNOTIFICATION_Login_Success"  // 第三方登录成功通知
-#define KNOTIFICATION_Logout_Success  @"KNOTIFICATION_Logout_Success" // 退出登录通知
-#define KNOTIFICATION_Secect_Channel  @"KNOTIFICATION_Secect_Channel" // 选中频道通知
-#define KNOTIFICATION_Scroll_Channel  @"KNOTIFICATION_Scroll_Channel" // 滑动频道通知
-#define KNOTIFICATION_TextOnly_ON     @"KNOTIFICATION_TextOnly_ON"    // 无图模式开启通知
-#define KNOTIFICATION_TextOnly_OFF    @"KNOTIFICATION_TextOnly_OFF"   // 无图模式关闭通知
-#define KNOTIFICATION_FontSize_Change @"KNOTIFICATION_FontSize_Change"// 字体大小改变通知
-#define KNOTIFICATION_PushToFavorite  @"KNOTIFICATION_PushToFavorite" // 跳转到收藏通知
-#define KNOTIFICATION_TouchFavorite   @"KNOTIFICATION_TouchFavorite"  // 点击收藏通知
-#define KNOTIFICATION_FindNewChannel  @"KNOTIFICATION_FindNewChannel" // 发现新频道通知
-#define KNOTIFICATION_CleanNewChannel @"KNOTIFICATION_CleanNewChannel"// 删除新频道通知
-#define KNOTIFICATION_PushExit        @"KNOTIFICATION_PushExit"       // 从推送页面退出
-#define KNOTIFICATION_RecoverVideo    @"KNOTIFICATION_RecoverVideo"   // 视频从详情页回位
-#define KNOTIFICATION_PausedVideo     @"KNOTIFICATION_PausedVideo"    // 暂停视频
-#define KNOTIFICATION_FindNewNotif    @"KNOTIFICATION_FindNewNotif"   // 发现新频道通知
-#define KNOTIFICATION_CleanNewNotif   @"KNOTIFICATION_CleanNewNotif"  // 删除新频道通知
-#define KNOTIFICATION_CheckNewNotif   @"KNOTIFICATION_CheckNewNotif"  // 检查新频道通知
-#define KNOTIFICATION_AddRedPoint     @"KNOTIFICATION_AddRedPoint"    // 添加小红点通知
-#define KNOTIFICATION_RemoveRedPoint  @"KNOTIFICATION_RemoveRedPoint" // 移除小红点通知
+#define KNOTIFICATION_Categories        @"KNOTIFICATION_Categories"         // 频道刷新通知
+#define KNOTIFICATION_UpdateCategories  @"KNOTIFICATION_UpdateCategories"   // 频道刷新通知
+#define KNOTIFICATION_Refresh           @"KNOTIFICATION_Refresh"            // 首页刷新按钮通知
+#define KNOTIFICATION_Refresh_Success   @"KNOTIFICATION_Refresh_Success"    // 首页刷新成功通知
+#define KNOTIFICATION_Login_Success     @"KNOTIFICATION_Login_Success"      // 第三方登录成功通知
+#define KNOTIFICATION_Logout_Success    @"KNOTIFICATION_Logout_Success"     // 退出登录通知
+#define KNOTIFICATION_Secect_Channel    @"KNOTIFICATION_Secect_Channel"     // 选中频道通知
+#define KNOTIFICATION_Scroll_Channel    @"KNOTIFICATION_Scroll_Channel"     // 滑动频道通知
+#define KNOTIFICATION_TextOnly_ON       @"KNOTIFICATION_TextOnly_ON"        // 无图模式开启通知
+#define KNOTIFICATION_TextOnly_OFF      @"KNOTIFICATION_TextOnly_OFF"       // 无图模式关闭通知
+#define KNOTIFICATION_FontSize_Change   @"KNOTIFICATION_FontSize_Change"    // 字体大小改变通知
+#define KNOTIFICATION_PushToFavorite    @"KNOTIFICATION_PushToFavorite"     // 跳转到收藏通知
+#define KNOTIFICATION_TouchFavorite     @"KNOTIFICATION_TouchFavorite"      // 点击收藏通知
+#define KNOTIFICATION_PushExit          @"KNOTIFICATION_PushExit"           // 从推送页面退出
+#define KNOTIFICATION_RecoverVideo      @"KNOTIFICATION_RecoverVideo"       // 视频从详情页回位
+#define KNOTIFICATION_PausedVideo       @"KNOTIFICATION_PausedVideo"        // 暂停视频
+#define KNOTIFICATION_CheckNewNotif     @"KNOTIFICATION_CheckNewNotif"      // 检查新频道通知
+#define KNOTIFICATION_AddRedPoint       @"KNOTIFICATION_AddRedPoint"        // 添加小红点通知
+#define KNOTIFICATION_RemoveRedPoint    @"KNOTIFICATION_RemoveRedPoint"     // 移除小红点通知
 
 
 // 刷新成功提示banner

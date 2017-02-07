@@ -50,10 +50,6 @@ static CGFloat const ButtonHeight = 40;
     negativeSpacer.width = -10;
     self.navigationItem.rightBarButtonItems = @[negativeSpacer, searchItem];
     
-    if ([DEF_PERSISTENT_GET_OBJECT(kHaveNewChannel) isEqual:@1] || [DEF_PERSISTENT_GET_OBJECT(kHaveNewNotif) isEqual:@1]) {
-        [self addRedPoint];
-    }
-    
     // 添加导航栏标题按钮
     _titleButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [_titleButton setAdjustsImageWhenHighlighted:NO];
@@ -68,41 +64,29 @@ static CGFloat const ButtonHeight = 40;
                                                  name:KNOTIFICATION_Categories
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(updateChannel:)
+                                                 name:KNOTIFICATION_UpdateCategories
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(refresh_success)
                                                  name:KNOTIFICATION_Refresh_Success
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(findNewChannel)
-                                                 name:KNOTIFICATION_FindNewChannel
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(cleanNewChannel)
-                                                 name:KNOTIFICATION_CleanNewChannel
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(findNewNotif)
-                                                 name:KNOTIFICATION_FindNewNotif
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(cleanNewNotif)
-                                                 name:KNOTIFICATION_CleanNewNotif
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(checkNewNotif)
                                                  name:KNOTIFICATION_CheckNewNotif
                                                object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(removeBackToTopView)
-                                                 name:KNOTIFICATION_Refresh
-                                               object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self
+//                                             selector:@selector(removeBackToTopView)
+//                                                 name:KNOTIFICATION_Refresh
+//                                               object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(selectChannelAction)
                                                  name:KNOTIFICATION_Secect_Channel
                                                object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(removeBackToTopView)
-                                                 name:KNOTIFICATION_Scroll_Channel
-                                               object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self
+//                                             selector:@selector(removeBackToTopView)
+//                                                 name:KNOTIFICATION_Scroll_Channel
+//                                               object:nil];
     
     // 添加分段控制器
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
@@ -196,14 +180,6 @@ static CGFloat const ButtonHeight = 40;
     [_segmentVC addParentController:self navView:_navView];
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    if (self.view.top == 44) {
-        self.view.frame = CGRectMake(self.view.left, self.view.top + 20, self.view.width, self.view.height - 20);
-    }
-}
-
 - (void)dealloc
 {
     // 移除通知
@@ -246,32 +222,98 @@ static CGFloat const ButtonHeight = 40;
     [_segmentVC addParentController:self navView:_navView];
 }
 
-/**
- *  导航栏左侧按钮点击事件
- *
- *  @param button 按钮
- */
-- (void)leftAction:(UIButton *)button
+- (void)updateChannel:(NSNotification *)notif
 {
-    // 打点-点击侧边栏按钮-010115
-    if (_segmentVC.titleArray.count > 0) {
-        NSString *channelName = _segmentVC.titleArray[_segmentVC.selectIndex - 10000];
-        NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
-                                       channelName, @"channel",
-                                       nil];
-        [Flurry logEvent:@"Home_MenuButton_Click" withParameters:articleParams];
-//#if DEBUG
-//        [iConsole info:[NSString stringWithFormat:@"Home_MenuButton_Click:%@",articleParams],nil];
-//#endif
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    NSNumber *version = notif.object[@"version"];
+    NSMutableArray *categoryArray = notif.object[@"category"];
+    NSMutableArray *newArray = [NSMutableArray array];
+    // 查找是否有新频道
+    for (CategoriesModel *newModel in categoryArray) {
+        BOOL isNew = YES;
+        for (CategoriesModel *model in appDelegate.categoriesArray) {
+            if ([newModel.channelID isEqualToNumber:model.channelID]) {
+                isNew = NO;
+                break;
+            }
+        }
+        if (isNew) {
+            // 发现新频道
+            newModel.isNew = YES;
+            [newArray addObject:newModel];
+        }
     }
-    self.segmentVC.isPullDownListShow = NO;
-    if (_leftView == nil) {
-        _leftView = [[LeftView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
+    // 插入新频道
+    for (CategoriesModel *newModel in newArray) {
+        [appDelegate.categoriesArray insertObject:newModel atIndex:newModel.index.integerValue];
     }
-    [[UIApplication sharedApplication].keyWindow addSubview:_leftView];
-    _leftView.isShow = YES;
-    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_PausedVideo object:nil];
+    if (newArray.count > 0) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_AddRedPoint object:nil];
+    }
+    // 查找是否有删除频道
+    NSMutableArray *deleteArray = [NSMutableArray array];
+    for (CategoriesModel *model in appDelegate.categoriesArray) {
+        BOOL isHave = NO;
+        for (CategoriesModel *newModel in categoryArray) {
+            if ([newModel.channelID isEqualToNumber:model.channelID]) {
+                isHave = YES;
+                break;
+            }
+        }
+        if (!isHave) {
+            // 发现删除频道
+            [deleteArray addObject:model];
+        }
+    }
+    // 删除频道
+    if (deleteArray.count <= 3) {
+        for (CategoriesModel *model in deleteArray) {
+            [appDelegate.categoriesArray removeObject:model];
+        }
+    }
+    if (newArray.count > 0 || deleteArray.count > 0) {
+        [self addSegment:[NSNotification notificationWithName:KNOTIFICATION_Categories object:version]];
+        return;
+    }
+    // 判断是否有调整顺序
+    if (appDelegate.categoriesArray.count == categoryArray.count) {
+        for (int i = 0; i < appDelegate.categoriesArray.count; i++) {
+            CategoriesModel *model = appDelegate.categoriesArray[i];
+            CategoriesModel *newModel = categoryArray[i];
+            if (![model.channelID isEqualToNumber:newModel.channelID]) {
+                appDelegate.categoriesArray = categoryArray;
+                [self addSegment:[NSNotification notificationWithName:KNOTIFICATION_Categories object:version]];
+            }
+        }
+    }
 }
+
+///**
+// *  导航栏左侧按钮点击事件
+// *
+// *  @param button 按钮
+// */
+//- (void)leftAction:(UIButton *)button
+//{
+//    // 打点-点击侧边栏按钮-010115
+//    if (_segmentVC.titleArray.count > 0) {
+//        NSString *channelName = _segmentVC.titleArray[_segmentVC.selectIndex - 10000];
+//        NSDictionary *articleParams = [NSDictionary dictionaryWithObjectsAndKeys:
+//                                       channelName, @"channel",
+//                                       nil];
+//        [Flurry logEvent:@"Home_MenuButton_Click" withParameters:articleParams];
+////#if DEBUG
+////        [iConsole info:[NSString stringWithFormat:@"Home_MenuButton_Click:%@",articleParams],nil];
+////#endif
+//    }
+//    self.segmentVC.isPullDownListShow = NO;
+//    if (_leftView == nil) {
+//        _leftView = [[LeftView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
+//    }
+//    [[UIApplication sharedApplication].keyWindow addSubview:_leftView];
+//    _leftView.isShow = YES;
+//    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_PausedVideo object:nil];
+//}
 
 /**
  *  导航栏右侧按钮点击事件
@@ -316,55 +358,55 @@ static CGFloat const ButtonHeight = 40;
     [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Refresh object:homeTBC.model.channelID];
 }
 
-- (void)showBackToTopView
-{
-    if (![self.backToTop.superview isEqual:self.view]) {
-        [self.view addSubview:self.backToTop];
-        self.backToTop.alpha = 0;
-        [UIView animateWithDuration:.3 animations:^{
-            self.backToTop.alpha = 1;
-        }];
-    }
-}
-
-- (void)removeBackToTopView
-{
-    [UIView animateWithDuration:.3 animations:^{
-        self.backToTop.alpha = 0;
-    } completion:^(BOOL finished) {
-        [self.backToTop removeFromSuperview];
-    }];
-}
-
-#pragma mark - setter/getter
-- (UIView *)backToTop
-{
-    if (_backToTop == nil) {
-        _backToTop = [[UIView alloc] initWithFrame:CGRectMake(0, kScreenHeight - 64 - 43, kScreenWidth, 43)];
-        _backToTop.backgroundColor = [UIColor colorWithRed:78 / 255.0 green:173 / 255.0 blue:240 / 255.0 alpha:.95];
-        _backToTop.userInteractionEnabled = YES;
-        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backToTopAction)];
-        [_backToTop addGestureRecognizer:tap];
-        NSString *toTopString = @"Get the latest stories";
-        CGSize toTopSize = [toTopString calculateSize:CGSizeMake(300, 16) font:[UIFont systemFontOfSize:15]];
-        UIImageView *toTopView = [[UIImageView alloc] initWithFrame:CGRectMake((kScreenWidth - 13 - 8 - toTopSize.width) * .5, (_backToTop.height - 11) * .5, 13, 11)];
-        toTopView.contentMode = UIViewContentModeScaleAspectFit;
-        toTopView.image = [UIImage imageNamed:@"icon_arrow_top"];
-        [_backToTop addSubview:toTopView];
-        UILabel *toTopLabel = [[UILabel alloc] initWithFrame:CGRectMake(toTopView.right + 8, (_backToTop.height - toTopSize.height) * .5, toTopSize.width, toTopSize.height)];
-        toTopLabel.font = [UIFont systemFontOfSize:15];
-        toTopLabel.textColor = [UIColor whiteColor];
-        toTopLabel.text = toTopString;
-        [_backToTop addSubview:toTopLabel];
-    }
-    return _backToTop;
-}
-
-- (void)backToTopAction
-{
-    HomeTableViewController *homeTBC = _segmentVC.subViewControllers[_segmentVC.selectIndex - 10000];
-    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Refresh object:homeTBC.model.channelID];
-}
+//- (void)showBackToTopView
+//{
+//    if (![self.backToTop.superview isEqual:self.view]) {
+//        [self.view addSubview:self.backToTop];
+//        self.backToTop.alpha = 0;
+//        [UIView animateWithDuration:.3 animations:^{
+//            self.backToTop.alpha = 1;
+//        }];
+//    }
+//}
+//
+//- (void)removeBackToTopView
+//{
+//    [UIView animateWithDuration:.3 animations:^{
+//        self.backToTop.alpha = 0;
+//    } completion:^(BOOL finished) {
+//        [self.backToTop removeFromSuperview];
+//    }];
+//}
+//
+//#pragma mark - setter/getter
+//- (UIView *)backToTop
+//{
+//    if (_backToTop == nil) {
+//        _backToTop = [[UIView alloc] initWithFrame:CGRectMake(0, kScreenHeight - 64 - 43, kScreenWidth, 43)];
+//        _backToTop.backgroundColor = [UIColor colorWithRed:78 / 255.0 green:173 / 255.0 blue:240 / 255.0 alpha:.95];
+//        _backToTop.userInteractionEnabled = YES;
+//        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backToTopAction)];
+//        [_backToTop addGestureRecognizer:tap];
+//        NSString *toTopString = @"Get the latest stories";
+//        CGSize toTopSize = [toTopString calculateSize:CGSizeMake(300, 16) font:[UIFont systemFontOfSize:15]];
+//        UIImageView *toTopView = [[UIImageView alloc] initWithFrame:CGRectMake((kScreenWidth - 13 - 8 - toTopSize.width) * .5, (_backToTop.height - 11) * .5, 13, 11)];
+//        toTopView.contentMode = UIViewContentModeScaleAspectFit;
+//        toTopView.image = [UIImage imageNamed:@"icon_arrow_top"];
+//        [_backToTop addSubview:toTopView];
+//        UILabel *toTopLabel = [[UILabel alloc] initWithFrame:CGRectMake(toTopView.right + 8, (_backToTop.height - toTopSize.height) * .5, toTopSize.width, toTopSize.height)];
+//        toTopLabel.font = [UIFont systemFontOfSize:15];
+//        toTopLabel.textColor = [UIColor whiteColor];
+//        toTopLabel.text = toTopString;
+//        [_backToTop addSubview:toTopLabel];
+//    }
+//    return _backToTop;
+//}
+//
+//- (void)backToTopAction
+//{
+//    HomeTableViewController *homeTBC = _segmentVC.subViewControllers[_segmentVC.selectIndex - 10000];
+//    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Refresh object:homeTBC.model.channelID];
+//}
 
 #pragma mark - Notification
 /**
@@ -373,39 +415,6 @@ static CGFloat const ButtonHeight = 40;
 - (void)refresh_success
 {
     [_titleButton setUserInteractionEnabled:YES];
-}
-
-// 发现新频道
-- (void)findNewChannel
-{
-    DEF_PERSISTENT_SET_OBJECT(kHaveNewChannel, @1);
-    [self addRedPoint];
-}
-
-// 删除小红点
-- (void)cleanNewChannel
-{
-    DEF_PERSISTENT_SET_OBJECT(kHaveNewChannel, @0);
-    if ([DEF_PERSISTENT_GET_OBJECT(kHaveNewNotif) isEqualToNumber:@1]) {
-        return;
-    }
-    [self removeRedPoint];
-}
-    
-// 发现新通知
-- (void)findNewNotif
-{
-    DEF_PERSISTENT_SET_OBJECT(kHaveNewNotif, @1);
-    [self addRedPoint];
-}
-    
-- (void)cleanNewNotif
-{
-    DEF_PERSISTENT_SET_OBJECT(kHaveNewNotif, @0);
-    if ([DEF_PERSISTENT_GET_OBJECT(kHaveNewChannel) isEqualToNumber:@1]) {
-        return;
-    }
-    [self removeRedPoint];
 }
 
 /**
@@ -418,7 +427,6 @@ static CGFloat const ButtonHeight = 40;
         return;
     }
     
-    __weak typeof(self) weakSelf = self;
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     NSNumber *last_id = DEF_PERSISTENT_GET_OBJECT(kLastNotifID);
     if (last_id == nil) {
@@ -430,7 +438,7 @@ static CGFloat const ButtonHeight = 40;
         if (status && [status isEqualToString:@"1"]) {
             // 有新通知
             DEF_PERSISTENT_SET_OBJECT(kHaveNewNotif, @1);
-            [weakSelf addRedPoint];
+            [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_AddRedPoint object:nil];
         }
     } failure:^(NSError *error) {
         
@@ -443,20 +451,8 @@ static CGFloat const ButtonHeight = 40;
  */
 - (void)selectChannelAction
 {
-    [self removeBackToTopView];
+//    [self removeBackToTopView];
     [self checkNewNotif];
-}
-
-// 添加小红点
-- (void)addRedPoint
-{
-    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_AddRedPoint object:nil];
-}
-
-// 移除小红点
-- (void)removeRedPoint
-{
-    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_RemoveRedPoint object:nil];
 }
 
 - (void)didReceiveMemoryWarning {

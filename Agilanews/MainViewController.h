@@ -10,6 +10,7 @@
 
 @interface MainViewController : UITabBarController<UITabBarControllerDelegate>
 
+@property (nonatomic, assign) NSInteger index;
 + (instancetype)shareTabBarViewController;
 
 @end

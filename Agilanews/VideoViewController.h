@@ -7,7 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "BaseViewController.h"
+#import "SegmentViewController.h"
 
-@interface VideoViewController : UIViewController
+@interface VideoViewController : BaseViewController
+
+@property (nonatomic, strong) SegmentViewController *segmentVC;
+@property (nonatomic, strong) UIButton *titleButton;
+@property (nonatomic, strong) UIView *navView;
 
 @end

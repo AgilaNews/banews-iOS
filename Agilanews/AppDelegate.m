@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import "MainViewController.h"
 #import "HomeViewController.h"
+#import "VideoViewController.h"
 #import "BaseNavigationController.h"
 #import "AppDelegate+ShareSDK.h"
 #import "AppDelegate+LaunchAd.h"
@@ -306,80 +307,29 @@
 {
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setObject:version forKey:@"version"];
-    [[SSHttpRequest sharedInstance] get:kHomeUrl_Channel params:params contentType:UrlencodedType serverType:NetServer_Home success:^(id responseObj) {
+    [[SSHttpRequest sharedInstance] get:kHomeUrl_Channel params:params contentType:UrlencodedType serverType:NetServer_V3 success:^(id responseObj) {
         NSMutableArray *categoryArray = [NSMutableArray array];
-        for (NSDictionary *newDic in responseObj) {
-            CategoriesModel *categoriesModel = [CategoriesModel mj_objectWithKeyValues:newDic];
+        for (NSDictionary *dic in responseObj[@"home"]) {
+            CategoriesModel *categoriesModel = [CategoriesModel mj_objectWithKeyValues:dic];
             [categoryArray addObject:categoriesModel];
+        }
+        NSMutableArray *videoCategoryArray = [NSMutableArray array];
+        for (NSDictionary *dic in responseObj[@"video"]) {
+            CategoriesModel *categoriesModel = [CategoriesModel mj_objectWithKeyValues:dic];
+            [videoCategoryArray addObject:categoriesModel];
         }
         if (isFirst) {
             // 首次安装无频道
             _categoriesArray = categoryArray;
+            _videoCategories = videoCategoryArray;
             [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Categories object:version];
         } else {
-            NSMutableArray *newArray = [NSMutableArray array];
-            // 查找是否有新频道
-            for (CategoriesModel *newModel in categoryArray) {
-                BOOL isNew = YES;
-                for (CategoriesModel *model in _categoriesArray) {
-                    if ([newModel.channelID isEqualToNumber:model.channelID]) {
-                        isNew = NO;
-                        break;
-                    }
-                }
-                if (isNew) {
-                    // 发现新频道
-                    newModel.isNew = YES;
-                    [newArray addObject:newModel];
-                }
-            }
-            // 插入新频道
-            for (CategoriesModel *newModel in newArray) {
-                [_categoriesArray insertObject:newModel atIndex:newModel.index.integerValue];
-            }
-            if (newArray.count > 0) {
-                [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_FindNewChannel object:nil];
-            }
-            // 查找是否有删除频道
-            NSMutableArray *deleteArray = [NSMutableArray array];
-            for (CategoriesModel *model in _categoriesArray) {
-                BOOL isHave = NO;
-                for (CategoriesModel *newModel in categoryArray) {
-                    if ([newModel.channelID isEqualToNumber:model.channelID]) {
-                        isHave = YES;
-                        break;
-                    }
-                }
-                if (!isHave) {
-                    // 发现删除频道
-                    [deleteArray addObject:model];
-                }
-            }
-            // 删除频道
-            if (deleteArray.count <= 3) {
-                for (CategoriesModel *model in deleteArray) {
-                    [_categoriesArray removeObject:model];
-                }
-            }
-            if (newArray.count > 0 || deleteArray.count > 0) {
-                [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Categories object:version];
-                return;
-            }
-            // 判断是否有调整顺序
-            if (_categoriesArray.count == categoryArray.count) {
-                for (int i = 0; i < _categoriesArray.count; i++) {
-                    CategoriesModel *model = _categoriesArray[i];
-                    CategoriesModel *newModel = categoryArray[i];
-                    if (![model.channelID isEqualToNumber:newModel.channelID]) {
-                        _categoriesArray = categoryArray;
-                        [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Categories object:version];
-                    }
-                }
-            }
+            [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_UpdateCategories
+                                                                object:@{@"version" : version,
+                                                                         @"category" : categoryArray,
+                                                                         @"videoCategory" : videoCategoryArray}];
         }
-    } failure:^(NSError *error) {
-        
-    } isShowHUD:NO];
+    } failure:nil isShowHUD:NO];
 }
 
 #pragma mark - Notifications
@@ -756,9 +706,12 @@
                 referrerID = [[NSUUID UUID] UUIDString];
                 [self uploadReferrerWithReferrerID:referrerID];
             }
-            // 加载频道列表
+            // 加载首页频道列表
             NSString *categoryFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/category.data"];
             _categoriesArray = [NSKeyedUnarchiver unarchiveObjectWithFile:categoryFilePath];
+            // 加载视频频道列表
+            NSString *videoCategoryFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/videoCategory.data"];
+            _videoCategories = [NSKeyedUnarchiver unarchiveObjectWithFile:videoCategoryFilePath];
             // 加载登录信息
             NSString *loginFilePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/userinfo.data"];
             _model = [NSKeyedUnarchiver unarchiveObjectWithFile:loginFilePath];
@@ -950,6 +903,36 @@
         // 缓存新闻列表
         NSMutableDictionary *newsDic = [NSMutableDictionary dictionary];
         for (HomeTableViewController *homeTabVC in homeVC.segmentVC.subViewControllers) {
+            if (homeTabVC.dataList.count > 0) {
+                // 有新数据
+                NSInteger length = 30;
+                if (homeTabVC.dataList.count > length) {
+                    NSMutableArray *listArray = [NSMutableArray arrayWithArray:[homeTabVC.dataList subarrayWithRange:NSMakeRange(0, length)]];
+                    for (NewsModel *model in [listArray copy]) {
+                        if (model && [model isKindOfClass:[NewsModel class]] && model.nativeAd) {
+                            [listArray removeObject:model];
+                        }
+                    }
+                    [newsDic setObject:listArray forKey:homeTabVC.model.channelID];
+                } else {
+                    NSMutableArray *listArray = [NSMutableArray arrayWithArray:homeTabVC.dataList];
+                    for (NewsModel *model in [listArray copy]) {
+                        if (model && [model isKindOfClass:[NewsModel class]] && model.nativeAd) {
+                            [listArray removeObject:model];
+                        }
+                    }
+                    [newsDic setObject:listArray forKey:homeTabVC.model.channelID];
+                }
+            } else {
+                // 无新数据
+                NSArray *dataList = oldNewsData[oldNewsDataKey][homeTabVC.model.channelID];
+                if (dataList.count) {
+                    [newsDic setObject:dataList forKey:homeTabVC.model.channelID];
+                }
+            }
+        }
+        VideoViewController *videoVC = [navCtrl.jt_viewControllers objectAtIndex:1];
+        for (HomeTableViewController *homeTabVC in videoVC.segmentVC.subViewControllers) {
             if (homeTabVC.dataList.count > 0) {
                 // 有新数据
                 NSInteger length = 30;

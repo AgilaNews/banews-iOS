@@ -57,7 +57,7 @@
                                                  name:KNOTIFICATION_Login_Success
                                                object:nil];
     // 发送通知
-    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_CleanNewNotif
+    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_RemoveRedPoint
                                                         object:nil];
 }
 

@@ -141,7 +141,8 @@
     if (![DEF_PERSISTENT_GET_OBJECT(SS_GuideCnlKey) isEqualToNumber:@1]) {
         [[UIApplication sharedApplication].keyWindow addSubview:[GuideChannelView sharedInstance]];
     }
-    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_CleanNewChannel object:nil];
+    DEF_PERSISTENT_SET_OBJECT(kHaveNewChannel, @0);
+    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_RemoveRedPoint object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated

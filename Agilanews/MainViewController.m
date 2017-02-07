@@ -39,6 +39,10 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addRedPoint) name:KNOTIFICATION_AddRedPoint object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(removeRedPoint) name:KNOTIFICATION_RemoveRedPoint object:nil];
+
+    if ([DEF_PERSISTENT_GET_OBJECT(kHaveNewChannel) isEqual:@1] || [DEF_PERSISTENT_GET_OBJECT(kHaveNewNotif) isEqual:@1]) {
+        [self addRedPoint];
+    }
 }
 
 - (void)dealloc
@@ -101,11 +105,20 @@
         item.image = [[UIImage imageNamed:imageNames[i]] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
 //        item.imageInsets = UIEdgeInsetsMake(6, 0, -6, 0);
     }
+    self.index = 0;
 }
 
 #pragma mark -标签栏代理方法
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
 {
+    JTNavigationController *navCtrl = (JTNavigationController *)viewController;
+    if ([navCtrl.jt_viewControllers.firstObject isKindOfClass:[HomeViewController class]]) {
+        self.index = 0;
+    } else if ([navCtrl.jt_viewControllers.firstObject isKindOfClass:[VideoViewController class]]) {
+        self.index = 1;
+    } else if ([navCtrl.jt_viewControllers.firstObject isKindOfClass:[MeViewController class]]) {
+        self.index = 2;
+    }
 //    if ([viewController isKindOfClass:[UINavigationController class]]) {
 //        [(UINavigationController *)viewController popToRootViewControllerAnimated:NO];
 //    }
@@ -132,7 +145,11 @@
 }
 - (void)removeRedPoint
 {
-    [self.tabBar.subviews.lastObject removeAllSubviews];
+    if (![DEF_PERSISTENT_GET_OBJECT(kHaveNewNotif) isEqualToNumber:@1] && ![DEF_PERSISTENT_GET_OBJECT(kHaveNewChannel) isEqualToNumber:@1]) {
+        DEF_PERSISTENT_SET_OBJECT(kHaveNewNotif, @0);
+        DEF_PERSISTENT_SET_OBJECT(kHaveNewChannel, @0);
+        [self.tabBar.subviews.lastObject removeAllSubviews];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
