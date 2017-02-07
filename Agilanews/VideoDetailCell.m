@@ -94,7 +94,10 @@
     [super layoutSubviews];
     
     __weak typeof(self) weakSelf = self;
-    CGSize titleLabelSize = [_model.title calculateSize:CGSizeMake(kScreenWidth - 22, 80) font:self.titleLabel.font];
+    NSString *titleString = [_model.title stringByReplacingOccurrencesOfString:@"<font>" withString:@""];
+    titleString = [titleString stringByReplacingOccurrencesOfString:@"</font>" withString:@""];
+
+    CGSize titleLabelSize = [titleString calculateSize:CGSizeMake(kScreenWidth - 22, 80) font:self.titleLabel.font];
     [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(11);
         make.top.mas_equalTo(11);
@@ -155,7 +158,7 @@
     }];
     [super updateConstraints];
 
-    self.titleLabel.text = _model.title;
+    self.titleLabel.text = titleString;
     self.sourceLabel.text = _model.source;
     self.watchLabel.text = views;
     self.contentLabel.text = model.content;
