@@ -350,7 +350,7 @@
     [[SSHttpRequest sharedInstance] post:kHomeUrl_Collect params:paramsArray contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
         if (dataList.count >= 10) {
             NSMutableArray *newsIDs = [NSMutableArray array];
-            for (LocalFavorite *localFavorite in dataList) {
+            for (LocalFavorite *localFavorite in favoritesArray) {
                 NewsModel *model = (NewsModel *)localFavorite.news_model;
                 [newsIDs addObject:model.news_id];
             }
@@ -358,7 +358,7 @@
             [weakSelf uploadFavoritesWithDataList:dataList];
         } else {
             NSMutableArray *newsIDs = [NSMutableArray array];
-            for (LocalFavorite *localFavorite in dataList) {
+            for (LocalFavorite *localFavorite in favoritesArray) {
                 NewsModel *model = (NewsModel *)localFavorite.news_model;
                 [newsIDs addObject:model.news_id];
             }
