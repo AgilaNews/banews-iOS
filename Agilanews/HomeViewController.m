@@ -11,6 +11,7 @@
 #import "HomeTableViewController.h"
 #import "CategoriesModel.h"
 #import "SearchViewController.h"
+#import "MainViewController.h"
 
 static CGFloat const ButtonHeight = 40;
 
@@ -388,7 +389,7 @@ static CGFloat const ButtonHeight = 40;
     if ([DEF_PERSISTENT_GET_OBJECT(kHaveNewNotif) isEqualToNumber:@1]) {
         return;
     }
-    [_redPoint removeFromSuperview];
+    [self removeRedPoint];
 }
     
 // 发现新通知
@@ -404,7 +405,7 @@ static CGFloat const ButtonHeight = 40;
     if ([DEF_PERSISTENT_GET_OBJECT(kHaveNewChannel) isEqualToNumber:@1]) {
         return;
     }
-    [_redPoint removeFromSuperview];
+    [self removeRedPoint];
 }
 
 /**
@@ -449,13 +450,13 @@ static CGFloat const ButtonHeight = 40;
 // 添加小红点
 - (void)addRedPoint
 {
-//    if (!_redPoint) {
-//        _redPoint = [[UIView alloc] initWithFrame:CGRectMake(_leftButton.right - 15, _leftButton.top + 10, 6, 6)];
-//        _redPoint.backgroundColor = SSColor(233, 51, 17);
-//        _redPoint.layer.cornerRadius = 3;
-//        _redPoint.layer.masksToBounds = YES;
-//    }
-//    [_leftButton addSubview:_redPoint];
+    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_AddRedPoint object:nil];
+}
+
+// 移除小红点
+- (void)removeRedPoint
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_RemoveRedPoint object:nil];
 }
 
 - (void)didReceiveMemoryWarning {

@@ -18,7 +18,6 @@
 @property (nonatomic, strong) UIView *navView;
 @property (nonatomic, strong) UIButton *titleButton;
 //@property (nonatomic, strong) UIButton *leftButton;
-@property (nonatomic, strong) UIView *redPoint;
 @property (nonatomic, strong) UIView *backToTop;
 
 - (void)showBackToTopView;

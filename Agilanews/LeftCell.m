@@ -15,17 +15,25 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         self.backgroundColor = [UIColor whiteColor];
+        self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         _titleImageView = [[UIImageView alloc] initWithFrame:CGRectMake(12, (self.height - 18) * .5, 18, 18)];
         _titleImageView.backgroundColor = [UIColor whiteColor];
         [self.contentView addSubview:_titleImageView];
         
-        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(isHave ? 49 : 13, _titleImageView.top, 150, 18)];
+        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(isHave ? 47 : 13, _titleImageView.top, kScreenWidth - 47 * 2, 18)];
         _titleLabel.backgroundColor = [UIColor whiteColor];
         _titleLabel.textColor = kBlackColor;
-        _titleLabel.font = [UIFont systemFontOfSize:14];
+        _titleLabel.font = [UIFont systemFontOfSize:16];
         [self.contentView addSubview:_titleLabel];
     }
     return self;
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    _titleImageView.top = (self.height - 18) * .5;
+    _titleLabel.top = _titleImageView.top;
 }
 
 - (void)awakeFromNib {

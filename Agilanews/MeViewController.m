@@ -21,6 +21,9 @@
 #define Twitter    201
 #define GooglePuls 202
 
+#define SectionHeaderHeight 8
+#define RowHeight 48
+
 @interface MeViewController ()
 
 @end
@@ -45,6 +48,7 @@
         }
     }
     self.navigationController.navigationBar.shadowImage = [UIImage new];
+    self.view.backgroundColor = kWhiteBgColor;
     self.automaticallyAdjustsScrollViewInsets = NO;
     
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight - 49) style:UITableViewStylePlain];
@@ -53,45 +57,47 @@
     _tableView.showsVerticalScrollIndicator = NO;
     _tableView.dataSource = self;
     _tableView.delegate = self;
-    _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    _tableView.separatorInset = UIEdgeInsetsMake(0, 45, 0, 0);
     [self.view addSubview:_tableView];
     
-    _headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, (kScreenHeight - 49) * .28)];
+    _headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 190 * kScreenHeight / 568.0)];
     _headerView.backgroundColor = kOrangeColor;
     
     _avatarButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    _avatarButton.frame = CGRectMake(12, (_headerView.height - 9 - 18 - 57) * .5, 57, 57);
-    _avatarButton.layer.cornerRadius = 57 * .5;
-    _avatarButton.layer.borderColor = SSColor_RGB(235).CGColor;
+    _avatarButton.frame = CGRectMake((kScreenWidth - 80) * .5, (_headerView.height - 10 - 20 - 80) * .5, 80, 80);
+    _avatarButton.layer.cornerRadius = 80 * .5;
+    _avatarButton.layer.borderColor = SSColor(255, 189, 113).CGColor;
     _avatarButton.layer.borderWidth = 1;
     _avatarButton.layer.masksToBounds = YES;
     [_avatarButton addTarget:self action:@selector(enterUserInfo) forControlEvents:UIControlEventTouchUpInside];
     [_headerView addSubview:_avatarButton];
     
     for (int i = 0; i < 3; i++) {
+        float leftSide = (kScreenWidth - 60 * 3 - 37 * 2) * .5;
         UIButton *loginButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        loginButton.frame = CGRectMake(12 + (50 + 18) * i, (_headerView.height - 9 - 18 - 50) * .5, 50, 50);
+        loginButton.frame = CGRectMake(leftSide + (60 + 37) * i, (_headerView.height - 25 - 20 - 60) * .5, 60, 60);
         loginButton.tag = 200 + i;
         [loginButton addTarget:self action:@selector(loginAction:) forControlEvents:UIControlEventTouchUpInside];
         [_headerView addSubview:loginButton];
         switch (i) {
             case 0:
-                [loginButton setImage:[UIImage imageNamed:@"icon_login_facebook"] forState:UIControlStateNormal];
+                [loginButton setImage:[UIImage imageNamed:@"icon_facebook_white"] forState:UIControlStateNormal];
                 break;
             case 1:
-                [loginButton setImage:[UIImage imageNamed:@"icon_login_twitter"] forState:UIControlStateNormal];
+                [loginButton setImage:[UIImage imageNamed:@"icon_twitter_white"] forState:UIControlStateNormal];
                 break;
             case 2:
-                [loginButton setImage:[UIImage imageNamed:@"icon_login_google"] forState:UIControlStateNormal];
+                [loginButton setImage:[UIImage imageNamed:@"icon_google_white"] forState:UIControlStateNormal];
                 break;
             default:
                 break;
         }
     }
-    _loginLabel = [[UILabel alloc] initWithFrame:CGRectMake(12, _headerView.height - 9 - 18, kScreenWidth - 24, 18)];
-    _loginLabel.backgroundColor = [UIColor whiteColor];
-    _loginLabel.font = [UIFont boldSystemFontOfSize:17];
-    _loginLabel.textColor = kOrangeColor;
+    _loginLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, (_headerView.height - 25 - 20 - 60) * .5 + 60 + 25, kScreenWidth, 20)];
+    _loginLabel.backgroundColor = kOrangeColor;
+    _loginLabel.font = [UIFont boldSystemFontOfSize:18];
+    _loginLabel.textColor = [UIColor whiteColor];
+    _loginLabel.textAlignment = NSTextAlignmentCenter;
     [_headerView addSubview:_loginLabel];
     
     _appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
@@ -115,13 +121,13 @@
             button.hidden = NO;
             switch (i) {
                 case 0:
-                    [button setImage:[UIImage imageNamed:@"icon_login_facebook"] forState:UIControlStateNormal];
+                    [button setImage:[UIImage imageNamed:@"icon_facebook_white"] forState:UIControlStateNormal];
                     break;
                 case 1:
-                    [button setImage:[UIImage imageNamed:@"icon_login_twitter"] forState:UIControlStateNormal];
+                    [button setImage:[UIImage imageNamed:@"icon_twitter_white"] forState:UIControlStateNormal];
                     break;
                 case 2:
-                    [button setImage:[UIImage imageNamed:@"icon_login_google"] forState:UIControlStateNormal];
+                    [button setImage:[UIImage imageNamed:@"icon_google_white"] forState:UIControlStateNormal];
                     break;
                 default:
                     break;
@@ -131,10 +137,19 @@
         _loginLabel.text = @"Click to Log in";
     }
     _tableView.tableHeaderView = _headerView;
-    _tableView.tableFooterView = [UIView new];
+    float footerViewHeight = 0;
+    if (iPhone4) {
+        footerViewHeight = 8;
+    } else {
+        footerViewHeight = kScreenHeight - 49 - _headerView.height - RowHeight * 7 - SectionHeaderHeight;
+    }
+    UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, footerViewHeight)];
+    footerView.backgroundColor = [UIColor whiteColor];
+    _tableView.tableFooterView = footerView;
     
     // 注册通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginSuccess) name:KNOTIFICATION_Login_Success object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userLogOut) name:KNOTIFICATION_Logout_Success object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -176,98 +191,88 @@
 }
 
 #pragma mark - UITableViewDataSource
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return 2;
-}
+//- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+//{
+//    return 2;
+//}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section == 0) {
-        return 5;
-    }
-    return 2;
+    return 7;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 6;
+    return SectionHeaderHeight;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    return 6;
-}
+//- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+//{
+//    return SectionHeaderHeight;
+//}
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 6)];
-    view.backgroundColor = [UIColor whiteColor];
-    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 1)];
-    lineView.backgroundColor = SSColor_RGB(217);
-    [view addSubview:lineView];
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, SectionHeaderHeight)];
+    view.backgroundColor = SSColor_RGB(238);
+//    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 1)];
+//    lineView.backgroundColor = SSColor_RGB(217);
+//    [view addSubview:lineView];
     return view;
 }
 
-- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
-{
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 6)];
-    view.backgroundColor = [UIColor whiteColor];
-    return view;
-}
+//- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+//{
+//    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, SectionHeaderHeight)];
+//    view.backgroundColor = SSColor_RGB(238);
+//    return view;
+//}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 45;
+    return RowHeight;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    LeftCell *cell = nil;
-    if (indexPath.section == 0) {
-        cell = [[LeftCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"leftCell" HaveImage:YES];
-        switch (indexPath.row) {
-            case 0:
-                cell.titleImageView.image = [UIImage imageNamed:@"icon_notification"];
-                cell.titleLabel.text = @"Notification";
-                if ([DEF_PERSISTENT_GET_OBJECT(kHaveNewNotif) isEqual:@1]) {
-                    [self addRedPointWithLable:cell.titleLabel Index:indexPath.row];
-                }
-                break;
-            case 1:
-                cell.titleImageView.image = [UIImage imageNamed:@"icon_sidebar_interest"];
-                cell.titleLabel.text = @"Interests";
-                break;
-            case 2:
-                cell.titleImageView.image = [UIImage imageNamed:@"icon_sidebar_channel"];
-                cell.titleLabel.text = @"Channels";
-                if ([DEF_PERSISTENT_GET_OBJECT(kHaveNewChannel) isEqual:@1]) {
-                    [self addRedPointWithLable:cell.titleLabel Index:indexPath.row];
-                }
-                break;
-            case 3:
-                cell.titleImageView.image = [UIImage imageNamed:@"icon_sidebar_favorites"];
-                cell.titleLabel.text = @"Favorites";
-                break;
-            case 4:
-                cell.titleImageView.image = [UIImage imageNamed:@"icon_facebook"];
-                cell.titleLabel.text = @"Follow us on Facebook";
-                break;
-            default:
-                break;
-        }
-    } else {
-        cell = [[LeftCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"leftCell" HaveImage:NO];
-        switch (indexPath.row) {
-            case 0:
-                cell.titleLabel.text = @"Feedback";
-                break;
-            case 1:
-                cell.titleLabel.text = @"Settings";
-                break;
-            default:
-                break;
-        }
+    LeftCell *cell = [[LeftCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"leftCell" HaveImage:YES];
+    switch (indexPath.row) {
+        case 0:
+            cell.titleImageView.image = [UIImage imageNamed:@"icon_notification"];
+            cell.titleLabel.text = @"Notification";
+            if ([DEF_PERSISTENT_GET_OBJECT(kHaveNewNotif) isEqual:@1]) {
+                [self addRedPointWithLable:cell.titleLabel Index:indexPath.row];
+            }
+            break;
+        case 1:
+            cell.titleImageView.image = [UIImage imageNamed:@"icon_sidebar_interest"];
+            cell.titleLabel.text = @"Interests";
+            break;
+        case 2:
+            cell.titleImageView.image = [UIImage imageNamed:@"icon_sidebar_channel"];
+            cell.titleLabel.text = @"Channels";
+            if ([DEF_PERSISTENT_GET_OBJECT(kHaveNewChannel) isEqual:@1]) {
+                [self addRedPointWithLable:cell.titleLabel Index:indexPath.row];
+            }
+            break;
+        case 3:
+            cell.titleImageView.image = [UIImage imageNamed:@"icon_sidebar_favorites"];
+            cell.titleLabel.text = @"Favorites";
+            break;
+        case 4:
+            cell.titleImageView.image = [UIImage imageNamed:@"icon_facebook"];
+            cell.titleLabel.text = @"Follow us on Facebook";
+            break;
+        case 5:
+            cell.titleImageView.image = [UIImage imageNamed:@"icon_sidebar_feedback"];
+            cell.titleLabel.text = @"Feedback";
+            break;
+        case 6:
+            cell.titleImageView.image = [UIImage imageNamed:@"icon_sidebar_settings"];
+            cell.titleLabel.text = @"Settings";
+            break;
+        default:
+            break;
     }
     return cell;
 }
@@ -275,114 +280,116 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if (indexPath.section == 0) {
-        switch (indexPath.row) {
-            case 0:
-            {
-                // 打点-点击通知按钮-010409
-                [Flurry logEvent:@"Menu_Notification_Click"];
-                // 服务器打点-notification点击-050105
-                NSMutableDictionary *eventDic = [NSMutableDictionary dictionary];
-                [eventDic setObject:@"050105" forKey:@"id"];
-                [eventDic setObject:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970] * 1000] forKey:@"time"];
-                [eventDic setObject:[NetType getNetType] forKey:@"net"];
-                if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
-                    [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) forKey:@"lng"];
-                    [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) forKey:@"lat"];
-                } else {
-                    [eventDic setObject:@"" forKey:@"lng"];
-                    [eventDic setObject:@"" forKey:@"lat"];
-                }
-                NSString *abflag = DEF_PERSISTENT_GET_OBJECT(@"abflag");
-                if (abflag && abflag.length > 0) {
-                    [eventDic setObject:abflag forKey:@"abflag"];
-                }
-                NSDictionary *sessionDic = [NSDictionary dictionaryWithObjectsAndKeys:
-                                            DEF_PERSISTENT_GET_OBJECT(@"UUID"), @"id",
-                                            [NSArray arrayWithObject:eventDic], @"events",
-                                            nil];
-                NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObject:[NSArray arrayWithObject:sessionDic] forKey:@"sessions"];
-                [[SSHttpRequest sharedInstance] post:@"" params:params contentType:JsonType serverType:NetServer_Log success:^(id responseObj) {
-                    // 打点成功
-                } failure:^(NSError *error) {
-                    // 打点失败
-                    [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
-                    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-                    [appDelegate.eventArray addObject:eventDic];
-                } isShowHUD:NO];
-                // 点击Notification
-                NotificationViewController *notifVC = [[NotificationViewController alloc] init];
-                notifVC.hidesBottomBarWhenPushed = YES;
-                [self.navigationController pushViewController:notifVC animated:YES];
-                break;
+    switch (indexPath.row) {
+        case 0:
+        {
+            // 打点-点击通知按钮-010409
+            [Flurry logEvent:@"Menu_Notification_Click"];
+            // 服务器打点-notification点击-050105
+            NSMutableDictionary *eventDic = [NSMutableDictionary dictionary];
+            [eventDic setObject:@"050105" forKey:@"id"];
+            [eventDic setObject:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970] * 1000] forKey:@"time"];
+            [eventDic setObject:[NetType getNetType] forKey:@"net"];
+            if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
+                [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) forKey:@"lng"];
+                [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) forKey:@"lat"];
+            } else {
+                [eventDic setObject:@"" forKey:@"lng"];
+                [eventDic setObject:@"" forKey:@"lat"];
             }
-            case 1:
-            {
-                // 点击兴趣
-                InterestsViewController *interestVC = [[InterestsViewController alloc] init];
-                interestVC.hidesBottomBarWhenPushed = YES;
-                [self.navigationController pushViewController:interestVC animated:YES];
-                break;
+            NSString *abflag = DEF_PERSISTENT_GET_OBJECT(@"abflag");
+            if (abflag && abflag.length > 0) {
+                [eventDic setObject:abflag forKey:@"abflag"];
             }
-            case 2:
-            {
-                // 打点-点击频道-010407
-                [Flurry logEvent:@"Menu_Channels_Click"];
-                // 点击Channels
-                ChannelViewController *channelVC = [[ChannelViewController alloc] init];
-                channelVC.hidesBottomBarWhenPushed = YES;
-                [self.navigationController pushViewController:channelVC animated:YES];
-                break;
-            }
-            case 3:
-            {
-                // 打点-点击收藏-010403
-                [Flurry logEvent:@"Info_Icon_Click"];
-                // 点击Favorites
-                FavoritesViewController *favoritesVC = [[FavoritesViewController alloc] init];
-                favoritesVC.hidesBottomBarWhenPushed = YES;
-                [self.navigationController pushViewController:favoritesVC animated:YES];
-                break;
-            }
-            case 4:
-            {
-                // 点击Follow
-                NSURL *facebookURL = [NSURL URLWithString:@"fb://profile/1037705142944222"];
-                if ([[UIApplication sharedApplication] canOpenURL:facebookURL]) {
-                    [[UIApplication sharedApplication] openURL:facebookURL];
-                } else {
-                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://www.facebook.com/AgilaBuzz/?fref=ts"]];
-                }
-                break;
-            }
-            default:
-                break;
+            NSDictionary *sessionDic = [NSDictionary dictionaryWithObjectsAndKeys:
+                                        DEF_PERSISTENT_GET_OBJECT(@"UUID"), @"id",
+                                        [NSArray arrayWithObject:eventDic], @"events",
+                                        nil];
+            NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObject:[NSArray arrayWithObject:sessionDic] forKey:@"sessions"];
+            [[SSHttpRequest sharedInstance] post:@"" params:params contentType:JsonType serverType:NetServer_Log success:^(id responseObj) {
+                // 打点成功
+            } failure:^(NSError *error) {
+                // 打点失败
+                [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
+                AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+                [appDelegate.eventArray addObject:eventDic];
+            } isShowHUD:NO];
+            // 点击Notification
+            NotificationViewController *notifVC = [[NotificationViewController alloc] init];
+            notifVC.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:notifVC animated:YES];
+            break;
         }
+        case 1:
+        {
+            // 点击兴趣
+            InterestsViewController *interestVC = [[InterestsViewController alloc] init];
+            interestVC.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:interestVC animated:YES];
+            break;
+        }
+        case 2:
+        {
+            // 打点-点击频道-010407
+            [Flurry logEvent:@"Menu_Channels_Click"];
+            // 点击Channels
+            ChannelViewController *channelVC = [[ChannelViewController alloc] init];
+            channelVC.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:channelVC animated:YES];
+            break;
+        }
+        case 3:
+        {
+            // 打点-点击收藏-010403
+            [Flurry logEvent:@"Info_Icon_Click"];
+            // 点击Favorites
+            FavoritesViewController *favoritesVC = [[FavoritesViewController alloc] init];
+            favoritesVC.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:favoritesVC animated:YES];
+            break;
+        }
+        case 4:
+        {
+            // 点击Follow
+            NSURL *facebookURL = [NSURL URLWithString:@"fb://profile/1037705142944222"];
+            if ([[UIApplication sharedApplication] canOpenURL:facebookURL]) {
+                [[UIApplication sharedApplication] openURL:facebookURL];
+            } else {
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://www.facebook.com/AgilaBuzz/?fref=ts"]];
+            }
+            break;
+        }
+        case 5:
+        {
+            // 打点-点击反馈-010404
+            [Flurry logEvent:@"Menu_FeedbackButton_Click"];
+            // 点击Feedback
+            FeedbackViewController *feedbackVC = [[FeedbackViewController alloc] init];
+            feedbackVC.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:feedbackVC animated:YES];
+            break;
+        }
+        case 6:
+        {
+            // 打点-点击设置-010406
+            [Flurry logEvent:@"Menu_SetButton_Click"];
+            // 点击Settings
+            SettingsViewController *settingsVC = [[SettingsViewController alloc] init];
+            settingsVC.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:settingsVC animated:YES];
+            break;
+        }
+        default:
+            break;
+    }
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if (scrollView.contentOffset.y < 0) {
+        self.tableView.backgroundColor = kOrangeColor;
     } else {
-        switch (indexPath.row) {
-            case 0:
-            {
-                // 打点-点击反馈-010404
-                [Flurry logEvent:@"Menu_FeedbackButton_Click"];
-                // 点击Feedback
-                FeedbackViewController *feedbackVC = [[FeedbackViewController alloc] init];
-                feedbackVC.hidesBottomBarWhenPushed = YES;
-                [self.navigationController pushViewController:feedbackVC animated:YES];
-                break;
-            }
-            case 1:
-            {
-                // 打点-点击设置-010406
-                [Flurry logEvent:@"Menu_SetButton_Click"];
-                // 点击Settings
-                SettingsViewController *settingsVC = [[SettingsViewController alloc] init];
-                settingsVC.hidesBottomBarWhenPushed = YES;
-                [self.navigationController pushViewController:settingsVC animated:YES];
-                break;
-            }
-            default:
-                break;
-        }
+        self.tableView.backgroundColor = [UIColor whiteColor];
     }
 }
 
@@ -575,6 +582,10 @@
  */
 - (void)loginSuccess
 {
+    for (int i = 0; i < 3; i++) {
+        UIButton *button = [_headerView viewWithTag:200 + i];
+        button.hidden = YES;
+    }
     _avatarButton.hidden = NO;
     _loginLabel.text = self.appDelegate.model.name;
     [_avatarButton sd_setImageWithURL:[NSURL URLWithString:_appDelegate.model.portrait] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"icon_sidebar_head"] options:SDWebImageLowPriority | SDWebImageRetryFailed completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
@@ -614,18 +625,18 @@
 
 - (void)addRedPointWithLable:(UILabel *)label Index:(NSInteger)index
 {
-    NSInteger right = 0;
-    switch (index) {
-        case 0:
-            right = 120;
-            break;
-        case 1:
-            right = 140;
-            break;
-        default:
-            break;
-    }
-    UIView *redPoint = [[UIView alloc] initWithFrame:CGRectMake(label.right - right, label.top - 10, 5, 5)];
+//    NSInteger right = 0;
+//    switch (index) {
+//        case 0:
+//            right = 120;
+//            break;
+//        case 1:
+//            right = 140;
+//            break;
+//        default:
+//            break;
+//    }
+    UIView *redPoint = [[UIView alloc] initWithFrame:CGRectMake(label.width + 5, label.height * .5 - 5 * .5, 5, 5)];
     redPoint.backgroundColor = SSColor(233, 51, 17);
     redPoint.layer.cornerRadius = 2.5;
     redPoint.layer.masksToBounds = YES;

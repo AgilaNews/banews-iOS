@@ -36,6 +36,14 @@
     [self _initViewControllers];
     // 初始化标签栏
     [self _initTabBarView];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addRedPoint) name:KNOTIFICATION_AddRedPoint object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(removeRedPoint) name:KNOTIFICATION_RemoveRedPoint object:nil];
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 // 初始化视图控制器
@@ -68,10 +76,10 @@
     self.tabBar.barTintColor = [UIColor whiteColor];
     self.tabBar.tintColor = [UIColor whiteColor];
     
-    [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:SSColor_RGB(102),
-                                                       NSForegroundColorAttributeName, nil] forState:UIControlStateNormal];
-    [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:kOrangeColor,
-                                                       NSForegroundColorAttributeName, nil] forState:UIControlStateSelected];
+    [[UITabBarItem appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : SSColor_RGB(102),
+                                                        NSFontAttributeName : [UIFont systemFontOfSize:11]} forState:UIControlStateNormal];
+    [[UITabBarItem appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : kOrangeColor,
+                                                        NSFontAttributeName : [UIFont systemFontOfSize:11]} forState:UIControlStateSelected];
     
     // 定义标签栏图片数组
     NSArray *titles = @[@"Home",
@@ -111,6 +119,20 @@
 //    keyFrame.keyTimes = @[@.1,@.3,@.5,@.7,@.85,@.95,@1.0];
 //    // 添加关键帧动画
 //    [[[[self.tabBar subviews] objectAtIndex:tabBarController.selectedIndex + 1] layer] addAnimation:keyFrame forKey:@"keyFrame"];
+}
+
+- (void)addRedPoint
+{
+    float side = (kScreenWidth / 3.0) / 2.0 + 10;
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(side, 5, 6, 6)];
+    view.backgroundColor = SSColor(233, 51, 17);
+    view.layer.cornerRadius = 3;
+    view.layer.masksToBounds = YES;
+    [self.tabBar.subviews.lastObject addSubview:view];
+}
+- (void)removeRedPoint
+{
+    [self.tabBar.subviews.lastObject removeAllSubviews];
 }
 
 - (void)didReceiveMemoryWarning {

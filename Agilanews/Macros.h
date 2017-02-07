@@ -101,6 +101,7 @@
 #define KNOTIFICATION_Refresh         @"KNOTIFICATION_Refresh"        // 首页刷新按钮通知
 #define KNOTIFICATION_Refresh_Success @"KNOTIFICATION_Refresh_Success"// 首页刷新成功通知
 #define KNOTIFICATION_Login_Success   @"KNOTIFICATION_Login_Success"  // 第三方登录成功通知
+#define KNOTIFICATION_Logout_Success  @"KNOTIFICATION_Logout_Success" // 退出登录通知
 #define KNOTIFICATION_Secect_Channel  @"KNOTIFICATION_Secect_Channel" // 选中频道通知
 #define KNOTIFICATION_Scroll_Channel  @"KNOTIFICATION_Scroll_Channel" // 滑动频道通知
 #define KNOTIFICATION_TextOnly_ON     @"KNOTIFICATION_TextOnly_ON"    // 无图模式开启通知
@@ -116,7 +117,8 @@
 #define KNOTIFICATION_FindNewNotif    @"KNOTIFICATION_FindNewNotif"   // 发现新频道通知
 #define KNOTIFICATION_CleanNewNotif   @"KNOTIFICATION_CleanNewNotif"  // 删除新频道通知
 #define KNOTIFICATION_CheckNewNotif   @"KNOTIFICATION_CheckNewNotif"  // 检查新频道通知
-
+#define KNOTIFICATION_AddRedPoint     @"KNOTIFICATION_AddRedPoint"    // 添加小红点通知
+#define KNOTIFICATION_RemoveRedPoint  @"KNOTIFICATION_RemoveRedPoint" // 移除小红点通知
 
 
 // 刷新成功提示banner
