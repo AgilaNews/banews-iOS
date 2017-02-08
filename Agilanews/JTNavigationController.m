@@ -91,7 +91,7 @@ static NSValue *jt_tabBarRectValue;
     [super viewDidAppear:animated];
     
     if (self.tabBarController && [self rootViewController].hidesBottomBarWhenPushed) {
-        self.tabBarController.tabBar.frame = CGRectZero;
+//        self.tabBarController.tabBar.frame = CGRectZero;
     }
 }
 

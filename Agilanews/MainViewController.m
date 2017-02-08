@@ -82,10 +82,11 @@
     self.tabBar.tintColor = [UIColor whiteColor];
     
     [[UITabBarItem appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : SSColor_RGB(102),
-                                                        NSFontAttributeName : [UIFont systemFontOfSize:11]} forState:UIControlStateNormal];
+                                                        NSFontAttributeName : [UIFont systemFontOfSize:11]}
+                                             forState:UIControlStateNormal];
     [[UITabBarItem appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : kOrangeColor,
-                                                        NSFontAttributeName : [UIFont systemFontOfSize:11]} forState:UIControlStateSelected];
-    
+                                                        NSFontAttributeName : [UIFont systemFontOfSize:11]}
+                                             forState:UIControlStateSelected];
     // 定义标签栏图片数组
     NSArray *titles = @[@"Home",
                         @"Video",
