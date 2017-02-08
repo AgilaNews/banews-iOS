@@ -214,7 +214,13 @@
             [models addObject:model];
         }
         weakSelf.baseArray = models;
-        [weakSelf setupScrollViewWith:models];
+        if (models.count) {
+            [weakSelf setupScrollViewWith:models];
+        } else {
+            AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+            weakSelf.baseArray = appDelegate.categoriesArray;
+            [weakSelf setupScrollViewWith:appDelegate.categoriesArray];
+        }
     } failure:^(NSError *error) {
         [SVProgressHUD dismiss];
         AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
