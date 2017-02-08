@@ -898,7 +898,8 @@
         NSDictionary *oldNewsData = [NSKeyedUnarchiver unarchiveObjectWithFile:newsFilePath];
         NSNumber *oldNewsDataKey = oldNewsData.allKeys.firstObject;
 
-        JTNavigationController *navCtrl = (JTNavigationController *)_window.rootViewController;
+        MainViewController *mainTBC = (MainViewController *)_window.rootViewController;
+        JTNavigationController *navCtrl = (JTNavigationController *)mainTBC.viewControllers.firstObject;
         HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
         // 缓存新闻列表
         NSMutableDictionary *newsDic = [NSMutableDictionary dictionary];
@@ -931,7 +932,8 @@
                 }
             }
         }
-        VideoViewController *videoVC = [navCtrl.jt_viewControllers objectAtIndex:1];
+        JTNavigationController *navCtrlTwo = (JTNavigationController *)[mainTBC.viewControllers objectAtIndex:1];
+        VideoViewController *videoVC = navCtrlTwo.jt_viewControllers.firstObject;
         for (HomeTableViewController *homeTabVC in videoVC.segmentVC.subViewControllers) {
             if (homeTabVC.dataList.count > 0) {
                 // 有新数据

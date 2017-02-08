@@ -157,8 +157,6 @@
             }
             if ([[NSDate date] timeIntervalSince1970] - refreshTime > 3600) {
                 [self requestDataWithChannelID:_model.channelID isLater:YES isShowHUD:NO isShowBanner:NO];
-            } else {
-                [self.tableView setContentOffset:CGPointMake(self.tableView.contentOffset.x, 44) animated:NO];
             }
         }
     }
