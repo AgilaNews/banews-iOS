@@ -857,13 +857,20 @@
     if (later == NO) {
         [params setObject:@"older" forKey:@"dir"];
     }
-    NetServerType type;
-    if ([_model.channelID isEqualToNumber:@30001]) {
-        type = NetServer_V3;
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    MainViewController *mainTBC = (MainViewController *)appDelegate.window.rootViewController;
+    if (mainTBC.index == 0) {
+        [params setObject:@"home" forKey:@"tab"];
     } else {
-        type = NetServer_Home;
+        [params setObject:@"video" forKey:@"tab"];
     }
-    [[SSHttpRequest sharedInstance] get:kHomeUrl_NewsList params:params contentType:UrlencodedType serverType:type success:^(id responseObj) {
+//    NetServerType type;
+//    if ([_model.channelID isEqualToNumber:@30001]) {
+//        type = NetServer_V3;
+//    } else {
+//        type = NetServer_Home;
+//    }
+    [[SSHttpRequest sharedInstance] get:kHomeUrl_NewsList params:params contentType:UrlencodedType serverType:NetServer_V3 success:^(id responseObj) {
         [SVProgressHUD dismiss];
         NSMutableArray *models = [NSMutableArray array];
         NSNumber *has_ad = responseObj[@"has_ad"];
