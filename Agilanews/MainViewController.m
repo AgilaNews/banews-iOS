@@ -122,6 +122,11 @@
         }
         self.index = 0;
     } else if ([navCtrl.jt_viewControllers.firstObject isKindOfClass:[VideoViewController class]]) {
+        if (self.index == 1) {
+            VideoViewController *videoVC = navCtrl.jt_viewControllers.firstObject;
+            HomeTableViewController *homeTBC = videoVC.segmentVC.subViewControllers[videoVC.segmentVC.selectIndex - 10000];
+            [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Refresh object:homeTBC.model.channelID];
+        }
         self.index = 1;
     } else if ([navCtrl.jt_viewControllers.firstObject isKindOfClass:[MeViewController class]]) {
         self.index = 2;
