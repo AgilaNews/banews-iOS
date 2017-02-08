@@ -24,7 +24,7 @@
         } else {
             self.title = @"Privacy Policy";
         }
-        _webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
+        _webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 64, kScreenWidth, kScreenHeight - 64)];
         _webView.backgroundColor = kWhiteBgColor;
         _webView.scrollView.backgroundColor = kWhiteBgColor;
         _webView.delegate = self;
@@ -39,7 +39,8 @@
 
     self.view.backgroundColor = kWhiteBgColor;
     self.isBackButton = YES;
-    
+    self.automaticallyAdjustsScrollViewInsets = NO;
+
     NSString *urlString = nil;
     if (_webType == TermOfService) {
         urlString = @"http://www.agilanews.com/agreement.html";
