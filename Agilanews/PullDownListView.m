@@ -9,6 +9,7 @@
 #import "PullDownListView.h"
 #import "AppDelegate.h"
 #import "SegmentViewController.h"
+#import "MainViewController.h"
 
 @implementation PullDownListView
 
@@ -19,10 +20,17 @@
         self.userInteractionEnabled = YES;
         AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
         NSInteger count = 0;
-        if (appDelegate.categoriesArray.count % 3 == 0) {
-            count = appDelegate.categoriesArray.count / 3;
+        MainViewController *mainVC = (MainViewController *)appDelegate.window.rootViewController;
+        NSMutableArray *categories = [NSMutableArray array];
+        if (mainVC.index == 0) {
+            categories = appDelegate.categoriesArray;
         } else {
-            count = appDelegate.categoriesArray.count / 3 + 1;
+            categories = appDelegate.videoCategories;
+        }
+        if (categories.count % 3 == 0) {
+            count = categories.count / 3;
+        } else {
+            count = categories.count / 3 + 1;
         }
         _whiteView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 40 + count * 40 + 10)];
         _whiteView.backgroundColor = [UIColor whiteColor];
@@ -44,10 +52,10 @@
         CGFloat spacing_V = 10;
         CGFloat itemWidth = (kScreenWidth - spacing_H * 4) / 3.0;
         CGFloat itemHeight = 30;
-        for (int i = 0; i < appDelegate.categoriesArray.count; i++) {
+        for (int i = 0; i < categories.count; i++) {
             UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
             button.frame = CGRectMake(spacing_H + i % 3 * (itemWidth + spacing_H), 40 + i / 3 * (itemHeight + spacing_V), itemWidth, itemHeight);
-            CategoriesModel *model = appDelegate.categoriesArray[i];
+            CategoriesModel *model = categories[i];
             [button setTitle:model.name forState:UIControlStateNormal];
             if ([model.name isEqualToString:@"Entertainment"]) {
                 button.titleLabel.font = [UIFont systemFontOfSize:12];
@@ -71,8 +79,15 @@
 {
     [super layoutSubviews];
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    for (int i = 0; i < appDelegate.categoriesArray.count; i++) {
-        CategoriesModel *model = appDelegate.categoriesArray[i];
+    MainViewController *mainVC = (MainViewController *)appDelegate.window.rootViewController;
+    NSMutableArray *categories = [NSMutableArray array];
+    if (mainVC.index == 0) {
+        categories = appDelegate.categoriesArray;
+    } else {
+        categories = appDelegate.videoCategories;
+    }
+    for (int i = 0; i < categories.count; i++) {
+        CategoriesModel *model = categories[i];
         UIButton *button = [_whiteView viewWithTag:10000 + i];
         [button setTitle:model.name forState:UIControlStateNormal];
         if ([model.name isEqualToString:@"Entertainment"]) {
