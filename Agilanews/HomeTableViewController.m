@@ -1378,7 +1378,17 @@
  */
 - (void)requestDataWithRefreshNotif:(NSNotification *)notif
 {
-    if ([_model.channelID isEqualToNumber:notif.object] && [self.tableView isDisplayedInScreen]) {
+    if ([_model.channelID isEqualToNumber:notif.object]) {
+        if ([_model.channelID isEqualToNumber:@30001]) {
+            AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+            MainViewController *mainVC = (MainViewController *)appDelegate.window.rootViewController;
+            if (mainVC.index == 1 && [self.model.name isEqualToString:@"Videos"]) {
+                return;
+            }
+            if (mainVC.index == 0 && [self.model.name isEqualToString:@"Hot"]) {
+                return;
+            }
+        }
         [self.tableView setContentOffset:self.tableView.contentOffset animated:NO];
         _isShowBanner = YES;
         [self.tableView.header beginRefreshing];

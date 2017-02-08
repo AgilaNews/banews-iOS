@@ -10,6 +10,7 @@
 #import "HomeViewController.h"
 #import "VideoViewController.h"
 #import "MeViewController.h"
+#import "HomeTableViewController.h"
 
 @interface MainViewController ()
 
@@ -113,25 +114,17 @@
 {
     JTNavigationController *navCtrl = (JTNavigationController *)viewController;
     if ([navCtrl.jt_viewControllers.firstObject isKindOfClass:[HomeViewController class]]) {
+        if (self.index == 0) {
+            HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
+            HomeTableViewController *homeTBC = homeVC.segmentVC.subViewControllers[homeVC.segmentVC.selectIndex - 10000];
+            [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Refresh object:homeTBC.model.channelID];
+        }
         self.index = 0;
     } else if ([navCtrl.jt_viewControllers.firstObject isKindOfClass:[VideoViewController class]]) {
         self.index = 1;
     } else if ([navCtrl.jt_viewControllers.firstObject isKindOfClass:[MeViewController class]]) {
         self.index = 2;
     }
-//    if ([viewController isKindOfClass:[UINavigationController class]]) {
-//        [(UINavigationController *)viewController popToRootViewControllerAnimated:NO];
-//    }
-//    // 创建弹性效果关键帧动画
-//    CAKeyframeAnimation *keyFrame = [CAKeyframeAnimation animationWithKeyPath:@"transform.scale"];
-//    // 设置放大倍数
-//    keyFrame.values = @[@1.4,@1.0,@1.25,@1.0,@1.125,@1.0,@1.06,@1.0];
-//    // 设置动画时间
-//    keyFrame.duration = .5;
-//    // 设置放大效果每帧时间
-//    keyFrame.keyTimes = @[@.1,@.3,@.5,@.7,@.85,@.95,@1.0];
-//    // 添加关键帧动画
-//    [[[[self.tabBar subviews] objectAtIndex:tabBarController.selectedIndex + 1] layer] addAnimation:keyFrame forKey:@"keyFrame"];
 }
 
 - (void)addRedPoint
