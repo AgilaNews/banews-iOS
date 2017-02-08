@@ -1122,7 +1122,9 @@
     switch (indexPath.section) {
         case 0:
         {
-            CGSize titleLabelSize = [_model.title calculateSize:CGSizeMake(kScreenWidth - 22, 80) font:[UIFont boldSystemFontOfSize:21]];
+            NSString *titleString = [_model.title stringByReplacingOccurrencesOfString:@"<font>" withString:@""];
+            titleString = [titleString stringByReplacingOccurrencesOfString:@"</font>" withString:@""];
+            CGSize titleLabelSize = [titleString calculateSize:CGSizeMake(kScreenWidth - 22, 80) font:[UIFont boldSystemFontOfSize:21]];
             CGSize contentLabelSize = CGSizeZero;
             VideoModel *model = _model.videos.firstObject;
             if (_isContentOpen) {
