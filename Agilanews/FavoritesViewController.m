@@ -53,6 +53,7 @@
     _editBtn.titleLabel.font = [UIFont systemFontOfSize:17];
     [_editBtn setTitle:@"Edit" forState:UIControlStateNormal];
     [_editBtn setTitle:@"Cancel" forState:UIControlStateSelected];
+    [_editBtn setTitleColor:[UIColor colorWithWhite:1 alpha:.5] forState:UIControlStateDisabled];
     [_editBtn addTarget:self action:@selector(editAction:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *editItem = [[UIBarButtonItem alloc]initWithCustomView:_editBtn];
     if ([UIDevice currentDevice].systemVersion.floatValue >= 7.0) {
@@ -760,6 +761,7 @@
             blankLabel.font = [UIFont systemFontOfSize:16];
             blankLabel.text = @"No favorites yet";
             [_blankView addSubview:blankLabel];
+            self.editBtn.enabled = NO;
         } else {
             [_blankView removeAllSubviews];
             [_blankView removeFromSuperview];
@@ -784,6 +786,11 @@
             [self.tableView.footer setTitle:@"No more favorites" forState:MJRefreshFooterStateNoMoreData];
         } else {
             [self.tableView removeFooter];
+        }
+        if (dataList.count) {
+            self.editBtn.enabled = YES;
+        } else {
+            self.editBtn.enabled = NO;
         }
     }
 }
