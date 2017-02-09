@@ -125,6 +125,7 @@
 #pragma mark -标签栏代理方法
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
 {
+    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_PausedVideo object:nil];
     JTNavigationController *navCtrl = (JTNavigationController *)viewController;
     if ([navCtrl.jt_viewControllers.firstObject isKindOfClass:[HomeViewController class]]) {
         if (self.index == 0) {
