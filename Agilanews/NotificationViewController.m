@@ -173,6 +173,11 @@
     [self requestDataIsFooter:YES];
 }
 
+- (void)requestAction
+{
+    [self requestDataIsFooter:NO];
+}
+
 #pragma mark - UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -269,10 +274,12 @@
         _showBlankView = showBlankView;
         
         if (showBlankView) {
-            _blankView = [[UIView alloc] initWithFrame:CGRectMake(0, 64, self.view.width, self.view.height)];
+            _blankView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height - 64)];
             _blankView.backgroundColor = kWhiteBgColor;
             _blankView.userInteractionEnabled = YES;
             [self.tableView addSubview:_blankView];
+            UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(requestAction)];
+            [_blankView addGestureRecognizer:tap];
             UIImageView *failureView = [[UIImageView alloc] initWithFrame:CGRectMake((_blankView.width - 32) * .5, 164 / kScreenHeight * 568, 32, 34)];
             failureView.backgroundColor = kWhiteBgColor;
             failureView.image = [UIImage imageNamed:@"icon_nonotification"];
