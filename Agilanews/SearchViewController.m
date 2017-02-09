@@ -486,6 +486,13 @@
     [self requestSearchDataWithIsFooter:NO];
 }
 
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
+{
+    if (searchText.length > 100) {
+        searchBar.text = [searchBar.text substringToIndex:100];
+    }
+}
+
 #pragma mark - setter/getter
 - (void)setDataList:(NSMutableArray *)dataList
 {
