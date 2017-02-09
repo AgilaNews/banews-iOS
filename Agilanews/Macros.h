@@ -70,6 +70,10 @@
 #define SS_GuideHomeKey @"SS_GuideHomeKey_v1.0.1"// 引导页——主页
 #define SS_GuideFavKey  @"SS_GuideFavKey_v1.0.1" // 引导页——收藏
 #define SS_GuideCnlKey  @"SS_GuideCnlKey_v1.0.1" // 引导页——频道
+#define SS_GuideVideoKey        @"SS_GuideVideoKey"                 // 引导页——视频
+#define SS_GuideFirstVideoTab   @"SS_GuideFirstVideoTab_v1.3.0"     // 引导页——首次进入视频Tab
+#define SS_GuideFirstMeTab      @"SS_GuideFirstMeTab_v1.3.0"        // 引导页——首次进入MeTab
+
 // 开屏广告参数
 #define SS_SPLASH_ON            @"SS_SPLASH_ON"         // 开屏广告开关
 #define SS_SPLASH_SLOT          @"SS_SPLASH_SLOT"       // 广告轮播位

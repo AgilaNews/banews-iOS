@@ -111,6 +111,9 @@
 		5F605F291E35E55600953120 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F605F281E35E55600953120 /* MainViewController.m */; };
 		5F605F2F1E35E80400953120 /* VideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F605F2E1E35E80400953120 /* VideoViewController.m */; };
 		5F605F321E35E80E00953120 /* MeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F605F311E35E80E00953120 /* MeViewController.m */; };
+		5F605F381E4C1A5100953120 /* GuideVideoTab.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F605F371E4C1A5100953120 /* GuideVideoTab.m */; };
+		5F605F3B1E4C3FEC00953120 /* GuideFirstVideoTab.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F605F3A1E4C3FEC00953120 /* GuideFirstVideoTab.m */; };
+		5F605F3E1E4C4B7D00953120 /* GuideFirstMeTab.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F605F3D1E4C4B7D00953120 /* GuideFirstMeTab.m */; };
 		5F635CA41D3CCC50006AAE3D /* UIView+UIScreenDisplaying.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F635CA31D3CCC50006AAE3D /* UIView+UIScreenDisplaying.m */; };
 		5F635CA71D3CFA58006AAE3D /* TimeStampToString.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F635CA61D3CFA58006AAE3D /* TimeStampToString.m */; };
 		5F635CB11D3DD4C3006AAE3D /* LeftView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F635CB01D3DD4C3006AAE3D /* LeftView.m */; };
@@ -470,6 +473,12 @@
 		5F605F2E1E35E80400953120 /* VideoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoViewController.m; sourceTree = "<group>"; };
 		5F605F301E35E80E00953120 /* MeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeViewController.h; sourceTree = "<group>"; };
 		5F605F311E35E80E00953120 /* MeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeViewController.m; sourceTree = "<group>"; };
+		5F605F361E4C1A5100953120 /* GuideVideoTab.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuideVideoTab.h; sourceTree = "<group>"; };
+		5F605F371E4C1A5100953120 /* GuideVideoTab.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GuideVideoTab.m; sourceTree = "<group>"; };
+		5F605F391E4C3FEC00953120 /* GuideFirstVideoTab.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuideFirstVideoTab.h; sourceTree = "<group>"; };
+		5F605F3A1E4C3FEC00953120 /* GuideFirstVideoTab.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GuideFirstVideoTab.m; sourceTree = "<group>"; };
+		5F605F3C1E4C4B7D00953120 /* GuideFirstMeTab.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuideFirstMeTab.h; sourceTree = "<group>"; };
+		5F605F3D1E4C4B7D00953120 /* GuideFirstMeTab.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GuideFirstMeTab.m; sourceTree = "<group>"; };
 		5F635CA21D3CCC50006AAE3D /* UIView+UIScreenDisplaying.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+UIScreenDisplaying.h"; sourceTree = "<group>"; };
 		5F635CA31D3CCC50006AAE3D /* UIView+UIScreenDisplaying.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+UIScreenDisplaying.m"; sourceTree = "<group>"; };
 		5F635CA51D3CFA58006AAE3D /* TimeStampToString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeStampToString.h; sourceTree = "<group>"; };
@@ -1179,6 +1188,12 @@
 				5F5AE9781D54A4C900A5A8B7 /* GuideFavoritesView.m */,
 				5F17B4851DAB78A0008EBD51 /* GuideChannelView.h */,
 				5F17B4861DAB78A0008EBD51 /* GuideChannelView.m */,
+				5F605F361E4C1A5100953120 /* GuideVideoTab.h */,
+				5F605F371E4C1A5100953120 /* GuideVideoTab.m */,
+				5F605F391E4C3FEC00953120 /* GuideFirstVideoTab.h */,
+				5F605F3A1E4C3FEC00953120 /* GuideFirstVideoTab.m */,
+				5F605F3C1E4C4B7D00953120 /* GuideFirstMeTab.h */,
+				5F605F3D1E4C4B7D00953120 /* GuideFirstMeTab.m */,
 			);
 			name = Guide;
 			sourceTree = "<group>";
@@ -1954,6 +1969,7 @@
 				5FE7FB331E21DABB00529D54 /* PicDetailViewController.m in Sources */,
 				5F42C08D1D34E41D00B89651 /* UIImage+MultiFormat.m in Sources */,
 				5F42BFF61D34E3D500B89651 /* AFNetworkReachabilityManager.m in Sources */,
+				5F605F3B1E4C3FEC00953120 /* GuideFirstVideoTab.m in Sources */,
 				5F907AC01DD5A8F200DD9748 /* FacebookAdManager.m in Sources */,
 				5FE7FB581E28701E00529D54 /* UIImageView+XHLaunchAdCache.m in Sources */,
 				5FF4B7311D379B1B00CC6704 /* ImageModel.m in Sources */,
@@ -2064,6 +2080,7 @@
 				5FF4B76E1D37BD2C00CC6704 /* NSMutableDictionary+UhouAdditions.m in Sources */,
 				5F86EDCD1DF66DCD00F3C35B /* LSEmojiFly.m in Sources */,
 				5F2E0A1E1D87B47A00FEC0AC /* HZPhotoBrowser.m in Sources */,
+				5F605F3E1E4C4B7D00953120 /* GuideFirstMeTab.m in Sources */,
 				5F767A801D9CE82E00822BAC /* MJExtensionConst.m in Sources */,
 				5F42C0871D34E41D00B89651 /* SDWebImageDownloader.m in Sources */,
 				5FF4B7791D37BD2C00CC6704 /* UIImageView+UhouAdditions.m in Sources */,
@@ -2080,6 +2097,7 @@
 				5FF4B77A1D37BD2C00CC6704 /* UILabel+UhouAdditions.m in Sources */,
 				5FE722181D4F5F3F0026BFC3 /* FeedbackViewController.m in Sources */,
 				5FF4B7901D38DEE400CC6704 /* GifPicCell.m in Sources */,
+				5F605F381E4C1A5100953120 /* GuideVideoTab.m in Sources */,
 				5F5C63931D950AB4005D3578 /* LoadingView.m in Sources */,
 				5F42BFF81D34E3D500B89651 /* AFURLRequestSerialization.m in Sources */,
 				5FF4B6FF1D372E5700CC6704 /* HomeViewController.m in Sources */,

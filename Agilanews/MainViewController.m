@@ -11,6 +11,9 @@
 #import "VideoViewController.h"
 #import "MeViewController.h"
 #import "HomeTableViewController.h"
+#import "GuideVideoTab.h"
+#import "GuideFirstVideoTab.h"
+#import "GuideFirstMeTab.h"
 
 @interface MainViewController ()
 
@@ -40,9 +43,18 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addRedPoint) name:KNOTIFICATION_AddRedPoint object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(removeRedPoint) name:KNOTIFICATION_RemoveRedPoint object:nil];
+}
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
     if ([DEF_PERSISTENT_GET_OBJECT(kHaveNewChannel) isEqual:@1] || [DEF_PERSISTENT_GET_OBJECT(kHaveNewNotif) isEqual:@1]) {
         [self addRedPoint];
+    }
+    
+    if (![DEF_PERSISTENT_GET_OBJECT(SS_GuideVideoKey) isEqualToNumber:@1]) {
+        [[UIApplication sharedApplication].keyWindow.rootViewController.view addSubview:[GuideVideoTab sharedInstance]];
     }
 }
 
@@ -122,6 +134,9 @@
         }
         self.index = 0;
     } else if ([navCtrl.jt_viewControllers.firstObject isKindOfClass:[VideoViewController class]]) {
+        if (![DEF_PERSISTENT_GET_OBJECT(SS_GuideFirstVideoTab) isEqualToNumber:@1]) {
+            [[UIApplication sharedApplication].keyWindow.rootViewController.view addSubview:[GuideFirstVideoTab sharedInstance]];
+        }
         if (self.index == 1) {
             VideoViewController *videoVC = navCtrl.jt_viewControllers.firstObject;
             HomeTableViewController *homeTBC = videoVC.segmentVC.subViewControllers[videoVC.segmentVC.selectIndex - 10000];
@@ -129,6 +144,9 @@
         }
         self.index = 1;
     } else if ([navCtrl.jt_viewControllers.firstObject isKindOfClass:[MeViewController class]]) {
+        if (![DEF_PERSISTENT_GET_OBJECT(SS_GuideFirstMeTab) isEqualToNumber:@1]) {
+            [[UIApplication sharedApplication].keyWindow.rootViewController.view addSubview:[GuideFirstMeTab sharedInstance]];
+        }
         self.index = 2;
     }
 }
