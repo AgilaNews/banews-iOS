@@ -538,7 +538,9 @@
 //#endif
         [self.tableView setContentOffset:self.tableView.contentOffset animated:NO];
         _isShowBanner = YES;
-        [self.tableView.header beginRefreshing];
+        if (!self.tableView.header.isRefreshing) {
+            [self.tableView.header beginRefreshing];
+        }
         return;
     }
     
@@ -1398,7 +1400,9 @@
         }
         [self.tableView setContentOffset:self.tableView.contentOffset animated:NO];
         _isShowBanner = YES;
-        [self.tableView.header beginRefreshing];
+        if (!self.tableView.header.isRefreshing) {
+            [self.tableView.header beginRefreshing];
+        }
     }
 }
 
@@ -1417,7 +1421,9 @@
     CategoriesModel *cateModel = notif.object;
     if ([cateModel.channelID isEqualToNumber:_model.channelID] && ([[NSDate date] timeIntervalSince1970] - refreshTime) > 3600) {
         _isShowBanner = NO;
-        [self.tableView.header beginRefreshing];
+        if (!self.tableView.header.isRefreshing) {
+            [self.tableView.header beginRefreshing];
+        }
     } else {
         [self.tableView reloadData];
     }
@@ -1437,7 +1443,9 @@
     }
     if ([self.tableView isDisplayedInScreen] && ([[NSDate date] timeIntervalSince1970] - refreshTime) > 3600) {
         _isShowBanner = NO;
-        [self.tableView.header beginRefreshing];
+        if (!self.tableView.header.isRefreshing) {
+            [self.tableView.header beginRefreshing];
+        }
     } else {
         [self.tableView reloadData];
     }
@@ -1458,7 +1466,9 @@
     if ([[NSDate date] timeIntervalSince1970] - refreshTime > 3600) {
         if ([self.tableView isDisplayedInScreen]) {
             _isShowBanner = NO;
-            [self.tableView.header beginRefreshing];
+            if (!self.tableView.header.isRefreshing) {
+                [self.tableView.header beginRefreshing];
+            }
         }
     }
 }
@@ -1482,7 +1492,9 @@
         }
         if ([[NSDate date] timeIntervalSince1970] - refreshTime > 3600) {
             _isShowBanner = NO;
-            [self.tableView.header beginRefreshing];
+            if (!self.tableView.header.isRefreshing) {
+                [self.tableView.header beginRefreshing];
+            }
         }
     }
 }

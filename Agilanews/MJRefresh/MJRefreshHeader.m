@@ -241,6 +241,9 @@
 {
     if (self.window) {
         self.state = MJRefreshHeaderStateRefreshing;
+        if (_scrollView.mj_insetT > self.mj_h) {
+            _scrollView.mj_insetT = self.mj_h;
+        }
     } else {
         self.state = MJRefreshHeaderStateWillRefresh;
         // 刷新(预防从另一个控制器回到这个控制器的情况，回来要重新刷新一下)
