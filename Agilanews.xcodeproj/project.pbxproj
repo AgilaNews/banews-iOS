@@ -948,7 +948,6 @@
 				5FF4B6F51D372BDE00CC6704 /* Home */,
 				5F605F2B1E35E7BF00953120 /* Video */,
 				5F605F2C1E35E7CE00953120 /* Me */,
-				5F635CA81D3DD3B9006AAE3D /* Left */,
 				5F5AE9721D54344700A5A8B7 /* Guide */,
 				5F907ABD1DD5A3E700DD9748 /* FacebookAd */,
 				5FE7FB651E289A3400529D54 /* LaunchAd */,
@@ -1221,18 +1220,11 @@
 			children = (
 				5F605F301E35E80E00953120 /* MeViewController.h */,
 				5F605F311E35E80E00953120 /* MeViewController.m */,
-			);
-			name = Me;
-			sourceTree = "<group>";
-		};
-		5F635CA81D3DD3B9006AAE3D /* Left */ = {
-			isa = PBXGroup;
-			children = (
 				5F635CAB1D3DD42A006AAE3D /* Models */,
 				5F635CAA1D3DD41E006AAE3D /* Views */,
 				5F635CA91D3DD40C006AAE3D /* ViewControllers */,
 			);
-			name = Left;
+			name = Me;
 			sourceTree = "<group>";
 		};
 		5F635CA91D3DD40C006AAE3D /* ViewControllers */ = {
