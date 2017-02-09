@@ -684,6 +684,9 @@
             [weakSelf.commentArray insertObject:model atIndex:0];
             weakSelf.commentArray = weakSelf.commentArray;
             _commentsLabel.hidden = NO;
+            if (_model) {
+                _model.commentCount = [NSNumber numberWithInteger:_model.commentCount.integerValue + 1];
+            }
             _detailModel.commentCount = [NSNumber numberWithInteger:_detailModel.commentCount.integerValue + 1];
             if (_detailModel.commentCount.integerValue < 1000) {
                 _commentsLabel.text = _detailModel.commentCount.stringValue;
