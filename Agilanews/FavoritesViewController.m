@@ -46,6 +46,7 @@
     self.title = @"Favorites";
     self.isBackButton = YES;
     self.view.backgroundColor = kWhiteBgColor;
+    self.automaticallyAdjustsScrollViewInsets = NO;
     self.jt_fullScreenPopGestureEnabled = NO;
     // 添加导航栏右侧按钮
     _editBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -64,7 +65,7 @@
         self.navigationItem.rightBarButtonItem = editItem;
     }
     
-    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight) style:UITableViewStylePlain];
+    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, kScreenWidth, kScreenHeight - 64) style:UITableViewStylePlain];
     _tableView.backgroundColor = kWhiteBgColor;
     _tableView.dataSource = self;
     _tableView.delegate = self;
@@ -691,6 +692,19 @@
     }
 }
 
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (_isEdit && _selectedList.count) {
+        for (NewsModel *model in _selectedList) {
+            SinglePicCell *selectCell = (SinglePicCell *)cell;
+            if ([model.news_id isEqualToString:selectCell.model.news_id]) {
+                [cell setSelected:YES animated:YES];
+                break;
+            }
+        }
+    }
+}
+
 - (void)shareToFacebook:(UIButton *)button
 {
     id cell = button.superview;
@@ -848,6 +862,7 @@
         self.isEdit = NO;
         _editBtn.selected = NO;
         [self.tableView setEditing:NO animated:YES];
+        [self.tableView reloadData];
         return;
     }
     [self.navigationController popToRootViewControllerAnimated:YES];
