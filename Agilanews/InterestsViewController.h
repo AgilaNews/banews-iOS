@@ -13,6 +13,7 @@
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) NSMutableArray *baseArray;
 @property (nonatomic, strong) NSMutableArray *interests;
+@property (nonatomic, strong) UIButton *doneButton;
 @property (nonatomic, assign) BOOL isSkip;
 
 @end

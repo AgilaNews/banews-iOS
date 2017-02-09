@@ -91,18 +91,19 @@
     contentLabel.text = contentStr;
     [self.view addSubview:contentLabel];
     
-    UIButton *doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    doneButton.frame = CGRectMake(15, self.view.height - 15 - 45, kScreenWidth - 30, 45);
-    [doneButton setBackgroundColor:kOrangeColor forState:UIControlStateNormal];
-    [doneButton setTitle:@"Done" forState:UIControlStateNormal];
-    [doneButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    doneButton.titleLabel.font = [UIFont systemFontOfSize:20];
-    doneButton.layer.cornerRadius = 4;
-    doneButton.layer.masksToBounds = YES;
-    [doneButton addTarget:self action:@selector(doneAction) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:doneButton];
+    _doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    _doneButton.frame = CGRectMake(15, self.view.height - 15 - 45, kScreenWidth - 30, 45);
+    [_doneButton setBackgroundColor:kOrangeColor forState:UIControlStateNormal];
+    [_doneButton setBackgroundColor:[UIColor colorWithRed:255 / 255.0 green:136 / 255.0 blue:0 / 255.0 alpha:.5] forState:UIControlStateDisabled];
+    [_doneButton setTitle:@"Done" forState:UIControlStateNormal];
+    [_doneButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    _doneButton.titleLabel.font = [UIFont systemFontOfSize:20];
+    _doneButton.layer.cornerRadius = 4;
+    _doneButton.layer.masksToBounds = YES;
+    [_doneButton addTarget:self action:@selector(doneAction) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:_doneButton];
     
-    _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, contentLabel.bottom + 25, kScreenWidth, doneButton.top - contentLabel.bottom - 50)];
+    _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, contentLabel.bottom + 25, kScreenWidth, _doneButton.top - contentLabel.bottom - 50)];
     _scrollView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:_scrollView];
     
@@ -204,10 +205,12 @@
 - (void)requestData
 {
     [SVProgressHUD show];
+    _doneButton.enabled = NO;
     __weak typeof(self) weakSelf = self;
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [[SSHttpRequest sharedInstance] get:kHomeUrl_Interest params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
         [SVProgressHUD dismiss];
+        _doneButton.enabled = YES;
         NSMutableArray *models = [NSMutableArray array];
         for (NSDictionary *dic in responseObj[@"interests"]) {
             CategoriesModel *model = [CategoriesModel mj_objectWithKeyValues:dic];
@@ -223,6 +226,7 @@
         }
     } failure:^(NSError *error) {
         [SVProgressHUD dismiss];
+        _doneButton.enabled = YES;
         AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
         weakSelf.baseArray = appDelegate.categoriesArray;
         [weakSelf setupScrollViewWith:appDelegate.categoriesArray];
