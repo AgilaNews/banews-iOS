@@ -57,6 +57,7 @@
                                                  name:KNOTIFICATION_Login_Success
                                                object:nil];
     // 发送通知
+    DEF_PERSISTENT_SET_OBJECT(kHaveNewNotif, @0);
     [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_RemoveRedPoint
                                                         object:nil];
 }

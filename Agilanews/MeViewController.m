@@ -167,6 +167,7 @@
     } else {
         [self.navigationController.navigationBar lt_setBackgroundColor:[UIColor clearColor]];
     }
+    [self.tableView reloadData];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -242,6 +243,8 @@
             cell.titleLabel.text = @"Notification";
             if ([DEF_PERSISTENT_GET_OBJECT(kHaveNewNotif) isEqual:@1]) {
                 [self addRedPointWithLable:cell.titleLabel Index:indexPath.row];
+            } else {
+                [cell.titleLabel removeAllSubviews];
             }
             break;
         case 1:
@@ -253,6 +256,8 @@
             cell.titleLabel.text = @"Channels";
             if ([DEF_PERSISTENT_GET_OBJECT(kHaveNewChannel) isEqual:@1]) {
                 [self addRedPointWithLable:cell.titleLabel Index:indexPath.row];
+            } else {
+                [cell.titleLabel removeAllSubviews];
             }
             break;
         case 3:
