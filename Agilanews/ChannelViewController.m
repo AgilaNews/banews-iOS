@@ -138,9 +138,9 @@
     [_okButton addTarget:self action:@selector(okAction) forControlEvents:UIControlEventTouchUpInside];
     [_collectionView addSubview:_okButton];
     
-    if (![DEF_PERSISTENT_GET_OBJECT(SS_GuideCnlKey) isEqualToNumber:@1]) {
-        [[UIApplication sharedApplication].keyWindow addSubview:[GuideChannelView sharedInstance]];
-    }
+//    if (![DEF_PERSISTENT_GET_OBJECT(SS_GuideCnlKey) isEqualToNumber:@1]) {
+//        [[UIApplication sharedApplication].keyWindow addSubview:[GuideChannelView sharedInstance]];
+//    }
     DEF_PERSISTENT_SET_OBJECT(kHaveNewChannel, @0);
     [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_RemoveRedPoint object:nil];
 }

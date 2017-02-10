@@ -1288,11 +1288,11 @@
         // 推荐文章展示
         self.isRecommendShow = YES;
     }
-    if (![DEF_PERSISTENT_GET_OBJECT(SS_GuideFavKey) isEqualToNumber:@1]) {
-        if (scrollView.contentOffset.y + kScreenHeight - 64 - 50 >= _tableView.contentSize.height && _tableView.numberOfSections == 3) {
-            self.isShowGuide = YES;
-        }
-    }
+//    if (![DEF_PERSISTENT_GET_OBJECT(SS_GuideFavKey) isEqualToNumber:@1]) {
+//        if (scrollView.contentOffset.y + kScreenHeight - 64 - 50 >= _tableView.contentSize.height && _tableView.numberOfSections == 3) {
+//            self.isShowGuide = YES;
+//        }
+//    }
 }
 
 #pragma mark - UIWebViewDelegate
