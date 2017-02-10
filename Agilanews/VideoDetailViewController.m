@@ -1928,9 +1928,9 @@
         [eventDic setObject:@"" forKey:@"dispatch_id"];
     }
     if (_channelName) {
-        [eventDic setObject:_channelName forKey:@"channel_id"];
+        [eventDic setObject:_channelName forKey:@"channel"];
     } else {
-        [eventDic setObject:@"" forKey:@"channel_id"];
+        [eventDic setObject:@"" forKey:@"channel"];
     }
     [eventDic setObject:@"1" forKey:@"play_type"];
     [eventDic setObject:[NetType getNetType] forKey:@"net"];
@@ -1983,9 +1983,9 @@
             [eventDic setObject:@"" forKey:@"dispatch_id"];
         }
         if (_channelName) {
-            [eventDic setObject:_channelName forKey:@"channel_id"];
+            [eventDic setObject:_channelName forKey:@"channel"];
         } else {
-            [eventDic setObject:@"" forKey:@"channel_id"];
+            [eventDic setObject:@"" forKey:@"channel"];
         }
         [eventDic setObject:@"1" forKey:@"play_type"];
         [eventDic setObject:[NSArray arrayWithArray:_playerPath] forKey:@"path"];

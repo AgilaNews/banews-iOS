@@ -10,7 +10,9 @@
 #import "ImageModel.h"
 #import "VideoModel.h"
 #import "AppDelegate.h"
+#import "MainViewController.h"
 #import "HomeViewController.h"
+#import "VideoViewController.h"
 #import "NotifDetailViewController.h"
 #import "FavoritesViewController.h"
 
@@ -72,16 +74,22 @@
         } else {
             [eventDic setObject:@"" forKey:@"dispatch_id"];
         }
-        UIViewController *viewCtrl = self.ViewController;
+        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        MainViewController *mainVC = (MainViewController *)appDelegate.window.rootViewController;
+        JTNavigationController *navCtrl = mainVC.viewControllers[mainVC.index];
+        UIViewController *viewCtrl = navCtrl.jt_viewControllers.firstObject;
         if ([viewCtrl isKindOfClass:[HomeViewController class]]) {
             HomeViewController *homeVC = (HomeViewController *)viewCtrl;
-            AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
             CategoriesModel *model = appDelegate.categoriesArray[homeVC.segmentVC.selectIndex - 10000];
-            [eventDic setObject:model.channelID forKey:@"channel_id"];
+            [eventDic setObject:model.channelID forKey:@"channel"];
+        } else if ([viewCtrl isKindOfClass:[VideoViewController class]]) {
+            VideoViewController *videoVC = (VideoViewController *)viewCtrl;
+            CategoriesModel *model = appDelegate.videoCategories[videoVC.segmentVC.selectIndex - 10000];
+            [eventDic setObject:model.channelID forKey:@"channel"];
         } else if ([viewCtrl isKindOfClass:[NotifDetailViewController class]]) {
-            [eventDic setObject:@"Notification" forKey:@"channel_id"];
+            [eventDic setObject:@"Notification" forKey:@"channel"];
         } else if ([viewCtrl isKindOfClass:[FavoritesViewController class]]) {
-            [eventDic setObject:@"Favorite" forKey:@"channel_id"];
+            [eventDic setObject:@"Favorite" forKey:@"channel"];
         }
         [eventDic setObject:@"0" forKey:@"play_type"];
         [eventDic setObject:[NSArray arrayWithArray:_playerPath] forKey:@"path"];
@@ -99,7 +107,6 @@
             [eventDic setObject:abflag forKey:@"abflag"];
         }
         [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
-        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
         [appDelegate.eventArray addObject:eventDic];
     }
 }
@@ -552,16 +559,23 @@
             } else {
                 [eventDic setObject:@"" forKey:@"dispatch_id"];
             }
-            UIViewController *viewCtrl = self.ViewController;
+            
+            AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+            MainViewController *mainVC = (MainViewController *)appDelegate.window.rootViewController;
+            JTNavigationController *navCtrl = mainVC.viewControllers[mainVC.index];
+            UIViewController *viewCtrl = navCtrl.jt_viewControllers.firstObject;
             if ([viewCtrl isKindOfClass:[HomeViewController class]]) {
                 HomeViewController *homeVC = (HomeViewController *)viewCtrl;
-                AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
                 CategoriesModel *model = appDelegate.categoriesArray[homeVC.segmentVC.selectIndex - 10000];
-                [eventDic setObject:model.channelID forKey:@"channel_id"];
+                [eventDic setObject:model.channelID forKey:@"channel"];
+            } else if ([viewCtrl isKindOfClass:[VideoViewController class]]) {
+                VideoViewController *videoVC = (VideoViewController *)viewCtrl;
+                CategoriesModel *model = appDelegate.videoCategories[videoVC.segmentVC.selectIndex - 10000];
+                [eventDic setObject:model.channelID forKey:@"channel"];
             } else if ([viewCtrl isKindOfClass:[NotifDetailViewController class]]) {
-                [eventDic setObject:@"Notification" forKey:@"channel_id"];
+                [eventDic setObject:@"Notification" forKey:@"channel"];
             } else if ([viewCtrl isKindOfClass:[FavoritesViewController class]]) {
-                [eventDic setObject:@"Favorite" forKey:@"channel_id"];
+                [eventDic setObject:@"Favorite" forKey:@"channel"];
             }
             [eventDic setObject:[NetType getNetType] forKey:@"net"];
             if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
@@ -613,16 +627,22 @@
                 } else {
                     [eventDic setObject:@"" forKey:@"dispatch_id"];
                 }
-                UIViewController *viewCtrl = self.ViewController;
+                AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+                MainViewController *mainVC = (MainViewController *)appDelegate.window.rootViewController;
+                JTNavigationController *navCtrl = mainVC.viewControllers[mainVC.index];
+                UIViewController *viewCtrl = navCtrl.jt_viewControllers.firstObject;
                 if ([viewCtrl isKindOfClass:[HomeViewController class]]) {
                     HomeViewController *homeVC = (HomeViewController *)viewCtrl;
-                    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
                     CategoriesModel *model = appDelegate.categoriesArray[homeVC.segmentVC.selectIndex - 10000];
-                    [eventDic setObject:model.channelID forKey:@"channel_id"];
+                    [eventDic setObject:model.channelID forKey:@"channel"];
+                } else if ([viewCtrl isKindOfClass:[VideoViewController class]]) {
+                    VideoViewController *videoVC = (VideoViewController *)viewCtrl;
+                    CategoriesModel *model = appDelegate.videoCategories[videoVC.segmentVC.selectIndex - 10000];
+                    [eventDic setObject:model.channelID forKey:@"channel"];
                 } else if ([viewCtrl isKindOfClass:[NotifDetailViewController class]]) {
-                    [eventDic setObject:@"Notification" forKey:@"channel_id"];
+                    [eventDic setObject:@"Notification" forKey:@"channel"];
                 } else if ([viewCtrl isKindOfClass:[FavoritesViewController class]]) {
-                    [eventDic setObject:@"Favorite" forKey:@"channel_id"];
+                    [eventDic setObject:@"Favorite" forKey:@"channel"];
                 }
                 [eventDic setObject:@"0" forKey:@"play_type"];
                 [eventDic setObject:[NSArray arrayWithArray:_playerPath] forKey:@"path"];
@@ -640,7 +660,6 @@
                     [eventDic setObject:abflag forKey:@"abflag"];
                 }
                 [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(@"UUID") forKey:@"session"];
-                AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
                 [appDelegate.eventArray addObject:eventDic];
             }
         }
