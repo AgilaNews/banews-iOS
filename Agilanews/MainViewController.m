@@ -41,8 +41,19 @@
     // 初始化标签栏
     [self _initTabBarView];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addRedPoint) name:KNOTIFICATION_AddRedPoint object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(removeRedPoint) name:KNOTIFICATION_RemoveRedPoint object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(addRedPoint)
+                                                 name:KNOTIFICATION_AddRedPoint
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(removeRedPoint)
+                                                 name:KNOTIFICATION_RemoveRedPoint
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(refresh_success)
+                                                 name:KNOTIFICATION_Refresh_Success
+                                               object:nil];
+
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -132,6 +143,14 @@
             HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
             HomeTableViewController *homeTBC = homeVC.segmentVC.subViewControllers[homeVC.segmentVC.selectIndex - 10000];
             [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Refresh object:homeTBC.model.channelID];
+            CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform"];
+            animation.fromValue = [NSValue valueWithCATransform3D:CATransform3DIdentity];
+            animation.toValue = [NSValue valueWithCATransform3D:CATransform3DMakeRotation(-M_PI_2, 0.0, 0.0, -1.0)];
+            animation.duration = 0.25;
+            animation.cumulative = YES;
+            animation.repeatCount = HUGE_VALF;
+            UIView *view = [[self.tabBar subviews] objectAtIndex:tabBarController.selectedIndex + 1];
+            [view.subviews.firstObject.layer addAnimation:animation forKey:nil];
         }
         self.index = 0;
     } else if ([navCtrl.jt_viewControllers.firstObject isKindOfClass:[VideoViewController class]]) {
@@ -172,6 +191,12 @@
             [view removeFromSuperview];
         }
     }
+}
+
+- (void)refresh_success
+{
+    UIView *view = [[self.tabBar subviews] objectAtIndex:self.tabBarController.selectedIndex + 1];
+    [view.subviews.firstObject.layer removeAllAnimations];
 }
 
 - (void)didReceiveMemoryWarning {
