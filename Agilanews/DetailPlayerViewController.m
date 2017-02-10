@@ -20,7 +20,7 @@
     // Do any additional setup after loading the view.
     
     self.view.backgroundColor = [UIColor blackColor];
-    CGFloat height = (_height.floatValue * .5) * (kScreenWidth / (_width.floatValue * .5));
+    CGFloat height = (_height.floatValue * 2) * (kScreenWidth / (_width.floatValue));
     _playerView = [[YTPlayerView alloc] initWithFrame:CGRectMake(0, (kScreenHeight - height) * .5, kScreenWidth, height)];
     _playerView.webView.backgroundColor = [UIColor clearColor];
     [self.view addSubview:_playerView];
@@ -34,6 +34,7 @@
                                  @"autoplay" : @1,          // 自动播放
                                  @"modestbranding" : @1,    // 将参数值设为1可以阻止YouTube徽标显示在控件栏中。
                                  @"origin" : @"http://www.youtube.com",
+                                 @"enablejsapi" : @1,
                                  @"showinfo" : @0};         // 播放器是否显示视频标题和上传者等信息。  0:不显示  1:显示
     if (_videoid && playerVars) {
         [self.playerView loadWithVideoId:_videoid playerVars:playerVars];
@@ -45,6 +46,8 @@
     _holderView.backgroundColor = [UIColor clearColor];
     [self.playerView addSubview:_holderView];
     NSString *imageUrl = [_pattern stringByReplacingOccurrencesOfString:@"{w}" withString:[NSString stringWithFormat:@"%f",(kScreenWidth * 2)]];
+    imageUrl = [imageUrl stringByReplacingOccurrencesOfString:@"|v=1" withString:@""];
+
     imageUrl = [imageUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     [_holderView sd_setImageWithURL:[NSURL URLWithString:imageUrl]];
     
