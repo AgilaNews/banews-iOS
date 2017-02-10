@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface GuideFirstVideoTab : UIView
+@interface GuideFirstVideoTab : UIView <UIGestureRecognizerDelegate>
 
 @property (nonatomic, strong) UIImageView *videoView;
 

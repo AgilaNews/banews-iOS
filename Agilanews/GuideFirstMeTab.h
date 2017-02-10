@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface GuideFirstMeTab : UIView
+@interface GuideFirstMeTab : UIView <UIGestureRecognizerDelegate>
 
 @property (nonatomic, strong) UIImageView *imageView;
 

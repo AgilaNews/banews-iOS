@@ -24,7 +24,8 @@ static GuideFirstMeTab *_guideView = nil;
 
 - (void)_initSubviews
 {
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(removeAction)];
+    UIGestureRecognizer *tap = [[UIGestureRecognizer alloc] initWithTarget:self action:@selector(removeAction)];
+    tap.delegate = self;
     [_guideView addGestureRecognizer:tap];
     
     _imageView = [[UIImageView alloc] init];
@@ -55,6 +56,12 @@ static GuideFirstMeTab *_guideView = nil;
     
     [_imageView addSubview:guideLabel];
     [_guideView addSubview:_imageView];
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+    [self removeAction];
+    return YES;
 }
 
 - (void)removeAction

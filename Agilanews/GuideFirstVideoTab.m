@@ -23,7 +23,8 @@ static GuideFirstVideoTab *_guideView = nil;
 
 - (void)_initSubviews
 {
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(removeAction)];
+    UIGestureRecognizer *tap = [[UIGestureRecognizer alloc] initWithTarget:self action:@selector(removeAction)];
+    tap.delegate = self;
     [_guideView addGestureRecognizer:tap];
     
     _videoView = [[UIImageView alloc] init];
@@ -54,6 +55,12 @@ static GuideFirstVideoTab *_guideView = nil;
     
     [_videoView addSubview:guideLabel];
     [_guideView addSubview:_videoView];
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+    [self removeAction];
+    return YES;
 }
 
 - (void)removeAction
