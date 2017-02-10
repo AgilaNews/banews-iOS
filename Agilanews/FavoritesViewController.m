@@ -188,6 +188,8 @@
     if (isFooter) {
         NewsModel *model = _dataList.lastObject;
         [params setObject:model.collect_id forKey:@"last_id"];
+    } else {
+        [SVProgressHUD show];
     }
     [[SSHttpRequest sharedInstance] get:kHomeUrl_Collect params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
         [SVProgressHUD dismiss];
@@ -231,9 +233,6 @@
 {
     // 打点-点击删除-010504
     [Flurry logEvent:@"Favor_DelButton_Click"];
-//#if DEBUG
-//    [iConsole info:@"Favor_DelButton_Click",nil];
-//#endif
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     if (appDelegate.model) {
         __weak typeof(self) weakSelf = self;
@@ -248,26 +247,21 @@
         [[SSHttpRequest sharedInstance] DELETE:kHomeUrl_Collect params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
             // 打点-删除成功-010505
             [Flurry logEvent:@"Favor_DelButton_Click_Y"];
-//#if DEBUG
-//            [iConsole info:@"Favor_DelButton_Click_Y",nil];
-//#endif
             [weakSelf.dataList removeObjectsInArray:_selectedList];
             [[CoreDataManager sharedInstance] removeAccountFavoriteModelWithCollectIDs:collectIDs];
-            if (_dataList.count == 0) {
+            weakSelf.dataList = weakSelf.dataList;
+            if (weakSelf.dataList.count == 0) {
                 weakSelf.showBlankView = YES;
             }
             [_tableView reloadData];
         } failure:^(NSError *error) {
             // 打点-删除失败-010506
             [Flurry logEvent:@"Favor_DelButton_Click_N"];
-//#if DEBUG
-//            [iConsole info:@"Favor_DelButton_Click_N",nil];
-//#endif
         } isShowHUD:NO];
     } else {
         [self.dataList removeObjectsInArray:_selectedList];
         [_detailList removeObjectsInArray:_selectedDetail];
-
+        self.dataList = self.dataList;
         if (_needRemoveNews.count > 0) {
             [[CoreDataManager sharedInstance] removeLocalFavoriteModelWithNewsIDs:_needRemoveNews];
         }
@@ -277,9 +271,6 @@
         [_tableView reloadData];
         // 打点-删除成功-010505
         [Flurry logEvent:@"Favor_DelButton_Click_Y"];
-//#if DEBUG
-//        [iConsole info:@"Favor_DelButton_Click_Y",nil];
-//#endif
     }
 }
 
@@ -292,9 +283,6 @@
 {
     // 打点-点击删除-010504
     [Flurry logEvent:@"Favor_DelButton_Click"];
-//#if DEBUG
-//    [iConsole info:@"Favor_DelButton_Click",nil];
-//#endif
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     if (appDelegate.model) {
         __weak typeof(self) weakSelf = self;
@@ -303,30 +291,23 @@
         [[SSHttpRequest sharedInstance] DELETE:kHomeUrl_Collect params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
             // 打点-删除成功-010505
             [Flurry logEvent:@"Favor_DelButton_Click_Y"];
-//#if DEBUG
-//            [iConsole info:@"Favor_DelButton_Click_Y",nil];
-//#endif
             [[CoreDataManager sharedInstance] removeAccountFavoriteModelWithCollectIDs:[NSArray arrayWithObject:model.collect_id]];
-            if (_dataList.count == 0) {
+            weakSelf.dataList = weakSelf.dataList;
+            if (weakSelf.dataList.count == 0) {
                 weakSelf.showBlankView = YES;
             }
         } failure:^(NSError *error) {
             // 打点-删除失败-010506
             [Flurry logEvent:@"Favor_DelButton_Click_N"];
-//#if DEBUG
-//            [iConsole info:@"Favor_DelButton_Click_N",nil];
-//#endif
         } isShowHUD:NO];
     } else {
         [[CoreDataManager sharedInstance] removeLocalFavoriteModelWithNewsIDs:[NSArray arrayWithObject:model.news_id]];
+        self.dataList = self.dataList;
         if (_dataList.count == 0) {
             self.showBlankView = YES;
         }
         // 打点-删除成功-010505
         [Flurry logEvent:@"Favor_DelButton_Click_Y"];
-//#if DEBUG
-//        [iConsole info:@"Favor_DelButton_Click_Y",nil];
-//#endif
     }
 }
 
@@ -722,9 +703,6 @@
                                    newsModel.news_id, @"article",
                                    nil];
     [Flurry logEvent:@"Home_List_Share_FacebookClick" withParameters:articleParams];
-//#if DEBUG
-//    [iConsole info:[NSString stringWithFormat:@"Home_List_Share_FacebookClick:%@",articleParams],nil];
-//#endif
     
     __weak typeof(self) weakSelf = self;
     FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
@@ -764,6 +742,8 @@
             _blankView.backgroundColor = kWhiteBgColor;
             _blankView.userInteractionEnabled = YES;
             [self.tableView addSubview:_blankView];
+            UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapAction)];
+            [_blankView addGestureRecognizer:tap];
             UIImageView *failureView = [[UIImageView alloc] initWithFrame:CGRectMake((_blankView.width - 28) * .5, 164 / kScreenHeight * 568, 28, 26)];
             failureView.backgroundColor = kWhiteBgColor;
             failureView.image = [UIImage imageNamed:@"icon_nofavorites"];
@@ -786,26 +766,24 @@
 
 - (void)setDataList:(NSMutableArray *)dataList
 {
-    if (_dataList != dataList) {
-        _dataList = dataList;
-        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-        if (_dataList.count > 5 && appDelegate.model) {
-            __weak typeof(self) weakSelf = self;
-            [self.tableView addLegendFooterWithRefreshingBlock:^{
-                [weakSelf tableViewDidTriggerFooterRefresh];
-                [weakSelf.tableView.footer beginRefreshing];
-            }];
-            [self.tableView.footer setTitle:@"" forState:MJRefreshFooterStateIdle];
-            [self.tableView.footer setTitle:@"Loading..." forState:MJRefreshFooterStateRefreshing];
-            [self.tableView.footer setTitle:@"No more favorites" forState:MJRefreshFooterStateNoMoreData];
-        } else {
-            [self.tableView removeFooter];
-        }
-        if (dataList.count) {
-            self.editBtn.enabled = YES;
-        } else {
-            self.editBtn.enabled = NO;
-        }
+    _dataList = dataList;
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    if (_dataList.count > 5 && appDelegate.model) {
+        __weak typeof(self) weakSelf = self;
+        [self.tableView addLegendFooterWithRefreshingBlock:^{
+            [weakSelf tableViewDidTriggerFooterRefresh];
+            [weakSelf.tableView.footer beginRefreshing];
+        }];
+        [self.tableView.footer setTitle:@"" forState:MJRefreshFooterStateIdle];
+        [self.tableView.footer setTitle:@"Loading..." forState:MJRefreshFooterStateRefreshing];
+        [self.tableView.footer setTitle:@"No more favorites" forState:MJRefreshFooterStateNoMoreData];
+    } else {
+        [self.tableView removeFooter];
+    }
+    if (dataList.count) {
+        self.editBtn.enabled = YES;
+    } else {
+        self.editBtn.enabled = NO;
     }
 }
 
@@ -918,6 +896,11 @@
 - (void)tableViewDidTriggerFooterRefresh
 {
     [self requestDataWithIsFooter:YES];
+}
+
+- (void)tapAction
+{
+    [self requestDataWithIsFooter:NO];
 }
 
 - (void)didReceiveMemoryWarning {
