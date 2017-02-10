@@ -362,13 +362,12 @@
             self.dislikeButton.hidden = YES;
         }
     }
+    self.titleImageView.contentMode = UIViewContentModeCenter;
     NSNumber *textOnlyMode = DEF_PERSISTENT_GET_OBJECT(SS_textOnlyMode);
     if ([textOnlyMode integerValue] == 1) {
-        self.titleImageView.contentMode = UIViewContentModeCenter;
         self.titleImageView.image = [UIImage imageNamed:@"placeholder"];
         return;
     }
-    self.titleImageView.contentMode = UIViewContentModeScaleAspectFit;
     float width = kScreenWidth - 22;
     NSString *imageUrl = nil;
     if (_model.tpl.integerValue == NEWS_GifPic) {
@@ -380,8 +379,10 @@
     }
     [self.titleImageView sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:[UIImage imageNamed:@"placeholder"] options:SDWebImageRetryFailed completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         if (!image) {
+            self.titleImageView.contentMode = UIViewContentModeCenter;
             _titleImageView.image = [UIImage imageNamed:@"placeholder"];
         } else {
+            self.titleImageView.contentMode = UIViewContentModeScaleAspectFit;
             _titleImageView.image = image;
         }
     }];
@@ -424,7 +425,7 @@
     if (_titleImageView == nil) {
         _titleImageView = [[UIImageView alloc] init];
         _titleImageView.backgroundColor = SSColor(235, 235, 235);
-        _titleImageView.contentMode = UIViewContentModeScaleAspectFit;
+        _titleImageView.contentMode = UIViewContentModeCenter;
         _titleImageView.clipsToBounds = YES;
         _titleImageView.image = [UIImage imageNamed:@"placeholder"];
     }
