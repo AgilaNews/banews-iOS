@@ -79,6 +79,10 @@
                                              selector:@selector(loginSuccess)
                                                  name:KNOTIFICATION_Login_Success
                                                object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(removeFavorite:)
+                                                 name:KNOTIFICATION_RemoveFavorite
+                                               object:nil];
     
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     NSArray *data = [[CoreDataManager sharedInstance] getLocalFavoriteModelList];
@@ -369,6 +373,19 @@
     } else {
         [self requestDataWithIsFooter:NO];
     }
+}
+
+- (void)removeFavorite:(NSNotification *)notif
+{
+    NSString *newsID = notif.object;
+    for (NewsModel *model in self.dataList.copy) {
+        if ([model.news_id isEqualToString:newsID]) {
+            [self.dataList removeObject:model];
+            break;
+        }
+    }
+    self.dataList = self.dataList;
+    [self.tableView reloadData];
 }
 
 #pragma mark - UITableViewDataSource
@@ -781,8 +798,10 @@
         [self.tableView removeFooter];
     }
     if (dataList.count) {
+        self.showBlankView = NO;
         self.editBtn.enabled = YES;
     } else {
+        self.showBlankView = YES;
         self.editBtn.enabled = NO;
     }
 }

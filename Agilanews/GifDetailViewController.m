@@ -404,12 +404,14 @@
         [params setObject:@[_collectID] forKey:@"ids"];
         [[SSHttpRequest sharedInstance] DELETE:kHomeUrl_Collect params:params contentType:JsonType serverType:NetServer_Home success:^(id responseObj) {
             button.selected = NO;
+            [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_RemoveFavorite object:_model.news_id];
         } failure:^(NSError *error) {
             
         } isShowHUD:NO];
     } else {
         [[CoreDataManager sharedInstance] removeLocalFavoriteModelWithNewsIDs:[NSArray arrayWithObject:_model.news_id]];
         button.selected = NO;
+        [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_RemoveFavorite object:_model.news_id];
     }
 }
 

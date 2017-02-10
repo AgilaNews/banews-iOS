@@ -120,6 +120,7 @@
 #define KNOTIFICATION_CheckNewNotif     @"KNOTIFICATION_CheckNewNotif"      // 检查新频道通知
 #define KNOTIFICATION_AddRedPoint       @"KNOTIFICATION_AddRedPoint"        // 添加小红点通知
 #define KNOTIFICATION_RemoveRedPoint    @"KNOTIFICATION_RemoveRedPoint"     // 移除小红点通知
+#define KNOTIFICATION_RemoveFavorite    @"KNOTIFICATION_RemoveFavorite"     // 删除收藏
 
 
 // 刷新成功提示banner
