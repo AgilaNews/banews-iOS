@@ -86,7 +86,7 @@ static CGFloat const ButtonHeight = 40;
             // 频道数组为空
             NSArray *nameArray = @[@"Hot",
                                    @"News",
-                                   @"Ent",
+                                   @"Entertainment",
                                    @"Fun",
                                    @"Show",
                                    @"Sports",
