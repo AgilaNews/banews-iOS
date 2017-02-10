@@ -574,7 +574,8 @@
     if (model.news_id == nil) {
         return;
     }
-    JTNavigationController *navCtrl = (JTNavigationController *)_window.rootViewController;
+    MainViewController *mainVC = (MainViewController *)_window.rootViewController;
+    JTNavigationController *navCtrl = (JTNavigationController *)mainVC.viewControllers.firstObject;
     HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
     NSNumber *tpl = userInfo[@"tpl"];
     switch (tpl.integerValue) {
