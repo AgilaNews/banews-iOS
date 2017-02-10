@@ -365,7 +365,7 @@
     NSNumber *textOnlyMode = DEF_PERSISTENT_GET_OBJECT(SS_textOnlyMode);
     if ([textOnlyMode integerValue] == 1) {
         self.titleImageView.contentMode = UIViewContentModeCenter;
-        self.titleImageView.image = [UIImage imageNamed:@"holderImage"];
+        self.titleImageView.image = [UIImage imageNamed:@"placeholder"];
         return;
     }
     self.titleImageView.contentMode = UIViewContentModeScaleAspectFit;
@@ -378,9 +378,9 @@
         imageUrl = [imageUrl stringByReplacingOccurrencesOfString:@"{h}" withString:[NSString stringWithFormat:@"%d",(int)(imageHeight * 2)]];
         imageUrl = [imageUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     }
-    [self.titleImageView sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:[UIImage imageNamed:@"holderImage"] options:SDWebImageRetryFailed completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+    [self.titleImageView sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:[UIImage imageNamed:@"placeholder"] options:SDWebImageRetryFailed completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         if (!image) {
-            _titleImageView.image = [UIImage imageNamed:@"holderImage"];
+            _titleImageView.image = [UIImage imageNamed:@"placeholder"];
         } else {
             _titleImageView.image = image;
         }
@@ -426,7 +426,7 @@
         _titleImageView.backgroundColor = SSColor(235, 235, 235);
         _titleImageView.contentMode = UIViewContentModeScaleAspectFit;
         _titleImageView.clipsToBounds = YES;
-        _titleImageView.image = [UIImage imageNamed:@"holderImage"];
+        _titleImageView.image = [UIImage imageNamed:@"placeholder"];
     }
     return _titleImageView;
 }
