@@ -47,7 +47,6 @@
     [self.playerView addSubview:_holderView];
     NSString *imageUrl = [_pattern stringByReplacingOccurrencesOfString:@"{w}" withString:[NSString stringWithFormat:@"%f",(kScreenWidth * 2)]];
     imageUrl = [imageUrl stringByReplacingOccurrencesOfString:@"|v=1" withString:@""];
-
     imageUrl = [imageUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     [_holderView sd_setImageWithURL:[NSURL URLWithString:imageUrl]];
     

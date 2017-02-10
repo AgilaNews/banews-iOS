@@ -64,7 +64,7 @@
     _headerView.backgroundColor = kOrangeColor;
     
     _avatarButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    _avatarButton.frame = CGRectMake((kScreenWidth - 80) * .5, (_headerView.height - 10 - 20 - 80) * .5, 80, 80);
+    _avatarButton.frame = CGRectMake((kScreenWidth - 80) * .5, (_headerView.height - 10 - 20 - 80) * .5 + 13, 80, 80);
     _avatarButton.layer.cornerRadius = 80 * .5;
     _avatarButton.layer.borderColor = SSColor(255, 189, 113).CGColor;
     _avatarButton.layer.borderWidth = 1;
@@ -75,7 +75,7 @@
     for (int i = 0; i < 3; i++) {
         float leftSide = (kScreenWidth - 60 * 3 - 37 * 2) * .5;
         UIButton *loginButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        loginButton.frame = CGRectMake(leftSide + (60 + 37) * i, (_headerView.height - 25 - 20 - 60) * .5, 60, 60);
+        loginButton.frame = CGRectMake(leftSide + (60 + 37) * i, (_headerView.height - 25 - 20 - 60) * .5 + 13, 60, 60);
         loginButton.tag = 200 + i;
         [loginButton addTarget:self action:@selector(loginAction:) forControlEvents:UIControlEventTouchUpInside];
         [_headerView addSubview:loginButton];
@@ -93,7 +93,7 @@
                 break;
         }
     }
-    _loginLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, (_headerView.height - 25 - 20 - 60) * .5 + 60 + 25, kScreenWidth, 20)];
+    _loginLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, (_headerView.height - 25 - 20 - 60) * .5 + 60 + 25 + 13, kScreenWidth, 20)];
     _loginLabel.backgroundColor = kOrangeColor;
     _loginLabel.font = [UIFont boldSystemFontOfSize:18];
     _loginLabel.textColor = [UIColor whiteColor];
