@@ -122,7 +122,7 @@ static CGFloat const ButtonHeight = 40;
         NSArray *nameArray = @[@"Hot",
                                @"Videos",
                                @"National",
-                               @"Entertainment",
+                               @"Ent",
                                @"Photos",
                                @"NBA",
                                @"Sports",
