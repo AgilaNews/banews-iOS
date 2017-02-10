@@ -162,11 +162,13 @@
             HomeTableViewController *homeTBC = videoVC.segmentVC.subViewControllers[videoVC.segmentVC.selectIndex - 10000];
             [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Refresh object:homeTBC.model.channelID];
         }
+        [self refresh_success];
         self.index = 1;
     } else if ([navCtrl.jt_viewControllers.firstObject isKindOfClass:[MeViewController class]]) {
         if (![DEF_PERSISTENT_GET_OBJECT(SS_GuideFirstMeTab) isEqualToNumber:@1]) {
             [[UIApplication sharedApplication].keyWindow.rootViewController.view addSubview:[GuideFirstMeTab sharedInstance]];
         }
+        [self refresh_success];
         self.index = 2;
     }
 }
