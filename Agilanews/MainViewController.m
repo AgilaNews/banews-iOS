@@ -154,19 +154,23 @@
 
 - (void)addRedPoint
 {
-    float side = (kScreenWidth / 3.0) / 2.0 + 10;
+    float side = (kScreenWidth / 6.0) * 5 + 10;
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(side, 5, 6, 6)];
     view.backgroundColor = SSColor(233, 51, 17);
     view.layer.cornerRadius = 3;
     view.layer.masksToBounds = YES;
-    [self.tabBar.subviews.lastObject addSubview:view];
+    view.tag = 2017;
+    [self.tabBar addSubview:view];
 }
 - (void)removeRedPoint
 {
     if (![DEF_PERSISTENT_GET_OBJECT(kHaveNewNotif) isEqualToNumber:@1] && ![DEF_PERSISTENT_GET_OBJECT(kHaveNewChannel) isEqualToNumber:@1]) {
         DEF_PERSISTENT_SET_OBJECT(kHaveNewNotif, @0);
         DEF_PERSISTENT_SET_OBJECT(kHaveNewChannel, @0);
-        [self.tabBar.subviews.lastObject removeAllSubviews];
+        UIView *view = [self.tabBar viewWithTag:2017];
+        if (view) {
+            [view removeFromSuperview];
+        }
     }
 }
 
