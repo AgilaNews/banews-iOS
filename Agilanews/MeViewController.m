@@ -99,6 +99,13 @@
     _loginLabel.textColor = [UIColor whiteColor];
     _loginLabel.textAlignment = NSTextAlignmentCenter;
     [_headerView addSubview:_loginLabel];
+#if DEBUG
+    _loginLabel.userInteractionEnabled = YES;
+    UITapGestureRecognizer *tapLogin = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(autoLogin)];
+    tapLogin.numberOfTapsRequired = 5;
+//    tapLogin.numberOfTouchesRequired = 2;
+    [_loginLabel addGestureRecognizer:tapLogin];
+#endif
     
     _appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     if (_appDelegate.model) {
@@ -540,6 +547,22 @@
     } failure:^(NSError *error) {
         [SVProgressHUD dismiss];
     } isShowHUD:YES];
+}
+
+- (void)autoLogin
+{
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    LoginModel *model = [[LoginModel alloc] init];
+    model.user_id = @"57a6f7ff2016dff95ec3a4cb8f7cedba86280587";
+    model.name = @"Sisi Zhang";
+    model.gender = @1;
+    model.portrait = @"https://fb-s-b-a.akamaihd.net/h-ak-xfa1/v/t1.0-1/c15.0.50.50/p50x50/10354686_10150004552801856_220367501106153455_n.jpg?oh=0bb129c4bacce2fd26d99c098ed48ce3&oe=5938E12F&__gda__=1497377938_82d2c1baf61feaae03debc75ad5146f4";
+    model.email = @"zss232010@gmail.com";
+    model.create_time = @1481773390;
+    model.source = @"facebook";
+    appDelegate.model = model;
+    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_Login_Success object:nil];
+    [SVProgressHUD showSuccessWithStatus:@"Successful"];
 }
 
 #pragma mark - GIDSignInDelegate
