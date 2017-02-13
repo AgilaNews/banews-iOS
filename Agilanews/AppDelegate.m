@@ -1045,7 +1045,8 @@
     if (!model.news_id || !tpl) {
         return;
     }
-    JTNavigationController *navCtrl = (JTNavigationController *)_window.rootViewController;
+    MainViewController *mainVC = (MainViewController *)_window.rootViewController;
+    JTNavigationController *navCtrl = (JTNavigationController *)mainVC.viewControllers.firstObject;
     HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
     switch (tpl.integerValue) {
         case 2:
