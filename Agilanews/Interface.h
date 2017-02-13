@@ -11,6 +11,7 @@
 
 // 接口类型名称
 #define Server_Home      @"Server_Home"
+#define Server_HomeV3    @"Server_HomeV3"
 #define Server_Log       @"Server_Log"
 #define Server_Mon       @"Server_Mon"
 #define Server_Referrer  @"Server_Referrer"

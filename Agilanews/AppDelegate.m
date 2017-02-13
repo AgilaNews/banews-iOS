@@ -183,6 +183,14 @@
         logData = [NSMutableArray arrayWithArray:_eventArray];
     }
     [NSKeyedArchiver archiveRootObject:logData toFile:logFilePath];
+    
+#if DEBUG
+    DEF_PERSISTENT_SET_OBJECT(Server_Home, @"");
+    DEF_PERSISTENT_SET_OBJECT(Server_HomeV3, @"");
+    DEF_PERSISTENT_SET_OBJECT(Server_Log, @"");
+    DEF_PERSISTENT_SET_OBJECT(Server_Mon, @"");
+    DEF_PERSISTENT_SET_OBJECT(Server_Referrer, @"");
+#endif
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 #pragma mark - 冷启动

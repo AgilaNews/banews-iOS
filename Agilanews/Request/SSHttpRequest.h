@@ -25,6 +25,7 @@ typedef enum : NSUInteger {
 @property (nonatomic, assign) HttpType httpType;
 @property (nonatomic, assign) ContentType contentType;
 @property (nonatomic, strong) NSString *urlString;
+@property (nonatomic, strong) NSString *baseUrlString;
 
 
 /**

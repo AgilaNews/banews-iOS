@@ -8,6 +8,7 @@
 
 #import "SettingsViewController.h"
 #import "WebViewController.h"
+#import "DebugViewController.h"
 
 @interface SettingsViewController ()
 
@@ -21,6 +22,13 @@
 
     self.title = @"Settings";
     self.isBackButton = YES;
+    
+#if DEBUG
+    self.view.userInteractionEnabled = YES;
+    UITapGestureRecognizer *tapDebug = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(entreDebug)];
+    tapDebug.numberOfTapsRequired = 5;
+    [self.view addGestureRecognizer:tapDebug];
+#endif
     
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight - 64) style:UITableViewStylePlain];
     _tableView.backgroundColor = kWhiteBgColor;
@@ -523,6 +531,13 @@
 - (void)fontChange
 {
     [self.tableView reloadData];
+}
+
+// 进入Debug模式
+- (void)entreDebug
+{
+    DebugViewController *debugVC = [[DebugViewController alloc] init];
+    [self.navigationController pushViewController:debugVC animated:YES];
 }
 
 - (void)didReceiveMemoryWarning {

@@ -34,6 +34,11 @@ static SSHttpRequest *_manager = nil;
         // 设置请求头
         [_manager.requestSerializer setValue:@"gzip, deflate" forHTTPHeaderField:@"Accept-Encoding"];
         [_manager.requestSerializer setValue:@"en-PH;q=0.8,en-US;q=0.5,en;q=0.3" forHTTPHeaderField:@"Accept-Language"];
+#if DEBUG
+        _manager.baseUrlString = @"http://api.agilanews.info";
+#else
+        _manager.baseUrlString = @"http://api.agilanews.today";
+#endif
     });
     return _manager;
 }
@@ -45,11 +50,7 @@ static SSHttpRequest *_manager = nil;
     
     // 接口拼接
     if (url.length < 1) {
-#if DEBUG
-        _urlString = @"http://api.agilanews.info/";
-#else
-        _urlString = @"http://api.agilanews.today/";
-#endif
+        _urlString = _manager.baseUrlString;
     } else {
         switch (serverType) {
             case NetServer_Home:
@@ -63,7 +64,11 @@ static SSHttpRequest *_manager = nil;
             }
             case NetServer_V3:
             {
-                _urlString = [NSString stringWithFormat:@"%@%@",kV3Url,url];
+                if (DEF_PERSISTENT_GET_OBJECT(Server_HomeV3) != nil) {
+                    _urlString = [NSString stringWithFormat:@"%@%@",DEF_PERSISTENT_GET_OBJECT(Server_HomeV3),url];
+                } else {
+                    _urlString = [NSString stringWithFormat:@"%@%@",kV3Url,url];
+                }
                 break;
             }
             case NetServer_Log:
@@ -95,11 +100,7 @@ static SSHttpRequest *_manager = nil;
             }
             case NetServer_Check:
             {
-#if DEBUG
-                _urlString = [NSString stringWithFormat:@"http://api.agilanews.info%@",url];
-#else
-                _urlString = [NSString stringWithFormat:@"http://api.agilanews.today%@",url];
-#endif
+                _urlString = [NSString stringWithFormat:@"%@%@", _manager.baseUrlString, url];
                 break;
             }
 #if DEBUG
@@ -320,7 +321,11 @@ static SSHttpRequest *_manager = nil;
         }
         case NetServer_V3:
         {
-            _urlString = [NSString stringWithFormat:@"%@%@",kV3Url,url];
+            if (DEF_PERSISTENT_GET_OBJECT(Server_HomeV3) != nil) {
+                _urlString = [NSString stringWithFormat:@"%@%@",DEF_PERSISTENT_GET_OBJECT(Server_HomeV3),url];
+            } else {
+                _urlString = [NSString stringWithFormat:@"%@%@",kV3Url,url];
+            }
             break;
         }
         case NetServer_Log:
