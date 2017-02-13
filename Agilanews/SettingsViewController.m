@@ -204,9 +204,6 @@
                 {
                     // 打点-点击文字设置-010901
                     [Flurry logEvent:@"Set_FontSize_Set"];
-//#if DEBUG
-//                    [iConsole info:@"Set_FontSize_Set",nil];
-//#endif
                     // cell （0，0）
                     [tableView deselectRowAtIndexPath:indexPath animated:YES];
                     // 字体设置弹出提示框
@@ -217,9 +214,6 @@
                 {
                     // 打点-点击清理缓存-010907
                     [Flurry logEvent:@"Set_CacheClean_Click"];
-//#if DEBUG
-//                    [iConsole info:@"Set_CacheClean_Click",nil];
-//#endif
                     // cell （0，2）
                     [tableView deselectRowAtIndexPath:indexPath animated:YES];
                     // 提示清理缓存
@@ -239,9 +233,6 @@
                 {
                     // 打点-点击为app评分-010908
                     [Flurry logEvent:@"Set_Score_Click"];
-//#if DEBUG
-//                    [iConsole info:@"Set_Score_Click",nil];
-//#endif
                     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&onlyLatestVersion=true&pageNumber=0&sortOrdering=1&id=%d",1146695204]]];
                 }
                     break;
@@ -249,15 +240,12 @@
                 {
                     // 打点-点击版本更新-010909
                     [Flurry logEvent:@"Set_Update_Click"];
-//#if DEBUG
-//                    [iConsole info:@"Set_Update_Click",nil];
-//#endif
 //                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"itms-apps://itunes.apple.com/app/id1146695204"]];
                     __weak typeof(self) weakSelf = self;
                     [SVProgressHUD show];
                     NSMutableDictionary *params = [NSMutableDictionary dictionary];
                     [[SSHttpRequest sharedInstance] get:kHomeUrl_Check params:params contentType:UrlencodedType serverType:NetServer_Check success:^(id responseObj) {
-                        NSString *new_version = responseObj[@"updates"][@"new_version"];
+                        NSString *new_version = responseObj[@"new_version"];
                         NSString *version = [NSString stringWithFormat:@"v%@", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]];
                         if ([new_version compare:version options:NSNumericSearch] == NSOrderedDescending) {
                             [SVProgressHUD dismiss];
@@ -285,9 +273,6 @@
                                                                [NSString stringWithFormat:@"v%@",version], @"current version",
                                                                nil];
                                 [Flurry logEvent:@"UpdataDialog_UPDATALATER_Click" withParameters:articleParams];
-//#if DEBUG
-//                                [iConsole info:[NSString stringWithFormat:@"UpdataDialog_UPDATALATER_Click:%@",articleParams],nil];
-//#endif
                             }];
                             UIAlertAction *yesAction = [UIAlertAction actionWithTitle:@"Update Now" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
                                 // 打点-点击版本更新对话框中立即更新选项-010006
@@ -298,9 +283,6 @@
                                                                [NSString stringWithFormat:@"v%@",version], @"current version",
                                                                nil];
                                 [Flurry logEvent:@"UpdataDialog_UPDATANOW_Click" withParameters:articleParams];
-//#if DEBUG
-//                                [iConsole info:[NSString stringWithFormat:@"UpdataDialog_UPDATANOW_Click:%@",articleParams],nil];
-//#endif
                                 dispatch_after(0.2, dispatch_get_main_queue(), ^{
                                     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"itms-apps://%@", responseObj[@"updates"][@"update_url"]]]];
                                 });
@@ -456,17 +438,11 @@
     if (rightSwitch.isOn) {
         // 打点-打开低流量模式-010905
         [Flurry logEvent:@"Set_LowData_Open"];
-//#if DEBUG
-//        [iConsole info:@"Set_LowData_Open",nil];
-//#endif
         DEF_PERSISTENT_SET_OBJECT(SS_textOnlyMode, @1);
         [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_TextOnly_ON object:nil];
     }else{
         // 打点-关闭低流量模式-010906
         [Flurry logEvent:@"Set_LowData_Close"];
-//#if DEBUG
-//        [iConsole info:@"Set_LowData_Close",nil];
-//#endif
         DEF_PERSISTENT_SET_OBJECT(SS_textOnlyMode, @0);
         [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_TextOnly_OFF object:nil];
     }
