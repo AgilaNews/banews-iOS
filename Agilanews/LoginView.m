@@ -156,31 +156,83 @@
         {
             // 打点-点击facebook-010602
             [Flurry logEvent:@"Login_Facebook_Click"];
-//#if DEBUG
-//            [iConsole info:@"Login_Facebook_Click",nil];
-//#endif
             [SVProgressHUD show];
             button.enabled = NO;
-            [ShareSDK getUserInfo:SSDKPlatformTypeFacebook onStateChanged:^(SSDKResponseState state, SSDKUser *user, NSError *error) {
-                if (state == SSDKResponseStateSuccess) {
-                    // 打点-登陆Facebook成功-010605
-                    [Flurry logEvent:@"Login_Facebook_Click_Y"];
-//#if DEBUG
-//                    [iConsole info:@"Login_Facebook_Click_Y",nil];
-//#endif
-                    [self loginWithUserData:user LoginType:Facebook];
-                    button.enabled = YES;
-                } else {
-                    // 打点-登陆Facebook失败-010608
-                    [Flurry logEvent:@"Login_Facebook_Click_N"];
-//#if DEBUG
-//                    [iConsole info:@"Login_Facebook_Click_N",nil];
-//#endif
+            __weak typeof(self) weakSelf = self;
+            if ([FBSDKAccessToken currentAccessToken]) {
+                FBSDKGraphRequest *requset = [[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{@"fields": @"id, name, gender, picture.type(large), email, cover"}];
+                [requset startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
                     [SVProgressHUD dismiss];
-                    button.enabled = YES;
-                    SSLog(@"%@",error);
-                }
-            }];
+                    if (!error) {
+                        // 打点-登陆Facebook成功-010605
+                        [Flurry logEvent:@"Login_Facebook_Click_Y"];
+                        SSDKUser *userInfo = [[SSDKUser alloc] init];
+                        userInfo.uid = result[@"id"];
+                        userInfo.rawData = @{@"email" : result[@"email"],
+                                             };
+                        userInfo.nickname = result[@"name"];
+                        NSString *gender = result[@"gender"];
+                        if ([gender isEqualToString:@"female"]) {
+                            userInfo.gender = SSDKGenderFemale;
+                        } else if ([gender isEqualToString:@"male"]) {
+                            userInfo.gender = SSDKGenderMale;
+                        } else {
+                            userInfo.gender = SSDKGenderUnknown;
+                        }
+                        userInfo.icon = result[@"picture"][@"data"][@"url"];
+                        [weakSelf loginWithUserData:userInfo LoginType:Facebook];
+                        button.enabled = YES;
+                    } else {
+                        // 打点-登陆Facebook失败-010608
+                        [Flurry logEvent:@"Login_Facebook_Click_N"];
+                        [SVProgressHUD dismiss];
+                        button.enabled = YES;
+                        SSLog(@"%@",error);
+                    }
+                }];
+            } else {
+                FBSDKLoginManager *manager = [[FBSDKLoginManager alloc] init];
+                manager.defaultAudience = FBSDKDefaultAudienceEveryone;
+                manager.loginBehavior = FBSDKLoginBehaviorNative;
+                [manager logInWithReadPermissions:@[@"public_profile", @"email"] fromViewController:self.ViewController handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
+                    [SVProgressHUD dismiss];
+                    if (!error && !result.isCancelled) {
+                        [SVProgressHUD show];
+                        FBSDKGraphRequest *requset = [[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{@"fields": @"id, name, gender, picture.type(large), email, cover"}];
+                        [requset startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+                            [SVProgressHUD dismiss];
+                            if (!error) {
+                                // 打点-登陆Facebook成功-010605
+                                [Flurry logEvent:@"Login_Facebook_Click_Y"];
+                                SSDKUser *userInfo = [[SSDKUser alloc] init];
+                                userInfo.uid = result[@"id"];
+                                userInfo.rawData = @{@"email" : result[@"email"],
+                                                     };
+                                userInfo.nickname = result[@"name"];
+                                NSString *gender = result[@"gender"];
+                                if ([gender isEqualToString:@"female"]) {
+                                    userInfo.gender = SSDKGenderFemale;
+                                } else if ([gender isEqualToString:@"male"]) {
+                                    userInfo.gender = SSDKGenderMale;
+                                } else {
+                                    userInfo.gender = SSDKGenderUnknown;
+                                }
+                                userInfo.icon = result[@"picture"][@"data"][@"url"];
+                                [weakSelf loginWithUserData:userInfo LoginType:Facebook];
+                                button.enabled = YES;
+                            } else {
+                                // 打点-登陆Facebook失败-010608
+                                [Flurry logEvent:@"Login_Facebook_Click_N"];
+                                [SVProgressHUD dismiss];
+                                button.enabled = YES;
+                                SSLog(@"%@",error);
+                            }
+                        }];
+                    } else {
+                        button.enabled = YES;
+                    }
+                }];
+            }
             break;
         }
         case Twitter:

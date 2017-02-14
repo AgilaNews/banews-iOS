@@ -1012,9 +1012,16 @@
     if ([url.scheme isEqualToString:@"com.banews.agila"]) {
         [self openAppWithUrl:url.query];
     }
-    return [[GIDSignIn sharedInstance] handleURL:url
-                               sourceApplication:sourceApplication
-                                      annotation:annotation];
+    if ([[GIDSignIn sharedInstance] handleURL:url
+                            sourceApplication:sourceApplication
+                                   annotation:annotation]) {
+        return YES;
+    }
+    BOOL result = [[FBSDKApplicationDelegate sharedInstance] application:application
+                                                                 openURL:url
+                                                       sourceApplication:sourceApplication
+                                                              annotation:annotation];
+    return result;
 }
 
 - (BOOL)application:(UIApplication *)app
@@ -1024,12 +1031,19 @@
     if ([url.scheme isEqualToString:@"com.banews.agila"]) {
         [self openAppWithUrl:url.query];
     }
+    
     if ([[Twitter sharedInstance] application:app openURL:url options:options]) {
         return YES;
     }
-    return [[GIDSignIn sharedInstance] handleURL:url
-                               sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
-                                      annotation:options[UIApplicationOpenURLOptionsAnnotationKey]];
+    if ([[GIDSignIn sharedInstance] handleURL:url
+                            sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
+                                   annotation:options[UIApplicationOpenURLOptionsAnnotationKey]]) {
+        return YES;
+    }
+    return [self application:app
+                     openURL:url
+           sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
+                  annotation:options[UIApplicationOpenURLOptionsAnnotationKey]];
 }
 
 - (void)openAppWithUrl:(NSString *)url
