@@ -533,9 +533,6 @@
                                        [NetType getNetType], @"network",
                                        nil];
         [Flurry logEvent:@"Home_LocationRemindBar_Click" withParameters:articleParams];
-//#if DEBUG
-//        [iConsole info:[NSString stringWithFormat:@"Home_LocationRemindBar_Click:%@",articleParams],nil];
-//#endif
         [self.tableView setContentOffset:self.tableView.contentOffset animated:NO];
         _isShowBanner = YES;
         if (!self.tableView.header.isRefreshing) {
@@ -626,20 +623,20 @@
                                        [NetType getNetType], @"network",
                                        nil];
         [Flurry logEvent:@"Home_Videolist_Click" withParameters:articleParams];
-//#if DEBUG
-//        [iConsole info:[NSString stringWithFormat:@"Home_Videolist_Click:%@",articleParams],nil];
-//#endif
         [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_PausedVideo object:model.news_id];
         VideoDetailViewController *videoDetailVC = [[VideoDetailViewController alloc] init];
         videoDetailVC.model = model;
         videoDetailVC.channelName = _model.name;
-        OnlyVideoCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-        videoDetailVC.playerView = cell.playerView;
-        videoDetailVC.indexPath = indexPath;
-        videoDetailVC.fromCell = cell;
-        cell.isMove = YES;
-        videoDetailVC.hidesBottomBarWhenPushed = YES;
-        [self.navigationController pushViewController:videoDetailVC animated:YES];
+        UITableViewCell *tableViewCell = [tableView cellForRowAtIndexPath:indexPath];
+        if ([tableViewCell isKindOfClass:[OnlyVideoCell class]]) {
+            OnlyVideoCell *cell = (OnlyVideoCell *)tableViewCell;
+            videoDetailVC.playerView = cell.playerView;
+            videoDetailVC.indexPath = indexPath;
+            videoDetailVC.fromCell = cell;
+            cell.isMove = YES;
+            videoDetailVC.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:videoDetailVC animated:YES];
+        }
         return;
     }
     // 打点-点击列表-010108
@@ -648,9 +645,6 @@
                                    _model.name, @"channel",
                                    nil];
     [Flurry logEvent:@"Home_List_Click" withParameters:articleParams];
-//#if DEBUG
-//    [iConsole info:[NSString stringWithFormat:@"Home_List_Click:%@",articleParams],nil];
-//#endif
     [appDelegate.checkDic setObject:@1 forKey:model.news_id];
     
     if (model.tpl.integerValue == NEWS_HotVideo || model.tpl.integerValue == NEWS_OnlyVideo) {
@@ -722,9 +716,6 @@
                                        _model.name, @"channel",
                                        nil];
         [Flurry logEvent:@"Home_List_UpScroll" withParameters:articleParams];
-//#if DEBUG
-//        [iConsole info:[NSString stringWithFormat:@"Home_List_UpScroll:%@",articleParams],nil];
-//#endif
     }
     if (!decelerate) {
 //        // 下拉出现底部返回视图
