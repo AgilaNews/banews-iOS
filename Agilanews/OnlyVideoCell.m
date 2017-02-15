@@ -123,8 +123,6 @@
     [self.titleImageView addSubview:self.durationLabel];
     [self.titleImageView addSubview:self.playButton];
     [self.contentView addSubview:self.holderView];
-//    [self.contentView addSubview:self.watchView];
-//    [self.contentView addSubview:self.watchLabel];
     [self.contentView addSubview:self.likeButton];
     [self.contentView addSubview:self.commentView];
     [self.contentView addSubview:self.commentLabel];
@@ -133,8 +131,8 @@
     __weak typeof(self) weakSelf = self;
     // 视频布局
     [self.playerView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(0);
-        make.top.mas_equalTo(0);
+        make.left.mas_equalTo(weakSelf.contentView.mas_left);
+        make.top.mas_equalTo(weakSelf.contentView.mas_top);
         make.width.mas_equalTo(kScreenWidth);
         make.height.mas_equalTo(videoHeight);
     }];
@@ -181,20 +179,6 @@
         make.width.mas_equalTo(45);
         make.height.mas_equalTo(45);
     }];
-//    // 观看视图布局
-//    [self.watchView mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.top.mas_equalTo(weakSelf.titleImageView.mas_bottom).offset(15.5);
-//        make.left.mas_equalTo(11);
-//        make.width.mas_equalTo(11);
-//        make.height.mas_equalTo(11);
-//    }];
-//    // 观看量布局
-//    [self.watchLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.left.mas_equalTo(weakSelf.watchView.mas_right).offset(5);
-//        make.centerY.mas_equalTo(weakSelf.watchView.mas_centerY);
-//        make.width.mas_equalTo(0);
-//        make.height.mas_equalTo(0);
-//    }];
     // 点赞按钮布局
     [self.likeButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(weakSelf.titleLabel.mas_left);
@@ -233,8 +217,8 @@
     __weak typeof(self) weakSelf = self;
     // 视频布局
     [self.playerView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(0);
-        make.top.mas_equalTo(0);
+        make.left.mas_equalTo(weakSelf.contentView.mas_left);
+        make.top.mas_equalTo(weakSelf.contentView.mas_top);
         make.width.mas_equalTo(kScreenWidth);
         make.height.mas_equalTo(videoHeight);
     }];
@@ -306,22 +290,6 @@
         make.width.mas_equalTo(45);
         make.height.mas_equalTo(45);
     }];
-//    // 观看视图布局
-//    [self.watchView mas_updateConstraints:^(MASConstraintMaker *make) {
-//        make.top.mas_equalTo(weakSelf.titleImageView.mas_bottom).offset(15.5);
-//        make.left.mas_equalTo(11);
-//        make.width.mas_equalTo(11);
-//        make.height.mas_equalTo(11);
-//    }];
-//    // 观看量布局
-//    NSString *views = [TimeStampToString getViewsStringWithNumber:_model.views];
-//    CGSize watchLabelSize = [views calculateSize:CGSizeMake(100, 14) font:self.watchLabel.font];
-//    [self.watchLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-//        make.left.mas_equalTo(weakSelf.watchView.mas_right).offset(5);
-//        make.centerY.mas_equalTo(weakSelf.watchView.mas_centerY);
-//        make.width.mas_equalTo(watchLabelSize.width);
-//        make.height.mas_equalTo(watchLabelSize.height);
-//    }];
     // 点赞按钮布局
     [self.likeButton mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(weakSelf.titleLabel.mas_left);
@@ -391,7 +359,6 @@
         self.titleLabel.text = _model.title;
     }
     self.durationLabel.text = durationString;
-//    self.watchLabel.text = views;
     if (_model.commentCount.integerValue > 0) {
         self.commentLabel.text = _model.commentCount.stringValue;
     } else {
@@ -428,9 +395,6 @@
                                    [NetType getNetType], @"network",
                                    nil];
     [Flurry logEvent:@"Home_Videolist_Play_Click" withParameters:articleParams];
-//#if DEBUG
-//    [iConsole info:[NSString stringWithFormat:@"Home_Videolist_Play_Click:%@",articleParams],nil];
-//#endif
     // 服务器打点参数
     [_playerPath addObject:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithLongLong:[[NSDate date] timeIntervalSince1970]], @"time", @"1" , @"type", nil]];
     VideoModel *model = _model.videos.firstObject;
@@ -453,18 +417,12 @@
         NSString *message = @"You are playing video using traffic, whether to continue playing?";
         UIAlertController *playingAlert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *stopAction = [UIAlertAction actionWithTitle:@"Stop" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-//            // 打点-点击无图模式提醒对话框No选项-010011
-//            [Flurry logEvent:@"LowDataTips_No_Click"];
-//#if DEBUG
-//            [iConsole info:@"LowDataTips_No_Click",nil];
-//#endif
+            // 打点-点击无图模式提醒对话框No选项-010011
+            [Flurry logEvent:@"LowDataTips_No_Click"];
         }];
         UIAlertAction *continueAction = [UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-//            // 打点-点击无图模式提醒对话框中YES选项-010010
-//            [Flurry logEvent:@"LowDataTips_YES_Click"];
-//#if DEBUG
-//            [iConsole info:@"LowDataTips_YES_Click",nil];
-//#endif
+            // 打点-点击无图模式提醒对话框中YES选项-010010
+            [Flurry logEvent:@"LowDataTips_YES_Click"];
             weakSelf.isPlay = YES;
             if (model.youtube_id && _playerVars) {
                 [weakSelf.playerView loadWithVideoId:model.youtube_id playerVars:_playerVars];
@@ -805,26 +763,6 @@
     }
     return _playButton;
 }
-
-//- (UIImageView *)watchView
-//{
-//    if (_watchView == nil) {
-//        _watchView = [[UIImageView alloc] init];
-//        _watchView.contentMode = UIViewContentModeScaleAspectFit;
-//        _watchView.image = [UIImage imageNamed:@"icon_video"];
-//    }
-//    return _watchView;
-//}
-//
-//- (UILabel *)watchLabel
-//{
-//    if (_watchLabel == nil) {
-//        _watchLabel = [[UILabel alloc] init];
-//        _watchLabel.font = [UIFont systemFontOfSize:13];
-//        _watchLabel.textColor = kBlackColor;
-//    }
-//    return _watchLabel;
-//}
 
 - (UIButton *)likeButton
 {
