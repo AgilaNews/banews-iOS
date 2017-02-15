@@ -444,8 +444,7 @@
                         [Flurry logEvent:@"Login_Facebook_Click_Y"];
                         SSDKUser *userInfo = [[SSDKUser alloc] init];
                         userInfo.uid = result[@"id"];
-                        userInfo.rawData = @{@"email" : result[@"email"],
-                                             };
+                        userInfo.rawData = @{@"email" : result[@"email"]};
                         userInfo.nickname = result[@"name"];
                         NSString *gender = result[@"gender"];
                         if ([gender isEqualToString:@"female"]) {
@@ -482,8 +481,7 @@
                                 [Flurry logEvent:@"Login_Facebook_Click_Y"];
                                 SSDKUser *userInfo = [[SSDKUser alloc] init];
                                 userInfo.uid = result[@"id"];
-                                userInfo.rawData = @{@"email" : result[@"email"],
-                                                     };
+                                userInfo.rawData = @{@"email" : result[@"email"]};
                                 userInfo.nickname = result[@"name"];
                                 NSString *gender = result[@"gender"];
                                 if ([gender isEqualToString:@"female"]) {
@@ -521,6 +519,7 @@
                 if (state == SSDKResponseStateSuccess) {
                     // 打点-登陆twitter成功-010606
                     [Flurry logEvent:@"Login_Twitter_Click_Y"];
+                    user.icon = [user.icon stringByReplacingOccurrencesOfString:@"_normal" withString:@"_bigger"];
                     [self loginWithUserData:user LoginType:Twitter];
                     button.enabled = YES;
                 } else {

@@ -121,9 +121,6 @@
     }];
     // 打点-页面进入-010601
     [Flurry logEvent:@"Login_Enter"];
-//#if DEBUG
-//    [iConsole info:@"Login_Enter",nil];
-//#endif
 }
 
 - (void)removeAction
@@ -239,26 +236,18 @@
         {
             // 打点-点击twitter-010603
             [Flurry logEvent:@"Login_Twitter_Click"];
-//#if DEBUG
-//            [iConsole info:@"Login_Twitter_Click",nil];
-//#endif
             [SVProgressHUD show];
             button.enabled = NO;
             [ShareSDK getUserInfo:SSDKPlatformTypeTwitter onStateChanged:^(SSDKResponseState state, SSDKUser *user, NSError *error) {
                 if (state == SSDKResponseStateSuccess) {
                     // 打点-登陆twitter成功-010606
                     [Flurry logEvent:@"Login_Twitter_Click_Y"];
-//#if DEBUG
-//                    [iConsole info:@"Login_Twitter_Click_Y",nil];
-//#endif
+                    user.icon = [user.icon stringByReplacingOccurrencesOfString:@"_normal" withString:@"_bigger"];
                     [self loginWithUserData:user LoginType:Twitter];
                     button.enabled = YES;
                 } else {
                     // 打点-登陆twitter失败-010609
                     [Flurry logEvent:@"Login_Twitter_Click_N"];
-//#if DEBUG
-//                    [iConsole info:@"Login_Twitter_Click_N",nil];
-//#endif
                     [SVProgressHUD dismiss];
                     button.enabled = YES;
                     SSLog(@"%@",error);
@@ -270,9 +259,6 @@
         {
             // 打点-点击Google＋-010604
             [Flurry logEvent:@"Login_Google_Click"];
-//#if DEBUG
-//            [iConsole info:@"Login_Google_Click",nil];
-//#endif
             button.enabled = NO;
             [[GIDSignIn sharedInstance] signIn];
             break;
@@ -357,9 +343,6 @@
     if (error == nil) {
         // 打点-登陆Google＋成功-010607
         [Flurry logEvent:@"Login_Google_Click_Y"];
-//#if DEBUG
-//        [iConsole info:@"Login_Google_Click_Y",nil];
-//#endif
         SSDKUser *loginUser = [[SSDKUser alloc] init];
         loginUser.uid = user.userID;
         loginUser.rawData = @{@"email":user.profile.email};
@@ -373,9 +356,6 @@
         self.alpha = 1;
         // 打点-登陆Google＋失败-010610
         [Flurry logEvent:@"Login_Google_Click_N"];
-//#if DEBUG
-//        [iConsole info:@"Login_Google_Click_N",nil];
-//#endif
         SSLog(@"%@",error.localizedDescription);
     }
 }
