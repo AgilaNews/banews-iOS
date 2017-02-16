@@ -140,7 +140,7 @@
         _okButton.frame = CGRectMake(5, dislikeBgView.height - 39 - (isDown ? 9 : 0), dislikeBgView.width - 10, 39);
         _okButton.adjustsImageWhenHighlighted = NO;
         [_okButton setBackgroundColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [_okButton setTitle:@"OK" forState:UIControlStateNormal];
+        [_okButton setTitle:@"Not interested" forState:UIControlStateNormal];
         [_okButton setTitleColor:kOrangeColor forState:UIControlStateNormal];
         _okButton.titleLabel.font = [UIFont systemFontOfSize:16];
         [dislikeBgView addSubview:_okButton];
@@ -166,6 +166,11 @@
                 [self.reasons removeObject:[self.filterTags objectAtIndex:imageButton.tag - 500]];
             }
         }
+    }
+    if (self.reasons.count) {
+        [_okButton setTitle:@"OK" forState:UIControlStateNormal];
+    } else {
+        [_okButton setTitle:@"Not interested" forState:UIControlStateNormal];
     }
 }
 
