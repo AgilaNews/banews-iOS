@@ -69,19 +69,16 @@
 {
     switch (indexPath.section) {
         case 0:
-            return 88;
+            return 79;
             break;
         default:
-            return 48;
+            return 44;
             break;
     }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if (section == 0) {
-        return 0.0001;
-    }
     return 10;
 }
 
@@ -113,7 +110,7 @@
         case 0:
         {
             cell.textLabel.text = @"Profile Picture";
-            UIImageView *avatarView = [[UIImageView alloc] initWithFrame:CGRectMake(kScreenWidth - 13 - 64, (88 - 64) * .5, 64, 64)];
+            UIImageView *avatarView = [[UIImageView alloc] initWithFrame:CGRectMake(kScreenWidth - 13 - 57, 11, 57, 57)];
             [avatarView sd_setImageWithURL:[NSURL URLWithString:_model.portrait] placeholderImage:[UIImage imageNamed:@"icon_sidebar_head"] options:SDWebImageLowPriority | SDWebImageRetryFailed completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                 if (image)
                 {
@@ -131,7 +128,7 @@
                 case 0:
                 {
                     cell.textLabel.text = @"Name";
-                    cell.detailTextLabel.font = [UIFont systemFontOfSize:16];
+                    cell.detailTextLabel.font = [UIFont systemFontOfSize:14];
                     cell.detailTextLabel.textColor = SSColor(102, 102, 102);
                     cell.detailTextLabel.text = _model.name;
                 }
@@ -139,8 +136,8 @@
                 case 1:
                 {
                     cell.textLabel.text = @"Gender";
-                    UIImageView *genderView = [[UIImageView alloc] initWithFrame:CGRectMake(kScreenWidth - 13 - 19, 14, 19, 20)];
-                    // 0未知，1男，2女
+                    UIImageView *genderView = [[UIImageView alloc] initWithFrame:CGRectMake(kScreenWidth - 13 - 19, 12, 19, 20)];
+                    //0未知，1男，2女
                     switch ([_model.gender intValue]) {
                         case 0:
                             genderView.image = [UIImage imageNamed:@"icon_info_secrecy"];
