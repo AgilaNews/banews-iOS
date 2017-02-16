@@ -53,16 +53,16 @@
 //    [shareBtn setImage:[UIImage imageNamed:@"icon_article_share_default"] forState:UIControlStateNormal];
 //    [shareBtn addTarget:self action:@selector(shareAction) forControlEvents:UIControlEventTouchUpInside];
 //    UIBarButtonItem *shareItem = [[UIBarButtonItem alloc]initWithCustomView:shareBtn];
-    UIButton *moreBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    moreBtn.backgroundColor = kOrangeColor;
-    moreBtn.frame = CGRectMake(0, 0, 40, 38);
-    moreBtn.imageView.backgroundColor = kOrangeColor;
-    [moreBtn setImage:[UIImage imageNamed:@"icon_article_font"] forState:UIControlStateNormal];
-    [moreBtn addTarget:self action:@selector(moreAction) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *moreItem = [[UIBarButtonItem alloc]initWithCustomView:moreBtn];
-    UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-    negativeSpacer.width = -10;
-    self.navigationItem.rightBarButtonItems = @[negativeSpacer, moreItem];
+//    UIButton *moreBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+//    moreBtn.backgroundColor = kOrangeColor;
+//    moreBtn.frame = CGRectMake(0, 0, 40, 38);
+//    moreBtn.imageView.backgroundColor = kOrangeColor;
+//    [moreBtn setImage:[UIImage imageNamed:@"icon_article_font"] forState:UIControlStateNormal];
+//    [moreBtn addTarget:self action:@selector(moreAction) forControlEvents:UIControlEventTouchUpInside];
+//    UIBarButtonItem *moreItem = [[UIBarButtonItem alloc]initWithCustomView:moreBtn];
+//    UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+//    negativeSpacer.width = -10;
+//    self.navigationItem.rightBarButtonItems = @[negativeSpacer, moreItem];
     
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight) style:UITableViewStyleGrouped];
     _tableView.backgroundColor = kWhiteBgColor;
