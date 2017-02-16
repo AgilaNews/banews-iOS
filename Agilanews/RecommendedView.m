@@ -24,7 +24,11 @@
         
         UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(imageView.right + 10, 0, kScreenWidth - 70, 30)];
         titleLabel.backgroundColor = kWhiteBgColor;
-        titleLabel.textColor = kBlackColor;
+        if ([title isEqualToString:@"Hot Comments"]) {
+            titleLabel.textColor = SSColor(255, 90, 0);
+        } else {
+            titleLabel.textColor = kOrangeColor;
+        }
         titleLabel.font = [UIFont boldSystemFontOfSize:13];
         titleLabel.text = title;
         [self addSubview:titleLabel];

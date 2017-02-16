@@ -1130,7 +1130,7 @@
                             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
                         }
                         if (cell.contentView.subviews.count <= 0) {
-                            RecommendedView *recommendedView = [[RecommendedView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 30) titleImage:[UIImage imageNamed:@"icon_newcomment"] titleText:@"New Comments" HaveLoading:NO];
+                            RecommendedView *recommendedView = [[RecommendedView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 30) titleImage:[UIImage imageNamed:@"icon_newcomment"] titleText:@"Comments" HaveLoading:NO];
                             [cell.contentView addSubview:recommendedView];
                         }
                         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
