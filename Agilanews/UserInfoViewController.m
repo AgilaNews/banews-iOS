@@ -69,16 +69,19 @@
 {
     switch (indexPath.section) {
         case 0:
-            return 79;
+            return 88;
             break;
         default:
-            return 44;
+            return 48;
             break;
     }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
+    if (section == 0) {
+        return 0.0001;
+    }
     return 10;
 }
 
@@ -110,7 +113,7 @@
         case 0:
         {
             cell.textLabel.text = @"Profile Picture";
-            UIImageView *avatarView = [[UIImageView alloc] initWithFrame:CGRectMake(kScreenWidth - 13 - 57, 11, 57, 57)];
+            UIImageView *avatarView = [[UIImageView alloc] initWithFrame:CGRectMake(kScreenWidth - 13 - 57, (88 - 57) * .5, 57, 57)];
             [avatarView sd_setImageWithURL:[NSURL URLWithString:_model.portrait] placeholderImage:[UIImage imageNamed:@"icon_sidebar_head"] options:SDWebImageLowPriority | SDWebImageRetryFailed completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                 if (image)
                 {
@@ -136,8 +139,8 @@
                 case 1:
                 {
                     cell.textLabel.text = @"Gender";
-                    UIImageView *genderView = [[UIImageView alloc] initWithFrame:CGRectMake(kScreenWidth - 13 - 19, 12, 19, 20)];
-                    //0未知，1男，2女
+                    UIImageView *genderView = [[UIImageView alloc] initWithFrame:CGRectMake(kScreenWidth - 13 - 19, 14, 19, 20)];
+                    // 0未知，1男，2女
                     switch ([_model.gender intValue]) {
                         case 0:
                             genderView.image = [UIImage imageNamed:@"icon_info_secrecy"];
