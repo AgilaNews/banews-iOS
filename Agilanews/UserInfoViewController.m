@@ -113,7 +113,7 @@
         case 0:
         {
             cell.textLabel.text = @"Profile Picture";
-            UIImageView *avatarView = [[UIImageView alloc] initWithFrame:CGRectMake(kScreenWidth - 13 - 57, (88 - 57) * .5, 57, 57)];
+            UIImageView *avatarView = [[UIImageView alloc] initWithFrame:CGRectMake(kScreenWidth - 13 - 64, (88 - 64) * .5, 64, 64)];
             [avatarView sd_setImageWithURL:[NSURL URLWithString:_model.portrait] placeholderImage:[UIImage imageNamed:@"icon_sidebar_head"] options:SDWebImageLowPriority | SDWebImageRetryFailed completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                 if (image)
                 {
@@ -131,7 +131,7 @@
                 case 0:
                 {
                     cell.textLabel.text = @"Name";
-                    cell.detailTextLabel.font = [UIFont systemFontOfSize:14];
+                    cell.detailTextLabel.font = [UIFont systemFontOfSize:16];
                     cell.detailTextLabel.textColor = SSColor(102, 102, 102);
                     cell.detailTextLabel.text = _model.name;
                 }
