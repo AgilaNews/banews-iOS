@@ -51,7 +51,7 @@
 // 初始化子视图
 - (void)_initSubiews
 {
-    _textView = [[FeedbackTextView alloc] initWithFrame:CGRectMake(0, 64 + 10, kScreenWidth, 185)];
+    _textView = [[FeedbackTextView alloc] initWithFrame:CGRectMake(0, 64, kScreenWidth, 185)];
     [self.view addSubview:_textView];
     _textView.feedbackTextView.text = @" ";
     [_textView.feedbackTextView becomeFirstResponder];
