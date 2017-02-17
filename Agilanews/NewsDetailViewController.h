@@ -31,6 +31,7 @@
 @property (nonatomic, strong) NSString *collectID;          // 收藏新闻ID
 @property (nonatomic, strong) CommentTextView *commentTextView; // 评论输入框
 @property (nonatomic, strong) UIView *noCommentView;        // 无评论视图
+@property (nonatomic, strong) UIView *tagView;
 @property (nonatomic, strong) NSURLSessionDataTask *task;
 @property (nonatomic, assign) BOOL isShowGuide;         // 是否展示引导页
 @property (nonatomic, assign) NSInteger pullupCount;    // 上拉加载次数

@@ -82,6 +82,13 @@
         _hotArray = appDelegate.hotwordsDic[@"hotwords"];
         self.tableView.tableHeaderView = [self getHeaderViewWithHotWords:_hotArray];
     }
+    if (_isTagEnter && _keyword) {
+        [self.searchBar resignFirstResponder];
+        self.searchBar.text = _keyword;
+        [SVProgressHUD show];
+        [self requestSearchDataWithIsFooter:NO];
+        self.tableView.tableHeaderView = nil;
+    }
 }
 
 - (void)dealloc

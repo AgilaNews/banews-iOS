@@ -44,6 +44,7 @@ MJCodingImplementation
              @"share_url":@"share_url",
              @"youtube_videos":@"VideoModel",
              @"sns_widgets":@"SNSModel",
+             @"tags":@"tags",
              };
 }
 

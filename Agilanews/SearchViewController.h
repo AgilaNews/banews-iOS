@@ -20,5 +20,6 @@
 @property (nonatomic, assign) NSInteger pageCount;
 @property (nonatomic, strong) NSArray *hotArray;
 @property (nonatomic, strong) NSString *keyword;
+@property (nonatomic, assign) BOOL isTagEnter;
 
 @end

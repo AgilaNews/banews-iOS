@@ -270,7 +270,7 @@
         _likeButton.titleLabel.backgroundColor = kWhiteBgColor;
         _likeButton.layer.cornerRadius = 17;
         _likeButton.layer.masksToBounds = YES;
-        _likeButton.layer.borderWidth = 1;
+        _likeButton.layer.borderWidth = 0.5;
         _likeButton.layer.borderColor = SSColor_RGB(204).CGColor;
         _likeButton.titleLabel.font = [UIFont systemFontOfSize:14];
         _likeButton.imageEdgeInsets = UIEdgeInsetsMake(0, -5, 0, 0);
@@ -323,7 +323,7 @@
         _facebookShare.imageView.backgroundColor = kWhiteBgColor;
         _facebookShare.layer.cornerRadius = 17;
         _facebookShare.layer.masksToBounds = YES;
-        _facebookShare.layer.borderWidth = 1;
+        _facebookShare.layer.borderWidth = 0.5;
         _facebookShare.layer.borderColor = SSColor_RGB(204).CGColor;
         [_facebookShare setAdjustsImageWhenHighlighted:NO];
         [_facebookShare setBackgroundColor:kWhiteBgColor forState:UIControlStateNormal];

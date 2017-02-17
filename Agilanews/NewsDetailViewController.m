@@ -20,6 +20,7 @@
 #import "DetailPlayerViewController.h"
 #import "BaseNavigationController.h"
 #import "HomeViewController.h"
+#import "SearchViewController.h"
 #import "LoginView.h"
 #import "SNSModel.h"
 
@@ -846,10 +847,11 @@
             if (_detailModel == nil) {
                 return kScreenHeight;
             } else {
+                BOOL isHaveTag = self.detailModel.tags.count;
                 if (_isHaveAd) {
-                    return _webViewHeight + 54 + 83 + imageHeight;
+                    return _webViewHeight + (isHaveTag ? self.tagView.height + 26 : 0) + 34 + 25 + 83 + imageHeight;
                 } else {
-                    return _webViewHeight + 54;
+                    return _webViewHeight + (isHaveTag ? self.tagView.height + 26 : 0) + 34 + 25;
                 }
             }
             break;
@@ -986,13 +988,18 @@
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
             }
             [cell.contentView addSubview:_webView];
+            BOOL isHaveTag = self.detailModel.tags.count;
+            if (isHaveTag) {
+                [cell.contentView addSubview:self.tagView];
+                self.tagView.top = _webView.bottom;
+            }
             [cell.contentView addSubview:self.likeButton];
-            self.likeButton.top = _webView.bottom;
+            self.likeButton.top = isHaveTag ? self.tagView.bottom + 25 : _webView.bottom;
             [cell.contentView addSubview:self.facebookShare];
             self.facebookShare.top = self.likeButton.top;
             if (_isHaveAd) {
                 [cell.contentView addSubview:self.facebookAdView];
-                self.facebookAdView.top = self.likeButton.bottom + 20;
+                self.facebookAdView.top = self.likeButton.bottom + 25;
             }
             break;
         }
@@ -1465,7 +1472,7 @@
         _likeButton.titleLabel.backgroundColor = kWhiteBgColor;
         _likeButton.layer.cornerRadius = 17;
         _likeButton.layer.masksToBounds = YES;
-        _likeButton.layer.borderWidth = 1;
+        _likeButton.layer.borderWidth = 0.5;
         _likeButton.layer.borderColor = SSColor_RGB(204).CGColor;
         _likeButton.titleLabel.font = [UIFont systemFontOfSize:14];
         _likeButton.imageEdgeInsets = UIEdgeInsetsMake(0, -5, 0, 0);
@@ -1519,7 +1526,7 @@
         _facebookShare.imageView.backgroundColor = kWhiteBgColor;
         _facebookShare.layer.cornerRadius = 17;
         _facebookShare.layer.masksToBounds = YES;
-        _facebookShare.layer.borderWidth = 1;
+        _facebookShare.layer.borderWidth = 0.5;
         _facebookShare.layer.borderColor = SSColor_RGB(204).CGColor;
         [_facebookShare setAdjustsImageWhenHighlighted:NO];
         [_facebookShare setBackgroundColor:kWhiteBgColor forState:UIControlStateNormal];
@@ -1644,6 +1651,44 @@
             } isShowHUD:NO];
         }
     }
+}
+
+- (UIView *)tagView
+{
+    if (!_tagView) {
+        _tagView = [[UIView alloc] init];
+        CGFloat keyword_Y = 2;
+        CGFloat keyword_X = 11;
+        for (int i = 0; i < self.detailModel.tags.count; i++) {
+            NSString *tagString = self.detailModel.tags[i];
+            CGSize buttonSize = [tagString calculateSize:CGSizeMake(kScreenWidth - 22 - 22, 14) font:[UIFont systemFontOfSize:14]];
+            UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+            if (kScreenWidth - 11 - keyword_X - 10 < buttonSize.width + 22) {
+                // 放在下一行
+                keyword_X = 11;
+                keyword_Y += (26 + 12);
+            }
+            button.frame = CGRectMake(keyword_X, keyword_Y, buttonSize.width + 22, 26);
+            button.titleLabel.font = [UIFont systemFontOfSize:14];
+            [button setTitle:tagString forState:UIControlStateNormal];
+            [button setTitleColor:SSColor_RGB(102) forState:UIControlStateNormal];
+            [button setTitleColor:kOrangeColor forState:UIControlStateHighlighted];
+            [button setBackgroundColor:SSColor_RGB(240) forState:UIControlStateNormal];
+            button.layer.borderColor = SSColor_RGB(223).CGColor;
+            button.layer.borderWidth = 0.5;
+            button.layer.cornerRadius = 4;
+            [button addTarget:self action:@selector(searchAction:) forControlEvents:UIControlEventTouchUpInside];
+            [_tagView addSubview:button];
+            if (kScreenWidth - 11 - keyword_X - 10 >= buttonSize.width + 22) {
+                // 放在本行
+                keyword_X += (buttonSize.width + 22 + 10);
+            }
+            if (i == self.detailModel.tags.count - 1) {
+                _tagView.frame = CGRectMake(0, 2, kScreenWidth, button.bottom);
+            }
+        }
+    }
+    return _tagView;
 }
 
 #pragma mark - Notification
@@ -2027,9 +2072,6 @@
 {
     // 打点-点击文字调节-010223
     [Flurry logEvent:@"Article_FontSize_Set"];
-//#if DEBUG
-//    [iConsole info:@"Article_FontSize_Set",nil];
-//#endif
     UIAlertController *sheetAlert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     UIAlertAction *extraLarge = [UIAlertAction actionWithTitle:@"Extra Large" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         // 打点-选择字体大小-010224
@@ -2037,9 +2079,6 @@
                                        @"Extra Large", @"text_size",
                                        nil];
         [Flurry logEvent:@"Article_FontSize_Set_Click" withParameters:articleParams];
-//#if DEBUG
-//        [iConsole info:[NSString stringWithFormat:@"Article_FontSize_Set_Click:%@",articleParams],nil];
-//#endif
         DEF_PERSISTENT_SET_OBJECT(SS_FontSize, @1);
 //        [_tableView reloadData];
         [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_FontSize_Change object:nil];
@@ -2050,9 +2089,6 @@
                                        @"Large", @"text_size",
                                        nil];
         [Flurry logEvent:@"Article_FontSize_Set_Click" withParameters:articleParams];
-//#if DEBUG
-//        [iConsole info:[NSString stringWithFormat:@"Article_FontSize_Set_Click:%@",articleParams],nil];
-//#endif
         DEF_PERSISTENT_SET_OBJECT(SS_FontSize, @2);
 //        [_tableView reloadData];
         [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_FontSize_Change object:nil];
@@ -2063,9 +2099,6 @@
                                        @"Normal", @"text_size",
                                        nil];
         [Flurry logEvent:@"Article_FontSize_Set_Click" withParameters:articleParams];
-//#if DEBUG
-//        [iConsole info:[NSString stringWithFormat:@"Article_FontSize_Set_Click:%@",articleParams],nil];
-//#endif
         DEF_PERSISTENT_SET_OBJECT(SS_FontSize, @0);
 //        [_tableView reloadData];
         [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_FontSize_Change object:nil];
@@ -2076,9 +2109,6 @@
                                        @"Small", @"text_size",
                                        nil];
         [Flurry logEvent:@"Article_FontSize_Set_Click" withParameters:articleParams];
-//#if DEBUG
-//        [iConsole info:[NSString stringWithFormat:@"Article_FontSize_Set_Click:%@",articleParams],nil];
-//#endif
         DEF_PERSISTENT_SET_OBJECT(SS_FontSize, @3);
 //        [_tableView reloadData];
         [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_FontSize_Change object:nil];
@@ -2120,9 +2150,6 @@
                                    _model.news_id, @"article",
                                    nil];
     [Flurry logEvent:@"Article_Comments_Send" withParameters:articleParams];
-//#if DEBUG
-//    [iConsole info:[NSString stringWithFormat:@"Article_Comments_Send:%@",articleParams],nil];
-//#endif
     [self postComment];
 }
 
@@ -2146,10 +2173,21 @@
                                    _model.news_id, @"article",
                                    nil];
     [Flurry logEvent:@"Article_BackButton_Click" withParameters:articleParams];
-//#if DEBUG
-//    [iConsole info:[NSString stringWithFormat:@"Article_BackButton_Click:%@",articleParams],nil];
-//#endif
     [super backAction:button];
+}
+
+
+/**
+ 关键词搜索点击事件
+
+ @param button 关键词按钮
+ */
+- (void)searchAction:(UIButton *)button
+{
+    SearchViewController *searchVC = [[SearchViewController alloc] init];
+    searchVC.keyword = button.titleLabel.text;
+    searchVC.isTagEnter = YES;
+    [self.navigationController pushViewController:searchVC animated:YES];
 }
 
 // 创建图片文件夹

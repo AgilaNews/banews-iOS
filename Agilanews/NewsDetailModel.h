@@ -27,5 +27,6 @@
 @property (nonatomic, strong) NSString *share_url;      // 分享链接
 @property (nonatomic, strong) NSArray *youtube_videos;  // 视频
 @property (nonatomic, strong) NSArray *sns_widgets;     // sns标签
+@property (nonatomic, strong) NSArray *tags;            // 关键词
 
 @end
