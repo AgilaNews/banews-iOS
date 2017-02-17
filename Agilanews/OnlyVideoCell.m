@@ -216,12 +216,14 @@
     VideoModel *model = _model.videos.firstObject;
     __weak typeof(self) weakSelf = self;
     // 视频布局
-    [self.playerView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(weakSelf.contentView.mas_left);
-        make.top.mas_equalTo(weakSelf.contentView.mas_top);
-        make.width.mas_equalTo(kScreenWidth);
-        make.height.mas_equalTo(videoHeight);
-    }];
+    if ([self.playerView.superview.superview isKindOfClass:[OnlyVideoCell class]]) {
+        [self.playerView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.left.mas_equalTo(weakSelf.contentView.mas_left);
+            make.top.mas_equalTo(weakSelf.contentView.mas_top);
+            make.width.mas_equalTo(kScreenWidth);
+            make.height.mas_equalTo(videoHeight);
+        }];
+    }
     // 标题图片布局
     [self.titleImageView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(0);
