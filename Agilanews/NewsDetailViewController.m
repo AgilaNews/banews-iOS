@@ -324,7 +324,8 @@
         weakSelf.detailModel = [NewsDetailModel mj_objectWithKeyValues:responseObj];
         // css文件路径
         NSString *cssFilePath = [[NSBundle mainBundle] pathForResource:@"webView" ofType:@"css"];
-//        NSString *cssFilePath = @"http://192.168.31.131/android/css/news.css";
+//        NSString *cssFilePath = @"http://192.168.31.131/detail/css/detail.css";
+        
         NSString *jsFilePath = [[NSBundle mainBundle] pathForResource:@"webView" ofType:@"js"];
         // 格式化日期
         NSDate *currentDate = [NSDate dateWithTimeIntervalSince1970:[weakSelf.detailModel.public_time longLongValue]];

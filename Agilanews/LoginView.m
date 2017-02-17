@@ -280,7 +280,7 @@
             [params setValue:@"facebook" forKey:@"source"];
             [params setValue:user.rawData[@"email"] forKey:@"email"];
             if ([FBSDKAccessToken currentAccessToken]) {
-                [params setValue:[FBSDKAccessToken currentAccessToken] forKey:@""];
+                [params setValue:[FBSDKAccessToken currentAccessToken] forKey:@"token"];
             }
             break;
         case Twitter:
