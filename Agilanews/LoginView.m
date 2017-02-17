@@ -157,7 +157,7 @@
             button.enabled = NO;
             __weak typeof(self) weakSelf = self;
             if ([FBSDKAccessToken currentAccessToken]) {
-                FBSDKGraphRequest *requset = [[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{@"fields": @"id, name, gender, picture.type(large), email, cover"}];
+                FBSDKGraphRequest *requset = [[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{@"fields": @"id, name, gender, picture.type(large), email, cover, friends"}];
                 [requset startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
                     [SVProgressHUD dismiss];
                     if (!error) {
@@ -195,7 +195,7 @@
                     [SVProgressHUD dismiss];
                     if (!error && !result.isCancelled) {
                         [SVProgressHUD show];
-                        FBSDKGraphRequest *requset = [[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{@"fields": @"id, name, gender, picture.type(large), email, cover"}];
+                        FBSDKGraphRequest *requset = [[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{@"fields": @"id, name, gender, picture.type(large), email, cover, friends"}];
                         [requset startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
                             [SVProgressHUD dismiss];
                             if (!error) {
@@ -279,6 +279,9 @@
         case Facebook:
             [params setValue:@"facebook" forKey:@"source"];
             [params setValue:user.rawData[@"email"] forKey:@"email"];
+            if ([FBSDKAccessToken currentAccessToken]) {
+                [params setValue:[FBSDKAccessToken currentAccessToken] forKey:@""];
+            }
             break;
         case Twitter:
             [params setValue:@"twitter" forKey:@"source"];

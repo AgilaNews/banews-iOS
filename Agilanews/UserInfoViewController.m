@@ -185,6 +185,10 @@
         // 打点-logout成功-010703
         [Flurry logEvent:@"Info_Logout_Click_Y"];
         // 点击确定退出
+        [FBSDKAccessToken setCurrentAccessToken:nil];
+        [FBSDKProfile setCurrentProfile:nil];
+        FBSDKLoginManager *manager = [[FBSDKLoginManager alloc] init];
+        [manager logOut];
         NSFileManager *fileManager = [NSFileManager defaultManager];
         NSError *error = nil;
         NSString *documentsDirectory= [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/userinfo.data"];
