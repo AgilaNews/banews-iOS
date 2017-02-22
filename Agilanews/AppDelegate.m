@@ -583,6 +583,7 @@
         return;
     }
     MainViewController *mainVC = (MainViewController *)_window.rootViewController;
+    mainVC.selectedViewController = mainVC.viewControllers.firstObject;
     JTNavigationController *navCtrl = (JTNavigationController *)mainVC.viewControllers.firstObject;
     HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
     NSNumber *tpl = userInfo[@"tpl"];
@@ -1068,6 +1069,7 @@
         return;
     }
     MainViewController *mainVC = (MainViewController *)_window.rootViewController;
+    mainVC.selectedViewController = mainVC.viewControllers.firstObject;
     JTNavigationController *navCtrl = (JTNavigationController *)mainVC.viewControllers.firstObject;
     HomeViewController *homeVC = navCtrl.jt_viewControllers.firstObject;
     switch (tpl.integerValue) {
