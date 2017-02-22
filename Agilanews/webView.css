@@ -30,7 +30,6 @@ img {
 
 a:hover,a,a:visited{
     color: #ff8700;
-    opacity: 0.6;
     font-style: italic;
     text-decoration:none;
     pointer-events: none;
@@ -39,31 +38,73 @@ a:hover,a,a:visited{
 p{
     color: #3b3b3b;
     line-height:145%;
-    margin:9px -8px 20px -8px;
+    margin:9px 0px 20px 0px;
 }
 
+p a{
+    color: #3B3B3B;
+    font-style: normal;
+    text-decoration:none;
+    pointer-events: none;
+}
 .title {
     color: #3b3b3b;
-    font-size: 20px;
-    line-height: 24px;
+    font-size: 21px;
+    line-height: 29px;
     font-weight: bold;
-    margin:8px -8px 8px -8px;
+    margin:12px -8px 8px -8px;
 }
 
 .sourcetime,.time {
-    font-size: 11px;
+    font-size: 12px;
     color: #9b9c9c;
-    margin: 7px 0px 9px -4px;
+    margin: 7px 0px 16px -4px;
 }
 
 .sourcetime a {
     pointer-events: auto;
-    font-size: 11px;
+    font-size: 12px;
 }
 
 .source {
-    font-size: 11px;
+    font-size: 12px;
     pointer-events: auto;
+}
+
+ul{
+    list-style-position: inside;
+    padding-left: 0px;
+}
+
+ul li{
+    line-height: 25px;
+    color: #3b3b3b;
+    font-style: normal;
+    font-weight:normal;
+}
+
+ul li span,
+ul li p,
+ul li b,
+ul li i,
+ul li em,
+ul li strong,
+ul li a{
+    font-style: normal;
+    font-weight: normal;
+    color: #3B3B3B;
+}
+
+ol li span,
+ol li p,
+ol li b,
+ol li i,
+ol li em,
+ol li strong,
+ol li a{
+    font-style: normal;
+    font-weight: normal;
+    color: #3B3B3B;
 }
 
 table {
@@ -74,10 +115,8 @@ table {
     border-top: 1px;
     solid: #888;
     background: #efefef;
-}
-
-thead {
-    text-align: left;
+    text-align: center;
+    width: 100%;
 }
 
 th, td {
@@ -91,6 +130,58 @@ th, td {
 th {
     font-weight: bold;
     background: #ccc;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+strong,
+b{
+    font-weight: bold;
+}
+
+em,
+i{
+    font-style: italic;
+}
+
+iframe{
+    display: block;
+    margin: 0 auto 24px;
+}
+
+p em{
+    color: #3B3B3B;
+    font-weight: bold;
+}
+
+dl dt{
+    font-weight: bold;
+    line-height: 145%;
+    color: #3B3B3B;
+}
+
+dl dd {
+    margin-left: 0;
+    line-height: 145%;
+    color: #3B3B3B;
+}
+
+blockquote{
+    font-size: 28px;
+    font-style: italic;
+    color: #9c9c9c;
+}
+
+blockquote p{
+    line-height: 30px;
+}
+
+pre {
+    font-size: 1em;
 }
 
 .sns-container {
