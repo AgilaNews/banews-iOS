@@ -209,8 +209,8 @@
             break;
     }
     NSString *title = [model.title copy];
-    title = [model.title stringByReplacingOccurrencesOfString:@"<font>" withString:@""];
-    title = [model.title stringByReplacingOccurrencesOfString:@"</font>" withString:@""];
+    title = [title stringByReplacingOccurrencesOfString:@"<font>" withString:@""];
+    title = [title stringByReplacingOccurrencesOfString:@"</font>" withString:@""];
     switch ([model.tpl integerValue])
     {
         case NEWS_ManyPic:
