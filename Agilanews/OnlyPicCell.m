@@ -56,7 +56,7 @@
     [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(11);
         make.top.mas_equalTo(11);
-        make.width.mas_equalTo(titleLabelSize.width);
+        make.width.mas_equalTo(kScreenWidth - 22);
         make.height.mas_equalTo(titleLabelSize.height);
     }];
     // 标题图片布局
@@ -118,7 +118,7 @@
     // 标题布局
     CGSize titleLabelSize = [_model.title calculateSize:CGSizeMake(kScreenWidth - 22, 40) font:self.titleLabel.font];
     [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.width.mas_equalTo(titleLabelSize.width);
+        make.width.mas_equalTo(kScreenWidth - 22);
         make.height.mas_equalTo(titleLabelSize.height);
     }];
     // 标题图片布局

@@ -56,7 +56,7 @@
     [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(11);
         make.top.mas_equalTo(10);
-        make.width.mas_equalTo(titleLabelSize.width);
+        make.width.mas_equalTo(kScreenWidth - 22);
         make.height.mas_equalTo(titleLabelSize.height);
     }];
     // 标签布局
