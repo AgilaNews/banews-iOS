@@ -353,8 +353,8 @@
                     weakSelf.detailModel.body = [weakSelf.detailModel.body stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"<!--YOUTUBE%d-->",i] withString:imageUrl];
                 } else {
                     VideoModel *videoModel = weakSelf.detailModel.youtube_videos[i];
-                    NSString *imageUrl = [NSString stringWithFormat:@"<img src=\"\" data-src=\"%@\" height=\"%fpx\" width=\"%fpx\" img-type=\"video\" videoid=\"%@\" index=\"%d\" class=\"ready-to-load\"/>", videoModel.video_pattern, videoModel.height.integerValue / 2.0, videoModel.width.integerValue / 2.0, videoModel.youtube_id, i];
-                    imageUrl = [imageUrl stringByReplacingOccurrencesOfString:@"{w}" withString:[NSString stringWithFormat:@"%ld",videoModel.width.integerValue / 2]];
+                    NSString *imageUrl = [NSString stringWithFormat:@"<img src=\"\" data-src=\"%@\" height=\"%dpx\" width=\"%dpx\" img-type=\"video\" videoid=\"%@\" index=\"%d\" class=\"ready-to-load\"/>", videoModel.video_pattern, (int)(videoModel.height.integerValue * 0.5), (int)(videoModel.width.integerValue * 0.5), videoModel.youtube_id, i];
+                    imageUrl = [imageUrl stringByReplacingOccurrencesOfString:@"{w}" withString:[NSString stringWithFormat:@"%d",(int)(videoModel.width.integerValue * 0.5)]];
                     weakSelf.detailModel.body = [weakSelf.detailModel.body stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"<!--YOUTUBE%d-->",i] withString:imageUrl];
                 }
             }
@@ -396,7 +396,7 @@
             }
         }
         // 拼接HTML
-        NSString *htmlString = [NSString stringWithFormat:@"<html><head><link rel=\"stylesheet\" type=\"text/css\" href=\"file:///%@\"/><script src=\"file://%@\"></script></head><body><div class=\"title\">%@</div><div class=\"sourcetime\">%@ <a class=\"source\" href=\"%@\">/View source</a></div>%@",cssFilePath,jsFilePath,weakSelf.detailModel.title,dateString,weakSelf.detailModel.source_url,weakSelf.detailModel.body];
+        NSString *htmlString = [NSString stringWithFormat:@"<html><head><link rel=\"stylesheet\" type=\"text/css\" href=\"file:///%@\"/><script src=\"file://%@\"></script></head><body><div class=\"title\">%@</div><div class=\"sourcetime\">%@&nbsp;&nbsp;&nbsp;%@<a class=\"source\" href=\"%@\"> /View source</a></div>%@",cssFilePath,jsFilePath,weakSelf.detailModel.title,dateString,weakSelf.detailModel.source,weakSelf.detailModel.source_url,weakSelf.detailModel.body];
         htmlString = [htmlString stringByAppendingString:@"</body></html>"];
         [_webView loadHTMLString:htmlString baseURL:nil];
     } failure:^(NSError *error) {
