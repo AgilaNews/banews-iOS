@@ -77,12 +77,14 @@ p a{
     pointer-events: auto;
 }
 
-ul{
+ul,
+ol{
     list-style-position: inside;
     padding-left: 0px;
 }
 
-ul li{
+ul li,
+ol li{
     line-height: 25px;
     color: #3b3b3b;
     font-style: normal;
@@ -96,6 +98,7 @@ ul li i,
 ul li em,
 ul li strong,
 ul li a{
+    display: inline;
     font-style: normal;
     font-weight: normal;
     color: #3B3B3B;
@@ -108,6 +111,7 @@ ol li i,
 ol li em,
 ol li strong,
 ol li a{
+    display: inline;
     font-style: normal;
     font-weight: normal;
     color: #3B3B3B;
@@ -178,13 +182,20 @@ dl dd {
 }
 
 blockquote{
-    font-size: 28px;
+    font-size: 14px;
     font-style: italic;
-    color: #9c9c9c;
+    padding-left: 12px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    border-left: 4px solid #CCCCCC;
 }
 
-blockquote p{
-    line-height: 30px;
+blockquote> *{
+    line-height: 22px;
+    font-size: 14px;
+    color: #595758;
+    margin: 0;
+    padding: 0;
 }
 
 pre {
