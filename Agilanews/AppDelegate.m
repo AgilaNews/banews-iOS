@@ -1078,6 +1078,7 @@
             NewsDetailViewController *newsDetailVC = [[NewsDetailViewController alloc] init];
             newsDetailVC.model = model;
             newsDetailVC.isPushEnter = YES;
+            newsDetailVC.hidesBottomBarWhenPushed = YES;
             [homeVC.navigationController pushViewController:newsDetailVC animated:NO];
             return;
         }
@@ -1087,6 +1088,7 @@
             videoDetailVC.model = model;
             videoDetailVC.isPushEnter = YES;
             videoDetailVC.isNoModel = YES;
+            videoDetailVC.hidesBottomBarWhenPushed = YES;
             [homeVC.navigationController pushViewController:videoDetailVC animated:YES];
             return;
         }
@@ -1095,6 +1097,7 @@
             GifDetailViewController *gifDetailVC = [[GifDetailViewController alloc] init];
             gifDetailVC.model = model;
             gifDetailVC.isNoModel = YES;
+            gifDetailVC.hidesBottomBarWhenPushed = YES;
             [homeVC.navigationController pushViewController:gifDetailVC animated:NO];
             return;
         }
@@ -1102,6 +1105,7 @@
         {
             PicDetailViewController *picDetail = [[PicDetailViewController alloc] init];
             picDetail.model = model;
+            picDetail.hidesBottomBarWhenPushed = YES;
             [homeVC.navigationController pushViewController:picDetail animated:NO];
             return;
         }
