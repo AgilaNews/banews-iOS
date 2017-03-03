@@ -98,6 +98,9 @@
 {
     if (_labelView == nil) {
         _labelView = [[UIImageView alloc] initWithFrame:CGRectMake(1, 1, 26, 23)];
+        /*
+         张思思
+         */
         _labelView.contentMode = UIViewContentModeScaleAspectFit;
     }
     return _labelView;

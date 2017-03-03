@@ -98,6 +98,9 @@
 #define NEWS_Topics      14  // 专题模板
 #define NEWS_Interest    15  // 兴趣模板
 #define ADS_List         5000// 广告模板
+/*
+ 张思思
+ */
 #define Top_List         1001// 置顶模板
 
 // 通知

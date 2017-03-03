@@ -98,6 +98,9 @@
     }];
     // 标题布局
     CGSize titleLabelSize = [self.nativeAd.title calculateSize:CGSizeMake(kScreenWidth - 22 - 50, 30) font:self.titleLabel.font];
+    /*
+     张思思
+     */
     [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(11);
         make.top.mas_equalTo(9 + 8);

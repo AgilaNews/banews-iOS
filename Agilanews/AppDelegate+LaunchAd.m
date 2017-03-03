@@ -97,6 +97,9 @@
         [eventDic setObject:[NetType getNetType] forKey:@"net"];
         if (DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) != nil && DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) != nil) {
             [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LONGITUDE) forKey:@"lng"];
+            /*
+             张思思
+             */
             [eventDic setObject:DEF_PERSISTENT_GET_OBJECT(SS_LATITUDE) forKey:@"lat"];
         } else {
             [eventDic setObject:@"" forKey:@"lng"];

@@ -98,6 +98,9 @@
         NSString *abflag = DEF_PERSISTENT_GET_OBJECT(@"abflag");
         if (abflag && abflag.length > 0) {
             [eventDic setObject:abflag forKey:@"abflag"];
+            /*
+             张思思
+             */
         }
         NSDictionary *sessionDic = [NSDictionary dictionaryWithObjectsAndKeys:
                                     DEF_PERSISTENT_GET_OBJECT(@"UUID"), @"id",

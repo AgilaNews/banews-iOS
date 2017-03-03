@@ -98,6 +98,9 @@
 #pragma mark - AccountFavorite
 - (void)addAccountFavoriteWithCollectID:(NSString *)collectID DetailModel:(NewsDetailModel *)model
 {
+    /*
+     张思思
+     */
     AccountFavorite *accountFavorite = [NSEntityDescription insertNewObjectForEntityForName:@"AccountFavorite" inManagedObjectContext:kManagedObjectContext];
     accountFavorite.collect_id = collectID;
     accountFavorite.detail_model = model;

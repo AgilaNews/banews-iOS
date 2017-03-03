@@ -97,5 +97,7 @@ static GuideVideoTab *_guideView = nil;
         [_guideView removeFromSuperview];
     }];
 }
-
+/*
+ 张思思
+ */
 @end

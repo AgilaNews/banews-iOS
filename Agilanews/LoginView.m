@@ -98,6 +98,9 @@
             loginLabel.textColor = SSColor_RGB(102);
             loginLabel.text = loginText;
             [_bgView addSubview:loginLabel];
+            /*
+             张思思
+             */
             
             // 取消按钮
             UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];

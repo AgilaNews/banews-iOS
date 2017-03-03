@@ -98,6 +98,9 @@
     [self.titleImageView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(weakSelf.titleLabel.mas_left);
         make.top.mas_equalTo(weakSelf.titleLabel.mas_bottom).offset(10);
+        /*
+         张思思
+         */
         make.width.mas_equalTo(kScreenWidth - 22);
         make.height.mas_equalTo(width);
     }];
