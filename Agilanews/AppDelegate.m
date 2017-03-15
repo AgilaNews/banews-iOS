@@ -185,11 +185,11 @@
     [NSKeyedArchiver archiveRootObject:logData toFile:logFilePath];
     
 #if DEBUG
-    DEF_PERSISTENT_SET_OBJECT(Server_Home, @"");
-    DEF_PERSISTENT_SET_OBJECT(Server_HomeV3, @"");
-    DEF_PERSISTENT_SET_OBJECT(Server_Log, @"");
-    DEF_PERSISTENT_SET_OBJECT(Server_Mon, @"");
-    DEF_PERSISTENT_SET_OBJECT(Server_Referrer, @"");
+    DEF_PERSISTENT_SET_OBJECT(Server_Home, @"http://api.agilanews.info/v2");
+    DEF_PERSISTENT_SET_OBJECT(Server_HomeV3, @"http://api.agilanews.info/v3");
+    DEF_PERSISTENT_SET_OBJECT(Server_Log, @"http://log.agilanews.info/v3");
+    DEF_PERSISTENT_SET_OBJECT(Server_Mon, @"http://mon.agilanews.info/v2");
+    DEF_PERSISTENT_SET_OBJECT(Server_Referrer, @"http://api.agilanews.info/referrer");
 #endif
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
